@@ -15,17 +15,20 @@ import Typography from '@/components/ui/Typography'
 import Image from 'next/image'
 import absurd from '../../../public/absurd 1.png'
 import { signInSchema } from '@/types/zod'
+import { signIn } from '@/adapters/pocketbase'
 
 export default function () {
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'exampel@kungsbacka.se',
+            password: 'password',
         },
     })
-    const submit = (value: signInSchema) => {
+    const submit = async (value: signInSchema) => {
         console.log(value)
+        const user = await signIn(value);
+        console.log({ user });
     }
 
     return (

@@ -19,3 +19,4 @@ export const siginUpSchema = signInSchema
 
 export type signInSchema = z.infer<typeof signInSchema>
 export type siginUpSchema = z.infer<typeof siginUpSchema>
+export type roleSchema = z.infer<typeof roleSchema>

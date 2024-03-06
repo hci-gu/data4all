@@ -22,22 +22,25 @@ import Typography from '@/components/ui/Typography'
 import Image from 'next/image'
 import absurd from '../../../public/absurd 2.png'
 import { roleSchema, siginUpSchema } from '@/types/zod'
+import { signUp } from '@/adapters/pocketbase'
 
 export default function () {
     const form = useForm<siginUpSchema>({
         resolver: zodResolver(siginUpSchema),
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'exampel@kungsbacka.se',
+            password: 'password',
+            passwordConfirmation: 'password',
             role: 'User',
-            passwordConfirmation: '',
         },
         resetOptions: {
             keepIsSubmitSuccessful: true,
         },
     })
-    const submit = (value: siginUpSchema) => {
-        console.log(value)
+    const submit = async (value: siginUpSchema) => {
+        console.log({ value })
+        const user = await signUp(value)
+        console.log({ user });
     }
 
     const rols = Object.values(roleSchema.Values)
