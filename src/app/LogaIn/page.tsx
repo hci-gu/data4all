@@ -16,6 +16,7 @@ import Image from 'next/image'
 import absurd from '../../../public/absurd 1.png'
 import { signInSchema } from '@/types/zod'
 import { signIn } from '@/adapters/pocketbase'
+import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 
 export default function () {
     const form = useForm<signInSchema>({
@@ -79,7 +80,7 @@ export default function () {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Logga in med mejl</Button>
+                        <Button type="submit"><EnvelopeClosedIcon className='mr-2' /> Logga in med mejl</Button>
                     </form>
                 </Form>
             </div>

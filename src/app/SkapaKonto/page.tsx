@@ -23,6 +23,7 @@ import Image from 'next/image'
 import absurd from '../../../public/absurd 2.png'
 import { roleSchema, siginUpSchema } from '@/types/zod'
 import { signUp } from '@/adapters/pocketbase'
+import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 
 export default function () {
     const form = useForm<siginUpSchema>({
@@ -141,7 +142,7 @@ export default function () {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Skapa konto</Button>
+                        <Button type="submit"><EnvelopeClosedIcon className='mr-2' />Skapa konto</Button>
                     </form>
                 </Form>
             </div>
