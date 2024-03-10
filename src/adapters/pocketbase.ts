@@ -1,6 +1,6 @@
-import { roleSchema, siginUpSchema, signInSchema } from '@/types/zod'
+import { siginUpSchema, signInSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
-const pb = new PocketBase('http://127.0.0.1:8090')
+const pb = new PocketBase(process.env.POCKETBASE)
 
 export const signUp = async (user: siginUpSchema) => {
     const data = {
@@ -12,6 +12,7 @@ export const signUp = async (user: siginUpSchema) => {
         role: user.role,
     }
     const authUser = await pb.collection('users').create(data)
+    pb.collection('users').requestVerification(user.email)
     return authUser
 }
 
