@@ -17,8 +17,10 @@ import absurd from '../../../public/absurd 1.png'
 import { signInSchema } from '@/types/zod'
 import { signIn } from '@/adapters/pocketbase'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/navigation'
 
 export default function () {
+    const router = useRouter()
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -26,10 +28,9 @@ export default function () {
             password: 'password',
         },
     })
-    const submit = async (value: signInSchema) => {
-        console.log(value)
-        const user = await signIn(value);
-        console.log({ user });
+    const submit = (value: signInSchema) => {
+        signIn(value)
+        router.push('/')
     }
 
     return (
@@ -80,7 +81,10 @@ export default function () {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit"><EnvelopeClosedIcon className='mr-2' /> Logga in med mejl</Button>
+                        <Button type="submit">
+                            <EnvelopeClosedIcon className="mr-2" /> Logga in med
+                            mejl
+                        </Button>
                     </form>
                 </Form>
             </div>
