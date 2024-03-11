@@ -4,6 +4,7 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import ProtectRoute from '@/components/functionComponents/protectRoute'
+import Header from '@/components/ui/header'
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -29,19 +30,7 @@ export default function RootLayout({
                     fontSans.variable
                 )}
             >
-                <header className="fixed w-full">
-                    <ul className="flex justify-end gap-x-4 px-8 py-4">
-                        <li>
-                            <Link href={'/'}>Home</Link>
-                        </li>
-                        <li>
-                            <Link href={'/SkapaKonto'}>SkapaKonto</Link>
-                        </li>
-                        <li>
-                            <Link href={'/LogaIn'}>LogaIn</Link>
-                        </li>
-                    </ul>
-                </header>
+                <Header />
                 {children}
             </body>
         </html>
