@@ -25,6 +25,13 @@ export const signOut = async () => {
     if (pb.authStore.token === '') {
         return
     }
-    console.log({ userToken: pb.authStore.token })
     pb.authStore.clear()
+}
+
+export const removeUser = async (userId: string) => {
+    try {
+        await pb.collection('users').delete(userId)
+    } catch (error) {
+        console.log(error)
+    }
 }

@@ -42,17 +42,17 @@ export default function () {
     })
     const submit = (value: siginUpSchema) => {
         signUp(value)
-        router.push('/')
+        router.push('/LogaIn')
     }
 
     const rols = Object.values(roleSchema.Values)
 
     return (
-        <main className="grid grid-cols-2 h-screen">
-            <div className="bg-black flex items-center px-40">
+        <main className="grid h-screen grid-cols-2">
+            <div className="flex items-center bg-black px-40">
                 <Image src={absurd} alt="" />
             </div>
-            <div className="flex flex-col gap-12 justify-center mx-auto">
+            <div className="mx-auto flex flex-col justify-center gap-12">
                 <div>
                     <Typography level="H1">Skapa konto</Typography>
                     <Typography level="P">

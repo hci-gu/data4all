@@ -49,7 +49,7 @@ const Header = () => {
         default:
             return (
                 <>
-                    <header className="fixed flex w-full justify-between px-4 py-4 border-b-2 border-slate-200">
+                    <header className="sticky flex w-full justify-between px-4 py-4 border-b-2 border-slate-200">
                         <img src="Logo.png" alt="" />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:text-lg">
                             <Typography level="H2">
