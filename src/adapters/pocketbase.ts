@@ -1,6 +1,7 @@
+import { navigate } from '@/lib/utils'
 import { siginUpSchema, signInSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
-const pb = new PocketBase(process.env.POCKETBASE)
+export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
 export const signUp = async (user: siginUpSchema) => {
     const data = {
