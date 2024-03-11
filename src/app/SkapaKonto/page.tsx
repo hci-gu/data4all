@@ -24,8 +24,10 @@ import absurd from '../../../public/absurd 2.png'
 import { roleSchema, siginUpSchema } from '@/types/zod'
 import { signUp } from '@/adapters/pocketbase'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/navigation'
 
 export default function () {
+    const router = useRouter()
     const form = useForm<siginUpSchema>({
         resolver: zodResolver(siginUpSchema),
         defaultValues: {
@@ -38,10 +40,9 @@ export default function () {
             keepIsSubmitSuccessful: true,
         },
     })
-    const submit = async (value: siginUpSchema) => {
-        console.log({ value })
-        const user = await signUp(value)
-        console.log({ user });
+    const submit = (value: siginUpSchema) => {
+        signUp(value)
+        router.push('/')
     }
 
     const rols = Object.values(roleSchema.Values)
@@ -142,7 +143,10 @@ export default function () {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit"><EnvelopeClosedIcon className='mr-2' />Skapa konto</Button>
+                        <Button type="submit">
+                            <EnvelopeClosedIcon className="mr-2" />
+                            Skapa konto
+                        </Button>
                     </form>
                 </Form>
             </div>
