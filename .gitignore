@@ -39,3 +39,7 @@ next-env.d.ts
 pocketbase/pocketbase
 pocketbase/pb_data
 pocketbase/pocketbase.exe
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
