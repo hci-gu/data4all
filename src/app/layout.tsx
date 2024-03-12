@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import ProtectRoute from '@/components/functionComponents/protectRoute'
 import Header from '@/components/ui/header'
+import { pb } from '@/adapters/pocketbase'
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -23,10 +24,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <ProtectRoute />
+            {/* <ProtectRoute /> */}
             <body
                 className={cn(
-                    'bg-background min-h-screen font-sans antialiased',
+                    'min-h-screen bg-background font-sans antialiased',
                     fontSans.variable
                 )}
             >
