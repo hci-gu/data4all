@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Typography from './Typography'
 import { pb } from '@/adapters/pocketbase'
+import Image from 'next/image'
 
 const Header = () => {
     const pathname = usePathname()
@@ -10,7 +11,7 @@ const Header = () => {
         case '/LogaIn':
             return (
                 <>
-                    <header className="fixed flex w-full justify-between px-4 pt-4">
+                    <header className="fixed flex h-[60px] w-full justify-between  px-4">
                         <div className="flex w-[50%] items-center justify-between pr-4 font-semibold [&>*]:border-none [&>*]:text-lg [&>*]:text-white">
                             <Typography level="H2">
                                 Kungsbacka dataportal
@@ -31,7 +32,7 @@ const Header = () => {
         case '/SkapaKonto':
             return (
                 <>
-                    <header className="fixed flex w-full justify-between px-4 pt-4">
+                    <header className="fixed flex h-[60px] w-full justify-between px-4">
                         <div className="flex w-[50%] items-center justify-between pr-4 font-semibold [&>*]:border-none [&>*]:text-lg [&>*]:text-white">
                             <Typography level="H2">
                                 Kungsbacka dataportal
@@ -49,9 +50,14 @@ const Header = () => {
         default:
             return (
                 <>
-                    <header className="sticky flex w-full justify-between px-4 py-4 border-b-2 border-slate-200">
-                        <img src="Logo.png" alt="" />
-                        <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:text-lg">
+                    <header className="sticky flex h-[60px] w-full justify-between items-center border-b-2 border-slate-200 px-4">
+                        <Image
+                            src="/Logo.png"
+                            height={40}
+                            width={251}
+                            alt="Logo"
+                        />
+                        <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
                             <Typography level="H2">
                                 {pb.authStore.model?.username}
                             </Typography>
