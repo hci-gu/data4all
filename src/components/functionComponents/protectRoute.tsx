@@ -19,6 +19,7 @@ const ProtectRoute = () => {
                 break
             case '/skapa-konto':
                 navigator('/')
+                console.log('här här');
                 break
         }
     } else if (
@@ -28,7 +29,6 @@ const ProtectRoute = () => {
     ) {
         navigator('/skapa-konto')
     }
-
     return <></>
 }
 
