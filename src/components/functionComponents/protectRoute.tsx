@@ -14,19 +14,19 @@ const ProtectRoute = () => {
 
     if (pb.authStore.isValid) {
         switch (pathname) {
-            case '/LogaIn':
+            case '/loga-in':
                 navigator('/')
                 break
-            case '/SkapaKonto':
+            case '/skapa-konto':
                 navigator('/')
                 break
         }
     } else if (
         !pb.authStore.isValid &&
-        pathname !== '/LogaIn' &&
-        pathname !== '/SkapaKonto'
+        pathname !== '/loga-in' &&
+        pathname !== '/skapa-konto'
     ) {
-        navigator('/SkapaKonto')
+        navigator('/skapa-konto')
     }
 
     return <></>

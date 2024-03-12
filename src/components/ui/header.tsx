@@ -7,7 +7,7 @@ import { pb } from '@/adapters/pocketbase'
 const Header = () => {
     const pathname = usePathname()
     switch (pathname) {
-        case '/LogaIn':
+        case '/loga-in':
             return (
                 <>
                     <header className="fixed flex w-full justify-between px-4 pt-4">
@@ -20,7 +20,7 @@ const Header = () => {
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
                                 className="h-fit text-sm"
-                                href={'/Skapakonto'}
+                                href={'/skapa-konto'}
                             >
                                 Skapa ett konto
                             </Link>
@@ -28,7 +28,7 @@ const Header = () => {
                     </header>
                 </>
             )
-        case '/SkapaKonto':
+        case '/skapa-konto':
             return (
                 <>
                     <header className="fixed flex w-full justify-between px-4 pt-4">
@@ -39,7 +39,7 @@ const Header = () => {
                             <img src="boxes.png" alt="" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
-                            <Link className="h-fit text-sm" href={'/LogaIn'}>
+                            <Link className="h-fit text-sm" href={'/loga-in'}>
                                 Logga in istället
                             </Link>
                         </div>
