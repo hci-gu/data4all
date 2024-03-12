@@ -1,18 +1,40 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
+
+const baseUrl = 'http://localhost:3000'
 
 test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+    await page.goto(`${baseUrl}/loga-in`)
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+    // Expects page to have a title of "Logga in".
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Logga in')
+})
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test('can navigate to login', async ({ page }) => {
+    await page.goto(`${baseUrl}`)
+    await page.getByRole('link', { name: /Logga in istället/i }).click()
+    await expect(page).toHaveURL(`${baseUrl}/loga-in`) 
+})
+test('can login', async ({ page }) => {
+    const user = {
+        email: 'exampel@kungsbacka.se',
+        password: '123456789',
+        role: 'User',
+    }
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+    /* Signup page */
+    await page.goto(`${baseUrl}/skapa-konto`)
+    await page.fill('input[name="email"]', user.email)
+    await page.fill('input[name="password"]', user.password)
+    await page.fill('input[name="passwordConfirmation"]', user.password)
+    await page.locator('select').selectOption({ label: user.role })
+    await page.click('button[type="submit"]')
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+    /* Sign in page */
+    await page.getByRole('link', { name: /Logga in istället/i }).click()
+    await expect(page).toHaveURL(`${baseUrl}/loga-in`)
+    await page.fill('input[name="email"]', user.email)
+    await page.fill('input[name="password"]', user.password)
+    await page.click('button[type="submit"]')
+    await page.waitForURL(`${baseUrl}/skapa-konto`)
+    await expect(page).toHaveURL(`${baseUrl}/skapa-konto`)
+})
