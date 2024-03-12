@@ -50,7 +50,7 @@ const Header = () => {
         default:
             return (
                 <>
-                    <header className="sticky flex h-[60px] w-full justify-between items-center border-b-2 border-slate-200 px-4">
+                    <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
                         <Image
                             src="/Logo.png"
                             height={40}
@@ -59,7 +59,7 @@ const Header = () => {
                         />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
                             <Typography level="H2">
-                                {pb.authStore.model?.username}
+                                {pb.authStore.model?.name}
                             </Typography>
                         </div>
                     </header>
