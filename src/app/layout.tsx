@@ -2,10 +2,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import ProtectRoute from '@/components/functionComponents/protectRoute'
 import Header from '@/components/ui/header'
-import { pb } from '@/adapters/pocketbase'
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -24,7 +21,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <ProtectRoute />
             <body
                 className={cn(
                     'min-h-screen bg-background font-sans antialiased',

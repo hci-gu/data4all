@@ -20,18 +20,28 @@ export default function SignIn() {
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'styris.n@gmail.com',
+            password: '&j7eKjmFE3zpGHet',
         },
     })
-    const submit = (value: signInSchema) => {
-        signIn(value)
-        router.push('/')
+    const submit = async (value: signInSchema) => {
+        const response = await fetch('/api/auth/sign-in', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: value.email,
+                password: value.password,
+            }),
+        })
     }
     return (
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(submit)}
+                // action="/api/auth/sign-in"
+                // method="post"
                 className="space-y-8"
             >
                 <FormField
@@ -65,8 +75,7 @@ export default function SignIn() {
                     )}
                 />
                 <Button type="submit">
-                    <EnvelopeClosedIcon className="mr-2" /> Logga in med
-                    mejl
+                    <EnvelopeClosedIcon className="mr-2" /> Logga in med mejl
                 </Button>
             </form>
         </Form>

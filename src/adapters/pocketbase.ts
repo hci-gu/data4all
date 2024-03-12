@@ -1,6 +1,5 @@
 import { updateUserSchema } from '@/app/profile/page'
 import { siginUpSchema, signInSchema } from '@/types/zod'
-import { cookies } from 'next/headers'
 import PocketBase from 'pocketbase'
 import { z } from 'zod'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
@@ -23,7 +22,7 @@ export const signIn = async (user: signInSchema) => {
         .collection('users')
         .authWithPassword(user.email, user.password)
     const cookieString = pb.authStore.exportToCookie()
-    cookies().set('auth', cookieString)
+    // cookies().set('auth', cookieString)
     console.log(authUser)
 }
 
