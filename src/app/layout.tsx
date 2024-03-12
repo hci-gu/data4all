@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            {/* <ProtectRoute /> */}
+            <ProtectRoute />
             <body
                 className={cn(
                     'min-h-screen bg-background font-sans antialiased',

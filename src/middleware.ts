@@ -1,17 +1,25 @@
-import { pb } from '@/adapters/pocketbase'
+import { isUserAuthed } from '@/adapters/pocketbase'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-    const currentUser = pb.authStore.isValid
-    if (currentUser && request.nextUrl.pathname.startsWith('/loga-in')) {
-        return Response.redirect(new URL('/profile', request.url))
-    }
-    if (currentUser && request.nextUrl.pathname.startsWith('/skapa-konto')) {
-        return Response.redirect(new URL('/profile', request.url))
-    }
-
-    if (!currentUser && !request.nextUrl.pathname.startsWith('/loga-in')) {
-        return Response.redirect(new URL('/loga-in', request.url))
+    console.log(request.cookies)
+    // if (!!currentUser) {
+    //     const path = request.nextUrl.pathname
+    //     switch (true) {
+    //         case path.startsWith('/loga-in'):
+    //             return Response.redirect(new URL('/profile', request.url))
+    //         case path.startsWith('/skapa-konto'):
+    //             return Response.redirect(new URL('/profile', request.url))
+    //     }
+    // }
+    if (!isUserAuthed()) {
+        const path = request.nextUrl.pathname
+        switch (true) {
+            case !path.startsWith('/loga-in'):
+                return Response.redirect(new URL('/loga-in', request.url))
+            // case !path.startsWith('/skapa-konto'):
+            //     return Response.redirect(new URL('/loga-in', request.url))
+        }
     }
 }
 
