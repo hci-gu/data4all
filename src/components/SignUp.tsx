@@ -21,33 +21,44 @@ import {
 import { roleSchema, siginUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
-import { signUp } from '@/adapters/pocketbase'
 export default function SignUp() {
     const router = useRouter()
     const form = useForm<siginUpSchema>({
         resolver: zodResolver(siginUpSchema),
         defaultValues: {
-            email: '',
-            password: '',
-            passwordConfirmation: ''
+            email: 'styris.n@gmail.com',
+            password: 'j7eKjmFE3zpGHet',
+            passwordConfirmation: 'j7eKjmFE3zpGHet',
+            role: 'User'
         },
         resetOptions: {
             keepIsSubmitSuccessful: true,
         },
     })
-    const submit = (value: siginUpSchema) => {
-        signUp(value)
-        router.push('/')
+    const submit = async (value: siginUpSchema) => {
+        const response = await fetch('/api/auth/sign-up', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: value.email,
+                password: value.password,
+                passwordConfirmation: value.passwordConfirmation,
+                role: value.role,
+            }),
+        })
+
+        if (response.status === 200) {
+            router.push('/loga-in')
+        }
     }
 
     const rols = Object.values(roleSchema.Values)
 
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(submit)}
-                className="space-y-8"
-            >
+            <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="email"
@@ -113,10 +124,7 @@ export default function SignUp() {
                                     </FormControl>
                                     <SelectContent>
                                         {rols.map((role) => (
-                                            <SelectItem
-                                                value={role}
-                                                key={role}
-                                            >
+                                            <SelectItem value={role} key={role}>
                                                 {role}
                                             </SelectItem>
                                         ))}
