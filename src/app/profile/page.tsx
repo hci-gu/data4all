@@ -214,7 +214,7 @@ export default function () {
                         variant={'outline'}
                         onClick={() => {
                             signOut()
-                            router.push('/LogaIn')
+                            router.push('/loga-in')
                         }}
                     >
                         Logga ut
