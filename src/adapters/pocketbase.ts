@@ -1,7 +1,5 @@
-import { updateUserSchema } from '@/app/profile/page'
-import { siginUpSchema, signInSchema } from '@/types/zod'
+import { siginUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
-import { z } from 'zod'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
 export const signUp = async (user: siginUpSchema) => {
@@ -26,23 +24,8 @@ export const signIn = async (user: signInSchema) => {
     console.log(authUser)
 }
 
-export const signOut = async () => {
-    if (pb.authStore.token === '') {
-        return
-    }
-    pb.authStore.clear()
-}
-
-export const removeUser = async (userId: string) => {
-    try {
-        await pb.collection('users').delete(userId)
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 export const updateUser = async (
-    formData: z.infer<typeof updateUserSchema>,
+    formData: updateUserSchema,
     userId: string
 ) => {
     const data = {
@@ -58,4 +41,31 @@ export const updateUser = async (
     } catch (error) {
         console.log(error)
     }
+}
+
+export const signOut = async () => {
+    const response = await fetch('/api/auth/sign-out', {
+        method: 'DELETE',
+    })
+
+    if (response.status === 200) {
+        pb.authStore.clear()
+        return true
+    }
+    return false
+}
+
+export const removeUser = async (userId: string) => {
+    const response = await fetch('/api/auth/removeAccount', {
+        method: 'DELETE',
+        body: JSON.stringify({
+            id: userId,
+        }),
+    })
+
+    if (response.status === 200) {
+        pb.authStore.clear()
+        return true
+    }
+    return false
 }
