@@ -22,8 +22,7 @@ export const signIn = async (user: signInSchema) => {
         .collection('users')
         .authWithPassword(user.email, user.password)
     const cookieString = pb.authStore.exportToCookie()
-    // cookies().set('auth', cookieString)
-    console.log(authUser)
+    // cookies().set('auth', cookieString)    
 }
 
 export const signOut = async () => {

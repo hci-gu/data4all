@@ -10,10 +10,10 @@ test('has title', async ({ page }) => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Logga in')
 })
 
-test('can navigate to login', async ({ page }) => {
-    await page.goto(`${baseUrl}`)
-    await page.getByRole('link', { name: /Logga in istället/i }).click()
-    await expect(page).toHaveURL(`${baseUrl}/loga-in`)
+test('can navigate to signup page', async ({ page }) => {
+    await page.goto(`${baseUrl}/loga-in`)
+    page.click('a[href="/skapa-konto"]')
+    await expect(page).toHaveURL(`${baseUrl}/skapa-konto`)
 })
 test('can login', async ({ page }) => {
     const user = {
@@ -35,12 +35,12 @@ test('can login', async ({ page }) => {
     await page.fill('input[name="email"]', user.email)
     await page.fill('input[name="password"]', user.password)
     await page.click('button[type="submit"]')
-
-    // index page
-    await expect(page).toHaveURL(`${baseUrl}/`)
-    await page.getByRole('button').click()
-
+    
     // profile page
-    await expect(page).toHaveURL(`${baseUrl}/profile`)
+    await expect(page).toHaveURL(`${baseUrl}`)
+    await page.goto(`${baseUrl}/profile`)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Profil')
+
+    // Delete account
+    await page.getByRole('button', { name: 'Ta bort konto' }).click()
 })
