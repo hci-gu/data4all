@@ -69,6 +69,16 @@ export default function () {
         updateUser(value, userId)
     }
 
+    const signOut = async () => {
+        const response = await fetch('/api/auth/sign-out', {
+            method: 'DELETE',
+        })
+
+        if (response.status === 200) {
+            router.push('/loga-in')
+        }
+    }
+
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
             <div className="flex w-[573.5px] flex-col gap-[10px]">
@@ -214,7 +224,6 @@ export default function () {
                         variant={'outline'}
                         onClick={() => {
                             signOut()
-                            router.push('/loga-in')
                         }}
                     >
                         Logga ut

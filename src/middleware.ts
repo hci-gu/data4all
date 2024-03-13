@@ -14,7 +14,6 @@ export function middleware(request: NextRequest) {
     }
     if (authorizedUser === undefined) {
         const path = request.nextUrl.pathname
-        console.log(path)
         if (!path.startsWith('/loga-in') && !path.startsWith('/skapa-konto')) {
             return Response.redirect(new URL('/loga-in', request.url))
         }
