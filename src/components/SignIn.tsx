@@ -14,13 +14,14 @@ import { Input } from '@/components/ui/input'
 import { signInSchema } from '@/types/zod'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
+import { signIn } from '@/adapters/pocketbase'
 export default function SignIn() {
     const router = useRouter()
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
             email: 'styris.n@gmail.com',
-            password: '&j7eKjmFE3zpGHet',
+            password: 'j7eKjmFE3zpGHet',
         },
     })
     const submit = async (value: signInSchema) => {
@@ -36,6 +37,7 @@ export default function SignIn() {
         })
 
         if (response.status === 200) {
+            signIn(value)
             router.push('/')
         }
     }

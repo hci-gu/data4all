@@ -12,5 +12,5 @@ export async function POST(request: Request) {
 
     cookies().set('PBAuth', authUser.token)
 
-    return NextResponse.json({message: 'succes'}, {status: 200})
+    return NextResponse.json({ message: 'succes' }, { status: 200 })
 }

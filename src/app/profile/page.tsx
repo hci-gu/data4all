@@ -45,7 +45,6 @@ export default function () {
         router.push('/SkapaKonto')
     }
     const user = pb.authStore.model
-
     const roles = Object.values(roleSchema.Values)
 
     const form = useForm<z.infer<typeof updateUserSchema>>({
@@ -75,7 +74,22 @@ export default function () {
         })
 
         if (response.status === 200) {
+            pb.authStore.clear()
             router.push('/loga-in')
+        }
+    }
+
+    const removeUser = async (userId: string) => {
+        const response = await fetch('/api/auth/removeAccount', {
+            method: 'DELETE',
+            body: JSON.stringify({
+                id: userId,
+            }),
+        })
+
+        if (response.status === 200) {
+            pb.authStore.clear()
+            router.push('/skapa-konto')
         }
     }
 
@@ -230,7 +244,7 @@ export default function () {
                     </Button>
                     <Button
                         variant={'destructive'}
-                        onClick={() => removeAccount(user?.id)}
+                        onClick={() => removeUser(user?.id)}
                     >
                         Ta bort konto
                     </Button>
