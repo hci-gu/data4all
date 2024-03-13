@@ -40,10 +40,6 @@ export const updateUserSchema = z
 export default function () {
     const router = useRouter()
 
-    const removeAccount = (userId: string) => {
-        removeUser(userId)
-        router.push('/SkapaKonto')
-    }
     const user = pb.authStore.model
     const roles = Object.values(roleSchema.Values)
 
@@ -61,10 +57,7 @@ export default function () {
 
     const submit = (value: z.infer<typeof updateUserSchema>) => {
         const userId = pb.authStore.model?.id
-        console.log(userId)
-        console.log(pb.authStore.model)
 
-        //@ts-ignore
         updateUser(value, userId)
     }
 
