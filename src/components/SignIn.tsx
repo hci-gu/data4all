@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { signInSchema } from '@/types/zod'
-import { signIn } from '@/adapters/pocketbase'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 export default function SignIn() {
@@ -35,6 +34,10 @@ export default function SignIn() {
                 password: value.password,
             }),
         })
+
+        if (response.status === 200) {
+            router.push('/')
+        }
     }
     return (
         <Form {...form}>
