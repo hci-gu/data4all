@@ -3,7 +3,8 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
     const authorizedUser = cookies().get('PBAuth')
-    if (authorizedUser !== undefined) {
+    
+    if (authorizedUser) {
         const path = request.nextUrl.pathname
         switch (true) {
             case path.startsWith('/loga-in'):
@@ -12,7 +13,7 @@ export function middleware(request: NextRequest) {
                 return Response.redirect(new URL('/profile', request.url))
         }
     }
-    if (authorizedUser === undefined) {
+    if (!authorizedUser) {
         const path = request.nextUrl.pathname
         if (!path.startsWith('/loga-in') && !path.startsWith('/skapa-konto')) {
             return Response.redirect(new URL('/loga-in', request.url))
