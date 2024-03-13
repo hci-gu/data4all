@@ -1,3 +1,4 @@
+// @ts-check
 import { test, expect } from '@playwright/test'
 
 const baseUrl = 'http://localhost:3000'
@@ -12,7 +13,7 @@ test('has title', async ({ page }) => {
 test('can navigate to login', async ({ page }) => {
     await page.goto(`${baseUrl}`)
     await page.getByRole('link', { name: /Logga in istället/i }).click()
-    await expect(page).toHaveURL(`${baseUrl}/loga-in`) 
+    await expect(page).toHaveURL(`${baseUrl}/loga-in`)
 })
 test('can login', async ({ page }) => {
     const user = {
@@ -27,14 +28,19 @@ test('can login', async ({ page }) => {
     await page.fill('input[name="password"]', user.password)
     await page.fill('input[name="passwordConfirmation"]', user.password)
     await page.locator('select').selectOption({ label: user.role })
-    await page.click('button[type="submit"]')
+    await page.getByRole('button', { name: 'Skapa konto' }).click()
 
-    /* Sign in page */
-    await page.getByRole('link', { name: /Logga in istället/i }).click()
+    /* Login page */
     await expect(page).toHaveURL(`${baseUrl}/loga-in`)
     await page.fill('input[name="email"]', user.email)
     await page.fill('input[name="password"]', user.password)
     await page.click('button[type="submit"]')
-    await page.waitForURL(`${baseUrl}/skapa-konto`)
-    await expect(page).toHaveURL(`${baseUrl}/skapa-konto`)
+
+    // index page
+    await expect(page).toHaveURL(`${baseUrl}/`)
+    await page.getByRole('button').click()
+
+    // profile page
+    await expect(page).toHaveURL(`${baseUrl}/profile`)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Profil')
 })
