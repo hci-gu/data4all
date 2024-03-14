@@ -21,9 +21,9 @@ import { useForm } from 'react-hook-form'
 import { Button } from './ui/button'
 import { pb, updateUser } from '@/adapters/pocketbase'
 import { useRouter } from 'next/navigation'
+import { AuthModel } from 'pocketbase'
 
-export default function UpdateUserForm() {
-    const user = pb.authStore.model
+export default function UpdateUserForm({user}: {user: AuthModel}) {
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {

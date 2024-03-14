@@ -5,14 +5,13 @@ import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizeduser } from '../api/auth/utils'
 
 export default function () {
-
     const user = loadAuthorizeduser()
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
             <div className="flex w-[573.5px] flex-col gap-[10px]">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
-                <UpdateUserForm />
+                <UpdateUserForm user={user} />
                 <Separator />
                 <h2 className="text-3xl font-semibold">
                     Om Kungsbacka dataportal

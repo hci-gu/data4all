@@ -2,10 +2,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Typography from './Typography'
-import { pb } from '@/adapters/pocketbase'
 import Image from 'next/image'
 
-const Header = () => {
+export default function Header({usersName}: {usersName: string}) {
     const pathname = usePathname()
     switch (pathname) {
         case '/loga-in':
@@ -58,13 +57,10 @@ const Header = () => {
                             alt="Logo"
                         />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
-                            <Typography level="H2">
-                                {pb.authStore.model?.name}
-                            </Typography>
+                            <Typography level="H2">{usersName}</Typography>
                         </div>
                     </header>
                 </>
             )
     }
 }
-export default Header
