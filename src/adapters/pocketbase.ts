@@ -28,19 +28,24 @@ export const updateUser = async (
     formData: updateUserSchema,
     userId: string
 ) => {
-    const data = {
-        name: formData?.name,
-        email: formData?.email,
-        oldPassword: formData?.oldPassword,
-        password: formData?.password,
-        passwordConfirm: formData?.passwordConfirm,
-        role: formData?.role,
+    const response = await fetch('/api/auth/updateAccount', {
+        method: 'PUT',
+        body: JSON.stringify({
+            id: userId,
+            formData: {
+                name: formData?.name,
+                email: formData?.email,
+                oldPassword: formData?.oldPassword,
+                password: formData?.password,
+                passwordConfirm: formData?.passwordConfirm,
+                role: formData?.role,
+            },
+        }),
+    })
+    if (response.status === 200) {
+        return true
     }
-    try {
-        await pb.collection('users').update(userId, data)
-    } catch (error) {
-        console.log(error)
-    }
+    return false
 }
 
 export const signOut = async () => {

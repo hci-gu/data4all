@@ -19,7 +19,8 @@ import { roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from './ui/button'
-import { pb } from '@/adapters/pocketbase'
+import { pb, updateUser } from '@/adapters/pocketbase'
+import { useRouter } from 'next/navigation'
 
 export default function UpdateUserForm() {
     const user = pb.authStore.model
@@ -36,10 +37,10 @@ export default function UpdateUserForm() {
     })
 
     const roles = Object.values(roleSchema.Values)
+    const router = useRouter()
 
-    const submit = (value: updateUserSchema) => {
-        //@ts-ignore
-        updateUser(value, user?.id)
+    const submit = async (value: updateUserSchema) => {
+        if (await updateUser(value, user?.id)) router.push('/profile')
     }
     return (
         <Form {...form}>
