@@ -43,3 +43,4 @@ pocketbase/pocketbase.exe
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+tests/setup/storage.json
