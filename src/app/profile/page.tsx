@@ -2,8 +2,12 @@ import LogoutButton from '@/components/logoutButton'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
+import { loadAuthorizeduser } from '../api/auth/utils'
 
 export default function () {
+
+    const user = loadAuthorizeduser()
+
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
             <div className="flex w-[573.5px] flex-col gap-[10px]">

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
         .collection('users')
         .authWithPassword(user.email, user.password)
 
-    cookies().set('PBAuth', authUser.token)
+    cookies().set('PBAuth', pb.authStore.exportToCookie())
 
     return NextResponse.json({ message: 'succes' }, { status: 200 })
 }
