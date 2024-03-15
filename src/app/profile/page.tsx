@@ -29,7 +29,7 @@ export default function () {
                 <Separator />
                 <div className="flex justify-start gap-[10px]">
                     <LogoutButton />
-                    <RemoveAccountButton />
+                    <RemoveAccountButton userId={user?.id} />
                 </div>
             </div>
             <Separator orientation="vertical" />
