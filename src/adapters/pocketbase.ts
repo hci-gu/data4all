@@ -3,25 +3,39 @@ import PocketBase from 'pocketbase'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
 export const signUp = async (user: siginUpSchema) => {
-    const data = {
-        email: user.email,
-        emailVisibility: true,
-        password: user.password,
-        passwordConfirm: user.passwordConfirmation,
-        name: user.email,
-        role: user.role,
+    const response = await fetch('/api/auth/sign-up', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: user.email,
+            password: user.password,
+            passwordConfirmation: user.passwordConfirmation,
+            role: user.role,
+        }),
+    })
+    if (response.status === 200) {
+        return true
     }
-    const authUser = await pb.collection('users').create(data)
-    pb.collection('users').requestVerification(user.email)
+    return false
 }
 
 export const signIn = async (user: signInSchema) => {
-    const authUser = await pb
-        .collection('users')
-        .authWithPassword(user.email, user.password)
-    const cookieString = pb.authStore.exportToCookie()
-    // cookies().set('auth', cookieString)
-    console.log(authUser)
+    const response = await fetch('/api/auth/sign-in', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: user.email,
+            password: user.password,
+        }),
+    })
+    if (response.status === 200) {
+        return true
+    }
+    return false
 }
 
 export const updateUser = async (
