@@ -2,89 +2,50 @@ import { siginUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
-export const signUp = async (user: siginUpSchema) => {
-    const response = await fetch('/api/auth/sign-up', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            email: user.email,
-            password: user.password,
-            passwordConfirmation: user.passwordConfirmation,
-            role: user.role,
-        }),
-    })
-    if (response.status === 200) {
+const apiUrl = (endpoint: string) => `/api/auth/${endpoint}`
+const handleResponse = async (Response: Response): Promise<boolean> => {
+    if (Response.ok) {
         return true
     }
     return false
 }
-
-export const signIn = async (user: signInSchema) => {
-    const response = await fetch('/api/auth/sign-in', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            email: user.email,
-            password: user.password,
-        }),
-    })
-    if (response.status === 200) {
-        return true
+const apiRequest = async (
+    url: string,
+    method: string,
+    body?: any
+): Promise<boolean> => {
+    const options: RequestInit = {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
     }
-    return false
+
+    const response = await fetch(url, options)
+    return await handleResponse(response)
+}
+
+export const signUp = async (user: siginUpSchema): Promise<boolean> => {
+    return await apiRequest(apiUrl('sign-up'), 'POST', user)
+}
+
+export const signIn = async (user: signInSchema): Promise<boolean> => {
+    return await apiRequest(apiUrl('sign-in'), 'POST', user)
+}
+
+export const signOut = async (): Promise<boolean> => {
+    return await apiRequest(apiUrl('sign-out'), 'DELETE')
 }
 
 export const updateUser = async (
     formData: updateUserSchema,
     userId: string
-) => {
-    const response = await fetch('/api/auth/updateAccount', {
-        method: 'PUT',
-        body: JSON.stringify({
-            id: userId,
-            formData: {
-                name: formData?.name,
-                email: formData?.email,
-                oldPassword: formData?.oldPassword,
-                password: formData?.password,
-                passwordConfirm: formData?.passwordConfirm,
-                role: formData?.role,
-            },
-        }),
+): Promise<boolean> => {
+    return await apiRequest(apiUrl('updateAccount'), 'PUT', {
+        id: userId,
+        formData,
     })
-    if (response.status === 200) {
-        return true
-    }
-    return false
 }
 
-export const signOut = async () => {
-    const response = await fetch('/api/auth/sign-out', {
-        method: 'DELETE',
-    })
-
-    if (response.status === 200) {
-        pb.authStore.clear()
-        return true
-    }
-    return false
-}
-
-export const removeUser = async (userId: string) => {
-    const response = await fetch('/api/auth/removeAccount', {
-        method: 'DELETE',
-        body: JSON.stringify({
-            id: userId,
-        }),
-    })
-
-    if (response.status === 200) {
-        pb.authStore.clear()
-        return true
-    }
-    return false
+export const removeUser = async (userId: string): Promise<boolean> => {
+    return await apiRequest(apiUrl('removeAccount'), 'DELETE', { id: userId })
 }
