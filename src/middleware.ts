@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import PocketBase from 'pocketbase'
-import { z } from 'zod'
 
 export function middleware(request: NextRequest) {
     const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
@@ -17,16 +16,21 @@ export function middleware(request: NextRequest) {
     }
 
     if (authorizedUser) {
-        pb.authStore.loadFromCookie(z.string().parse(authorizedUser?.value))
+        pb.authStore.loadFromCookie(authorizedUser.value)
     }
 
-    if (!pb.authStore.isValid) {
-        if (!path.startsWith('/loga-in') && !path.startsWith('/skapa-konto')) {
-            return Response.redirect(new URL('/loga-in', request.url))
-        }
+    if (
+        !pb.authStore.isValid &&
+        !path.startsWith('/loga-in') &&
+        !path.startsWith('/skapa-konto')
+    ) {
+        return Response.redirect(new URL('/loga-in', request.url))
     }
 
-    if (authorizedUser && (path.startsWith('/loga-in') || path.startsWith('/skapa-konto'))) {
+    if (
+        authorizedUser &&
+        (path.startsWith('/loga-in') || path.startsWith('/skapa-konto'))
+    ) {
         return Response.redirect(new URL('/profile', request.url))
     }
 }
