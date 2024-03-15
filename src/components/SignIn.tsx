@@ -25,30 +25,11 @@ export default function SignIn() {
         },
     })
     const submit = async (value: signInSchema) => {
-        const response = await fetch('/api/auth/sign-in', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: value.email,
-                password: value.password,
-            }),
-        })
-
-        if (response.status === 200) {
-            signIn(value)
-            router.push('/')
-        }
+        if (await signIn(value)) router.push('/')
     }
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(submit)}
-                // action="/api/auth/sign-in"
-                // method="post"
-                className="space-y-8"
-            >
+            <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="email"

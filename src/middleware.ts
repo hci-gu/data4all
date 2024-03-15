@@ -1,23 +1,26 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
+import PocketBase from 'pocketbase'
 
 export function middleware(request: NextRequest) {
+    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
-    
+    const path = request.nextUrl.pathname
+
     if (authorizedUser) {
-        const path = request.nextUrl.pathname
-        switch (true) {
-            case path.startsWith('/loga-in'):
-                return Response.redirect(new URL('/profile', request.url))
-            case path.startsWith('/skapa-konto'):
-                return Response.redirect(new URL('/profile', request.url))
-        }
+        pb.authStore.loadFromCookie(authorizedUser.value)
     }
-    if (!authorizedUser) {
-        const path = request.nextUrl.pathname
-        if (!path.startsWith('/loga-in') && !path.startsWith('/skapa-konto')) {
-            return Response.redirect(new URL('/loga-in', request.url))
-        }
+    const isLoginPage =
+        path.startsWith('/loga-in') || path.startsWith('/skapa-konto')
+    const isUnauthorized = !authorizedUser && !isLoginPage
+    const isInvalidAuth =
+        authorizedUser && !pb.authStore.isValid && !isLoginPage
+
+    if (isUnauthorized || isInvalidAuth) {
+        return Response.redirect(new URL('/loga-in', request.url))
+    }
+    if (authorizedUser && isLoginPage) {
+        return Response.redirect(new URL('/profile', request.url))
     }
 }
 

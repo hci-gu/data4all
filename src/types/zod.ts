@@ -17,6 +17,21 @@ export const siginUpSchema = signInSchema
         path: ['passwordConfirmation'],
     })
 
+export const updateUserSchema = z
+    .object({
+        name: z.string().min(1, 'name is required'),
+        email: z.string().min(1, 'email is required').email('invalid email'),
+        oldPassword: z.string(),
+        password: z.string(),
+        passwordConfirm: z.string(),
+        role: z.string(),
+    })
+    .refine((data) => data.password === data.passwordConfirm, {
+        path: ['passwordConfirm'],
+        message: 'Passwords does not match',
+    })
+
 export type signInSchema = z.infer<typeof signInSchema>
 export type siginUpSchema = z.infer<typeof siginUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
+export type updateUserSchema = z.infer<typeof updateUserSchema>

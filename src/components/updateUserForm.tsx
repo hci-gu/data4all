@@ -1,7 +1,4 @@
 'use client'
-import { Button } from '@/components/ui/button'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
     Form,
     FormControl,
@@ -18,41 +15,60 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { roleSchema, siginUpSchema } from '@/types/zod'
+import { roleSchema, updateUserSchema } from '@/types/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Button } from './ui/button'
+import { pb, updateUser } from '@/adapters/pocketbase'
 import { useRouter } from 'next/navigation'
-import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
-import { signUp } from '@/adapters/pocketbase'
-export default function SignUp() {
-    const router = useRouter()
-    const form = useForm<siginUpSchema>({
-        resolver: zodResolver(siginUpSchema),
+import { AuthModel } from 'pocketbase'
+
+export default function UpdateUserForm({user}: {user: AuthModel}) {
+    const form = useForm<updateUserSchema>({
+        resolver: zodResolver(updateUserSchema),
         defaultValues: {
-            email: '',
+            name: user?.name,
+            email: user?.email,
+            oldPassword: '',
             password: '',
-            passwordConfirmation: '',
-            role: 'User',
-        },
-        resetOptions: {
-            keepIsSubmitSuccessful: true,
+            passwordConfirm: '',
+            role: user?.role,
         },
     })
-    const submit = async (value: siginUpSchema) => {
-        if (await signUp(value)) router.push('/loga-in')
+
+    const roles = Object.values(roleSchema.Values)
+    const router = useRouter()
+
+    const submit = async (value: updateUserSchema) => {
+        if (await updateUser(value, user?.id)) router.push('/profile')
     }
-
-    const rols = Object.values(roleSchema.Values)
-
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
+            <form
+                className="flex w-[384px] flex-col gap-[10px]"
+                onSubmit={form.handleSubmit(submit)}
+            >
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Namn</FormLabel>
+                            <FormControl>
+                                <Input placeholder="namn" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Mail</FormLabel>
+                            <FormLabel>Mejl</FormLabel>
                             <FormControl>
-                                <Input placeholder="Mail" {...field} />
+                                <Input placeholder="email" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -77,14 +93,31 @@ export default function SignUp() {
                 />
                 <FormField
                     control={form.control}
-                    name="passwordConfirmation"
+                    name="oldPassword"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Upprepa lösenord</FormLabel>
+                            <FormLabel>Nuvarande lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
-                                    placeholder="Lösenord"
+                                    placeholder="Nuvarande lösenord"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="passwordConfirm"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Bekräfta lösenord</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="password"
+                                    placeholder="Bekräfta lösenord"
                                     {...field}
                                 />
                             </FormControl>
@@ -109,7 +142,7 @@ export default function SignUp() {
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {rols.map((role) => (
+                                        {roles.map((role) => (
                                             <SelectItem value={role} key={role}>
                                                 {role}
                                             </SelectItem>
@@ -121,10 +154,9 @@ export default function SignUp() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">
-                    <EnvelopeClosedIcon className="mr-2" />
-                    Skapa konto
-                </Button>
+                <div>
+                    <Button type="submit">Uppdatera</Button>
+                </div>
             </form>
         </Form>
     )

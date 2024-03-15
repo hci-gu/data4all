@@ -1,60 +1,51 @@
-import { updateUserSchema } from '@/app/profile/page'
-import { siginUpSchema, signInSchema } from '@/types/zod'
+import { siginUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
-import { z } from 'zod'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
-export const signUp = async (user: siginUpSchema) => {
-    const data = {
-        email: user.email,
-        emailVisibility: true,
-        password: user.password,
-        passwordConfirm: user.passwordConfirmation,
-        name: user.email,
-        role: user.role,
+const apiUrl = (endpoint: string) => `/api/auth/${endpoint}`
+const handleResponse = async (Response: Response): Promise<boolean> => {
+    if (Response.ok) {
+        return true
     }
-    const authUser = await pb.collection('users').create(data)
-    pb.collection('users').requestVerification(user.email)
+    return false
+}
+const apiRequest = async (
+    url: string,
+    method: string,
+    body?: any
+): Promise<boolean> => {
+    const options: RequestInit = {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
+    }
+
+    const response = await fetch(url, options)
+    return await handleResponse(response)
 }
 
-export const signIn = async (user: signInSchema) => {
-    const authUser = await pb
-        .collection('users')
-        .authWithPassword(user.email, user.password)
-    const cookieString = pb.authStore.exportToCookie()
-    // cookies().set('auth', cookieString)    
+export const signUp = async (user: siginUpSchema): Promise<boolean> => {
+    return await apiRequest(apiUrl('sign-up'), 'POST', user)
 }
 
-export const signOut = async () => {
-    if (pb.authStore.token === '') {
-        return
-    }
-    pb.authStore.clear()
+export const signIn = async (user: signInSchema): Promise<boolean> => {
+    return await apiRequest(apiUrl('sign-in'), 'POST', user)
 }
 
-export const removeUser = async (userId: string) => {
-    try {
-        await pb.collection('users').delete(userId)
-    } catch (error) {
-        console.log(error)
-    }
+export const signOut = async (): Promise<boolean> => {
+    return await apiRequest(apiUrl('sign-out'), 'DELETE')
 }
 
 export const updateUser = async (
-    formData: z.infer<typeof updateUserSchema>,
+    formData: updateUserSchema,
     userId: string
-) => {
-    const data = {
-        name: formData?.name,
-        email: formData?.email,
-        oldPassword: formData?.oldPassword,
-        password: formData?.password,
-        passwordConfirm: formData?.passwordConfirm,
-        role: formData?.role,
-    }
-    try {
-        await pb.collection('users').update(userId, data)
-    } catch (error) {
-        console.log(error)
-    }
+): Promise<boolean> => {
+    return await apiRequest(apiUrl('updateAccount'), 'PUT', {
+        id: userId,
+        formData,
+    })
+}
+
+export const removeUser = async (userId: string): Promise<boolean> => {
+    return await apiRequest(apiUrl('removeAccount'), 'DELETE', { id: userId })
 }
