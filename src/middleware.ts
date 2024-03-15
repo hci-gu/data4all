@@ -7,30 +7,19 @@ export function middleware(request: NextRequest) {
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
 
-    if (
-        !authorizedUser &&
-        !path.startsWith('/loga-in') &&
-        !path.startsWith('/skapa-konto')
-    ) {
-        return Response.redirect(new URL('/loga-in', request.url))
-    }
-
     if (authorizedUser) {
         pb.authStore.loadFromCookie(authorizedUser.value)
     }
+    const isLoginPage =
+        path.startsWith('/loga-in') || path.startsWith('/skapa-konto')
+    const isUnauthorized = !authorizedUser && !isLoginPage
+    const isInvalidAuth =
+        authorizedUser && !pb.authStore.isValid && !isLoginPage
 
-    if (
-        !pb.authStore.isValid &&
-        !path.startsWith('/loga-in') &&
-        !path.startsWith('/skapa-konto')
-    ) {
+    if (isUnauthorized || isInvalidAuth) {
         return Response.redirect(new URL('/loga-in', request.url))
     }
-
-    if (
-        authorizedUser &&
-        (path.startsWith('/loga-in') || path.startsWith('/skapa-konto'))
-    ) {
+    if (authorizedUser && isLoginPage) {
         return Response.redirect(new URL('/profile', request.url))
     }
 }
