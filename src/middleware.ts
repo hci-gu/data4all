@@ -6,13 +6,19 @@ import { z } from 'zod'
 export function middleware(request: NextRequest) {
     const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
-    if (!authorizedUser) {
+    const path = request.nextUrl.pathname
+
+    if (
+        !authorizedUser &&
+        !path.startsWith('/loga-in') &&
+        !path.startsWith('/skapa-konto')
+    ) {
         return Response.redirect(new URL('/loga-in', request.url))
     }
 
-    pb.authStore.loadFromCookie(z.string().parse(authorizedUser?.value))
-
-    const path = request.nextUrl.pathname
+    if (authorizedUser) {
+        pb.authStore.loadFromCookie(z.string().parse(authorizedUser?.value))
+    }
 
     if (!pb.authStore.isValid) {
         if (!path.startsWith('/loga-in') && !path.startsWith('/skapa-konto')) {
@@ -20,11 +26,8 @@ export function middleware(request: NextRequest) {
         }
     }
 
-    switch (true) {
-        case path.startsWith('/loga-in'):
-            return Response.redirect(new URL('/profile', request.url))
-        case path.startsWith('/skapa-konto'):
-            return Response.redirect(new URL('/profile', request.url))
+    if (authorizedUser && (path.startsWith('/loga-in') || path.startsWith('/skapa-konto'))) {
+        return Response.redirect(new URL('/profile', request.url))
     }
 }
 
