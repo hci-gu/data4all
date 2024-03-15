@@ -15,6 +15,8 @@ import { signInSchema } from '@/types/zod'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { signIn } from '@/adapters/pocketbase'
+
+
 export default function SignIn() {
     const router = useRouter()
     const form = useForm<signInSchema>({
@@ -25,7 +27,10 @@ export default function SignIn() {
         },
     })
     const submit = async (value: signInSchema) => {
-        if (await signIn(value)) router.push('/')
+        const isSignIn = await signIn(value)
+        
+        if (!isSignIn) form.setError('root', { message: 'Inloggnings uppgifter är fel' })
+        if (isSignIn) router.push('/')
     }
     return (
         <Form {...form}>
@@ -56,6 +61,14 @@ export default function SignIn() {
                                     {...field}
                                 />
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    name="root"
+                    render={({ field }) => (
+                        <FormItem>
                             <FormMessage />
                         </FormItem>
                     )}
