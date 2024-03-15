@@ -1,23 +1,18 @@
-import { expect, test as setup } from '@playwright/test'
-import user from './user'
+import { test as setup } from '@playwright/test'
+import { user } from './user'
 
-setup('signUp', async ({ page }) => {
+setup('signUp', async ({ page, request }) => {
     /* SignUp page */
-    await page.goto('/skapa-konto')
-    await page.fill('input[name="email"]', user.email)
-    await page.fill('input[name="password"]', user.password)
-    await page.fill('input[name="passwordConfirmation"]', user.password)
-    await page.locator('select').selectOption({ label: user.role })
-    await page.getByRole('button', { name: 'Skapa konto' }).click()
-
-    await page.waitForURL('/loga-in')
+    await request.post('/api/auth/sign-up', {
+        data: { ...user },
+        headers: { 'Content-Type': 'application/json' },
+    })
 
     /* SignIn page */
-    await page.goto('/loga-in')
-    await page.fill('input[name="email"]', user.email)
-    await page.fill('input[name="password"]', user.password)
-    await page.click('button[type="submit"]')
+    await request.post('/api/auth/sign-in', {
+        data: { email: user.email, password: user.password },
+        headers: { 'Content-Type': 'application/json' },
+    })
 
-    await expect(page.getByRole('button')).toContainText('Loga ut')
-    await page.context().storageState({ path: 'tests/setup/storage.json' })
+    request.storageState({ path: 'tests/setup/storage.json' })
 })
