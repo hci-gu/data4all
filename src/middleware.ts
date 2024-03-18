@@ -1,9 +1,10 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import PocketBase from 'pocketbase'
+import { env } from './lib/env'
 
 export function middleware(request: NextRequest) {
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+    const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
 
