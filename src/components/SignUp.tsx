@@ -18,15 +18,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { roleSchema, siginUpSchema } from '@/types/zod'
+import { roleSchema, signUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as api from '@/adapters/api'
 
 export default function SignUp() {
     const router = useRouter()
-    const form = useForm<siginUpSchema>({
-        resolver: zodResolver(siginUpSchema),
+    const form = useForm<signUpSchema>({
+        resolver: zodResolver(signUpSchema),
         defaultValues: {
             email: '',
             password: '',
@@ -36,14 +36,14 @@ export default function SignUp() {
             keepIsSubmitSuccessful: true,
         },
     })
-    const submit = async (value: siginUpSchema) => {
-        const isSignUp = await api.signUp(value)
-
-        if (!isSignUp.success) {
+    const submit = async (value: signUpSchema) => {
+        try {
+            await api.signUp(value)
+            router.push('/logga-in')
+        } catch (e) {
             form.reset()
             form.setError('root', { message: 'Du är redan registrerad' })
         }
-        if (isSignUp.success) router.push('/loga-in')
     }
 
     const rols = Object.values(roleSchema.Values)

@@ -7,7 +7,7 @@ export const signInSchema = z.object({
     password: z.string().min(8),
 })
 
-export const siginUpSchema = signInSchema
+export const signUpSchema = signInSchema
     .extend({
         passwordConfirmation: z.string().min(8),
         role: roleSchema,
@@ -41,12 +41,7 @@ export const datasetSchema = z.object({
 })
 
 export type signInSchema = z.infer<typeof signInSchema>
-export type siginUpSchema = z.infer<typeof siginUpSchema>
+export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
-export type responseObject = {
-    success: boolean
-    error?: string
-    body?: datasetSchema
-}

@@ -5,7 +5,7 @@ import PocketBase, { ClientResponseError } from 'pocketbase'
 
 export async function DELETE(request: Request) {
     try {
-        const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
         const user = await request.json()
         console.log(user?.id)
 
@@ -14,6 +14,7 @@ export async function DELETE(request: Request) {
 
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
+        console.log(error)
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
