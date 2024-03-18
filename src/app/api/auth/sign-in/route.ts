@@ -13,10 +13,11 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: 'succes' }, { status: 200 })
     } catch (error) {
         if (error instanceof ClientResponseError) {
-            return NextResponse.json(
+            throw NextResponse.json(
                 { message: 'misslyckades att logga in användare' },
                 { status: 400 }
             )
         }
+        
     }
 }
