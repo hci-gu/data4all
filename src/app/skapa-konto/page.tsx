@@ -3,7 +3,7 @@ import Image from 'next/image'
 import absurd from '../../../public/absurd 2.png'
 import SignUp from '@/components/SignUp'
 
-export default function () {
+function skapaKonto () {
 
 
     return (
@@ -23,3 +23,5 @@ export default function () {
         </main>
     )
 }
+
+export default skapaKonto
