@@ -3,7 +3,7 @@ import { Inter as FontSans } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import Header from '@/components/ui/header'
-import { loadAuthorizeduser } from './api/auth/utils'
+import { loadAuthorizedUser } from './api/auth/utils'
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -20,7 +20,7 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    const user = loadAuthorizeduser()
+    const user = loadAuthorizedUser()
     return (
         <html lang="en">
             <body

@@ -13,7 +13,7 @@ export default function Home() {
                     router.push('/logga-in')
                 }}
             >
-                Loga ut
+                Logga ut
             </Button>
         </main>
     )

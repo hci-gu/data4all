@@ -1,6 +1,8 @@
+import { env } from '@/lib/env'
 import { siginUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
-export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+
+export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 const apiUrl = (endpoint: string) => `/api/auth/${endpoint}`
 const handleResponse = async (Response: Response): Promise<boolean> => {
