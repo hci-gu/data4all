@@ -3,8 +3,7 @@ import Image from 'next/image'
 import absurd from '../../../public/absurd 1.png'
 import SignIn from '@/components/SignIn'
 
-
-export default function () {
+function loggaIn() {
     return (
         <main className="grid grid-cols-2 h-screen">
             <div className="bg-black flex items-center px-40">
@@ -23,3 +22,5 @@ export default function () {
         </main>
     )
 }
+
+export default loggaIn

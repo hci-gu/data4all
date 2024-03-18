@@ -4,7 +4,8 @@ import { TypographyH2 } from './TypographyH2'
 import { TypographyP } from './TypographyP'
 
 const hederSchema = z.enum(['H1', 'H2', 'H3', 'P'])
-export default ({
+
+const Typography = ({
     level,
     children,
 }: {
@@ -22,3 +23,5 @@ export default ({
             return <p></p>
     }
 }
+
+export default Typography
