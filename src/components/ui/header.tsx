@@ -9,7 +9,7 @@ import Logo from '../../../public/Logo.png'
 export default function Header({ usersName }: { usersName: string }) {
     const pathname = usePathname()
     switch (pathname) {
-        case '/loga-in':
+        case '/logga-in':
             return (
                 <>
                     <header className="fixed flex h-[60px] w-full justify-between  px-4">
@@ -41,7 +41,7 @@ export default function Header({ usersName }: { usersName: string }) {
                             <Image src={Box} alt="" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
-                            <Link className="h-fit text-sm" href={'/loga-in'}>
+                            <Link className="h-fit text-sm" href={'/logga-in'}>
                                 Logga in istället
                             </Link>
                         </div>
@@ -57,7 +57,7 @@ export default function Header({ usersName }: { usersName: string }) {
                             alt="Logo"
                         />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
-                            <Typography level="H2">{usersName}</Typography>
+                            <Link href={'/profile'}>{usersName}</Link>
                         </div>
                     </header>
                 </>

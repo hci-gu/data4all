@@ -3,13 +3,13 @@ import Image from 'next/image'
 import absurd from '../../../public/absurd 1.png'
 import SignIn from '@/components/SignIn'
 
-function loggaIn() {
+function LoginPage() {
     return (
-        <main className="grid grid-cols-2 h-screen">
-            <div className="bg-black flex items-center px-40">
+        <main className="grid h-screen grid-cols-2">
+            <div className="flex items-center bg-black px-40">
                 <Image src={absurd} priority={true} alt="" />
             </div>
-            <div className="flex flex-col gap-12 justify-center mx-auto">
+            <div className="mx-auto flex flex-col justify-center gap-12">
                 <div>
                     <Typography level="H1">Logga in</Typography>
                     <Typography level="P">
@@ -23,4 +23,4 @@ function loggaIn() {
     )
 }
 
-export default loggaIn
+export default LoginPage

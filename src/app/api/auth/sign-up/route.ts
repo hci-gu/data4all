@@ -1,11 +1,11 @@
 import { env } from '@/lib/env'
-import { siginUpSchema } from '@/types/zod'
+import { signUpSchema } from '@/types/zod'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 
 export async function POST(request: Request) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-    const newUser = siginUpSchema.parse(await request.json())
+    const newUser = signUpSchema.parse(await request.json())
     const data = {
         email: newUser.email,
         emailVisibility: true,

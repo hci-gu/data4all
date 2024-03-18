@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
+import { env } from 'process'
 
-export async function PUT(request: Request) {
+export async function POST(request: Request) {
     try {
-        const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
         const data = await request.json()
         const datasetTitle = data?.title
 

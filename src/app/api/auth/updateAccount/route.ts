@@ -5,7 +5,7 @@ import PocketBase, { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 
 export async function PUT(request: Request) {
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+    const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     try {
         const data = await request.json()
         const formData = updateUserSchema.parse(data?.formData)
