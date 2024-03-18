@@ -1,9 +1,8 @@
-'use client'
-import { getAllDatasets } from '@/adapters/api'
+import { getAllDatasets, getDataset } from '@/adapters/api'
 
 export default function Home() {
     const asd = async () => {
-        const res = await getAllDatasets()
+        const res = await getDataset('Climate Change Impact')
     }
     asd()
 

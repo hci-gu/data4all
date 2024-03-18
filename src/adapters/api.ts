@@ -8,7 +8,9 @@ import {
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
-const apiUrl = (endpoint: string) => `/api/${endpoint}`
+const baseURL = 'http://localhost:3000'
+
+const apiUrl = (endpoint: string) => `${baseURL}/api/${endpoint}`
 const handleResponse = async (Response: Response): Promise<responseObject> => {
     const json = await Response.json()
     console.log('handleResponse: ', json)
@@ -22,7 +24,7 @@ const handleResponse = async (Response: Response): Promise<responseObject> => {
     }
 
     const body = datasetSchema.safeParse(json.body)
-    if (body.successs) {
+    if (body.success) {
         const responseObject: responseObject = {
             succses: true,
             body: body.data,
@@ -76,4 +78,7 @@ export const removeUser = async (userId: string): Promise<responseObject> => {
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
     return await apiRequest(apiUrl('datasets'), 'GET')
+}
+export const getDataset = async (datasetTitle: string) => {
+    return await apiRequest(apiUrl('datasets/singleItem'), 'PUT', {title: datasetTitle})
 }
