@@ -1,3 +1,4 @@
+import { env } from '@/lib/env'
 import { updateUserSchema } from '@/types/zod'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'

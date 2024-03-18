@@ -1,3 +1,4 @@
+import { env } from '@/lib/env'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
