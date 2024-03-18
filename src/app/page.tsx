@@ -4,7 +4,6 @@ import { getAllDatasets } from '@/adapters/api'
 export default function Home() {
     const asd = async () => {
         const res = await getAllDatasets()
-        console.log(res)
     }
     asd()
 

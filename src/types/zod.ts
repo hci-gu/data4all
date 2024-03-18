@@ -30,8 +30,18 @@ export const updateUserSchema = z
         path: ['passwordConfirm'],
         message: 'Passwords does not match',
     })
+export const datasetSchema = z.object({
+    records: z.array(
+        z.object({
+            id: z.string(),
+            description: z.string(),
+            title: z.string(),
+        })
+    ),
+})
 
 export type signInSchema = z.infer<typeof signInSchema>
 export type siginUpSchema = z.infer<typeof siginUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
+export type datasetSchema = z.infer<typeof datasetSchema>

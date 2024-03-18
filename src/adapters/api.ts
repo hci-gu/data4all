@@ -1,6 +1,10 @@
-import { siginUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
+import {
+    datasetSchema,
+    siginUpSchema,
+    signInSchema,
+    updateUserSchema,
+} from '@/types/zod'
 import PocketBase from 'pocketbase'
-import { z } from 'zod'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
 const apiUrl = (endpoint: string) => `/api/${endpoint}`
@@ -8,20 +12,7 @@ const handleResponse = async (
     Response: Response
 ): Promise<boolean | Object> => {
     const json = await Response.json()
-    console.log(json.body)
-
-    const body = z
-        .object({
-            records: z.array(
-                z.object({
-                    id: z.string(),
-                    description: z.string(),
-                    title: z.string(),
-                })
-            ),
-        })
-
-        .safeParse(json.body)
+    const body = datasetSchema.safeParse(json.body)
     console.log('req good:', Response.ok, body)
     if (Response.ok) {
         if (body.success) {
