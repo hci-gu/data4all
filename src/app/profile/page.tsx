@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizeduser } from '../api/auth/utils'
 
-export default function () {
+function ProfilePage() {
     const user = loadAuthorizeduser()
 
     return (
@@ -41,3 +41,5 @@ export default function () {
         </main>
     )
 }
+
+export default ProfilePage

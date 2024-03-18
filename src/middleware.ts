@@ -11,13 +11,13 @@ export function middleware(request: NextRequest) {
         pb.authStore.loadFromCookie(authorizedUser.value)
     }
     const isLoginPage =
-        path.startsWith('/loga-in') || path.startsWith('/skapa-konto')
+        path.startsWith('/logga-in') || path.startsWith('/skapa-konto')
     const isUnauthorized = !authorizedUser && !isLoginPage
     const isInvalidAuth =
         authorizedUser && !pb.authStore.isValid && !isLoginPage
 
     if (isUnauthorized || isInvalidAuth) {
-        return Response.redirect(new URL('/loga-in', request.url))
+        return Response.redirect(new URL('/logga-in', request.url))
     }
     if (authorizedUser && isLoginPage) {
         return Response.redirect(new URL('/profile', request.url))

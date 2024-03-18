@@ -10,7 +10,7 @@ export default function Home() {
             <Button
                 onClick={() => {
                     signOut()
-                    router.push('/loga-in')
+                    router.push('/logga-in')
                 }}
             >
                 Loga ut

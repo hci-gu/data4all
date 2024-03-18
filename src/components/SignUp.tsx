@@ -37,7 +37,7 @@ export default function SignUp() {
         },
     })
     const submit = async (value: siginUpSchema) => {
-        if (await signUp(value)) router.push('/loga-in')
+        if (await signUp(value)) router.push('/logga-in')
     }
 
     const rols = Object.values(roleSchema.Values)

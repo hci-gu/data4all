@@ -4,10 +4,10 @@ import { usePathname } from 'next/navigation'
 import Typography from './Typography'
 import Image from 'next/image'
 
-export default function Header({usersName}: {usersName: string}) {
+export default function Header({ usersName }: { usersName: string }) {
     const pathname = usePathname()
     switch (pathname) {
-        case '/loga-in':
+        case '/logga-in':
             return (
                 <>
                     <header className="fixed flex h-[60px] w-full justify-between  px-4">
@@ -39,7 +39,7 @@ export default function Header({usersName}: {usersName: string}) {
                             <img src="boxes.png" alt="" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
-                            <Link className="h-fit text-sm" href={'/loga-in'}>
+                            <Link className="h-fit text-sm" href={'/logga-in'}>
                                 Logga in istället
                             </Link>
                         </div>
