@@ -57,7 +57,7 @@ export default function Header({usersName}: {usersName: string}) {
                             alt="Logo"
                         />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
-                            <Typography level="H2">{usersName}</Typography>
+                            <Link href={'/profile'}>{usersName}</Link>
                         </div>
                     </header>
                 </>
