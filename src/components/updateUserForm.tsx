@@ -40,7 +40,13 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
     const router = useRouter()
 
     const submit = async (value: updateUserSchema) => {
-        if (await updateUser(value, user?.id)) router.push('/profile')
+        const response = await updateUser(value, user?.id)
+        if (!response.succses) {
+            console.log(response.error)
+        }
+        if (response.succses) {
+            router.refresh()
+        }
     }
     return (
         <Form {...form}>

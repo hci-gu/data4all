@@ -1,5 +1,6 @@
 import {
     datasetSchema,
+    responseObject,
     siginUpSchema,
     signInSchema,
     updateUserSchema,
@@ -8,25 +9,34 @@ import PocketBase from 'pocketbase'
 export const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
 
 const apiUrl = (endpoint: string) => `/api/${endpoint}`
-const handleResponse = async (
-    Response: Response
-): Promise<boolean | Object> => {
+const handleResponse = async (Response: Response): Promise<responseObject> => {
     const json = await Response.json()
-    const body = datasetSchema.safeParse(json.body)
-    console.log('req good:', Response.ok, body)
-    if (Response.ok) {
-        if (body.success) {
-            return body.data
+    console.log('handleResponse: ', json)
+
+    if (!Response.ok) {
+        const responseObject: responseObject = {
+            succses: false,
+            error: json.message,
         }
-        return true
+        return responseObject
     }
-    return false
+
+    const body = datasetSchema.safeParse(json.body)
+    if (body.successs) {
+        const responseObject: responseObject = {
+            succses: true,
+            body: body.data,
+        }
+        return responseObject
+    }
+    const responseObject: responseObject = { succses: true }
+    return responseObject
 }
 const apiRequest = async (
     url: string,
     method: string,
     body?: any
-): Promise<boolean | Object> => {
+): Promise<responseObject> => {
     const options: RequestInit = {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -37,34 +47,33 @@ const apiRequest = async (
     return await handleResponse(response)
 }
 
-export const signUp = async (
-    user: siginUpSchema
-): Promise<boolean | Object> => {
+export const signUp = async (user: siginUpSchema): Promise<responseObject> => {
     return await apiRequest(apiUrl('auth/sign-up'), 'POST', user)
 }
 
-export const signIn = async (user: signInSchema): Promise<boolean | Object> => {
+export const signIn = async (user: signInSchema): Promise<responseObject> => {
     return await apiRequest(apiUrl('auth/sign-in'), 'POST', user)
 }
 
-export const signOut = async (): Promise<boolean | Object> => {
+export const signOut = async (): Promise<responseObject> => {
     return await apiRequest(apiUrl('auth/sign-out'), 'DELETE')
 }
 
 export const updateUser = async (
     formData: updateUserSchema,
     userId: string
-): Promise<boolean | Object> => {
+): Promise<responseObject> => {
     return await apiRequest(apiUrl('auth/updateAccount'), 'PUT', {
         id: userId,
         formData,
     })
 }
 
-export const removeUser = async (userId: string): Promise<boolean | Object> => {
+export const removeUser = async (userId: string): Promise<responseObject> => {
     return await apiRequest(apiUrl('removeAccount'), 'DELETE', { id: userId })
 }
 
+// this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
     return await apiRequest(apiUrl('datasets'), 'GET')
 }

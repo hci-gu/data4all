@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
     try {
         await pb.collection('users').create(data)
-        return NextResponse.json({ message: 'succes' }, { status: 200 })
+        return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
         if (error instanceof ClientResponseError) {
             return NextResponse.json(

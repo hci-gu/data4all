@@ -6,7 +6,9 @@ export default function RemoveAccountButton() {
     const userId = pb.authStore.model?.id
     const router = useRouter()
     const removeAccount = async (userId: string) => {
-        if (await removeUser(userId)) router.push('/skapa-konto')
+        const response = await removeUser(userId)
+        if (!response.succses) console.log()
+        if (response.succses) router.push('/skapa-konto')
     }
     return (
         <>

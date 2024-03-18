@@ -32,17 +32,17 @@ export default function SignUp() {
             passwordConfirmation: '',
         },
         resetOptions: {
-            keepIsSubmitSuccessful: true,
+            keepIsSubmitsuccesssful: true,
         },
     })
     const submit = async (value: siginUpSchema) => {
         const isSignUp = await signUp(value)
 
-        if (!isSignUp) {
+        if (!isSignUp.succses) {
             form.reset()
             form.setError('root', { message: 'Du är redan registrerad' })
         }
-        if (isSignUp) router.push('/loga-in')
+        if (isSignUp.succses) router.push('/loga-in')
     }
 
     const rols = Object.values(roleSchema.Values)

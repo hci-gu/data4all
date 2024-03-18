@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation'
 export default function LogoutButton() {
     const router = useRouter()
     const logout = async () => {
-        if (await signOut()) router.push('/loga-in')
+        const response = await signOut()
+        if (!response.succses) console.log()
+        if (response.succses) router.push('/loga-in')
     }
     return (
         <>

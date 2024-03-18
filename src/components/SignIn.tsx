@@ -26,8 +26,11 @@ export default function SignIn() {
     })
     const submit = async (value: signInSchema) => {
         const isSignIn = await signIn(value)
-        
-        if (!isSignIn) form.setError('root', { message: 'Inloggnings uppgifter är fel' })
+        console.log(isSignIn)
+
+        //@ts-ignore
+        if (!isSignIn.succses)
+            form.setError('root', { message: 'Inloggnings uppgifter är fel' })
         if (isSignIn) router.push('/')
     }
     return (

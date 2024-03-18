@@ -45,3 +45,4 @@ export type siginUpSchema = z.infer<typeof siginUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
+export type responseObject = {succses: boolean, error?: string, body?: datasetSchema}
