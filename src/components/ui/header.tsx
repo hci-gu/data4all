@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Typography from './Typography'
 import Image from 'next/image'
+import Box from '../../../public/boxes.png'
+import Logo from '../../../public/Logo.png'
 
 export default function Header({ usersName }: { usersName: string }) {
     const pathname = usePathname()
@@ -15,7 +17,7 @@ export default function Header({ usersName }: { usersName: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <img src="boxes.png" alt="" />
+                            <Image src={Box} alt="" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
@@ -36,7 +38,7 @@ export default function Header({ usersName }: { usersName: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <img src="boxes.png" alt="" />
+                            <Image src={Box} alt="" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link className="h-fit text-sm" href={'/logga-in'}>
@@ -51,9 +53,7 @@ export default function Header({ usersName }: { usersName: string }) {
                 <>
                     <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
                         <Image
-                            src="/Logo.png"
-                            height={40}
-                            width={251}
+                            src={Logo}
                             alt="Logo"
                         />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">

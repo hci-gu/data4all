@@ -1,9 +1,10 @@
+import { env } from '@/lib/env'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import PocketBase from 'pocketbase'
 
 export async function DELETE(request: Request) {
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+    const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const user = await request.json()
     console.log(user?.id)
 
