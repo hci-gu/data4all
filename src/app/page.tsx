@@ -1,20 +1,14 @@
 'use client'
-import { signOut } from '@/adapters/pocketbase'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { getAllDatasets } from '@/adapters/api'
 
 export default function Home() {
-    const router = useRouter()
+    const asd = async () => {
+        const res = await getAllDatasets()
+        console.log(res)
+    }
+    asd()
+
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Button
-                onClick={() => {
-                    signOut()
-                    router.push('/loga-in')
-                }}
-            >
-                Loga ut
-            </Button>
-        </main>
+        <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
     )
 }

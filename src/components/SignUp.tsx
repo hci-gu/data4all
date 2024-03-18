@@ -21,7 +21,7 @@ import {
 import { roleSchema, siginUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
-import { signUp } from '@/adapters/pocketbase'
+import { signUp } from '@/adapters/api'
 export default function SignUp() {
     const router = useRouter()
     const form = useForm<siginUpSchema>({

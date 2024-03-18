@@ -1,5 +1,5 @@
 'use client'
-import { pb, removeUser } from '@/adapters/pocketbase'
+import { pb, removeUser } from '@/adapters/api'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 export default function RemoveAccountButton() {

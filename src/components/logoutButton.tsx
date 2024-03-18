@@ -1,5 +1,5 @@
 'use client'
-import { signOut } from '@/adapters/pocketbase'
+import { signOut } from '@/adapters/api'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 export default function LogoutButton() {

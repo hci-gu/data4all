@@ -19,11 +19,11 @@ import { roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from './ui/button'
-import { pb, updateUser } from '@/adapters/pocketbase'
+import { pb, updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import { AuthModel } from 'pocketbase'
 
-export default function UpdateUserForm({user}: {user: AuthModel}) {
+export default function UpdateUserForm({ user }: { user: AuthModel }) {
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
