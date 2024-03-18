@@ -12,6 +12,7 @@ test.describe('Profile page', () => {
             request,
             context,
         }) => {
+            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
@@ -20,8 +21,6 @@ test.describe('Profile page', () => {
     })
 
     test.describe('Not logged in user', () => {
-        test.use({ storageState: { cookies: [], origins: [] } })
-
         test('Can not reach the profile page', async ({ page }) => {
             await page.goto('/profile')
             await expect(page).toHaveURL('/logga-in')

@@ -18,7 +18,7 @@ test.describe('Signin page', () => {
         let email = '',
             password = ''
 
-        test.beforeEach(async ({ page, request, context }) => {
+        test.beforeAll(async ({}) => {
             const user = await createUser()
             email = user.email
             password = user.password
@@ -34,8 +34,26 @@ test.describe('Signin page', () => {
             // Clicks the submit button.
             await page.click('button[type="submit"]')
 
-            // Expects to be redirected to /profile.
+            // Expects to be redirected to /
             await expect(page).toHaveURL('/')
+        })
+
+        test('Get an error message if I enter the wrong password', async ({
+            page,
+            request,
+            context,
+        }) => {
+            await page.goto('/logga-in')
+
+            // Enters email and password.
+            await page.fill('input[name="email"]', email)
+            await page.fill('input[name="password"]', 'not my password')
+
+            // Clicks the submit button.
+            await page.click('button[type="submit"]')
+
+            // Expects to be redirected to /
+            await expect(page).toHaveURL('/logga-in')
         })
     })
 })
