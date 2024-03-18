@@ -21,7 +21,8 @@ import {
 import { roleSchema, siginUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
-import { signUp } from '@/adapters/pocketbase'
+import * as api from '@/adapters/api'
+
 export default function SignUp() {
     const router = useRouter()
     const form = useForm<siginUpSchema>({
@@ -30,14 +31,19 @@ export default function SignUp() {
             email: '',
             password: '',
             passwordConfirmation: '',
-            role: 'User',
         },
         resetOptions: {
             keepIsSubmitSuccessful: true,
         },
     })
     const submit = async (value: siginUpSchema) => {
-        if (await signUp(value)) router.push('/logga-in')
+        const isSignUp = await api.signUp(value)
+
+        if (!isSignUp.success) {
+            form.reset()
+            form.setError('root', { message: 'Du är redan registrerad' })
+        }
+        if (isSignUp.success) router.push('/loga-in')
     }
 
     const rols = Object.values(roleSchema.Values)
@@ -117,6 +123,14 @@ export default function SignUp() {
                                     </SelectContent>
                                 </Select>
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    name="root"
+                    render={({ field }) => (
+                        <FormItem>
                             <FormMessage />
                         </FormItem>
                     )}

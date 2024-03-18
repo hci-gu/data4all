@@ -19,11 +19,12 @@ import { roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from './ui/button'
-import { pb, updateUser } from '@/adapters/pocketbase'
+import { pb, updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import { AuthModel } from 'pocketbase'
+import toast from 'react-hot-toast'
 
-export default function UpdateUserForm({user}: {user: AuthModel}) {
+export default function UpdateUserForm({ user }: { user: AuthModel }) {
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
@@ -40,7 +41,11 @@ export default function UpdateUserForm({user}: {user: AuthModel}) {
     const router = useRouter()
 
     const submit = async (value: updateUserSchema) => {
-        if (await updateUser(value, user?.id)) router.push('/profile')
+        const response = await updateUser(value, user?.id)
+        if (!response.succses) toast.error('Något gick fel')
+        if (response.succses) {
+            router.refresh()
+        }
     }
     return (
         <Form {...form}>

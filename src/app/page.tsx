@@ -1,20 +1,12 @@
-'use client'
-import { signOut } from '@/adapters/pocketbase'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { getAllDatasets, getDataset } from '@/adapters/api'
 
 export default function Home() {
-    const router = useRouter()
+    const run = async () => {
+        const res = await getDataset('Climate Change Impact')
+    }
+    run()
+
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Button
-                onClick={() => {
-                    signOut()
-                    router.push('/logga-in')
-                }}
-            >
-                Logga ut
-            </Button>
-        </main>
+        <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
     )
 }
