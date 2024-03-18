@@ -22,6 +22,7 @@ import { Button } from './ui/button'
 import { pb, updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import { AuthModel } from 'pocketbase'
+import toast from 'react-hot-toast'
 
 export default function UpdateUserForm({ user }: { user: AuthModel }) {
     const form = useForm<updateUserSchema>({
@@ -41,9 +42,7 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
 
     const submit = async (value: updateUserSchema) => {
         const response = await updateUser(value, user?.id)
-        if (!response.succses) {
-            console.log(response.error)
-        }
+        if (!response.succses) toast.error('Något gick fel')
         if (response.succses) {
             router.refresh()
         }

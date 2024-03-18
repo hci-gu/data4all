@@ -72,7 +72,9 @@ export const updateUser = async (
 }
 
 export const removeUser = async (userId: string): Promise<responseObject> => {
-    return await apiRequest(apiUrl('removeAccount'), 'DELETE', { id: userId })
+    return await apiRequest(apiUrl('auth/removeAccount'), 'DELETE', {
+        id: userId,
+    })
 }
 
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
@@ -80,5 +82,7 @@ export const getAllDatasets = async () => {
     return await apiRequest(apiUrl('datasets'), 'GET')
 }
 export const getDataset = async (datasetTitle: string) => {
-    return await apiRequest(apiUrl('datasets/singleItem'), 'PUT', {title: datasetTitle})
+    return await apiRequest(apiUrl('datasets/singleItem'), 'PUT', {
+        title: datasetTitle,
+    })
 }
