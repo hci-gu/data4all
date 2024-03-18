@@ -18,7 +18,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: 'succes' }, { status: 200 })
     } catch (error) {
         if (error instanceof ClientResponseError) {
-            console.log('error', error.message)
             return NextResponse.json(
                 { message: 'misslyckades att registrera användare' },
                 { status: 400 }
