@@ -27,17 +27,22 @@ export default function SignUp() {
     const form = useForm<siginUpSchema>({
         resolver: zodResolver(siginUpSchema),
         defaultValues: {
-            email: 'styris.n@gmail.com',
-            password: 'j7eKjmFE3zpGHet',
-            passwordConfirmation: 'j7eKjmFE3zpGHet',
-            role: 'User',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
         },
         resetOptions: {
             keepIsSubmitSuccessful: true,
         },
     })
     const submit = async (value: siginUpSchema) => {
-        if (await signUp(value)) router.push('/loga-in')
+        const isSignUp = await signUp(value)
+
+        if (!isSignUp) {
+            form.reset()
+            form.setError('root', { message: 'Du är redan registrerad' })
+        }
+        if (isSignUp) router.push('/loga-in')
     }
 
     const rols = Object.values(roleSchema.Values)
@@ -117,6 +122,14 @@ export default function SignUp() {
                                     </SelectContent>
                                 </Select>
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    name="root"
+                    render={({ field }) => (
+                        <FormItem>
                             <FormMessage />
                         </FormItem>
                     )}

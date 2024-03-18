@@ -1,6 +1,6 @@
 import { siginUpSchema } from '@/types/zod'
 import { NextResponse } from 'next/server'
-import PocketBase from 'pocketbase'
+import PocketBase, { ClientResponseError } from 'pocketbase'
 
 export async function POST(request: Request) {
     const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
@@ -13,8 +13,15 @@ export async function POST(request: Request) {
         name: newUser.email,
         role: newUser.role,
     }
-    const authUser = await pb.collection('users').create(data)
-    pb.collection('users')
-
-    return NextResponse.json({ message: 'succes' }, { status: 200 })
+    try {
+        await pb.collection('users').create(data)
+        return NextResponse.json({ message: 'succes' }, { status: 200 })
+    } catch (error) {
+        if (error instanceof ClientResponseError) {
+            return NextResponse.json(
+                { message: 'misslyckades att registrera användare' },
+                { status: 400 }
+            )
+        }
+    }
 }
