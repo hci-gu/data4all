@@ -1,6 +1,6 @@
+import { env } from '@/lib/env'
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from 'process'
 const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 async function getDatasetArray(events: any[]): Promise<any[]> {
