@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
+import { env } from 'process'
 
 export async function GET() {
     try {
-        const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
         const records = await pb.collection('mocDataset').getFullList({
             sort: '-created',
         })

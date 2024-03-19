@@ -1,10 +1,11 @@
+import { env } from '@/lib/env'
 import { updateUserSchema } from '@/types/zod'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 
 export async function PUT(request: Request) {
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+    const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     try {
         const data = await request.json()
         const formData = updateUserSchema.parse(data?.formData)

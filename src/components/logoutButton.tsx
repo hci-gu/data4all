@@ -2,12 +2,17 @@
 import { signOut } from '@/adapters/api'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+
 export default function LogoutButton() {
     const router = useRouter()
     const logout = async () => {
-        const response = await signOut()
-        if (!response.succses) console.log()
-        if (response.succses) router.push('/loga-in')
+        try {
+            await signOut()
+            router.push('/logga-in')
+        } catch (e) {
+            toast.error('Något gick fel')
+        }
     }
     return (
         <>

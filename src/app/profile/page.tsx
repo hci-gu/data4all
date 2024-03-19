@@ -2,10 +2,10 @@ import LogoutButton from '@/components/logoutButton'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
-import { loadAuthorizeduser } from '../api/auth/utils'
+import { loadAuthorizedUser } from '../api/auth/utils'
 
-export default function () {
-    const user = loadAuthorizeduser()
+function ProfilePage() {
+    const user = loadAuthorizedUser()
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -29,7 +29,7 @@ export default function () {
                 <Separator />
                 <div className="flex justify-start gap-[10px]">
                     <LogoutButton />
-                    <RemoveAccountButton />
+                    <RemoveAccountButton userId={user?.id} />
                 </div>
             </div>
             <Separator orientation="vertical" />
@@ -41,3 +41,5 @@ export default function () {
         </main>
     )
 }
+
+export default ProfilePage

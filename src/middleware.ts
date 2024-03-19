@@ -1,9 +1,10 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import PocketBase from 'pocketbase'
+import { env } from './lib/env'
 
 export function middleware(request: NextRequest) {
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE)
+    const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
 
@@ -11,13 +12,13 @@ export function middleware(request: NextRequest) {
         pb.authStore.loadFromCookie(authorizedUser.value)
     }
     const isLoginPage =
-        path.startsWith('/loga-in') || path.startsWith('/skapa-konto')
+        path.startsWith('/logga-in') || path.startsWith('/skapa-konto')
     const isUnauthorized = !authorizedUser && !isLoginPage
     const isInvalidAuth =
         authorizedUser && !pb.authStore.isValid && !isLoginPage
 
     if (isUnauthorized || isInvalidAuth) {
-        return Response.redirect(new URL('/loga-in', request.url))
+        return Response.redirect(new URL('/logga-in', request.url))
     }
     if (authorizedUser && isLoginPage) {
         return Response.redirect(new URL('/profile', request.url))

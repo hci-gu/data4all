@@ -14,24 +14,24 @@ import { Input } from '@/components/ui/input'
 import { signInSchema } from '@/types/zod'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
-import { signIn } from '@/adapters/api'
+import * as api from '@/adapters/api'
+
 export default function SignIn() {
     const router = useRouter()
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
-            email: 'styris.n@gmail.com',
-            password: 'j7eKjmFE3zpGHet',
+            email: '',
+            password: '',
         },
     })
     const submit = async (value: signInSchema) => {
-        const isSignIn = await signIn(value)
-        console.log(isSignIn)
-
-        //@ts-ignore
-        if (!isSignIn.succses)
+        try {
+            await api.signIn(value)
+            router.push('/')
+        } catch (e) {
             form.setError('root', { message: 'Inloggnings uppgifter är fel' })
-        if (isSignIn) router.push('/')
+        }
     }
     return (
         <Form {...form}>
