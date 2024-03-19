@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input'
 import { signInSchema } from '@/types/zod'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
-import { signIn } from '@/adapters/api'
+import * as api from '@/adapters/api'
 
 export default function SignIn() {
     const router = useRouter()
@@ -27,7 +27,7 @@ export default function SignIn() {
     })
     const submit = async (value: signInSchema) => {
         try {
-            await signIn(value)
+            await api.signIn(value)
             router.push('/')
         } catch (e) {
             form.setError('root', { message: 'Inloggnings uppgifter är fel' })
