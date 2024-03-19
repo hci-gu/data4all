@@ -35,7 +35,7 @@ export default function Page () {
                             <ChevronRight size={32} />
                         </BreadcrumbSeparator>
                         <BreadcrumbItem>
-                            <BreadcrumbLink className="text-2xl font-bold" href="/dataset">Parkeringsplatser</BreadcrumbLink>
+                            <BreadcrumbLink className="text-2xl font-bold" href="/dataset/Parkeringsplatser">Parkeringsplatser</BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
