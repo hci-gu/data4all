@@ -8,7 +8,7 @@ export default function LogoutButton() {
     const router = useRouter()
     const logout = async () => {
         try {
-            const response = await signOut()
+            await signOut()
             router.push('/logga-in')
         } catch (e) {
             toast.error('Något gick fel')

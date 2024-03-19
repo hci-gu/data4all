@@ -1,10 +1,11 @@
 import { APIRequestContext, BrowserContext, Page } from '@playwright/test'
 import PocketBase from 'pocketbase'
+import uuid from 'short-uuid'
+
 const pb = new PocketBase('http://localhost:8090')
 
-let userId = 0
 export const createUser = async () => {
-    const email = `test.user_${userId++}@kungsbacka.se`
+    const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const user = await pb.collection('users').create({
         email,
@@ -26,7 +27,7 @@ function parseCookie(cookieString: string): any {
     const cookie = {
         name,
         value,
-        domain: '127.0.0.1',
+        domain: 'localhost',
         path: '/',
         expires: -1,
         httpOnly: false,
