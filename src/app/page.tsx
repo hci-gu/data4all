@@ -1,8 +1,21 @@
-import { getAllDatasets, getDataset } from '@/adapters/api'
+import * as api from '@/adapters/api'
+import { loadAuthorizedUser } from './api/auth/utils'
 
 export default function Home() {
+    const user = loadAuthorizedUser()
+    console.log('user', user)
+
     const run = async () => {
-        const res = await getDataset('Climate Change Impact')
+        const resDataset = await api.getAllDatasets()
+        console.log('datasets:', resDataset);
+        const resSingleDataset = await api.getDataset('Climate Change Impact')
+        console.log('dataset:', resSingleDataset)
+        const resEvent = await api.getEvent('wox79ra56il6u88') // swap out for a working id in your pb
+        console.log('events:', resEvent)
+        const resDatasetFromUserEvent = await api.getDatasetFromUserEvent(
+            user?.id as string
+        )
+        console.log('datasetFromUser:', resDatasetFromUserEvent)
     }
     run()
 

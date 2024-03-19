@@ -1,12 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from 'process'
 
-export async function POST(request: Request) {
+export async function GET(request: NextRequest) {
     try {
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const data = await request.json()
-        const datasetTitle = data?.title
+        const datasetTitle = request.nextUrl.searchParams.get('title') as string
 
         const records = await pb
             .collection('mocDataset')
@@ -23,5 +22,12 @@ export async function POST(request: Request) {
                 { status: 400 }
             )
         }
+        return NextResponse.json(
+            {
+                message: 'något gick fel',
+                error,
+            },
+            { status: 500 }
+        )
     }
 }

@@ -1,6 +1,5 @@
 import { env } from '@/lib/env'
 import {
-    datasetSchema,
     signUpSchema,
     signInSchema,
     updateUserSchema,
@@ -69,7 +68,14 @@ export const getAllDatasets = async () => {
     return apiRequest(apiUrl('datasets'), 'GET')
 }
 export const getDataset = async (datasetTitle: string) => {
-    return apiRequest(apiUrl('datasets/singleItem'), 'POST', {
-        title: datasetTitle,
-    })
+    const cleanUrl = datasetTitle.replace(/ /g, '%20')
+    return apiRequest(apiUrl(`datasets/singleDataset?title=${cleanUrl}`), 'GET')
+}
+export const getEvent = async (datasetId: string) => {
+    return apiRequest(apiUrl(`datasets/events?id=${datasetId}`), 'GET')
+}
+export const getDatasetFromUserEvent = async (userId: string) => {
+    console.log(userId);
+    
+    return apiRequest(apiUrl(`datasets/datasetFromUserEvent?id=${userId}`), 'GET')
 }
