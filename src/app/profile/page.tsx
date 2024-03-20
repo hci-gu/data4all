@@ -3,9 +3,19 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
+import {
+    Card,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card'
+import * as api from '@/adapters/api'
 
-function ProfilePage() {
+async function ProfilePage() {
     const user = loadAuthorizedUser()
+
+    const datasets = await api.getDatasetFromUserEvent(user?.id as string)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -37,6 +47,21 @@ function ProfilePage() {
                 <h2 className="text-center text-3xl font-semibold">
                     Dina dataset
                 </h2>
+                {datasets.records.map((dataset: any) => {
+                    return (
+                        <Card key={dataset.id}>
+                            <CardHeader>
+                                <CardTitle>{dataset.title}</CardTitle>
+                                <CardDescription>
+                                    {dataset.description}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardFooter>
+                                <p>tags & other footer related comps later</p>
+                            </CardFooter>
+                        </Card>
+                    )
+                })}
             </div>
         </main>
     )
