@@ -1,10 +1,5 @@
 import { env } from '@/lib/env'
-import {
-    datasetSchema,
-    signUpSchema,
-    signInSchema,
-    updateUserSchema,
-} from '@/types/zod'
+import { signUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
@@ -69,7 +64,14 @@ export const getAllDatasets = async () => {
     return apiRequest(apiUrl('datasets'), 'GET')
 }
 export const getDataset = async (datasetTitle: string) => {
-    return apiRequest(apiUrl('datasets/singleItem'), 'POST', {
-        title: datasetTitle,
-    })
+    return apiRequest(
+        apiUrl(`datasets?datasetTitle=${encodeURI(datasetTitle)}`),
+        'GET'
+    )
+}
+export const getEvent = async (datasetId: string) => {
+    return apiRequest(apiUrl(`events?id=${datasetId}`), 'GET')
+}
+export const getDatasetFromUserEvent = async (userId: string) => {
+    return apiRequest(apiUrl(`datasets?userId=${userId}`), 'GET')
 }
