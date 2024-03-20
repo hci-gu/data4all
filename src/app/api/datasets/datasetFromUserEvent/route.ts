@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from 'process'
+import { env } from '@/lib/env'
+import { z } from 'zod'
 const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
-async function getDatasetArray(events: any[]): Promise<any[]> {
-    const datasetPromises = events.map((event) => {
+async function getDatasetArray(datasetIds: string[]): Promise<any[]> {
+    // pb.collection('mocDataset').getList(1, 50, {
+    //     filter: ``
+    // })
+    const datasetPromises = datasetIds.map((id) => {
         const record = pb
             .collection('mocDataset')
-            .getFirstListItem(`id="${event.dataset}"`)
+            .getFirstListItem(`id="${id}"`)
         return record
     })
     const records = await Promise.all(datasetPromises)
@@ -22,8 +26,11 @@ export async function GET(request: NextRequest) {
         const userEvents = await pb.collection('events').getList(1, 50, {
             filter: `user="${userId}"`,
         })
+        const datasetIds = new Set(userEvents.items.map((e) => e.dataset))
 
-        const records = await getDatasetArray(userEvents.items)
+        const records = await getDatasetArray(
+            z.array(z.string()).parse(datasetIds)
+        )
 
         return NextResponse.json(
             {

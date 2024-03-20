@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from 'process'
+import { env } from '@/lib/env'
 
 export async function GET() {
     try {

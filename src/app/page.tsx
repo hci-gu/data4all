@@ -6,16 +6,16 @@ export default function Home() {
     console.log('user', user)
 
     const run = async () => {
-        const resDataset = await api.getAllDatasets()
-        console.log('datasets:', resDataset);
+        // const resDataset = await api.getAllDatasets()
+        // console.log('datasets:', resDataset);
         const resSingleDataset = await api.getDataset('Climate Change Impact')
         console.log('dataset:', resSingleDataset)
-        const resEvent = await api.getEvent('wox79ra56il6u88') // swap out for a working id in your pb
-        console.log('events:', resEvent)
-        const resDatasetFromUserEvent = await api.getDatasetFromUserEvent(
-            user?.id as string
-        )
-        console.log('datasetFromUser:', resDatasetFromUserEvent)
+        // const resEvent = await api.getEvent('wox79ra56il6u88') // swap out for a working id in your pb
+        // console.log('events:', resEvent)
+        // const resDatasetFromUserEvent = await api.getDatasetFromUserEvent(
+        //     user?.id as string
+        // )
+        // console.log('datasetFromUser:', resDatasetFromUserEvent)
     }
     run()
 
