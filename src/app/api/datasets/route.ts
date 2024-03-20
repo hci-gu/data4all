@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
-import { datasetFromUser, singleDataset } from './utils'
+import * as utils from './utils'
 const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 export async function GET(request: NextRequest) {
@@ -14,15 +14,16 @@ export async function GET(request: NextRequest) {
                     'datasetTitle'
                 ) as string
 
-                records = singleDataset(datasetTitle)
+                records = await utils.singleDataset(datasetTitle)
                 break
+
             case request.nextUrl.searchParams.get('userId') !== null:
                 // gets all datasets related to the users id
                 const userId = request.nextUrl.searchParams.get(
                     'userId'
                 ) as string
 
-                records = datasetFromUser(userId)
+                records = await utils.datasetsForUserId(userId)
 
                 break
 

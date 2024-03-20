@@ -1,27 +1,21 @@
 import { pb } from '@/adapters/api'
 
+async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
+    const records = await pb.collection('mocDataset').getFullList({
+        filter: datasetIds.map((id) => `id="${id}"`).join('||'),
+    })
+
+    return records
+}
+
 export async function singleDataset(datasetTitle: string) {
     const records = await pb
         .collection('mocDataset')
         .getFirstListItem(`title="${datasetTitle}"`)
+
     return records
 }
-export async function datasetFromUser(userId: string) {
-    async function getDatasetArray(datasetIds: string[]): Promise<any[]> {
-        // pb.collection('mocDataset').getList(1, 50, {
-        //     filter: ``
-        // })
-        const datasetPromises = datasetIds.map((id) => {
-            const record = pb
-                .collection('mocDataset')
-                .getFirstListItem(`id="${id}"`)
-            return record
-        })
-        const records = await Promise.all(datasetPromises)
-
-        return records
-    }
-
+export async function datasetsForUserId(userId: string) {
     const userEvents = await pb.collection('events').getList(1, 50, {
         filter: `user="${userId}"`,
     })
@@ -34,5 +28,5 @@ export async function datasetFromUser(userId: string) {
         )
     )
 
-    return await getDatasetArray(datasetIds as string[])
+    return await datasetsForIds(datasetIds as string[])
 }
