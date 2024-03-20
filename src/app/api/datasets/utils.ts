@@ -8,7 +8,7 @@ async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
     return records
 }
 
-export async function singleDataset(datasetTitle: string) {
+export async function datasetForTitle(datasetTitle: string) {
     const records = await pb
         .collection('mocDataset')
         .getFirstListItem(`title="${datasetTitle}"`)

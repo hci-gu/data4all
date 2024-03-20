@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
                     'datasetTitle'
                 ) as string
 
-                records = await utils.singleDataset(datasetTitle)
+                records = await utils.datasetForTitle(datasetTitle)
                 break
 
             case request.nextUrl.searchParams.get('userId') !== null:
