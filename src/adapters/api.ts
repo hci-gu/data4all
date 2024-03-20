@@ -65,7 +65,7 @@ export const getAllDatasets = async () => {
 }
 export const getDataset = async (datasetTitle: string) => {
     return apiRequest(
-        apiUrl(`datasets/singleDataset?title=${encodeURI(datasetTitle)}`),
+        apiUrl(`datasets?datasetTitle=${encodeURI(datasetTitle)}`),
         'GET'
     )
 }
@@ -73,10 +73,5 @@ export const getEvent = async (datasetId: string) => {
     return apiRequest(apiUrl(`datasets/events?id=${datasetId}`), 'GET')
 }
 export const getDatasetFromUserEvent = async (userId: string) => {
-    console.log(userId)
-
-    return apiRequest(
-        apiUrl(`datasets/datasetFromUserEvent?id=${userId}`),
-        'GET'
-    )
+    return apiRequest(apiUrl(`datasets?userId=${userId}`), 'GET')
 }
