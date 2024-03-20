@@ -1,4 +1,3 @@
-import { env } from '@/lib/env'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
