@@ -1,11 +1,25 @@
 import { z } from 'zod'
 
 export const roleSchema = z.enum(['User', 'Admin'])
-
-export const signInSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
+export const AuthorizedUserSchema = z.object({
+    avatar: z.string(),
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    email: z.string().min(1, 'email is required').email('invalid email'),
+    emailVisibility: z.boolean(),
+    id: z.string(),
+    name: z.string().min(1, 'name is required'),
+    role: roleSchema,
+    updated: z.string(),
+    username: z.string(),
+    verified: z.boolean(),
 })
+export const signInSchema = z
+    .object({
+        password: z.string().min(8),
+    })
+    .merge(AuthorizedUserSchema.pick({ email: true }))
 
 export const signUpSchema = signInSchema
     .extend({
@@ -19,18 +33,17 @@ export const signUpSchema = signInSchema
 
 export const updateUserSchema = z
     .object({
-        name: z.string().min(1, 'name is required'),
-        email: z.string().min(1, 'email is required').email('invalid email'),
         oldPassword: z.string(),
         password: z.string(),
         passwordConfirm: z.string(),
-        role: z.string(),
     })
+    .merge(AuthorizedUserSchema.pick({ email: true, role: true, name: true }))
     .refine((data) => data.password === data.passwordConfirm, {
         path: ['passwordConfirm'],
         message: 'Passwords does not match',
     })
-export const datasetSchema = z.object({
+
+export const datasetsSchema = z.object({
     records: z.array(
         z.object({
             id: z.string(),
@@ -39,26 +52,15 @@ export const datasetSchema = z.object({
         })
     ),
 })
-export const AuthorizedUserSchema = z.object({
-    avatar: z.string(),
-    collectionId: z.string(),
-    collectionName: z.string(),
-    created: z.string(),
-    email: z.string(),
-    emailVisibility: z.boolean(),
-    id: z.string(),
-    name: z.string(),
-    role: roleSchema,
-    updated: z.string(),
-    username: z.string(),
-    verified: z.boolean(),
+export const datasetSchema = z.object({
+    records: z.object({
+        id: z.string(),
+        description: z.string(),
+        title: z.string(),
+    }),
 })
 
-export type UserSchema = {
-    id: number
-    name: string
-    role: roleSchema
-}
+export type UserSchema = Pick<AuthorizedUserSchema, 'name' | 'role'>
 
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
