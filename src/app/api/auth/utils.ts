@@ -12,4 +12,3 @@ export function loadAuthorizedUser() {
     pb.authStore.loadFromCookie(z.string().parse(authorizedUser?.value))
     return pb.authStore.model
 }
-

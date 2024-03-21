@@ -40,6 +40,12 @@ export const datasetSchema = z.object({
     ),
 })
 
+export type UserSchema = {
+    id: number
+    name: string
+    role: roleSchema
+}
+
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
