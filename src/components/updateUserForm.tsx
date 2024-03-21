@@ -23,8 +23,11 @@ import { updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import { AuthModel } from 'pocketbase'
 import toast from 'react-hot-toast'
+import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
 
 export default function UpdateUserForm({ user }: { user: AuthModel }) {
+    const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
@@ -42,9 +45,11 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
 
     const submit = async (value: updateUserSchema) => {
         try {
+            setIsClicked(true)
             await updateUser(value, user?.id)
             router.refresh()
         } catch (e) {
+            setIsClicked(false)
             toast.error('Något gick fel')
         }
     }
@@ -169,7 +174,14 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
                     )}
                 />
                 <div>
-                    <Button type="submit">Uppdatera</Button>
+                    {isClicked ? (
+                        <Button type="submit" disabled>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Uppdatera
+                        </Button>
+                    ) : (
+                        <Button type="submit">Uppdatera</Button>
+                    )}
                 </div>
             </form>
         </Form>
