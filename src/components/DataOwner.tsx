@@ -21,17 +21,17 @@ export default function DataOwner({ user }: { user?: UserSchema }) {
         {
             id: 1,
             name: 'Sebastian Andreasson',
-            roll: 'Admin',
+            role: 'Admin',
         },
         {
             id: 2,
             name: 'Styrbjörn Nordberg',
-            roll: 'User',
+            role: 'User',
         },
         {
             id: 3,
             name: 'Josef Forkman',
-            roll: 'User',
+            role: 'User',
         },
     ]
 

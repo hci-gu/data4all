@@ -43,7 +43,7 @@ export const datasetSchema = z.object({
 export type UserSchema = {
     id: number
     name: string
-    roll: roleSchema
+    role: roleSchema
 }
 
 export type signInSchema = z.infer<typeof signInSchema>

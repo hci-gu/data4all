@@ -13,7 +13,7 @@ export default function User({ user }: { user: UserSchema }) {
                 <p>
                     <b className="text-lg">{user.name}</b>
                 </p>
-                <p className="text-sm text-gray-500">{user.roll}</p>
+                <p className="text-sm text-gray-500">{user.role}</p>
             </div>
         </div>
     )

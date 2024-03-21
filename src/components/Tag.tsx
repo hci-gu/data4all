@@ -1,5 +1,9 @@
 import Link from 'next/link'
-type Tag = { id: number; href: string; title: string }
+type Tag = {
+    id: number
+    href: string
+    title: string
+}
 
 export default function Tags({ Tags }: { Tags: Tag[] }) {
     return (

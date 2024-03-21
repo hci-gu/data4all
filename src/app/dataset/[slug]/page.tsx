@@ -23,7 +23,7 @@ export default function Page({
     const user: UserSchema = {
         id: 1,
         name: 'Sebastian Andreasson',
-        roll: 'Admin',
+        role: 'Admin',
     }
     const TagsData = [
         {
