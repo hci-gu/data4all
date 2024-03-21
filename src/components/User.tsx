@@ -13,7 +13,7 @@ export default function User({ user }: { user: User }) {
                 <AvatarFallback>{user.initials}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-                <b className="text-lg">{user.name}</b>
+                <p><b className="text-lg">{user.name}</b></p>
                 <p className="text-sm text-gray-500">{user.roll}</p>
             </div>
         </div>

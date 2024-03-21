@@ -51,13 +51,13 @@ export default function Page({ params: { slug } }: { params: { slug: string } })
                 <Breadcrumb className="mb-2">
                     <BreadcrumbList>
                         <BreadcrumbItem>
-                            <BreadcrumbLink className="" href="/">Home</BreadcrumbLink>
+                            <BreadcrumbLink className="text-xl" href="/">Home</BreadcrumbLink>
                         </BreadcrumbItem>
-                        <BreadcrumbSeparator className="text-2xl">
-                            <ChevronRight size={32} />
+                        <BreadcrumbSeparator className="text-2xl [&>svg]:size-5">
+                            <ChevronRight />
                         </BreadcrumbSeparator>
                         <BreadcrumbItem>
-                            <BreadcrumbLink className="" href="/dataset/Parkeringsplatser">Parkeringsplatser</BreadcrumbLink>
+                            <BreadcrumbLink className="text-xl font-bold" href="/dataset/Parkeringsplatser">Parkeringsplatser</BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
