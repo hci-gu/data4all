@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
-import * as utils from './utils'
 const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 export async function GET(request: NextRequest) {
