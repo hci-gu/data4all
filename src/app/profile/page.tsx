@@ -3,9 +3,16 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
+import * as api from '@/adapters/api'
 
-function ProfilePage() {
+async function ProfilePage() {
     const user = loadAuthorizedUser()
+
+    if (!user) {
+        return <div>loading...</div>
+    }
+
+    const datasets = await api.getDatasetFromUserEvent(user.id)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -29,7 +36,7 @@ function ProfilePage() {
                 <Separator />
                 <div className="flex justify-start gap-[10px]">
                     <LogoutButton />
-                    <RemoveAccountButton userId={user?.id} />
+                    <RemoveAccountButton userId={user.id} />
                 </div>
             </div>
             <Separator orientation="vertical" />

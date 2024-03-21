@@ -15,25 +15,26 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { roleSchema, updateUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from './ui/button'
 import { updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
-import { AuthModel } from 'pocketbase'
 import toast from 'react-hot-toast'
+import { useState } from 'react'
 
-export default function UpdateUserForm({ user }: { user: AuthModel }) {
+export default function UpdateUserForm({ user }: { user: AuthorizedUserSchema }) {
+    const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
-            name: user?.name,
-            email: user?.email,
+            name: user.name,
+            email: user.email,
             oldPassword: '',
             password: '',
             passwordConfirm: '',
-            role: user?.role,
+            role: user.role,
         },
     })
 
@@ -42,7 +43,8 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
 
     const submit = async (value: updateUserSchema) => {
         try {
-            await updateUser(value, user?.id)
+            setIsClicked(true)
+            await updateUser(value, user.id)
             router.refresh()
         } catch (e) {
             toast.error('Något gick fel')
