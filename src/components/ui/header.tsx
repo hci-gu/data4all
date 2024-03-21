@@ -52,10 +52,7 @@ export default function Header({ usersName }: { usersName: string }) {
             return (
                 <>
                     <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
-                        <Image
-                            src={Logo}
-                            alt="Logo"
-                        />
+                        <Image src={Logo} alt="Logo" />
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
                             <Link href={'/profile'}>{usersName}</Link>
                         </div>
