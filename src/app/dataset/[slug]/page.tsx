@@ -15,7 +15,7 @@ import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
 import { UserSchema, datasetSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import Error from 'next/error'
+import { datasetWithSpace, datasetWithUnderscore } from '@/lib/utils'
 
 export default async function Page({
     params: { slug },
@@ -23,18 +23,15 @@ export default async function Page({
     params: { slug?: string }
 }) {
     const user: UserSchema = {
-        id: 1,
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
     const TagsData = [
         {
-            id: 1,
             href: '/tag/Geodata',
             title: 'Geodata',
         },
         {
-            id: 2,
             href: '/tag/Miljö',
             title: 'Miljö',
         },
@@ -65,13 +62,13 @@ export default async function Page({
             href: '/dataset/Badplatser',
         },
     ]
+    let parsedPageData = null
     try {
         if (slug) {
-            const pageData = await getDataset(decodeURI(slug))
-            const parsedPageData = datasetSchema.parse(pageData)
+            const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
+            parsedPageData = datasetSchema.parse(pageData)
 
             console.log(parsedPageData);
-
         }
     } catch (error) {
         console.error(error);
@@ -92,19 +89,16 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href="/dataset/Parkeringsplatser"
+                                href={`/dataset/${parsedPageData && datasetWithUnderscore(parsedPageData.records.title)}`}
                             >
-                                Parkeringsplatser
+                                {parsedPageData && parsedPageData.records.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <Typography level="H1">Parkeringsplatser</Typography>
+                <Typography level="H1">{parsedPageData && parsedPageData.records.title}</Typography>
                 <p className="max-w-prose text-sm">
-                    Denna datamängd listar offentliga parkeringsplatser i
-                    kommunen, inklusive platser, avgifter, tidsbegränsningar och
-                    antal lediga platser. Den kan även inkludera information om
-                    parkeringshus eller gatuparkering.
+                    {parsedPageData && parsedPageData.records.description}
                 </p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
