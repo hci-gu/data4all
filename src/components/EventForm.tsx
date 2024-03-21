@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
     Form,
     FormControl,
@@ -6,23 +6,23 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default function EventForm() {
     const formSchema = z.object({
         username: z.string().min(2, {
-            message: "Username must be at least 2 characters.",
+            message: 'Username must be at least 2 characters.',
         }),
     })
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            username: '',
         },
     })
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -43,7 +43,10 @@ export default function EventForm() {
                                         <AvatarImage src="https://github.com/sebastianandreasson.png" />
                                         <AvatarFallback>SA</AvatarFallback>
                                     </Avatar>
-                                    <Input placeholder="Skriv en kommentar..." {...field} />
+                                    <Input
+                                        placeholder="Skriv en kommentar..."
+                                        {...field}
+                                    />
                                 </div>
                             </FormControl>
                             <FormMessage />
