@@ -15,3 +15,11 @@ export const getInitials = (name: string) => {
     }
     return initials
 }
+
+export const datasetWithUnderscore = (text: string) => {
+    return text.replaceAll(' ', '_')
+}
+
+export const datasetWithSpace = (text: string) => {
+    return text.replaceAll('_', ' ')
+}
