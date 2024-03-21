@@ -3,9 +3,21 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
+import {
+    Card,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card'
+import * as api from '@/adapters/api'
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
-function ProfilePage() {
+async function ProfilePage() {
     const user = loadAuthorizedUser()
+
+    const datasets = await api.getDatasetFromUserEvent(user?.id as string)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -37,6 +49,36 @@ function ProfilePage() {
                 <h2 className="text-center text-3xl font-semibold">
                     Dina dataset
                 </h2>
+                <div className="flex flex-col gap-2 mt-[10px]">
+                    {datasets.records.map((dataset: any) => {
+                        return (
+                            <Card key={dataset.id}>
+                                <Link href={''}>
+                                    <CardHeader>
+                                        <div className="flex h-fit w-full justify-between">
+                                            <CardTitle>
+                                                {dataset.title}
+                                            </CardTitle>
+                                            <ChevronRight />
+                                        </div>
+                                        <CardDescription className="line-clamp-2">
+                                            {dataset.description}
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardFooter className="flex gap-3">
+                                        <div className="flex gap-1">
+                                            <p>tags</p>
+                                        </div>
+                                        <div className="flex gap-3">
+                                            <p>last updated</p>
+                                            <p>is public?</p>
+                                        </div>
+                                    </CardFooter>
+                                </Link>
+                            </Card>
+                        )
+                    })}
+                </div>
             </div>
         </main>
     )
