@@ -39,6 +39,20 @@ export const datasetSchema = z.object({
         })
     ),
 })
+export const AuthorizedUserSchema = z.object({
+    avatar: z.string(),
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    email: z.string(),
+    emailVisibility: z.boolean(),
+    id: z.string(),
+    name: z.string(),
+    role: roleSchema,
+    updated: z.string(),
+    username: z.string(),
+    verified: z.boolean(),
+})
 
 export type UserSchema = {
     id: number
@@ -51,3 +65,4 @@ export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
+export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
