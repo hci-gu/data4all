@@ -1,6 +1,5 @@
 import Link from 'next/link'
 type Tag = {
-    id: number
     href: string
     title: string
 }
