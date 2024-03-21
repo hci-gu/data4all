@@ -16,8 +16,6 @@ import { UserPlus } from 'lucide-react'
 import User from './User'
 import { UserSchema } from '@/types/zod'
 
-
-
 export default function DataOwner({ user }: { user?: UserSchema }) {
     const users: UserSchema[] = [
         {
