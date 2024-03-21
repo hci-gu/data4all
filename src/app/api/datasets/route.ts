@@ -1,16 +1,47 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from 'process'
+import { env } from '@/lib/env'
+import * as utils from './utils'
+const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const records = await pb.collection('mocDataset').getFullList({
-            sort: '-created',
-        })
+        let records
+        switch (true) {
+            case request.nextUrl.searchParams.get('datasetTitle') !== null:
+                // gets single dataset by its title
+                const datasetTitle = request.nextUrl.searchParams.get(
+                    'datasetTitle'
+                ) as string
 
+                records = await utils.datasetForTitle(datasetTitle)
+                break
+
+            case request.nextUrl.searchParams.get('userId') !== null:
+                // gets all datasets related to the users id
+                const userId = request.nextUrl.searchParams.get(
+                    'userId'
+                ) as string
+
+                records = await utils.datasetsForUserId(userId)
+
+                break
+
+            default:
+                // gets all datasets
+                records = await pb.collection('mocDataset').getFullList({
+                    sort: '-created',
+                })
+
+                break
+        }
         return NextResponse.json(
-            { message: 'success', body: { records } },
+            {
+                message: 'success',
+                body: {
+                    records: records,
+                },
+            },
             { status: 200 }
         )
     } catch (error) {
@@ -21,5 +52,6 @@ export async function GET() {
                 { status: 400 }
             )
         }
+        return NextResponse.json({ message: 'Något gick fel' }, { status: 500 })
     }
 }
