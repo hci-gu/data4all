@@ -13,12 +13,14 @@ import EventForm from '@/components/EventForm'
 import DataOwner from '@/components/DataOwner'
 import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
-import { UserSchema } from '@/types/zod'
+import { UserSchema, datasetSchema } from '@/types/zod'
+import { getDataset } from '@/adapters/api'
+import Error from 'next/error'
 
-export default function Page({
+export default async function Page({
     params: { slug },
 }: {
-    params: { slug: string }
+    params: { slug?: string }
 }) {
     const user: UserSchema = {
         id: 1,
@@ -63,6 +65,17 @@ export default function Page({
             href: '/dataset/Badplatser',
         },
     ]
+    try {
+        if (slug) {
+            const pageData = await getDataset(decodeURI(slug))
+            const parsedPageData = datasetSchema.parse(pageData)
+
+            console.log(parsedPageData);
+
+        }
+    } catch (error) {
+        console.error(error);
+    }
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
             <div className="flex flex-col gap-4">
