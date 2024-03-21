@@ -26,4 +26,21 @@ test.describe('Profile page', () => {
             await expect(page).toHaveURL('/logga-in')
         })
     })
+
+    test.describe('user has a linked dataset', () => {
+        test.beforeEach(async ({ page, request, context }) => {
+            await loggedInUser({ page, request, context })
+        })
+
+        test('has dataset', async ({ page, request, context }) => {
+            // await loggedInUser({ page, request, context })
+            await page.goto('/profile')
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                'Profil'
+            )
+            await expect(page.getByRole('heading', { level: 3 })).toHaveText(
+                'test title'
+            )
+        })
+    })
 })
