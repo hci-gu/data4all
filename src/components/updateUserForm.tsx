@@ -85,7 +85,7 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Lösenord</FormLabel>
+                            <FormLabel>Nytt lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -97,40 +97,48 @@ export default function UpdateUserForm({ user }: { user: AuthModel }) {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="oldPassword"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Nuvarande lösenord</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="Nuvarande lösenord"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="passwordConfirm"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Bekräfta lösenord</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="Bekräfta lösenord"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div
+                    className={form.getValues().password !== '' ? '' : 'hidden'}
+                >
+                    <FormField
+                        control={form.control}
+                        name="passwordConfirm"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Bekräfta nytt lösenord</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="Bekräfta lösenord"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div
+                    className={form.getValues().password !== '' ? '' : 'hidden'}
+                >
+                    <FormField
+                        control={form.control}
+                        name="oldPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Nuvarande lösenord</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="Nuvarande lösenord"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <FormField
                     control={form.control}
                     name="role"

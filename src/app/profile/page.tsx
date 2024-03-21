@@ -47,21 +47,32 @@ async function ProfilePage() {
                 <h2 className="text-center text-3xl font-semibold">
                     Dina dataset
                 </h2>
-                {datasets.records.map((dataset: any) => {
-                    return (
-                        <Card key={dataset.id}>
-                            <CardHeader>
-                                <CardTitle>{dataset.title}</CardTitle>
-                                <CardDescription>
-                                    {dataset.description}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardFooter>
-                                <p>tags & other footer related comps later</p>
-                            </CardFooter>
-                        </Card>
-                    )
-                })}
+                <div className="flex flex-col gap-2">
+                    {datasets.records.map((dataset: any) => {
+                        return (
+                            <Card key={dataset.id}>
+                                <CardHeader>
+                                    <div className="flex h-fit w-full justify-between">
+                                        <CardTitle>{dataset.title}</CardTitle>
+                                        <p>chevron</p>
+                                    </div>
+                                    <CardDescription className="line-clamp-2">
+                                        {dataset.description}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardFooter className="flex gap-3">
+                                    <div className="flex gap-1">
+                                        <p>tags</p>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <p>last updated</p>
+                                        <p>is public?</p>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                        )
+                    })}
+                </div>
             </div>
         </main>
     )
