@@ -1,16 +1,13 @@
+import { getInitials } from '@/lib/utils'
 import { Avatar, AvatarFallback } from './ui/avatar'
-type User = {
-    id: number
-    name: string
-    roll: string
-    initials: string
-}
-export default function User({ user }: { user: User }) {
+import { UserSchema } from '@/types/zod'
+
+export default function User({ user }: { user: UserSchema }) {
     return (
         <div className="flex items-center gap-4">
             <Avatar>
                 {/* <AvatarImage src="https://github.com/sebastianandreasson.png" /> */}
-                <AvatarFallback>{user.initials}</AvatarFallback>
+                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
                 <p>

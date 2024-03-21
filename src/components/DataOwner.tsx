@@ -12,37 +12,28 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import Typography from '@/components/ui/Typography'
 import { UserPlus } from 'lucide-react'
 import User from './User'
+import { UserSchema } from '@/types/zod'
 
-type User = {
-    id: number
-    name: string
-    roll: string
-    initials: string
-}
 
-export default function DataOwner({ user }: { user?: User }) {
-    const users = [
+
+export default function DataOwner({ user }: { user?: UserSchema }) {
+    const users: UserSchema[] = [
         {
             id: 1,
             name: 'Sebastian Andreasson',
-            roll: 'Business Intelligence',
-            initials: 'SA',
+            roll: 'Admin',
         },
         {
             id: 2,
             name: 'Styrbjörn Nordberg',
-            roll: 'Business Intelligence',
-            initials: 'SN',
+            roll: 'User',
         },
         {
             id: 3,
             name: 'Josef Forkman',
-            roll: 'Business Intelligence',
-            initials: 'JF',
+            roll: 'User',
         },
     ]
 

@@ -13,13 +13,18 @@ import EventForm from '@/components/EventForm'
 import DataOwner from '@/components/DataOwner'
 import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
+import { UserSchema } from '@/types/zod'
 
 export default function Page({
     params: { slug },
 }: {
     params: { slug: string }
 }) {
-    const user = undefined
+    const user: UserSchema = {
+        id: 1,
+        name: 'Sebastian Andreasson',
+        roll: 'Admin',
+    }
     const TagsData = [
         {
             id: 1,
