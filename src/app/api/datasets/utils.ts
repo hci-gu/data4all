@@ -17,7 +17,7 @@ export async function datasetForTitle(datasetTitle: string) {
 }
 export async function datasetsForUserId(userId: string) {
     const userEvents = await pb.collection('events').getList(1, 50, {
-        filter: `user="${userId}"`,
+        filter: `user = "${userId}"`,
     })
 
     const datasetIds = Array.from(

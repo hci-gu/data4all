@@ -11,7 +11,7 @@ const handleResponse = async (Response: Response): Promise<any> => {
     const json = await Response.json()
 
     if (!Response.ok) {
-        throw new Error(json.message)
+        return new Error(json.message)
     }
 
     return json.body
@@ -30,8 +30,8 @@ const apiRequest = async (
 
         const response = await fetch(url, options)
         return handleResponse(response)
-    } catch (e) {
-        throw e
+    } catch (error) {
+        return new Error('Something went wrong')
     }
 }
 
