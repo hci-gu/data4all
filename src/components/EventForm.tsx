@@ -42,7 +42,9 @@ export default function EventForm({ user }: { user: AuthorizedUserSchema }) {
                             <FormControl>
                                 <div className="flex gap-2">
                                     <Avatar>
-                                        <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                                        <AvatarFallback>
+                                            {getInitials(user.name)}
+                                        </AvatarFallback>
                                     </Avatar>
                                     <Input
                                         placeholder="Skriv en kommentar..."

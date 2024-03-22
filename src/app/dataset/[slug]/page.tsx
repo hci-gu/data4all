@@ -13,13 +13,18 @@ import EventForm from '@/components/EventForm'
 import DataOwner from '@/components/DataOwner'
 import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
-import { AuthorizedUserSchema, EventSchema, UserSchema, datasetSchema } from '@/types/zod'
+import {
+    AuthorizedUserSchema,
+    EventSchema,
+    UserSchema,
+    datasetSchema,
+} from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { datasetWithSpace, datasetWithUnderscore } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
-import moment from "moment";
+import moment from 'moment'
 
 export default async function Page({
     params: { slug },
@@ -32,16 +37,7 @@ export default async function Page({
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
-    const TagsData = [
-        {
-            href: '/tag/Geodata',
-            title: 'Geodata',
-        },
-        {
-            href: '/tag/Miljö',
-            title: 'Miljö',
-        },
-    ]
+    let TagsData
     const DatasetsData = [
         {
             title: 'Lekplatser',
@@ -74,12 +70,22 @@ export default async function Page({
     try {
         if (slug) {
             const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
+            console.log(pageData)
             parsedPageData = datasetSchema.parse(pageData)
-            events = EventSchema.parse(await api.getEvent(parsedPageData.records.id))
+            events = EventSchema.parse(
+                await api.getEvent(parsedPageData.records.id)
+            )
+            TagsData =
+                parsedPageData.records.expand?.tag.map((tag) => ({
+                    title: tag.name,
+                    href: `/tag/${tag.name}`,
+                })) ?? []
         }
     } catch (error) {
         if (error instanceof ZodError) {
-            throw new Error(error.errors[0].message)
+            // console.log('error', error.errors);
+
+            return new Error(error.errors[0].message)
         }
         throw new Error('Dataset hittades inte')
     }
@@ -106,7 +112,9 @@ export default async function Page({
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <Typography level="H1">{parsedPageData && parsedPageData.records.title}</Typography>
+                <Typography level="H1">
+                    {parsedPageData && parsedPageData.records.title}
+                </Typography>
                 <p className="max-w-prose text-sm">
                     {parsedPageData && parsedPageData.records.description}
                 </p>
@@ -115,7 +123,7 @@ export default async function Page({
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    <Tags Tags={TagsData} />
+                    {TagsData && <Tags Tags={TagsData} />}
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -140,17 +148,24 @@ export default async function Page({
                     className="flex flex-col gap-4"
                     aria-label="Aktivitets flödet"
                 >
-                    {events && events.records.items.map((event) => (
-                        <li className="flex gap-2">
-                            <Avatar>
-                                <AvatarFallback>e</AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col gap-1">
-                                <div dangerouslySetInnerHTML={{ __html: event.content }} />
-                                <b className="text-xs">{moment(event.created).fromNow()}</b>
-                            </div>
-                        </li>
-                    ))}
+                    {events &&
+                        events.records.items.map((event) => (
+                            <li className="flex gap-2">
+                                <Avatar>
+                                    <AvatarFallback>e</AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col gap-1">
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: event.content,
+                                        }}
+                                    />
+                                    <b className="text-xs">
+                                        {moment(event.created).fromNow()}
+                                    </b>
+                                </div>
+                            </li>
+                        ))}
                 </ul>
             </div>
         </main>

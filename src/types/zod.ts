@@ -52,11 +52,24 @@ export const datasetsSchema = z.object({
         })
     ),
 })
+export const tagSchema = z.object({
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    id: z.string(),
+    name: z.string(),
+    updated: z.string(),
+})
 export const datasetSchema = z.object({
     records: z.object({
         id: z.string(),
         description: z.string(),
         title: z.string(),
+        expand: z
+            .object({
+                tag: z.array(tagSchema),
+            })
+            .optional(),
     }),
 })
 export const EventSchema = z.object({
@@ -89,5 +102,7 @@ export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
+export type datasetsSchema = z.infer<typeof datasetsSchema>
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
+export type tagSchema = z.infer<typeof tagSchema>

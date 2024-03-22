@@ -24,7 +24,11 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 
-export default function UpdateUserForm({ user }: { user: AuthorizedUserSchema }) {
+export default function UpdateUserForm({
+    user,
+}: {
+    user: AuthorizedUserSchema
+}) {
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),

@@ -1,4 +1,5 @@
 import { pb } from '@/adapters/api'
+import { datasetSchema } from '@/types/zod'
 
 async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
     const records = await pb.collection('mocDataset').getFullList({
@@ -10,8 +11,8 @@ async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
 
 export async function datasetForTitle(datasetTitle: string) {
     const records = await pb
-        .collection('mocDataset')
-        .getFirstListItem(`title="${datasetTitle}"`)
+        .collection<datasetSchema>('mocDataset')
+        .getFirstListItem(`title="${datasetTitle}"`, { expand: 'tag' })
 
     return records
 }
