@@ -7,7 +7,7 @@ export function loadAuthorizedUser() {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     if (!authorizedUser) {
-        return 
+        return
     }
     pb.authStore.loadFromCookie(authorizedUser.value)
 

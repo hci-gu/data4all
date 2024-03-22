@@ -4,7 +4,9 @@ migrate(
         const dao = new Dao(db)
         const collection = dao.findCollectionByNameOrId('pgj749tbz9a41vm')
 
-        collection.name = 'tag'
+        collection.listRule = ''
+        collection.viewRule = ''
+        collection.createRule = ''
 
         return dao.saveCollection(collection)
     },
@@ -12,7 +14,9 @@ migrate(
         const dao = new Dao(db)
         const collection = dao.findCollectionByNameOrId('pgj749tbz9a41vm')
 
-        collection.name = 'tags'
+        collection.listRule = null
+        collection.viewRule = null
+        collection.createRule = null
 
         return dao.saveCollection(collection)
     }

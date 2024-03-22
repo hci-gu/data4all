@@ -2,24 +2,22 @@
 migrate(
     (db) => {
         const dao = new Dao(db)
-        const collection = dao.findCollectionByNameOrId('i4w0fcmgytxfkwo')
+        const collection = dao.findCollectionByNameOrId('pgj749tbz9a41vm')
 
         // update
         collection.schema.addField(
             new SchemaField({
                 system: false,
-                id: 'logwd0tr',
-                name: 'tag',
-                type: 'relation',
-                required: false,
+                id: 'kv1lkymo',
+                name: 'name',
+                type: 'text',
+                required: true,
                 presentable: false,
                 unique: false,
                 options: {
-                    collectionId: 'pgj749tbz9a41vm',
-                    cascadeDelete: false,
-                    minSelect: null,
-                    maxSelect: null,
-                    displayFields: null,
+                    min: null,
+                    max: null,
+                    pattern: '',
                 },
             })
         )
@@ -28,24 +26,22 @@ migrate(
     },
     (db) => {
         const dao = new Dao(db)
-        const collection = dao.findCollectionByNameOrId('i4w0fcmgytxfkwo')
+        const collection = dao.findCollectionByNameOrId('pgj749tbz9a41vm')
 
         // update
         collection.schema.addField(
             new SchemaField({
                 system: false,
-                id: 'logwd0tr',
-                name: 'tag',
-                type: 'relation',
+                id: 'kv1lkymo',
+                name: 'name',
+                type: 'text',
                 required: false,
                 presentable: false,
                 unique: false,
                 options: {
-                    collectionId: 'pgj749tbz9a41vm',
-                    cascadeDelete: false,
-                    minSelect: null,
-                    maxSelect: 1,
-                    displayFields: null,
+                    min: null,
+                    max: null,
+                    pattern: '',
                 },
             })
         )
