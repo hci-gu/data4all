@@ -59,6 +59,28 @@ export const datasetSchema = z.object({
         title: z.string(),
     }),
 })
+export const EventSchema = z.object({
+    records: z.object({
+        page: z.number(),
+        perPage: z.number(),
+        totalItems: z.number(),
+        totalPages: z.number(),
+        items: z.array(
+            z.object({
+                collectionId: z.string(),
+                collectionName: z.string(),
+                content: z.string(),
+                created: z.string(),
+                dataset: z.string(),
+                id: z.string(),
+                subject: z.string(),
+                types: z.string(),
+                updated: z.string(),
+                user: z.string(),
+            })
+        ),
+    }),
+})
 
 export type UserSchema = Pick<AuthorizedUserSchema, 'name' | 'role'>
 
@@ -68,3 +90,4 @@ export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
+export type EventSchema = z.infer<typeof EventSchema>
