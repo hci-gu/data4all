@@ -12,8 +12,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { AuthorizedUserSchema } from '@/types/zod'
+import { getInitials } from '@/lib/utils'
 
-export default function EventForm() {
+export default function EventForm({ user }: { user: AuthorizedUserSchema }) {
     const formSchema = z.object({
         username: z.string().min(2, {
             message: 'Username must be at least 2 characters.',
@@ -40,8 +42,7 @@ export default function EventForm() {
                             <FormControl>
                                 <div className="flex gap-2">
                                     <Avatar>
-                                        <AvatarImage src="https://github.com/sebastianandreasson.png" />
-                                        <AvatarFallback>SA</AvatarFallback>
+                                        <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                                     </Avatar>
                                     <Input
                                         placeholder="Skriv en kommentar..."

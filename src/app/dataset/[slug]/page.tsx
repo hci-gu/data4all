@@ -13,15 +13,21 @@ import EventForm from '@/components/EventForm'
 import DataOwner from '@/components/DataOwner'
 import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
-import { UserSchema, datasetSchema } from '@/types/zod'
+import { AuthorizedUserSchema, EventSchema, UserSchema, datasetSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { datasetWithSpace, datasetWithUnderscore } from '@/lib/utils'
+import { ZodError } from 'zod'
+import * as api from '@/adapters/api'
+import { loadAuthorizedUser } from '@/app/api/auth/utils'
+import moment from "moment";
 
 export default async function Page({
     params: { slug },
 }: {
     params: { slug?: string }
 }) {
+    // const router = useRouter()
+    const AuthorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
@@ -62,16 +68,20 @@ export default async function Page({
             href: '/dataset/Badplatser',
         },
     ]
-    let parsedPageData = null
+
+    let parsedPageData: datasetSchema | null = null
+    let events: EventSchema | null = null
     try {
         if (slug) {
             const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
             parsedPageData = datasetSchema.parse(pageData)
-
-            console.log(parsedPageData);
+            events = EventSchema.parse(await api.getEvent(parsedPageData.records.id))
         }
     } catch (error) {
-        console.error(error);
+        if (error instanceof ZodError) {
+            throw new Error(error.errors[0].message)
+        }
+        throw new Error('Dataset hittades inte')
     }
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
@@ -124,38 +134,23 @@ export default async function Page({
                     Bli den första att skriva något kring det här datasetet.
                 </p>
 
-                <EventForm />
+                <EventForm user={AuthorizedUser} />
 
                 <ul
                     className="flex flex-col gap-4"
                     aria-label="Aktivitets flödet"
                 >
-                    <li className="flex gap-2">
-                        <Avatar>
-                            <AvatarImage src="https://github.com/josefforkman.png" />
-                            <AvatarFallback>SA</AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-xs">
-                                <b>Jonathan Crusoe</b> föreslog sig själv som
-                                dataägare
-                            </p>
-                            <b className="text-xs">4 timmar sedan</b>
-                        </div>
-                    </li>
-                    <li className="flex gap-2">
-                        <Avatar>
-                            <AvatarImage src="https://github.com/josefforkman.png" />
-                            <AvatarFallback>SA</AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-xs">
-                                <b>Jonathan Crusoe</b> föreslog sig själv som
-                                dataägare
-                            </p>
-                            <b className="text-xs">4 timmar sedan</b>
-                        </div>
-                    </li>
+                    {events && events.records.items.map((event) => (
+                        <li className="flex gap-2">
+                            <Avatar>
+                                <AvatarFallback>e</AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col gap-1">
+                                <div dangerouslySetInnerHTML={{ __html: event.content }} />
+                                <b className="text-xs">{moment(event.created).fromNow()}</b>
+                            </div>
+                        </li>
+                    ))}
                 </ul>
             </div>
         </main>
