@@ -15,7 +15,7 @@ import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
 import {
     AuthorizedUserSchema,
-    EventSchema,
+    EventAPISchema,
     UserSchema,
     datasetSchema,
 } from '@/types/zod'
@@ -37,7 +37,7 @@ export default async function Page({
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
-    let TagsData
+    let TagsData: { title: string; href: string }[] = []
     const DatasetsData = [
         {
             title: 'Lekplatser',
@@ -66,12 +66,12 @@ export default async function Page({
     ]
 
     let parsedPageData: datasetSchema | null = null
-    let events: EventSchema | null = null
+    let events: EventAPISchema | null = null
     try {
         if (slug) {
             const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
             parsedPageData = datasetSchema.parse(pageData)
-            events = EventSchema.parse(
+            events = EventAPISchema.parse(
                 await api.getEvent(parsedPageData.records.id)
             )
             TagsData =
