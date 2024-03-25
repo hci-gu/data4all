@@ -83,6 +83,5 @@ export const loggedInUser = async ({
     if (setCookieHeader) {
         await context.addCookies([parseCookie(setCookieHeader)])
     }
-    const dataset = await createDataset()
-    const event = await createEvent(dataset.id, id)
+    return id
 }

@@ -49,35 +49,43 @@ async function ProfilePage() {
                 <h2 className="text-center text-3xl font-semibold">
                     Dina dataset
                 </h2>
-                <div className="flex flex-col gap-2 mt-[10px]">
-                    {datasets.records.map((dataset: any) => {
-                        return (
-                            <Card key={dataset.id}>
-                                <Link href={''}>
-                                    <CardHeader>
-                                        <div className="flex h-fit w-full justify-between">
-                                            <CardTitle>
-                                                {dataset.title}
-                                            </CardTitle>
-                                            <ChevronRight />
-                                        </div>
-                                        <CardDescription className="line-clamp-2">
-                                            {dataset.description}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardFooter className="flex gap-3">
-                                        <div className="flex gap-1">
-                                            <p>tags</p>
-                                        </div>
-                                        <div className="flex gap-3">
-                                            <p>last updated</p>
-                                            <p>is public?</p>
-                                        </div>
-                                    </CardFooter>
-                                </Link>
-                            </Card>
-                        )
-                    })}
+                <div className="mt-[10px] flex flex-col gap-2">
+                    {datasets.records.length > 0 ? (
+                        datasets.records.map((dataset: any) => {
+                            return (
+                                <Card key={dataset.id}>
+                                    <Link href={''}>
+                                        <CardHeader>
+                                            <div className="flex h-fit w-full justify-between">
+                                                <CardTitle>
+                                                    {dataset.title}
+                                                </CardTitle>
+                                                <ChevronRight />
+                                            </div>
+                                            <CardDescription className="line-clamp-2">
+                                                {dataset.description}
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardFooter className="flex gap-3">
+                                            <div className="flex gap-1">
+                                                <p>tags</p>
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <p>last updated</p>
+                                                <p>is public?</p>
+                                            </div>
+                                        </CardFooter>
+                                    </Link>
+                                </Card>
+                            )
+                        })
+                    ) : (
+                        <>
+                            <p className="text-center">
+                                Du har inga relaterade dataset.
+                            </p>
+                        </>
+                    )}
                 </div>
             </div>
         </main>
