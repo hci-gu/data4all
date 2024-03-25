@@ -78,7 +78,7 @@ export const getEvent = async (datasetId: string) => {
     return apiRequest(apiUrl(`events?id=${datasetId}`), 'GET')
 }
 export const createEvent = async (event: EventSchema) => {
-    return apiRequest(apiUrl(`events`), 'POST', { event })
+    return apiRequest(apiUrl(`events`), 'POST', event)
 }
 export const getDatasetFromUserEvent = async (userId: string) => {
     return apiRequest(apiUrl(`datasets?userId=${userId}`), 'GET')

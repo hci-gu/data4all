@@ -12,30 +12,37 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { AuthorizedUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
+import { createEvent } from '@/adapters/api'
 
-export default function EventForm({ user }: { user: AuthorizedUserSchema }) {
+export default function EventForm({ user, datasetId }: { user: AuthorizedUserSchema, datasetId: string }) {
     const formSchema = z.object({
-        username: z.string().min(2, {
-            message: 'Username must be at least 2 characters.',
+        comment: z.string().min(2, {
+            message: 'Kommentaren måste vara minst 2 tecken lång.',
         }),
     })
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: '',
+            comment: '',
         },
     })
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>, datasetId: string) {
+        const event: EventSchema = {
+            user: user.id,
+            content: values.comment,
+            dataset: datasetId,
+            types: 'comment'
+        }
+        await createEvent(event)
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit((value) => onSubmit(value, datasetId))} className="space-y-8">
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="comment"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="sr-only">Kommentar</FormLabel>
