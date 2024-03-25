@@ -63,6 +63,9 @@ export const removeUser = async (userId: string): Promise<void> => {
 export const getAllDatasets = async () => {
     return apiRequest(apiUrl('datasets'), 'GET')
 }
+export const getDatasets = async (datasetTitle: string) => {
+    return apiRequest(apiUrl(`datasets?=${encodeURI(datasetTitle)}`), 'GET')
+}
 export const getDataset = async (datasetTitle: string) => {
     return apiRequest(apiUrl(`datasets/${encodeURI(datasetTitle)}`), 'GET')
 }

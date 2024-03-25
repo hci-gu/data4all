@@ -12,6 +12,7 @@ export default function Home() {
             user?.id as string
         )
         const resEvent = await api.getEvent('wox79ra56il6u88') // swap out for a working id in your pb
+        const resSearchDataset = await api.getDatasets('Dataset')
     }
     run()
 
