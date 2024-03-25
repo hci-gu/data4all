@@ -1,5 +1,5 @@
 import test, { expect } from '@playwright/test'
-import { loggedInUser } from './setup/utils'
+import { createDataset, createEvent, loggedInUser } from './setup/utils'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
@@ -29,7 +29,9 @@ test.describe('Profile page', () => {
 
     test.describe('user has a linked dataset', () => {
         test.beforeEach(async ({ page, request, context }) => {
-            await loggedInUser({ page, request, context })
+            const userId = await loggedInUser({ page, request, context })
+            const dataset = await createDataset()
+            const event = await createEvent(dataset.id, userId)
         })
 
         test('has dataset', async ({ page, request, context }) => {
@@ -41,6 +43,22 @@ test.describe('Profile page', () => {
             await expect(page.getByRole('heading', { level: 3 })).toHaveText(
                 'test title'
             )
+        })
+    })
+    test.describe('user does not have dataset', () => {
+        test.beforeEach(async ({ page, request, context }) => {
+            await loggedInUser({ page, request, context })
+        })
+
+        test('does not have dataset', async ({ page, request, context }) => {
+            // await loggedInUser({ page, request, context })
+            await page.goto('/profile')
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                'Profil'
+            )
+            await expect(
+                page.getByText('Du har inga relaterade dataset')
+            ).toBeVisible()
         })
     })
 })
