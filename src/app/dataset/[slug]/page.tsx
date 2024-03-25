@@ -141,7 +141,7 @@ export default async function Page({
                     Bli den första att skriva något kring det här datasetet.
                 </p>
 
-                <EventForm user={AuthorizedUser} />
+                {parsedPageData && <EventForm user={AuthorizedUser} datasetId={parsedPageData?.records.id} />}
 
                 <ul
                     className="flex flex-col gap-4"
