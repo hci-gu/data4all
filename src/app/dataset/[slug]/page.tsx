@@ -70,7 +70,6 @@ export default async function Page({
     try {
         if (slug) {
             const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
-            console.log(pageData)
             parsedPageData = datasetSchema.parse(pageData)
             events = EventSchema.parse(
                 await api.getEvent(parsedPageData.records.id)
@@ -149,8 +148,8 @@ export default async function Page({
                     aria-label="Aktivitets flödet"
                 >
                     {events &&
-                        events.records.items.map((event) => (
-                            <li className="flex gap-2">
+                        events.records.items.map((event, index) => (
+                            <li className="flex gap-2" key={index}>
                                 <Avatar>
                                     <AvatarFallback>e</AvatarFallback>
                                 </Avatar>
