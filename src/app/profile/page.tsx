@@ -4,9 +4,13 @@ import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
+import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage() {
-    const user = loadAuthorizedUser()
+    const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
     const datasets = await api.getDatasetFromUserEvent(user?.id as string)
 
