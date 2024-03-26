@@ -8,8 +8,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { ChevronRight } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import EventForm from '@/components/EventForm'
 import DataOwner from '@/components/DataOwner'
 import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
@@ -23,16 +21,15 @@ import { getDataset } from '@/adapters/api'
 import { datasetWithSpace, datasetWithUnderscore } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
-import { loadAuthorizedUser } from '@/app/api/auth/utils'
-import moment from 'moment'
+import ActivityFlow from '@/components/ActivityFlow'
+import { loadAuthorizedUser } from "@/app/api/auth/utils"
 
 export default async function Page({
     params: { slug },
 }: {
     params: { slug?: string }
 }) {
-    // const router = useRouter()
-    const AuthorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
+    const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
@@ -64,16 +61,15 @@ export default async function Page({
             href: '/dataset/Badplatser',
         },
     ]
-
+    let eventsRespond: EventAPISchema | undefined
     let parsedPageData: datasetSchema | null = null
-    let events: EventAPISchema | null = null
     try {
         if (slug) {
             const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
             parsedPageData = datasetSchema.parse(pageData)
-            events = EventAPISchema.parse(
+            eventsRespond = EventAPISchema.parse(
                 await api.getEvent(parsedPageData.records.id)
-            )
+            )            
             TagsData =
                 parsedPageData.records.expand?.tag.map((tag) => ({
                     title: tag.name,
@@ -82,8 +78,6 @@ export default async function Page({
         }
     } catch (error) {
         if (error instanceof ZodError) {
-            // console.log('error', error.errors);
-
             return new Error(error.errors[0].message)
         }
         throw new Error('Dataset hittades inte')
@@ -135,38 +129,7 @@ export default async function Page({
                 </section>
             </div>
             <Separator orientation="vertical" />
-            <div className="flex flex-col gap-4">
-                <h2 className="text-2xl font-bold">Aktivitet</h2>
-                <p className="text-sm">
-                    Bli den första att skriva något kring det här datasetet.
-                </p>
-
-                {parsedPageData && <EventForm user={AuthorizedUser} datasetId={parsedPageData?.records.id} />}
-
-                <ul
-                    className="flex flex-col gap-4"
-                    aria-label="Aktivitets flödet"
-                >
-                    {events &&
-                        events.records.items.map((event, index) => (
-                            <li className="flex gap-2" key={index}>
-                                <Avatar>
-                                    <AvatarFallback>e</AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col gap-1">
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: event.content,
-                                        }}
-                                    />
-                                    <b className="text-xs">
-                                        {moment(event.created).fromNow()}
-                                    </b>
-                                </div>
-                            </li>
-                        ))}
-                </ul>
-            </div>
+            {parsedPageData && eventsRespond && <ActivityFlow user={authorizedUser} datasetId={parsedPageData?.records.id} eventRes={eventsRespond.records.items} />}
         </main>
     )
 }
