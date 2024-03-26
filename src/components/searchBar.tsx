@@ -14,37 +14,29 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
-import { Button } from '../../ui/button'
+import { Button } from './ui/button'
+import { useRouter } from 'next/navigation'
 
 const searchSchema = z.object({
     searchTerm: z.string().min(1),
 })
 type searchSchema = z.infer<typeof searchSchema>
-export default function SearchBar({
-    onFormSubmit,
-}: {
-    onFormSubmit: (datasets: any[]) => void
-}) {
+export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
     const [isClicked, setIsClicked] = useState(false)
+    const router = useRouter()
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
         defaultValues: {
-            searchTerm: '',
+            searchTerm: prevSearch ?? '',
         },
     })
 
     const submit = async (value: searchSchema) => {
         try {
             setIsClicked(true)
-            console.log(value.searchTerm)
-
-            const records = await api.getDatasets(value.searchTerm)
-            if (records) setIsClicked(false)
-            console.log(records.records)
-
-            onFormSubmit(records.records)
-        } catch (error) {
+            router.push(`/sok?searchTerm=${value.searchTerm}`)
             setIsClicked(false)
+        } catch (error) {
             toast.error('något gick fel')
         }
     }

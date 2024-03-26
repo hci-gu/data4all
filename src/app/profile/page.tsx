@@ -53,7 +53,7 @@ async function ProfilePage() {
                     {datasets.records.length > 0 ? (
                         datasets.records.map((dataset: any) => {
                             return (
-                                <Card key={dataset.id}>
+                                <Card>
                                     <Link href={''}>
                                         <CardHeader>
                                             <div className="flex h-fit w-full justify-between">
