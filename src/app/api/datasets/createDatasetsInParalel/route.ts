@@ -79,9 +79,7 @@ const newTestRecordsArray = [
 export async function GET(req: Request) {
     try {
         const records = newTestRecordsArray.map((record) => {
-            return pb
-                .collection('mocDataset')
-                .create(record, { $autoCancel: false })
+            return pb.collection('mocDataset').create(record)
         })
 
         return NextResponse.json(
