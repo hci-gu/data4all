@@ -21,6 +21,33 @@ export const createUser = async () => {
     }
 }
 
+export const createDataset = async () => {
+    const title = 'test title'
+    const description = 'test description'
+    const dataset = await pb.collection('mocDataset').create({
+        title,
+        description,
+    })
+    return { ...dataset, title, description }
+}
+
+export const createEvent = async (datasetId: string, userId: string) => {
+    const type = 'comment'
+    const event = await pb.collection('events').create({
+        dataset: datasetId,
+        types: 'comment',
+        user: userId,
+        content: 'test',
+        subject: 'test',
+    })
+    return {
+        ...event,
+        datasetId,
+        type,
+        userId,
+    }
+}
+
 function parseCookie(cookieString: string): any {
     const [nameValue, ...attributes] = cookieString.split('; ')
     const [name, value] = nameValue.split('=')
@@ -46,7 +73,7 @@ export const loggedInUser = async ({
     request: APIRequestContext
     context: BrowserContext
 }) => {
-    const { email, password } = await createUser()
+    const { email, password, id } = await createUser()
     const response = await request.post('/api/auth/sign-in', {
         data: { email: email, password: password },
         headers: { 'Content-Type': 'application/json' },
@@ -56,4 +83,5 @@ export const loggedInUser = async ({
     if (setCookieHeader) {
         await context.addCookies([parseCookie(setCookieHeader)])
     }
+    return id
 }

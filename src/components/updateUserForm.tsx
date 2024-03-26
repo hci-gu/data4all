@@ -23,6 +23,7 @@ import { updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
 
 export default function UpdateUserForm({
     user,
@@ -51,6 +52,7 @@ export default function UpdateUserForm({
             await updateUser(value, user.id)
             router.refresh()
         } catch (e) {
+            setIsClicked(false)
             toast.error('Något gick fel')
         }
     }
@@ -91,7 +93,7 @@ export default function UpdateUserForm({
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Lösenord</FormLabel>
+                            <FormLabel>Nytt lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -103,40 +105,48 @@ export default function UpdateUserForm({
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="oldPassword"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Nuvarande lösenord</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="Nuvarande lösenord"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="passwordConfirm"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Bekräfta lösenord</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="Bekräfta lösenord"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div
+                    className={form.getValues().password !== '' ? '' : 'hidden'}
+                >
+                    <FormField
+                        control={form.control}
+                        name="passwordConfirm"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Bekräfta nytt lösenord</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="Bekräfta lösenord"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div
+                    className={form.getValues().password !== '' ? '' : 'hidden'}
+                >
+                    <FormField
+                        control={form.control}
+                        name="oldPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Nuvarande lösenord</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="Nuvarande lösenord"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <FormField
                     control={form.control}
                     name="role"
@@ -167,7 +177,14 @@ export default function UpdateUserForm({
                     )}
                 />
                 <div>
-                    <Button type="submit">Uppdatera</Button>
+                    {isClicked ? (
+                        <Button type="submit" disabled>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Uppdatera
+                        </Button>
+                    ) : (
+                        <Button type="submit">Uppdatera</Button>
+                    )}
                 </div>
             </form>
         </Form>

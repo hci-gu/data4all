@@ -1,14 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server'
-import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
-const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+import { NextResponse } from 'next/server'
+import * as utils from '../../utils'
+import { ClientResponseError } from 'pocketbase'
 
-export async function GET(request: NextRequest) {
+export async function GET(req: Request, context: any) {
     try {
-        // gets all datasets
-        const records = await pb.collection('mocDataset').getFullList({
-            sort: '-created',
-        })
+        const { params } = context
+        const records = await utils.datasetsForUserId(params.userId)
 
         return NextResponse.json(
             {

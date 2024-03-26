@@ -21,6 +21,10 @@ export async function datasetsForUserId(userId: string) {
         filter: `user = "${userId}"`,
     })
 
+    if (userEvents.items.length < 1) {
+        return []
+    }
+
     const datasetIds = Array.from(
         new Set(
             userEvents.items.map((e) => {

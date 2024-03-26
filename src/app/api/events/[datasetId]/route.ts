@@ -3,13 +3,13 @@ import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
 import { EventSchema } from '@/types/zod'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, context: any) {
     try {
+        const { params } = context
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const datasetId = request.nextUrl.searchParams.get('id') as string
 
         const records = await pb.collection('events').getList(1, 50, {
-            filter: `dataset="${datasetId}"`,
+            filter: `dataset="${params.datasetId}"`,
         })
 
         return NextResponse.json(
