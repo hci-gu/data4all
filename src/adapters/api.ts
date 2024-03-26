@@ -29,7 +29,10 @@ const apiRequest = async (
     try {
         const options: RequestInit = {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
             body: body ? JSON.stringify(body) : undefined,
         }
 

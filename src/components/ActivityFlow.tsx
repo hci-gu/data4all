@@ -1,22 +1,9 @@
-"use client"
-
 import { AuthorizedUserSchema, EventAPISchema, EventSchema } from "@/types/zod"
-import { useEffect, useState } from "react"
 import { Avatar, AvatarFallback } from "./ui/avatar"
 import moment from 'moment'
 import EventForm from "./EventForm"
-import * as api from '@/adapters/api'
 
-
-const getEvents = async (datasetId: string) => {
-    const events = EventAPISchema.parse(
-        await api.getEvent(datasetId)
-    )
-    return events
-}
-
-export default function ActivityFlow({ user, datasetId, eventRes }: { user: AuthorizedUserSchema, datasetId: string, eventRes: EventSchema[] }) {
-    const [events, setEvents] = useState<EventSchema[]>(eventRes)
+export default function ActivityFlow({ user, datasetId, events }: { user: AuthorizedUserSchema, datasetId: string, events: EventSchema[] }) {
 
     return (
         <section className="flex flex-col gap-4">
@@ -25,7 +12,7 @@ export default function ActivityFlow({ user, datasetId, eventRes }: { user: Auth
                 Bli den första att skriva något kring det här datasetet.
             </p>
 
-            <EventForm user={user} datasetId={datasetId} setEvents={setEvents} />
+            <EventForm user={user} datasetId={datasetId} />
 
             <ul
                 className="flex flex-col gap-4"

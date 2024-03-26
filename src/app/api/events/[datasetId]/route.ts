@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
-import { EventSchema } from '@/types/zod'
 
 export async function GET(request: NextRequest, context: any) {
     try {

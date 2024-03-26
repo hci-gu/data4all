@@ -14,10 +14,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
-import { Dispatch, SetStateAction } from 'react'
 import { z } from 'zod'
+import { useRouter } from 'next/navigation'
 
-export default function EventForm({ user, datasetId, setEvents }: { user: AuthorizedUserSchema, datasetId: string, setEvents: Dispatch<SetStateAction<EventSchema[]>> }) {
+export default function EventForm({ user, datasetId }: { user: AuthorizedUserSchema, datasetId: string, }) {
+    const router = useRouter()
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
@@ -39,8 +40,8 @@ export default function EventForm({ user, datasetId, setEvents }: { user: Author
             types: 'comment'
         }
         await createEvent(event)
-        setEvents((prev) => [event, ...prev])
-        console.log(event)
+        router.refresh()
+        form.reset()
     }
     return (
         <Form {...form}>
