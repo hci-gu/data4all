@@ -8,27 +8,30 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
+import { Dispatch, SetStateAction } from 'react'
+import { z } from 'zod'
 
-export default function EventForm({ user, datasetId }: { user: AuthorizedUserSchema, datasetId: string }) {
+export default function EventForm({ user, datasetId, setEvents }: { user: AuthorizedUserSchema, datasetId: string, setEvents: Dispatch<SetStateAction<EventSchema[]>> }) {
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
         }),
     })
-    const form = useForm<z.infer<typeof formSchema>>({
+    type formSchema = z.infer<typeof formSchema>
+
+    const form = useForm<formSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             comment: '',
         },
     })
-    async function onSubmit(values: z.infer<typeof formSchema>, datasetId: string) {
+    async function onSubmit(values: formSchema, datasetId: string) {
         const event: EventSchema = {
             user: user.id,
             content: values.comment,
@@ -36,6 +39,8 @@ export default function EventForm({ user, datasetId }: { user: AuthorizedUserSch
             types: 'comment'
         }
         await createEvent(event)
+        setEvents((prev) => [event, ...prev])
+        console.log(event)
     }
     return (
         <Form {...form}>
@@ -67,3 +72,7 @@ export default function EventForm({ user, datasetId }: { user: AuthorizedUserSch
         </Form>
     )
 }
+function setEvents(arg0: (prev: any) => any[]) {
+    throw new Error('Function not implemented.')
+}
+
