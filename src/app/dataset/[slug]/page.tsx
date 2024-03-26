@@ -132,38 +132,12 @@ export default async function Page({
                 </section>
             </div>
             <Separator orientation="vertical" />
-            <section className="flex flex-col gap-4">
-                <h2 className="text-2xl font-bold">Aktivitet</h2>
-                <p className="text-sm">
-                    Bli den första att skriva något kring det här datasetet.
-                </p>
-
-                {parsedPageData && <EventForm user={authorizedUser} datasetId={parsedPageData?.records.id} />}
-
-                <ul
-                    className="flex flex-col gap-4"
-                    aria-label="Aktivitets flödet"
-                >
-                    {eventsRespond &&
-                        eventsRespond.records.items.map((event, index) => (
-                            <li className="flex gap-2" key={index}>
-                                <Avatar>
-                                    <AvatarFallback>e</AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col gap-1">
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: event.content,
-                                        }}
-                                    />
-                                    <b className="text-xs">
-                                        {moment(event.created).fromNow()}
-                                    </b>
-                                </div>
-                            </li>
-                        ))}
-                </ul>
-            </section>
+            {
+                parsedPageData && <ActivityFlow
+                    user={authorizedUser}
+                    datasetId={parsedPageData.records.id}
+                    eventData={eventsRespond?.records.items ?? []} />
+            }
         </main>
     )
 }

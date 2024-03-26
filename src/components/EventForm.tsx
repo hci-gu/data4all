@@ -16,9 +16,9 @@ import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function EventForm({ user, datasetId }: { user: AuthorizedUserSchema, datasetId: string, }) {
-    const router = useRouter()
+export default function EventForm({ user, datasetId, setEvents }: { user: AuthorizedUserSchema, datasetId: string, setEvents: Dispatch<SetStateAction<EventSchema[]>> }) {
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
@@ -40,7 +40,7 @@ export default function EventForm({ user, datasetId }: { user: AuthorizedUserSch
             types: 'comment'
         }
         await createEvent(event)
-        router.refresh()
+        setEvents((prev) => [...prev, event])
         form.reset()
     }
     return (
