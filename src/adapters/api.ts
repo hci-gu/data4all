@@ -64,7 +64,7 @@ export const getAllDatasets = async () => {
     return apiRequest(apiUrl('datasets'), 'GET')
 }
 export const getDatasets = async (datasetTitle: string) => {
-    return apiRequest(apiUrl(`datasets?=${encodeURI(datasetTitle)}`), 'GET')
+    return apiRequest(apiUrl(`datasets?title=${encodeURI(datasetTitle)}`), 'GET')
 }
 export const getDataset = async (datasetTitle: string) => {
     return apiRequest(apiUrl(`datasets/${encodeURI(datasetTitle)}`), 'GET')
