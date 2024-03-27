@@ -14,7 +14,7 @@ test.describe('Datasets page', () => {
                 dataset.title
             )
         })
-        test('Navigate to not existed dataset page', async ({ page }) => {
+        test('Gets a 404 page when going to a non existent dataset', async ({ page }) => {
             await page.goto(`/dataset/not-existed-dataset`)
             await expect(page.getByRole('paragraph')).toHaveText(
                 'Dataset hittades inte'
@@ -23,13 +23,13 @@ test.describe('Datasets page', () => {
     })
 
     test.describe('Not logged in user', () => {
-        test('Can not reach the datasets page and navigate to sign-in page', async ({ page }) => {
+        test('Can not reach the datasets page and gets redirected to the login page', async ({ page }) => {
             const dataset = await createDataset()
             await page.goto(`/dataset/${dataset.title}`)
 
             await expect(page).toHaveURL(`/logga-in`)
         })
-        test('Navigate to not existed dataset page and navigate to sign-in page', async ({ page }) => {
+        test('Can not react a non existent dataset page and gets redirected to the login page', async ({ page }) => {
             await page.goto(`/dataset/not-existed-dataset`)
             
             await expect(page).toHaveURL(`/logga-in`)
