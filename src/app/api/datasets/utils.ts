@@ -1,4 +1,5 @@
 import { pb } from '@/adapters/api'
+import { datasetWithHyphen } from '@/lib/utils'
 import { datasetSchema } from '@/types/zod'
 
 async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
@@ -13,6 +14,14 @@ export async function datasetForTitle(datasetTitle: string) {
     const records = await pb
         .collection<datasetSchema>('mocDataset')
         .getFirstListItem(`title="${datasetTitle}"`, { expand: 'tag' })
+
+    return records
+}
+export async function datasetForSlug(datasetSlug: string) {
+    datasetSlug = datasetWithHyphen(datasetSlug)
+    const records = await pb
+        .collection<datasetSchema>('mocDataset')
+        .getFirstListItem(`slug="${datasetSlug}"`, { expand: 'tag' })
 
     return records
 }
