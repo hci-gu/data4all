@@ -11,7 +11,9 @@ async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
 export async function datasetForTitle(datasetTitle: string) {
     const records = await pb
         .collection('mocDataset')
-        .getFirstListItem(`title="${datasetTitle}"`)
+        .getFirstListItem(`title="${datasetTitle}"`, {
+            expand: 'related_datasets,tag',
+        })
 
     return records
 }

@@ -31,11 +31,29 @@ export const updateUserSchema = z
         message: 'Passwords does not match',
     })
 export const datasetSchema = z.object({
+    id: z.string(),
+    description: z.string(),
+    title: z.string(),
+    related_datasets: z.array(z.string()),
+    tag: z.array(z.string()),
+})
+
+export const tagSchema = z.object({
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    id: z.string(),
+    name: z.string(),
+    updated: z.string(),
+})
+
+export const datasetAPISchema = z.object({
     records: z.array(
-        z.object({
-            id: z.string(),
-            description: z.string(),
-            title: z.string(),
+        datasetSchema.extend({
+            expand: z.object({
+                related_datasets: z.array(datasetSchema).optional(),
+                tag: z.array(tagSchema).optional(),
+            }),
         })
     ),
 })
