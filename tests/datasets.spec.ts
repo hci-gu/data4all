@@ -1,5 +1,5 @@
 import test, { expect } from '@playwright/test'
-import { createDataset, createEvent, loggedInUser } from './setup/utils'
+import { createDataset, loggedInUser } from './setup/utils'
 
 test.describe('Datasets page', () => {
     test.describe('Logged in user', () => {
