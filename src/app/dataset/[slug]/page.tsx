@@ -18,7 +18,7 @@ import {
     datasetSchema,
 } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import { datasetWithSpace, datasetWithUnderscore } from '@/lib/utils'
+import { stringWithHyphen } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import ActivityFlow from '@/components/ActivityFlow'
@@ -66,10 +66,10 @@ export default async function Page({
     let parsedPageData: datasetSchema | null = null
     try {
         if (slug) {
-            const pageData = datasetSchema.safeParse(await getDataset(datasetWithSpace(decodeURI(slug))))
-            
+            const pageData = datasetSchema.safeParse(await getDataset(stringWithHyphen(decodeURI(slug))))
+
             if (!pageData.success) notFound()
-            
+
             parsedPageData = pageData.data
             eventsRespond = EventAPISchema.parse(
                 await api.getEvent(parsedPageData.records.id)
@@ -102,7 +102,7 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${parsedPageData && datasetWithUnderscore(parsedPageData.records.title)}`}
+                                href={`/dataset/${parsedPageData && stringWithHyphen(parsedPageData.records.title)}`}
                             >
                                 {parsedPageData && parsedPageData.records.title}
                             </BreadcrumbLink>

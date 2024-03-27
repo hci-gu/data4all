@@ -16,10 +16,10 @@ export const getInitials = (name: string) => {
     return initials
 }
 
-export const datasetWithUnderscore = (text: string) => {
-    return text.replaceAll(' ', '_')
+export const stringWithHyphen = (text: string) => {
+    return text.toLowerCase().replaceAll(' ', '-')
 }
 
-export const datasetWithSpace = (text: string) => {
-    return text.replaceAll('_', ' ')
+export const stringWithSpace = (text: string) => {
+    return text.replaceAll('-', ' ')
 }
