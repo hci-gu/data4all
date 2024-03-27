@@ -23,9 +23,7 @@ import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import ActivityFlow from '@/components/ActivityFlow'
 import { loadAuthorizedUser } from "@/app/api/auth/utils"
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import moment from 'moment'
-import EventForm from '@/components/EventForm'
+import { notFound } from 'next/navigation'
 
 export default async function Page({
     params: { slug },
@@ -68,8 +66,11 @@ export default async function Page({
     let parsedPageData: datasetSchema | null = null
     try {
         if (slug) {
-            const pageData = await getDataset(datasetWithSpace(decodeURI(slug)))
-            parsedPageData = datasetSchema.parse(pageData)
+            const pageData = datasetSchema.safeParse(await getDataset(datasetWithSpace(decodeURI(slug))))
+            
+            if (!pageData.success) notFound()
+            
+            parsedPageData = pageData.data
             eventsRespond = EventAPISchema.parse(
                 await api.getEvent(parsedPageData.records.id)
             )
