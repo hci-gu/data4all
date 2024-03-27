@@ -9,7 +9,7 @@ import {
 import { datasetSchema } from '@/types/zod'
 import Link from 'next/link'
 
-export default function DatasetCard(dataset: datasetSchema) {
+export default function DatasetCard({ dataset }: { dataset: datasetSchema }) {
     return (
         <Card className="w-[560px]">
             <Link href={''}>

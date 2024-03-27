@@ -1,5 +1,4 @@
 'use client'
-import * as api from '@/adapters/api'
 import {
     Form,
     FormControl,
@@ -9,7 +8,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Search } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -66,10 +65,16 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
                         {isClicked ? (
                             <Button type="submit" disabled>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Sök
+                                <Search />
                             </Button>
                         ) : (
-                            <Button type="submit">sök</Button>
+                            <Button
+                                type="submit"
+                                variant={'outline'}
+                                className="w-10 p-2"
+                            >
+                                <Search />
+                            </Button>
                         )}
                     </div>
                     <FormDescription>
