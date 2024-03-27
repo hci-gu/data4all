@@ -49,6 +49,7 @@ export const datasetsSchema = z.object({
             id: z.string(),
             description: z.string(),
             title: z.string(),
+            slug: z.string(),
         })
     ),
 })
@@ -65,6 +66,7 @@ export const datasetSchema = z.object({
         id: z.string(),
         description: z.string(),
         title: z.string(),
+        slug: z.string(),
         expand: z
             .object({
                 tag: z.array(tagSchema),

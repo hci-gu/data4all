@@ -1,4 +1,4 @@
-import { EventSchema } from '@/types/zod'
+import { EventSchema, datasetSchema } from '@/types/zod'
 import { APIRequestContext, BrowserContext, Page } from '@playwright/test'
 import PocketBase from 'pocketbase'
 import uuid from 'short-uuid'
@@ -24,10 +24,12 @@ export const createUser = async () => {
 
 export const createDataset = async () => {
     const title = 'test title'
+    const slug = 'test-title'
     const description = 'test description'
     const dataset = await pb.collection('mocDataset').create({
         title,
         description,
+        slug
     })
     return { ...dataset, title, description }
 }
