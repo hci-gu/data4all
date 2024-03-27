@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, Search } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -29,6 +29,7 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
             searchTerm: prevSearch ?? '',
         },
     })
+    const [searchTerm, setSearchTerm] = useState('')
 
     const submit = async (value: searchSchema) => {
         try {
@@ -39,11 +40,20 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
             toast.error('något gick fel')
         }
     }
+
+    // start of autocomplete function 
+    const asd = (value: string) => {
+        setSearchTerm(value)
+    }
+
     return (
         <>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
+                    onChange={() => {
+                        asd(form.getValues('searchTerm'))
+                    }}
                     className="flex w-fit flex-col items-start"
                 >
                     <div className="mb-[6px] flex max-w-[432px] gap-2">
