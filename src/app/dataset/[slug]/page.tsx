@@ -18,7 +18,7 @@ import {
     datasetSchema,
 } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import { stringWithHyphen } from '@/lib/utils'
+import { createTag, stringWithHyphen } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import ActivityFlow from '@/components/ActivityFlow'
@@ -36,51 +36,21 @@ export default async function Page({
         role: 'Admin',
     }
     let TagsData: { title: string; href: string }[] = []
-    const DatasetsData = [
-        {
-            title: 'Lekplatser',
-            description:
-                'Datamängden lekplatser omfattar barnvänliga områden där barn kan leka säkert.',
-            href: '/dataset/Lekplatser',
-        },
-        {
-            title: 'Badplatser',
-            description:
-                'Datamängden badplatser innehåller information om offentliga sjöar, floder eller pooler där invånare kan bada.',
-            href: '/dataset/Badplatser',
-        },
-        {
-            title: 'Badplatser',
-            description:
-                'Datamängden badplatser innehåller information om offentliga sjöar, floder eller pooler där invånare kan bada.',
-            href: '/dataset/Badplatser',
-        },
-        {
-            title: 'Badplatser',
-            description:
-                'Datamängden badplatser innehåller information om offentliga sjöar, floder eller pooler där invånare kan bada.',
-            href: '/dataset/Badplatser',
-        },
-    ]
     let eventsRespond: EventAPISchema | undefined
-    let parsedPageData: datasetSchema | null = null
+    let pageData: datasetSchema | null = null
     try {
         if (slug) {
-            const pageData = datasetSchema.safeParse(
+            pageData = datasetSchema.parse(
                 await getDataset(stringWithHyphen(decodeURI(slug)))
             )
 
-            if (!pageData.success) notFound()
+            if (!pageData) return notFound()
 
-            parsedPageData = pageData.data
             eventsRespond = EventAPISchema.parse(
-                await api.getEvent(parsedPageData.records.id)
+                await api.getEvent(pageData.id)
             )
-            TagsData =
-                parsedPageData.records.expand?.tag.map((tag) => ({
-                    title: tag.name,
-                    href: `/tag/${tag.name}`,
-                })) ?? []
+
+            TagsData = createTag(pageData.expand?.tag ?? [])
         }
     } catch (error) {
         if (error instanceof ZodError) {
@@ -88,6 +58,9 @@ export default async function Page({
         }
         throw new Error('Dataset hittades inte')
     }
+
+    if (!pageData) notFound()
+
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
             <div className="flex flex-col gap-4">
@@ -104,25 +77,25 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${parsedPageData && stringWithHyphen(parsedPageData.records.title)}`}
+                                href={`/dataset/${stringWithHyphen(pageData.title)}`}
                             >
-                                {parsedPageData && parsedPageData.records.title}
+                                {pageData.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
                 <Typography level="H1">
-                    {parsedPageData && parsedPageData.records.title}
+                    {pageData.title}
                 </Typography>
                 <p className="max-w-prose text-sm">
-                    {parsedPageData && parsedPageData.records.description}
+                    {pageData.description}
                 </p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    {TagsData && <Tags Tags={TagsData} />}
+                    <Tags Tags={TagsData} />
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -131,17 +104,15 @@ export default async function Page({
                     <h2 id="RelatedDatasets" className="text-2xl font-bold">
                         Relaterade dataset
                     </h2>
-                    <Datasets datasets={DatasetsData} />
+                    <Datasets datasets={pageData.expand?.related_datasets ?? []} />
                 </section>
             </div>
             <Separator orientation="vertical" />
-            {parsedPageData && (
-                <ActivityFlow
-                    user={authorizedUser}
-                    datasetId={parsedPageData.records.id}
-                    eventData={eventsRespond?.records.items ?? []}
-                />
-            )}
+            <ActivityFlow
+                user={authorizedUser}
+                datasetId={pageData.id}
+                eventData={eventsRespond?.items ?? []}
+            />
         </main>
     )
 }

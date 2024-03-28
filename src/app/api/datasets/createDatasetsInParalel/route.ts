@@ -1,8 +1,7 @@
 import { pb } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import { NextResponse } from 'next/server'
-import Client, { ClientResponseError } from 'pocketbase'
-import { record } from 'zod'
+import { ClientResponseError } from 'pocketbase'
 
 const newTestRecordsArray = [
     {
