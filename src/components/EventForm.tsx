@@ -18,7 +18,15 @@ import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
 
-export default function EventForm({ user, datasetId, setEvents }: { user: AuthorizedUserSchema, datasetId: string, setEvents: Dispatch<SetStateAction<EventSchema[]>> }) {
+export default function EventForm({
+    user,
+    datasetId,
+    setEvents,
+}: {
+    user: AuthorizedUserSchema
+    datasetId: string
+    setEvents: Dispatch<SetStateAction<EventSchema[]>>
+}) {
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
@@ -37,7 +45,7 @@ export default function EventForm({ user, datasetId, setEvents }: { user: Author
             user: user.id,
             content: values.comment,
             dataset: datasetId,
-            types: 'comment'
+            types: 'comment',
         }
         await createEvent(event)
         setEvents((prev) => [...prev, event])
@@ -45,7 +53,12 @@ export default function EventForm({ user, datasetId, setEvents }: { user: Author
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit((value) => onSubmit(value, datasetId))} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit((value) =>
+                    onSubmit(value, datasetId)
+                )}
+                className="space-y-8"
+            >
                 <FormField
                     control={form.control}
                     name="comment"
@@ -76,4 +89,3 @@ export default function EventForm({ user, datasetId, setEvents }: { user: Author
 function setEvents(arg0: (prev: any) => any[]) {
     throw new Error('Function not implemented.')
 }
-

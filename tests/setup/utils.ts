@@ -29,7 +29,7 @@ export const createDataset = async () => {
     const dataset = await pb.collection('mocDataset').create({
         title,
         description,
-        slug
+        slug,
     })
     return { ...dataset, title, description }
 }

@@ -22,7 +22,7 @@ import { stringWithHyphen } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import ActivityFlow from '@/components/ActivityFlow'
-import { loadAuthorizedUser } from "@/app/api/auth/utils"
+import { loadAuthorizedUser } from '@/app/api/auth/utils'
 import { notFound } from 'next/navigation'
 
 export default async function Page({
@@ -66,7 +66,9 @@ export default async function Page({
     let parsedPageData: datasetSchema | null = null
     try {
         if (slug) {
-            const pageData = datasetSchema.safeParse(await getDataset(stringWithHyphen(decodeURI(slug))))
+            const pageData = datasetSchema.safeParse(
+                await getDataset(stringWithHyphen(decodeURI(slug)))
+            )
 
             if (!pageData.success) notFound()
 
@@ -133,12 +135,13 @@ export default async function Page({
                 </section>
             </div>
             <Separator orientation="vertical" />
-            {
-                parsedPageData && <ActivityFlow
+            {parsedPageData && (
+                <ActivityFlow
                     user={authorizedUser}
                     datasetId={parsedPageData.records.id}
-                    eventData={eventsRespond?.records.items ?? []} />
-            }
+                    eventData={eventsRespond?.records.items ?? []}
+                />
+            )}
         </main>
     )
 }

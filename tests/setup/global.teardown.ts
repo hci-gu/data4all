@@ -16,13 +16,13 @@ setup('setup', async ({ page, request, context }) => {
     for (const dataset of datasets) {
         if (dataset.title === 'test title') {
             await pb.collection('mocDataset').delete(dataset.id)
-        } 
+        }
     }
 
     const events = await pb.collection('events').getFullList()
 
     for (const event of events) {
         if (event.content === 'test')
-        await pb.collection('events').delete(event.id)
+            await pb.collection('events').delete(event.id)
     }
 })
