@@ -3,10 +3,8 @@ import SearchBar from '@/components/searchBar'
 import SearchResults from '@/components/searchResults'
 import Typography from '@/components/ui/Typography'
 import WelcomeBack from '@/components/welcomeBack'
-import { datasetSchema } from '@/types/zod'
 import { X } from 'lucide-react'
 import Link from 'next/link'
-import { z } from 'zod'
 
 export default async function page({
     searchParams,
@@ -14,15 +12,8 @@ export default async function page({
     searchParams?: { [key: string]: string | undefined }
 }) {
     const searchTerm = searchParams?.searchTerm
-
     const request = await api.getDatasets(searchTerm as string)
-    const parsedRequest = z
-        .array(datasetSchema)
-        .safeParse(request.records.items)
-    if (!parsedRequest.success) {
-        return
-    }
-    const datasets = parsedRequest.data
+    const datasets = request.records.items
 
     return (
         <>

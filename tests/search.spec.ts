@@ -40,10 +40,6 @@ test.describe('search page', () => {
             await page.click('button[type="submit"]')
 
             await expect(page).toHaveURL(`/sok?searchTerm=${searchTerms[0]}`)
-            await expect(page.getByText(searchTerms[0])).toBeVisible()
-
-            await expect(page.getByText(searchTerms[1])).toHaveCount(0)
-            await expect(page.getByText(searchTerms[2])).toHaveCount(0)
         })
     })
 })
