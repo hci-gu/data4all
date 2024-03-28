@@ -21,8 +21,8 @@ export const createUser = async () => {
     }
 }
 
-export const createDataset = async () => {
-    const title = 'test title'
+export const createDataset = async (titleValue: string) => {
+    const title = titleValue
     const description = 'test description'
     const dataset = await pb.collection('mocDataset').create({
         title,
