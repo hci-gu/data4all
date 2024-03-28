@@ -1,4 +1,5 @@
 import { pb } from '@/adapters/api'
+import { stringWithHyphen } from '@/lib/utils'
 import { NextResponse } from 'next/server'
 import Client, { ClientResponseError } from 'pocketbase'
 import { record } from 'zod'
@@ -82,7 +83,7 @@ export async function GET(req: Request) {
             return pb.collection('mocDataset').create(
                 {
                     ...record,
-                    slug: record.title.toLowerCase().replaceAll(' ', '-'),
+                    slug: stringWithHyphen(record.title),
                 },
                 { $autoCancel: false }
             )
