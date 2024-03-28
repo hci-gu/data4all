@@ -19,7 +19,3 @@ export const getInitials = (name: string) => {
 export const stringWithHyphen = (text: string) => {
     return text.toLowerCase().replaceAll(' ', '-')
 }
-
-export const stringWithSpace = (text: string) => {
-    return text.replaceAll('-', ' ')
-}
