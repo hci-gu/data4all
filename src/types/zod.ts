@@ -44,14 +44,15 @@ export const updateUserSchema = z
     })
 
 export const datasetsSchema = z.object({
-    records: z.array(
-        z.object({
-            id: z.string(),
-            description: z.string(),
-            title: z.string(),
-            slug: z.string(),
-        })
-    ),
+    records: z.object({
+        items: z.array(
+            z.object({
+                title: z.string(),
+                id: z.string(),
+                description: z.string(),
+            })
+        ),
+    }),
 })
 export const tagSchema = z.object({
     collectionId: z.string(),

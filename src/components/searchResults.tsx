@@ -11,7 +11,7 @@ export default function SearchResults({ records }: { records?: any }) {
                         <Typography level="H3">Dataset</Typography>
                         <p>resultat</p>
                     </div>
-                    {records &&
+                    {records > 0 ? (
                         records.map((dataset: datasetSchema) => {
                             return (
                                 <DatasetCard
@@ -19,7 +19,10 @@ export default function SearchResults({ records }: { records?: any }) {
                                     dataset={dataset}
                                 />
                             )
-                        })}
+                        })
+                    ) : (
+                        <p>Hittade inga resultat</p>
+                    )}
                 </div>
                 <div className="flex flex-col gap-[10px]">
                     <div className="flex flex-col">
