@@ -7,6 +7,7 @@ import {
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+pb.autoCancellation(false)
 
 const baseURL = 'http://localhost:3000'
 
@@ -70,6 +71,12 @@ export const removeUser = async (userId: string): Promise<void> => {
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
     return apiRequest(apiUrl('datasets'), 'GET')
+}
+export const getDatasets = async (datasetTitle: string) => {
+    return apiRequest(
+        apiUrl(`datasets?title=${encodeURI(datasetTitle)}`),
+        'GET'
+    )
 }
 export const getDataset = async (datasetTitle: string) => {
     return apiRequest(apiUrl(`datasets/${encodeURI(datasetTitle)}`), 'GET')

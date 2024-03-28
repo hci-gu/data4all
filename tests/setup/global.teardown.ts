@@ -14,7 +14,7 @@ setup('setup', async ({ page, request, context }) => {
     const datasets = await pb.collection('mocDataset').getFullList()
 
     for (const dataset of datasets) {
-        if (dataset.title === 'test title') {
+        if (dataset.title.includes('test')) {
             await pb.collection('mocDataset').delete(dataset.id)
         }
     }

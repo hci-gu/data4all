@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
+import { error } from 'console'
 const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 export async function GET(request: NextRequest) {
     try {
-        // gets all datasets
-        const records = await pb.collection('mocDataset').getFullList({
+        const title = request.nextUrl.searchParams.get('title') ?? ''
+
+        const records = await pb.collection('mocDataset').getList(1, 25, {
             sort: '-created',
+            filter: `title ~ "${decodeURI(title)}"`,
         })
 
         return NextResponse.json(
             {
                 message: 'success',
                 body: {
+                    title: title,
                     records: records,
                 },
             },

@@ -4,15 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
-import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
-import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import DatasetCard from '@/components/datasetCard'
 import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage() {
@@ -54,30 +46,10 @@ async function ProfilePage() {
                     {datasets.records.length > 0 ? (
                         datasets.records.map((dataset: any) => {
                             return (
-                                <Card key={dataset.id}>
-                                    <Link href={''}>
-                                        <CardHeader>
-                                            <div className="flex h-fit w-full justify-between">
-                                                <CardTitle>
-                                                    {dataset.title}
-                                                </CardTitle>
-                                                <ChevronRight />
-                                            </div>
-                                            <CardDescription className="line-clamp-2">
-                                                {dataset.description}
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardFooter className="flex gap-3">
-                                            <div className="flex gap-1">
-                                                <p>tags</p>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <p>last updated</p>
-                                                <p>is public?</p>
-                                            </div>
-                                        </CardFooter>
-                                    </Link>
-                                </Card>
+                                <DatasetCard
+                                    key={dataset.id}
+                                    dataset={dataset}
+                                />
                             )
                         })
                     ) : (

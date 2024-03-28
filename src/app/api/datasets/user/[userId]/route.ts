@@ -17,6 +17,7 @@ export async function GET(req: Request, context: any) {
             { status: 200 }
         )
     } catch (error) {
+
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(

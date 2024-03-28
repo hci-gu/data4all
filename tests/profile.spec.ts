@@ -30,7 +30,7 @@ test.describe('Profile page', () => {
     test.describe('user has a linked dataset', () => {
         test.beforeEach(async ({ page, request, context }) => {
             const userId = await loggedInUser({ page, request, context })
-            const dataset = await createDataset()
+            const dataset = await createDataset('test title')
             const event = await createEvent(dataset.id, userId)
         })
 
