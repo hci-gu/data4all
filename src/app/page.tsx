@@ -1,6 +1,10 @@
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from './api/auth/utils'
 import { EventAPISchema } from '@/types/zod'
+import WelcomeBack from '@/components/welcomeBack'
+import Typography from '@/components/ui/Typography'
+import SearchBar from '@/components/searchBar'
+import { Separator } from '@radix-ui/react-separator'
 
 export default function Home() {
     const user = loadAuthorizedUser()

@@ -5,6 +5,7 @@ import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
+import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage() {
     const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
