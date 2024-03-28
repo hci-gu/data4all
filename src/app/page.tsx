@@ -1,6 +1,6 @@
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from './api/auth/utils'
-import { EventSchema } from '@/types/zod'
+import { EventAPISchema } from '@/types/zod'
 
 export default function Home() {
     const user = loadAuthorizedUser()
@@ -17,7 +17,7 @@ export default function Home() {
             )
         }
 
-        const resEvent = EventSchema.safeParse(await api.getEvent('mxwzv2ngw1yuhca')) // swap out for a working id in your pb
+        const resEvent = EventAPISchema.safeParse(await api.getEvent('qg80nv4p4728w0j')) // swap out for a working id in your pb
 
         if (!resEvent.success) {
             console.error('resEvent.error', resEvent.error)
