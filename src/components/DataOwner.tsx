@@ -54,9 +54,9 @@ export default function DataOwner({ user }: { user?: UserSchema }) {
                                 <SelectGroup>
                                     <SelectLabel>Användare</SelectLabel>
                                     {users &&
-                                        users.map((user) => (
+                                        users.map((user, index) => (
                                             <SelectItem
-                                                key={user.id}
+                                                key={index}
                                                 value={user.name.replaceAll(
                                                     ' ',
                                                     ''
@@ -71,8 +71,8 @@ export default function DataOwner({ user }: { user?: UserSchema }) {
                         <p className="text-sm font-bold">Relevanta användare</p>
                         <ul className="flex flex-col gap-4">
                             {users &&
-                                users.map((user) => (
-                                    <li key={user.id}>
+                                users.map((user, index) => (
+                                    <li key={index}>
                                         <User user={user} />
                                     </li>
                                 ))}

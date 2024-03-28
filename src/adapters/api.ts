@@ -1,5 +1,10 @@
 import { env } from '@/lib/env'
-import { signUpSchema, signInSchema, updateUserSchema } from '@/types/zod'
+import {
+    signUpSchema,
+    signInSchema,
+    updateUserSchema,
+    EventSchema,
+} from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 pb.autoCancellation(false)
@@ -12,27 +17,30 @@ const handleResponse = async (Response: Response): Promise<any> => {
     const json = await Response.json()
 
     if (!Response.ok) {
-        throw new Error(json.message)
+        return new Error(json.message)
     }
 
     return json.body
 }
 const apiRequest = async (
     url: string,
-    method: string,
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     body?: any
 ): Promise<any> => {
     try {
         const options: RequestInit = {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
             body: body ? JSON.stringify(body) : undefined,
         }
 
         const response = await fetch(url, options)
         return handleResponse(response)
-    } catch (e) {
-        throw e
+    } catch (error) {
+        return new Error('Something went wrong')
     }
 }
 
@@ -75,6 +83,9 @@ export const getDataset = async (datasetTitle: string) => {
 }
 export const getEvent = async (datasetId: string) => {
     return apiRequest(apiUrl(`events/${datasetId}`), 'GET')
+}
+export const createEvent = async (event: EventSchema) => {
+    return apiRequest(apiUrl(`events`), 'POST', event)
 }
 export const getDatasetFromUserEvent = async (userId: string) => {
     return apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')

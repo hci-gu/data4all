@@ -7,7 +7,7 @@ import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
 
 async function ProfilePage() {
-    const user = loadAuthorizedUser()
+    const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
     const datasets = await api.getDatasetFromUserEvent(user?.id as string)
 
@@ -33,7 +33,7 @@ async function ProfilePage() {
                 <Separator />
                 <div className="flex justify-start gap-[10px]">
                     <LogoutButton />
-                    <RemoveAccountButton userId={user?.id} />
+                    <RemoveAccountButton userId={user.id} />
                 </div>
             </div>
             <Separator orientation="vertical" />

@@ -15,3 +15,7 @@ export const getInitials = (name: string) => {
     }
     return initials
 }
+
+export const stringWithHyphen = (text: string) => {
+    return text.toLowerCase().replaceAll(' ', '-')
+}
