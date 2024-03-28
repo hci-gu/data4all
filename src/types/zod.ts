@@ -53,29 +53,37 @@ export const tagSchema = z.object({
 })
 
 export const datasetSchema = z.object({
-    records: z.object({
-        id: z.string(),
-        description: z.string(),
-        title: z.string(),
-        slug: z.string(),
-        expand: z
-            .object({
-                tag: z.array(tagSchema),
-            })
-            .optional(),
-    }),
-})
-
-export const datasetAPISchema = z.object({
-    records: z.array(
-        datasetSchema.extend({
-            expand: z.object({
-                related_datasets: z.array(datasetSchema).optional(),
-                tag: z.array(tagSchema).optional(),
-            }),
-            slug: z.string(),
+    id: z.string(),
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    updated: z.string(),
+    title: z.string(),
+    description: z.string(),
+    tag: z.array(z.string()),
+    related_datasets: z.array(z.string()),
+    slug: z.string(),
+    expand: z
+        .object({
+            tag: z.array(tagSchema).optional(),
+            related_datasets: z
+                .array(
+                    z.object({
+                        id: z.string(),
+                        collectionId: z.string(),
+                        collectionName: z.string(),
+                        created: z.string(),
+                        updated: z.string(),
+                        title: z.string(),
+                        description: z.string(),
+                        tag: z.array(z.string()),
+                        related_datasets: z.array(z.string()),
+                        slug: z.string(),
+                    })
+                )
+                .optional(),
         })
-    ),
+        .optional(),
 })
 
 export const EventSchema = z.object({
@@ -91,13 +99,11 @@ export const EventSchema = z.object({
     user: z.string(),
 })
 export const EventAPISchema = z.object({
-    records: z.object({
-        page: z.number(),
-        perPage: z.number(),
-        totalItems: z.number(),
-        totalPages: z.number(),
-        items: z.array(EventSchema),
-    }),
+    page: z.number(),
+    perPage: z.number(),
+    totalItems: z.number(),
+    totalPages: z.number(),
+    items: z.array(EventSchema),
 })
 
 export type UserSchema = Pick<AuthorizedUserSchema, 'name' | 'role'>
