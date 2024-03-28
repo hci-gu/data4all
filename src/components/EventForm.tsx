@@ -8,40 +8,69 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
+import { getInitials } from '@/lib/utils'
+import { createEvent } from '@/adapters/api'
+import { z } from 'zod'
+import { useRouter } from 'next/navigation'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function EventForm() {
+export default function EventForm({
+    user,
+    datasetId,
+    setEvents,
+}: {
+    user: AuthorizedUserSchema
+    datasetId: string
+    setEvents: Dispatch<SetStateAction<EventSchema[]>>
+}) {
     const formSchema = z.object({
-        username: z.string().min(2, {
-            message: 'Username must be at least 2 characters.',
+        comment: z.string().min(2, {
+            message: 'Kommentaren måste vara minst 2 tecken lång.',
         }),
     })
-    const form = useForm<z.infer<typeof formSchema>>({
+    type formSchema = z.infer<typeof formSchema>
+
+    const form = useForm<formSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: '',
+            comment: '',
         },
     })
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: formSchema, datasetId: string) {
+        const event: EventSchema = {
+            user: user.id,
+            content: values.comment,
+            dataset: datasetId,
+            types: 'comment',
+        }
+        await createEvent(event)
+        setEvents((prev) => [...prev, event])
+        form.reset()
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit((value) =>
+                    onSubmit(value, datasetId)
+                )}
+                className="space-y-8"
+            >
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="comment"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="sr-only">Kommentar</FormLabel>
                             <FormControl>
                                 <div className="flex gap-2">
                                     <Avatar>
-                                        <AvatarImage src="https://github.com/sebastianandreasson.png" />
-                                        <AvatarFallback>SA</AvatarFallback>
+                                        <AvatarFallback>
+                                            {getInitials(user.name)}
+                                        </AvatarFallback>
                                     </Avatar>
                                     <Input
                                         placeholder="Skriv en kommentar..."
@@ -56,4 +85,7 @@ export default function EventForm() {
             </form>
         </Form>
     )
+}
+function setEvents(arg0: (prev: any) => any[]) {
+    throw new Error('Function not implemented.')
 }

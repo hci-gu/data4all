@@ -1,10 +1,10 @@
 ## Description
 
-Provide a clear description of what the PR does and why its relevant 
+Provide a clear description of what the PR does and why its relevant
 
 ## Related Issue ( optional )
 
-Link to any related issue 
+Link to any related issue
 
 ## Changes
 
@@ -13,8 +13,6 @@ Describe the changes in more detail, if necessary include explanation of why som
 ## Tests
 
 Does the PR pass all implemented tests
-
- 
 
 ## Screenshots & GIFs ( optional )
 

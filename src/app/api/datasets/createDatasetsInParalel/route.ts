@@ -1,4 +1,5 @@
 import { pb } from '@/adapters/api'
+import { stringWithHyphen } from '@/lib/utils'
 import { NextResponse } from 'next/server'
 import Client, { ClientResponseError } from 'pocketbase'
 import { record } from 'zod'
@@ -79,9 +80,13 @@ const newTestRecordsArray = [
 export async function GET(req: Request) {
     try {
         const records = newTestRecordsArray.map((record) => {
-            return pb
-                .collection('mocDataset')
-                .create(record, { $autoCancel: false })
+            return pb.collection('mocDataset').create(
+                {
+                    ...record,
+                    slug: stringWithHyphen(record.title),
+                },
+                { $autoCancel: false }
+            )
         })
 
         return NextResponse.json(

@@ -8,35 +8,34 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { ChevronRight } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import EventForm from '@/components/EventForm'
 import DataOwner from '@/components/DataOwner'
 import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
-import { UserSchema } from '@/types/zod'
+import {
+    AuthorizedUserSchema,
+    EventAPISchema,
+    UserSchema,
+    datasetSchema,
+} from '@/types/zod'
+import { getDataset } from '@/adapters/api'
+import { stringWithHyphen } from '@/lib/utils'
+import { ZodError } from 'zod'
+import * as api from '@/adapters/api'
+import ActivityFlow from '@/components/ActivityFlow'
+import { loadAuthorizedUser } from '@/app/api/auth/utils'
+import { notFound } from 'next/navigation'
 
-export default function Page({
+export default async function Page({
     params: { slug },
 }: {
-    params: { slug: string }
+    params: { slug?: string }
 }) {
+    const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const user: UserSchema = {
-        id: 1,
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
-    const TagsData = [
-        {
-            id: 1,
-            href: '/tag/Geodata',
-            title: 'Geodata',
-        },
-        {
-            id: 2,
-            href: '/tag/Miljö',
-            title: 'Miljö',
-        },
-    ]
+    let TagsData: { title: string; href: string }[] = []
     const DatasetsData = [
         {
             title: 'Lekplatser',
@@ -63,6 +62,32 @@ export default function Page({
             href: '/dataset/Badplatser',
         },
     ]
+    let eventsRespond: EventAPISchema | undefined
+    let parsedPageData: datasetSchema | null = null
+    try {
+        if (slug) {
+            const pageData = datasetSchema.safeParse(
+                await getDataset(stringWithHyphen(decodeURI(slug)))
+            )
+
+            if (!pageData.success) notFound()
+
+            parsedPageData = pageData.data
+            eventsRespond = EventAPISchema.parse(
+                await api.getEvent(parsedPageData.records.id)
+            )
+            TagsData =
+                parsedPageData.records.expand?.tag.map((tag) => ({
+                    title: tag.name,
+                    href: `/tag/${tag.name}`,
+                })) ?? []
+        }
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return new Error(error.errors[0].message)
+        }
+        throw new Error('Dataset hittades inte')
+    }
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
             <div className="flex flex-col gap-4">
@@ -79,26 +104,25 @@ export default function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href="/dataset/Parkeringsplatser"
+                                href={`/dataset/${parsedPageData && stringWithHyphen(parsedPageData.records.title)}`}
                             >
-                                Parkeringsplatser
+                                {parsedPageData && parsedPageData.records.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <Typography level="H1">Parkeringsplatser</Typography>
+                <Typography level="H1">
+                    {parsedPageData && parsedPageData.records.title}
+                </Typography>
                 <p className="max-w-prose text-sm">
-                    Denna datamängd listar offentliga parkeringsplatser i
-                    kommunen, inklusive platser, avgifter, tidsbegränsningar och
-                    antal lediga platser. Den kan även inkludera information om
-                    parkeringshus eller gatuparkering.
+                    {parsedPageData && parsedPageData.records.description}
                 </p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    <Tags Tags={TagsData} />
+                    {TagsData && <Tags Tags={TagsData} />}
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -111,46 +135,13 @@ export default function Page({
                 </section>
             </div>
             <Separator orientation="vertical" />
-            <div className="flex flex-col gap-4">
-                <h2 className="text-2xl font-bold">Aktivitet</h2>
-                <p className="text-sm">
-                    Bli den första att skriva något kring det här datasetet.
-                </p>
-
-                <EventForm />
-
-                <ul
-                    className="flex flex-col gap-4"
-                    aria-label="Aktivitets flödet"
-                >
-                    <li className="flex gap-2">
-                        <Avatar>
-                            <AvatarImage src="https://github.com/josefforkman.png" />
-                            <AvatarFallback>SA</AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-xs">
-                                <b>Jonathan Crusoe</b> föreslog sig själv som
-                                dataägare
-                            </p>
-                            <b className="text-xs">4 timmar sedan</b>
-                        </div>
-                    </li>
-                    <li className="flex gap-2">
-                        <Avatar>
-                            <AvatarImage src="https://github.com/josefforkman.png" />
-                            <AvatarFallback>SA</AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-xs">
-                                <b>Jonathan Crusoe</b> föreslog sig själv som
-                                dataägare
-                            </p>
-                            <b className="text-xs">4 timmar sedan</b>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            {parsedPageData && (
+                <ActivityFlow
+                    user={authorizedUser}
+                    datasetId={parsedPageData.records.id}
+                    eventData={eventsRespond?.records.items ?? []}
+                />
+            )}
         </main>
     )
 }

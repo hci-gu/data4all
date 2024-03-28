@@ -5,7 +5,7 @@ import { ClientResponseError } from 'pocketbase'
 export async function GET(req: Request, context: any) {
     try {
         const { params } = context
-        const records = await utils.datasetForTitle(params.slug)
+        const records = await utils.datasetForSlug(params.slug)
 
         return NextResponse.json(
             {
