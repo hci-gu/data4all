@@ -3,6 +3,7 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
+import * as api from '@/adapters/api'
 import {
     Card,
     CardDescription,
@@ -10,12 +11,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import * as api from '@/adapters/api'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
+import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage() {
-    const user = loadAuthorizedUser()
+    const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
     const datasets = await api.getDatasetFromUserEvent(user?.id as string)
 
@@ -41,7 +42,7 @@ async function ProfilePage() {
                 <Separator />
                 <div className="flex justify-start gap-[10px]">
                     <LogoutButton />
-                    <RemoveAccountButton userId={user?.id} />
+                    <RemoveAccountButton userId={user.id} />
                 </div>
             </div>
             <Separator orientation="vertical" />
