@@ -15,7 +15,6 @@ import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
 import { z } from 'zod'
-import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
 
 export default function EventForm({
@@ -85,7 +84,4 @@ export default function EventForm({
             </form>
         </Form>
     )
-}
-function setEvents(arg0: (prev: any) => any[]) {
-    throw new Error('Function not implemented.')
 }
