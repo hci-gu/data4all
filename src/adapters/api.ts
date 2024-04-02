@@ -4,20 +4,22 @@ import {
     signInSchema,
     updateUserSchema,
     EventSchema,
+    datasetSchema,
+    datasetWithRelationsSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
+import { z } from 'zod'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 pb.autoCancellation(false)
 
 const baseURL = 'http://localhost:3000'
 
 const apiUrl = (endpoint: string) => `${baseURL}/api/${endpoint}`
-
-const handleResponse = async (Response: Response): Promise<any> => {
+const handleResponse = async (Response: Response) => {
     const json = await Response.json()
 
     if (!Response.ok) {
-        return new Error(json.message)
+        throw new Error(json.message)
     }
 
     return json.body
@@ -26,7 +28,7 @@ const apiRequest = async (
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     body?: any
-): Promise<any> => {
+) => {
     try {
         const options: RequestInit = {
             method,
@@ -40,7 +42,7 @@ const apiRequest = async (
         const response = await fetch(url, options)
         return handleResponse(response)
     } catch (error) {
-        return new Error('Something went wrong')
+        throw new Error('Something went wrong')
     }
 }
 
@@ -63,30 +65,54 @@ export const updateUser = async (
     })
 
 export const removeUser = async (userId: string): Promise<void> => {
-    return apiRequest(apiUrl('auth/removeAccount'), 'DELETE', {
+    apiRequest(apiUrl('auth/removeAccount'), 'DELETE', {
         id: userId,
     })
 }
 
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
-    return apiRequest(apiUrl('datasets'), 'GET')
+    return datasetSchema
+        .array()
+        .parse(await apiRequest(apiUrl('datasets'), 'GET'))
 }
 export const getDatasets = async (datasetTitle: string) => {
-    return apiRequest(
-        apiUrl(`datasets?title=${encodeURI(datasetTitle)}`),
-        'GET'
-    )
+    return z
+        .array(datasetSchema)
+        .parse(
+            await apiRequest(apiUrl(`datasets?title=${datasetTitle}`), 'GET')
+        )
 }
 export const getDataset = async (datasetTitle: string) => {
-    return apiRequest(apiUrl(`datasets/${encodeURI(datasetTitle)}`), 'GET')
+    const dataset = await apiRequest(
+        apiUrl(`datasets/${encodeURI(datasetTitle)}`),
+        'GET'
+    )
+    const cleanDataset = responseCleanup(dataset)
+
+    return datasetWithRelationsSchema.parse(cleanDataset)
 }
-export const getEvent = async (datasetId: string) => {
-    return apiRequest(apiUrl(`events/${datasetId}`), 'GET')
+export const getEvents = async (datasetId: string) => {
+    return EventSchema.array().parse(
+        await apiRequest(apiUrl(`events/${datasetId}`), 'GET')
+    )
 }
 export const createEvent = async (event: EventSchema) => {
-    return apiRequest(apiUrl(`events`), 'POST', event)
+    return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
 }
-export const getDatasetFromUserEvent = async (userId: string) => {
-    return apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
+export const getDatasetFromUser = async (userId: string) => {
+    return datasetSchema
+        .array()
+        .parse(await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET'))
+}
+
+function responseCleanup(res: any) {
+    return {
+        id: res?.id,
+        title: res?.title,
+        description: res?.description,
+        slug: res?.slug,
+        relatedDatasets: res?.relatedDatasets,
+        tags: res?.tags,
+    }
 }

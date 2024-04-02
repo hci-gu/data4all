@@ -10,9 +10,7 @@ export async function GET(req: Request, context: any) {
         return NextResponse.json(
             {
                 message: 'success',
-                body: {
-                    records: records,
-                },
+                body: records,
             },
             { status: 200 }
         )

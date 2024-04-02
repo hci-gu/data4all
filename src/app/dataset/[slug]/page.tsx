@@ -13,13 +13,10 @@ import Tags from '@/components/Tag'
 import Datasets from '@/components/Datasets'
 import {
     AuthorizedUserSchema,
-    EventAPISchema,
     UserSchema,
-    datasetSchema,
 } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
-import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import ActivityFlow from '@/components/ActivityFlow'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
@@ -35,7 +32,6 @@ export default async function Page({
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
-    let TagsData: { title: string; href: string }[] = []
     const DatasetsData = [
         {
             title: 'Lekplatser',
@@ -62,32 +58,13 @@ export default async function Page({
             href: '/dataset/Badplatser',
         },
     ]
-    let eventsRespond: EventAPISchema | undefined
-    let parsedPageData: datasetSchema | null = null
-    try {
-        if (slug) {
-            const pageData = datasetSchema.safeParse(
-                await getDataset(stringWithHyphen(decodeURI(slug)))
-            )
-
-            if (!pageData.success) notFound()
-
-            parsedPageData = pageData.data
-            eventsRespond = EventAPISchema.parse(
-                await api.getEvent(parsedPageData.records.id)
-            )
-            TagsData =
-                parsedPageData.records.expand?.tag.map((tag) => ({
-                    title: tag.name,
-                    href: `/tag/${tag.name}`,
-                })) ?? []
-        }
-    } catch (error) {
-        if (error instanceof ZodError) {
-            return new Error(error.errors[0].message)
-        }
-        throw new Error('Dataset hittades inte')
+    if (!slug) {
+        return notFound()
     }
+    const parsedPageData = await getDataset(stringWithHyphen(decodeURI(slug)))
+    const eventsRespond = await api.getEvents(parsedPageData.id)
+
+
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
             <div className="flex flex-col gap-4">
@@ -104,25 +81,25 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${parsedPageData && stringWithHyphen(parsedPageData.records.title)}`}
+                                href={`/dataset/${stringWithHyphen(parsedPageData.title)}`}
                             >
-                                {parsedPageData && parsedPageData.records.title}
+                                {parsedPageData && parsedPageData.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
                 <Typography level="H1">
-                    {parsedPageData && parsedPageData.records.title}
+                    {parsedPageData.title}
                 </Typography>
                 <p className="max-w-prose text-sm">
-                    {parsedPageData && parsedPageData.records.description}
+                    {parsedPageData.description}
                 </p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    {TagsData && <Tags Tags={TagsData} />}
+                    {<Tags Tags={parsedPageData.tags} />}
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -135,13 +112,13 @@ export default async function Page({
                 </section>
             </div>
             <Separator orientation="vertical" />
-            {parsedPageData && (
+            {
                 <ActivityFlow
                     user={authorizedUser}
-                    datasetId={parsedPageData.records.id}
-                    eventData={eventsRespond?.records.items ?? []}
+                    datasetId={parsedPageData.id}
+                    eventData={eventsRespond ?? []}
                 />
-            )}
+            }
         </main>
     )
 }

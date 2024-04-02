@@ -1,5 +1,5 @@
 'use client'
-import { AuthorizedUserSchema, EventAPISchema, EventSchema } from '@/types/zod'
+import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import moment from 'moment'
 import EventForm from './EventForm'

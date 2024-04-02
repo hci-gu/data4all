@@ -19,17 +19,14 @@ import { UserSchema } from '@/types/zod'
 export default function DataOwner({ user }: { user?: UserSchema }) {
     const users: UserSchema[] = [
         {
-            id: 1,
             name: 'Sebastian Andreasson',
             role: 'Admin',
         },
         {
-            id: 2,
             name: 'Styrbjörn Nordberg',
             role: 'User',
         },
         {
-            id: 3,
             name: 'Josef Forkman',
             role: 'User',
         },

@@ -5,12 +5,12 @@ import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
-import { AuthorizedUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
 
 async function ProfilePage() {
     const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
-    const datasets = await api.getDatasetFromUserEvent(user?.id as string)
+    const datasets = await api.getDatasetFromUser(user?.id as string)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -43,8 +43,8 @@ async function ProfilePage() {
                     Dina dataset
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
-                    {datasets.records.length > 0 ? (
-                        datasets.records.map((dataset: any) => {
+                    {datasets.length > 0 ? (
+                        datasets.map((dataset: datasetSchema) => {
                             return (
                                 <DatasetCard
                                     key={dataset.id}
