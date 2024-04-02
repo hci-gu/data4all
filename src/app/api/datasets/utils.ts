@@ -1,6 +1,6 @@
 import { pb } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
-import { datasetSchema } from '@/types/zod'
+import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
 
 async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
     const records = await pb.collection('mocDataset').getFullList({
@@ -20,7 +20,7 @@ export async function datasetForTitle(datasetTitle: string) {
 export async function datasetForSlug(datasetSlug: string) {
     datasetSlug = stringWithHyphen(datasetSlug)
     const records = await pb
-        .collection<datasetSchema>('mocDataset')
+        .collection<datasetWithRelationsSchema>('mocDataset')
         .getFirstListItem(`slug="${datasetSlug}"`, { expand: 'tag' })
 
     return records
