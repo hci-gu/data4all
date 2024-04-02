@@ -29,7 +29,7 @@ export default function SignIn() {
         try {
             await api.signIn(value)
             router.push('/')
-        } catch (e) {
+        } catch (event) {
             form.setError('root', { message: 'Inloggnings uppgifter är fel' })
         }
     }
@@ -68,7 +68,7 @@ export default function SignIn() {
                 />
                 <FormField
                     name="root"
-                    render={({ field }) => (
+                    render={() => (
                         <FormItem>
                             <FormMessage />
                         </FormItem>

@@ -17,7 +17,6 @@ import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
 import ActivityFlow from '@/components/activityFlow'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
-import { notFound } from 'next/navigation'
 
 export default async function Page({
     params: { slug },

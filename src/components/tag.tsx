@@ -1,7 +1,6 @@
 import { tagSchema } from '@/types/zod'
 import Link from 'next/link'
 
-
 export default function Tags({ Tags }: { Tags: tagSchema[] }) {
     return (
         <ul className="flex gap-1">

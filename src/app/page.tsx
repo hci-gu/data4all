@@ -3,7 +3,6 @@ import Typography from '@/components/ui/Typography'
 import SearchBar from '@/components/searchBar'
 import { Separator } from '@/components/ui/separator'
 
-
 export default function Home() {
     return (
         <main className="flex min-h-screen flex-col items-center">

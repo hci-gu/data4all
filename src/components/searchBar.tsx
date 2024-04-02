@@ -30,7 +30,6 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
             searchTerm: prevSearch ?? '',
         },
     })
-    const [searchTerm, setSearchTerm] = useState('')
 
     const submit = async (value: searchSchema) => {
         try {

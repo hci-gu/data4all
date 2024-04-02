@@ -1,16 +1,16 @@
-import LogoutButton from '@/components/logoutButton'
+import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import UpdateUserForm from '@/components/updateUserForm'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
-import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
+import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage() {
     const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
-    const datasets = await api.getDatasetFromUser(user?.id as string)
+    const datasets = await api.getDatasetFromUser(user.id)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -44,14 +44,9 @@ async function ProfilePage() {
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
                     {datasets.length > 0 ? (
-                        datasets.map((dataset: datasetSchema) => {
-                            return (
-                                <DatasetCard
-                                    key={dataset.id}
-                                    dataset={dataset}
-                                />
-                            )
-                        })
+                        datasets.map((dataset) => (
+                            <DatasetCard key={dataset.id} dataset={dataset} />
+                        ))
                     ) : (
                         <>
                             <p className="text-center">

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Box from '../../../public/boxes.png'
 import Logo from '../../../public/Logo.png'
 
-export default function Header({ usersName }: { usersName: string }) {
+export default function Header({ usersName }: { usersName?: string }) {
     const pathname = usePathname()
     switch (pathname) {
         case '/logga-in':
