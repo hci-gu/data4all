@@ -1,4 +1,3 @@
-import { loadAuthorizedUser } from './api/auth/utils'
 import WelcomeBack from '@/components/welcomeBack'
 import Typography from '@/components/ui/Typography'
 import SearchBar from '@/components/searchBar'

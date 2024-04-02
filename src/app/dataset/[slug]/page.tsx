@@ -8,9 +8,9 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { ChevronRight } from 'lucide-react'
-import DataOwner from '@/components/DataOwner'
-import Tags from '@/components/Tag'
-import Datasets from '@/components/Datasets'
+import DataOwner from '@/components/dataOwner'
+import Tags from '@/components/tag'
+import Datasets from '@/components/datasets'
 import {
     AuthorizedUserSchema,
     UserSchema,
@@ -18,7 +18,7 @@ import {
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
-import ActivityFlow from '@/components/ActivityFlow'
+import ActivityFlow from '@/components/activityFlow'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
 import { notFound } from 'next/navigation'
 

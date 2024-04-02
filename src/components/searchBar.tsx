@@ -1,19 +1,20 @@
 'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { z } from 'zod'
 import {
     Form,
     FormControl,
     FormDescription,
     FormField,
     FormItem,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Search } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { z } from 'zod'
+} from './ui/form'
+import { Input } from './ui/input'
 import { Button } from './ui/button'
+import { Loader2, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 const searchSchema = z.object({
@@ -40,8 +41,6 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
             toast.error('något gick fel')
         }
     }
-
-    
 
     return (
         <>
