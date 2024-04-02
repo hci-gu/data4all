@@ -14,7 +14,7 @@ export default function ActivityFlow({
     datasetId: string
     eventData: EventSchema[]
 }) {
-    const [events, setEvents] = useState<EventSchema[]>(eventData)
+    const [events, setEvents] = useState(eventData)
 
     return (
         <section className="flex flex-col gap-4">

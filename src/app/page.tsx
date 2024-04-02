@@ -6,8 +6,6 @@ import { Separator } from '@/components/ui/separator'
 
 
 export default function Home() {
-    const user = loadAuthorizedUser()
-
     return (
         <main className="flex min-h-screen flex-col items-center">
             <WelcomeBack homePage={true} />

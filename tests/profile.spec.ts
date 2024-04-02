@@ -12,7 +12,6 @@ test.describe('Profile page', () => {
             request,
             context,
         }) => {
-            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
@@ -35,7 +34,6 @@ test.describe('Profile page', () => {
         })
 
         test('has dataset', async ({ page, request, context }) => {
-            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
@@ -51,7 +49,6 @@ test.describe('Profile page', () => {
         })
 
         test('does not have dataset', async ({ page, request, context }) => {
-            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'

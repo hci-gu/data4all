@@ -41,19 +41,13 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
         }
     }
 
-    // start of autocomplete function 
-    const asd = (value: string) => {
-        setSearchTerm(value)
-    }
+    
 
     return (
         <>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    onChange={() => {
-                        asd(form.getValues('searchTerm'))
-                    }}
                     className="flex w-fit flex-col items-start"
                 >
                     <div className="mb-[6px] flex max-w-[432px] gap-2">
