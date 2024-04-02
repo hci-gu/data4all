@@ -55,11 +55,10 @@ export const datasetSchema = z.object({
     slug: z.string(),
 })
 
-export const datasetWithRelationsSchema = datasetSchema.extend(
-    {
-        relatedDatasets: z.array(datasetSchema),
-        tags: z.array(tagSchema),
-    })
+export const datasetWithRelationsSchema = datasetSchema.extend({
+    relatedDatasets: z.array(datasetSchema),
+    tags: z.array(tagSchema),
+})
 export const EventSchema = z.object({
     id: z.string().optional(),
     collectionId: z.string().optional(),
@@ -78,7 +77,9 @@ export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
-export type datasetWithRelationsSchema = z.infer<typeof datasetWithRelationsSchema>
+export type datasetWithRelationsSchema = z.infer<
+    typeof datasetWithRelationsSchema
+>
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type tagSchema = z.infer<typeof tagSchema>
