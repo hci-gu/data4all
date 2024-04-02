@@ -2,7 +2,7 @@
 import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import moment from 'moment'
-import EventForm from './EventForm'
+import EventForm from './eventForm'
 import { useState } from 'react'
 
 export default function ActivityFlow({
