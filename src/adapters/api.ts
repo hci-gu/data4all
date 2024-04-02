@@ -77,8 +77,8 @@ export const getAllDatasets = async () => {
         .parse(await apiRequest(apiUrl('datasets'), 'GET'))
 }
 export const getDatasets = async (datasetTitle: string) => {
-    return z
-        .array(datasetSchema)
+    return datasetSchema
+        .array()
         .parse(
             await apiRequest(apiUrl(`datasets?title=${datasetTitle}`), 'GET')
         )
@@ -88,14 +88,14 @@ export const getDataset = async (datasetTitle: string) => {
         apiUrl(`datasets/${encodeURI(datasetTitle)}`),
         'GET'
     )
-    const cleanDataset = responseCleanup(dataset)
+
+    const cleanDataset = responseDatasetCleanup(dataset)
 
     return datasetWithRelationsSchema.parse(cleanDataset)
 }
 export const getEvents = async (datasetId: string) => {
-    return EventSchema.array().parse(
-        await apiRequest(apiUrl(`events/${datasetId}`), 'GET')
-    )
+    const events = await apiRequest(apiUrl(`events/${datasetId}`), 'GET')
+    return EventSchema.array().parse(events.items)
 }
 export const createEvent = async (event: EventSchema) => {
     return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
@@ -106,13 +106,13 @@ export const getDatasetFromUser = async (userId: string) => {
         .parse(await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET'))
 }
 
-function responseCleanup(res: any) {
+function responseDatasetCleanup(res: any) {
     return {
         id: res?.id,
         title: res?.title,
         description: res?.description,
         slug: res?.slug,
-        relatedDatasets: res?.relatedDatasets,
-        tags: res?.tags,
+        relatedDatasets: res?.expand?.related_datasets ?? [],
+        tags: res?.expand?.tag,
     }
 }

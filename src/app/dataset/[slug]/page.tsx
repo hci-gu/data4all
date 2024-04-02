@@ -11,10 +11,7 @@ import { ChevronRight } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import Datasets from '@/components/datasets'
-import {
-    AuthorizedUserSchema,
-    UserSchema,
-} from '@/types/zod'
+import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
@@ -25,7 +22,7 @@ import { notFound } from 'next/navigation'
 export default async function Page({
     params: { slug },
 }: {
-    params: { slug?: string }
+    params: { slug: string }
 }) {
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const user: UserSchema = {
@@ -58,12 +55,9 @@ export default async function Page({
             href: '/dataset/Badplatser',
         },
     ]
-    if (!slug) {
-        return notFound()
-    }
-    const parsedPageData = await getDataset(stringWithHyphen(decodeURI(slug)))
-    const eventsRespond = await api.getEvents(parsedPageData.id)
 
+    const PageData = await getDataset(stringWithHyphen(decodeURI(slug)))
+    const eventsRespond = await api.getEvents(PageData.id)
 
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
@@ -81,25 +75,21 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${stringWithHyphen(parsedPageData.title)}`}
+                                href={`/dataset/${stringWithHyphen(PageData.title)}`}
                             >
-                                {parsedPageData && parsedPageData.title}
+                                {PageData && PageData.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <Typography level="H1">
-                    {parsedPageData.title}
-                </Typography>
-                <p className="max-w-prose text-sm">
-                    {parsedPageData.description}
-                </p>
+                <Typography level="H1">{PageData.title}</Typography>
+                <p className="max-w-prose text-sm">{PageData.description}</p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    {<Tags Tags={parsedPageData.tags} />}
+                    {<Tags Tags={PageData.tags} />}
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -115,7 +105,7 @@ export default async function Page({
             {
                 <ActivityFlow
                     user={authorizedUser}
-                    datasetId={parsedPageData.id}
+                    datasetId={PageData.id}
                     eventData={eventsRespond ?? []}
                 />
             }
