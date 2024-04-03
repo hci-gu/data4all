@@ -113,6 +113,6 @@ function responseDatasetCleanup(res: any) {
         description: res?.description,
         slug: res?.slug,
         relatedDatasets: res?.expand?.related_datasets ?? [],
-        tags: res?.expand?.tag,
+        tags: res?.expand?.tag ?? [],
     }
 }
