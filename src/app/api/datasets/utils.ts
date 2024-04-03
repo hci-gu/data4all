@@ -22,7 +22,7 @@ export async function datasetForTitle(datasetTitle: string) {
 export async function datasetForSlug(datasetSlug: string) {
     datasetSlug = stringWithHyphen(datasetSlug)
     const records = await pb
-        .collection<datasetSchema>('dataset')
+        .collection<datasetWithRelationsSchema>('dataset')
         .getFirstListItem(`slug="${datasetSlug}"`, {
             expand: 'related_datasets,tag',
         })
