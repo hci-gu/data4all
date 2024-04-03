@@ -19,7 +19,7 @@ test.describe('Datasets page', () => {
         }) => {
             await page.goto(`/dataset/not-existed-dataset`)
             await expect(page.getByRole('paragraph')).toHaveText(
-                'Dataset hittades inte'
+                'Misslyckades att hämta dataset'
             )
         })
     })

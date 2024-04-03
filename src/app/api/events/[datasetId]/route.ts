@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
 
-export async function GET(request: NextRequest, context: any) {
+export async function GET(
+    request: NextRequest,
+    context: { params: { datasetId: string } }
+) {
     try {
         const { params } = context
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -12,7 +15,7 @@ export async function GET(request: NextRequest, context: any) {
         })
 
         return NextResponse.json(
-            { message: 'success', body: { records } },
+            { message: 'success', body: records },
             { status: 200 }
         )
     } catch (error) {

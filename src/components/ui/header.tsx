@@ -4,9 +4,9 @@ import { usePathname } from 'next/navigation'
 import Typography from './Typography'
 import Image from 'next/image'
 import Box from '../../../public/boxes.png'
-import Logo from '../../../public/Logo.png'
+import Logo from '../../../public/logo.svg'
 
-export default function Header({ usersName }: { usersName: string }) {
+export default function Header({ usersName }: { usersName?: string }) {
     const pathname = usePathname()
     switch (pathname) {
         case '/logga-in':
@@ -17,7 +17,7 @@ export default function Header({ usersName }: { usersName: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="" />
+                            <Image src={Box} alt="Kungsbacka dataportal loga" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
@@ -38,7 +38,7 @@ export default function Header({ usersName }: { usersName: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="" />
+                            <Image src={Box} alt="Kungsbacka dataportal loga" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link className="h-fit text-sm" href={'/logga-in'}>
@@ -52,7 +52,12 @@ export default function Header({ usersName }: { usersName: string }) {
             return (
                 <>
                     <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
-                        <Image src={Logo} alt="Logo" />
+                        <Link href={'/'} className="flex items-center gap-4">
+                            <Image src={Logo} alt="Kungsbacka dataportal loga" />
+                            <Typography level="Large">
+                                Kungsbacka dataportal
+                            </Typography>
+                        </Link>
                         <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
                             <Link href={'/profile'}>{usersName}</Link>
                         </div>

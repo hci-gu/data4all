@@ -17,7 +17,7 @@ export async function PUT(request: Request) {
     } catch (error) {
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
-            return NextResponse.json(
+            throw NextResponse.json(
                 { message: 'misslyckades att uppdatera användare' },
                 { status: 400 }
             )

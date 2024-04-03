@@ -15,6 +15,7 @@ export const AuthorizedUserSchema = z.object({
     username: z.string(),
     verified: z.boolean(),
 })
+export type UserSchema = Pick<AuthorizedUserSchema, 'name' | 'role'>
 export const signInSchema = z
     .object({
         password: z.string().min(8),
@@ -43,69 +44,42 @@ export const updateUserSchema = z
         message: 'Passwords does not match',
     })
 
-export const datasetsSchema = z.object({
-    records: z.object({
-        items: z.array(
-            z.object({
-                title: z.string(),
-                id: z.string(),
-                description: z.string(),
-            })
-        ),
-    }),
-})
 export const tagSchema = z.object({
-    collectionId: z.string(),
-    collectionName: z.string(),
-    created: z.string(),
     id: z.string(),
     name: z.string(),
-    updated: z.string(),
 })
 export const datasetSchema = z.object({
-    records: z.object({
-        id: z.string(),
-        description: z.string(),
-        title: z.string(),
-        slug: z.string(),
-        expand: z
-            .object({
-                tag: z.array(tagSchema),
-            })
-            .optional(),
-    }),
+    id: z.string(),
+    title: z.string(),
+    description: z.string(),
+    slug: z.string(),
+})
+
+export const datasetWithRelationsSchema = datasetSchema.extend({
+    relatedDatasets: z.array(datasetSchema),
+    tags: z.array(tagSchema),
 })
 export const EventSchema = z.object({
     id: z.string().optional(),
     collectionId: z.string().optional(),
     collectionName: z.string().optional(),
     created: z.string().optional(),
-    subject: z.string().optional(),
     updated: z.string().optional(),
-    content: z.string(),
     dataset: z.string(),
     types: z.enum(['comment', 'ownerReq', 'OwnerAccept']),
     user: z.string(),
+    content: z.string(),
+    subject: z.string().optional(),
 })
-export const EventAPISchema = z.object({
-    records: z.object({
-        page: z.number(),
-        perPage: z.number(),
-        totalItems: z.number(),
-        totalPages: z.number(),
-        items: z.array(EventSchema),
-    }),
-})
-
-export type UserSchema = Pick<AuthorizedUserSchema, 'name' | 'role'>
 
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
-export type datasetsSchema = z.infer<typeof datasetsSchema>
+export type datasetWithRelationsSchema = z.infer<
+    typeof datasetWithRelationsSchema
+>
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
-export type EventAPISchema = z.infer<typeof EventAPISchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type tagSchema = z.infer<typeof tagSchema>

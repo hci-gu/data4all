@@ -2,7 +2,11 @@ import { datasetSchema } from '@/types/zod'
 import Typography from './ui/Typography'
 import DatasetCard from './datasetCard'
 
-export default function SearchResults({ records }: { records?: any }) {
+export default function SearchResults({
+    records,
+}: {
+    records: datasetSchema[]
+}) {
     return (
         <>
             <div className="mt-8 grid w-full max-w-[1220px] grid-cols-2 gap-8 ">

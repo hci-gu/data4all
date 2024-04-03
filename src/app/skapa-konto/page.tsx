@@ -1,7 +1,7 @@
 import Typography from '@/components/ui/Typography'
 import Image from 'next/image'
 import absurd from '../../../public/absurd 2.png'
-import SignUp from '@/components/SignUp'
+import { SignUp } from '@/components/auth'
 
 function SignUpPage() {
     return (

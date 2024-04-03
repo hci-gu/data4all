@@ -10,6 +10,7 @@ export async function POST(request: Request) {
         const user = signInSchema.parse(await request.json())
         await pb.collection('users').authWithPassword(user.email, user.password)
         cookies().set('PBAuth', pb.authStore.exportToCookie())
+
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
         if (error instanceof ClientResponseError) {
