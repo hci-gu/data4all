@@ -4,7 +4,6 @@ import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
 
 async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
     const records = await pb.collection('dataset').getFullList({
-    const records = await pb.collection('dataset').getFullList({
         filter: datasetIds.map((id) => `id="${id}"`).join('||'),
     })
 
