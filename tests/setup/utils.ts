@@ -26,7 +26,7 @@ export const createDataset = async () => {
     const title = 'test title'
     const slug = 'test-title'
     const description = 'test description'
-    const dataset = await pb.collection('mocDataset').create({
+    const dataset = await pb.collection('dataset').create({
         title,
         description,
         slug,

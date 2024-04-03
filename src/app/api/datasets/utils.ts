@@ -3,7 +3,7 @@ import { stringWithHyphen } from '@/lib/utils'
 import { datasetSchema } from '@/types/zod'
 
 async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
-    const records = await pb.collection('mocDataset').getFullList({
+    const records = await pb.collection('dataset').getFullList({
         filter: datasetIds.map((id) => `id="${id}"`).join('||'),
     })
 
@@ -12,7 +12,7 @@ async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
 
 export async function datasetForTitle(datasetTitle: string) {
     const records = await pb
-        .collection<datasetSchema>('mocDataset')
+        .collection<datasetSchema>('dataset')
         .getFirstListItem(`title="${datasetTitle}"`, {
             expand: 'related_datasets,tag',
         })
@@ -22,7 +22,7 @@ export async function datasetForTitle(datasetTitle: string) {
 export async function datasetForSlug(datasetSlug: string) {
     datasetSlug = stringWithHyphen(datasetSlug)
     const records = await pb
-        .collection<datasetSchema>('mocDataset')
+        .collection<datasetSchema>('dataset')
         .getFirstListItem(`slug="${datasetSlug}"`, {
             expand: 'related_datasets,tag',
         })

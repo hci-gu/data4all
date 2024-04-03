@@ -6,7 +6,7 @@ const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 export async function GET(request: NextRequest) {
     try {
         // gets all datasets
-        const records = await pb.collection('mocDataset').getFullList({
+        const records = await pb.collection('dataset').getFullList({
             sort: '-created',
         })
 

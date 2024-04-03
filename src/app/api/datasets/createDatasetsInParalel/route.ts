@@ -79,7 +79,7 @@ const newTestRecordsArray = [
 export async function GET(req: Request) {
     try {
         const records = newTestRecordsArray.map((record) => {
-            return pb.collection('mocDataset').create(
+            return pb.collection('dataset').create(
                 {
                     ...record,
                     slug: stringWithHyphen(record.title),
