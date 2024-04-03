@@ -1,8 +1,12 @@
-import { pb } from '@/adapters/api'
-import { stringWithHyphen } from '@/lib/utils'
-import { exec } from 'child_process'
+import PocketBase from 'pocketbase'
 
-async function runSeed() {
+const stringWithHyphen = (text) => {
+    return text.toLowerCase().replaceAll(' ', '-')
+}
+
+;(async () => {
+    const pb = new PocketBase('http://localhost:8090')
+
     const newTestRecordsArray = [
         {
             title: 'Electricity Consumption',
@@ -84,6 +88,4 @@ async function runSeed() {
             { $autoCancel: false }
         )
     })
-}
-
-runSeed()
+})()
