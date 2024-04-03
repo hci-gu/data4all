@@ -21,7 +21,7 @@ export const stringWithHyphen = (text: string) => {
     return text.toLowerCase().replaceAll(' ', '-')
 }
 
-export const createTag = ( tags: tagSchema[] ) => {
+export const createTag = (tags: tagSchema[]) => {
     return tags.map((tag) => ({
         title: tag.name,
         href: `/tag/${tag.name}`,

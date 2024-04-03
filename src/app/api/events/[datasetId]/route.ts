@@ -11,9 +11,11 @@ export async function GET(
         const { params } = context
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
-        const records = await pb.collection<EventSchema>('events').getList(1, 50, {
-            filter: `dataset="${params.datasetId}"`,
-        })
+        const records = await pb
+            .collection<EventSchema>('events')
+            .getList(1, 50, {
+                filter: `dataset="${params.datasetId}"`,
+            })
 
         return NextResponse.json(
             { message: 'success', body: records },

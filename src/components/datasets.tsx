@@ -17,7 +17,7 @@ export default function Datasets({ datasets }: { datasets: datasetSchema[] }) {
                             <ChevronRight />
                         </CardHeader>
                         <CardContent>
-                            <p className="text-gray-500-500 text-xs line-clamp-3">
+                            <p className="text-gray-500-500 line-clamp-3 text-xs">
                                 {dataset.description}
                             </p>
                         </CardContent>
