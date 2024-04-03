@@ -26,7 +26,7 @@ export const createDataset = async (titleValue: string) => {
     const title = titleValue
     const description = 'test description'
     const slug = titleValue.replace(/ /g, '-')
-    const dataset = await pb.collection('mocDataset').create({
+    const dataset = await pb.collection('dataset').create({
         title,
         description,
         slug,

@@ -11,11 +11,11 @@ setup('setup', async ({ page, request, context }) => {
         }
     }
 
-    const datasets = await pb.collection('mocDataset').getFullList()
+    const datasets = await pb.collection('dataset').getFullList()
 
     for (const dataset of datasets) {
         if (dataset.title.includes('test')) {
-            await pb.collection('mocDataset').delete(dataset.id)
+            await pb.collection('dataset').delete(dataset.id)
         }
     }
 
