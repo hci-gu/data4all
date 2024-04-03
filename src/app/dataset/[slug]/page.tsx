@@ -27,35 +27,9 @@ export default async function Page({
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
-    const DatasetsData = [
-        {
-            title: 'Lekplatser',
-            description:
-                'Datamängden lekplatser omfattar barnvänliga områden där barn kan leka säkert.',
-            href: '/dataset/Lekplatser',
-        },
-        {
-            title: 'Badplatser',
-            description:
-                'Datamängden badplatser innehåller information om offentliga sjöar, floder eller pooler där invånare kan bada.',
-            href: '/dataset/Badplatser',
-        },
-        {
-            title: 'Badplatser',
-            description:
-                'Datamängden badplatser innehåller information om offentliga sjöar, floder eller pooler där invånare kan bada.',
-            href: '/dataset/Badplatser',
-        },
-        {
-            title: 'Badplatser',
-            description:
-                'Datamängden badplatser innehåller information om offentliga sjöar, floder eller pooler där invånare kan bada.',
-            href: '/dataset/Badplatser',
-        },
-    ]
 
-    const PageData = await getDataset(stringWithHyphen(decodeURI(slug)))
-    const eventsRespond = await api.getEvents(PageData.id)
+    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
+    const events = await api.getEvents(dataset.id)
 
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
@@ -73,21 +47,21 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${stringWithHyphen(PageData.title)}`}
+                                href={`/dataset/${stringWithHyphen(dataset.title)}`}
                             >
-                                {PageData && PageData.title}
+                                {dataset && dataset.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <Typography level="H1">{PageData.title}</Typography>
-                <p className="max-w-prose text-sm">{PageData.description}</p>
+                <Typography level="H1">{dataset.title}</Typography>
+                <p className="max-w-prose text-sm">{dataset.description}</p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    {<Tags Tags={PageData.tags} />}
+                    {<Tags Tags={dataset.tags} />}
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -96,15 +70,15 @@ export default async function Page({
                     <h2 id="RelatedDatasets" className="text-2xl font-bold">
                         Relaterade dataset
                     </h2>
-                    <Datasets datasets={DatasetsData} />
+                    <Datasets datasets={dataset.relatedDatasets} />
                 </section>
             </div>
             <Separator orientation="vertical" />
             {
                 <ActivityFlow
                     user={authorizedUser}
-                    datasetId={PageData.id}
-                    eventData={eventsRespond ?? []}
+                    datasetId={dataset.id}
+                    initialEvents={events ?? []}
                 />
             }
         </main>

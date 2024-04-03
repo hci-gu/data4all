@@ -8,13 +8,13 @@ import { EventForm } from '.'
 export default function ActivityFlow({
     user,
     datasetId,
-    eventData,
+    initialEvents,
 }: {
     user: AuthorizedUserSchema
     datasetId: string
-    eventData: EventSchema[]
+    initialEvents: EventSchema[]
 }) {
-    const [events, setEvents] = useState(eventData)
+    const [events, setEvents] = useState(initialEvents)
 
     return (
         <section className="flex flex-col gap-4">
