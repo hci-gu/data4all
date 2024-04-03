@@ -10,12 +10,11 @@ import { Separator } from '@/components/ui/separator'
 import { ChevronRight } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
-import Datasets from '@/components/datasets'
+import { Datasets, ActivityFlow } from '@/components/dataset'
 import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
-import ActivityFlow from '@/components/activityFlow'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
 
 export default async function Page({

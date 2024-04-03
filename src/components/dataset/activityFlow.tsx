@@ -1,9 +1,9 @@
 'use client'
 import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
-import { Avatar, AvatarFallback } from './ui/avatar'
 import moment from 'moment'
-import EventForm from './eventForm'
 import { useState } from 'react'
+import { Avatar, AvatarFallback } from '../ui/avatar'
+import { EventForm } from '.'
 
 export default function ActivityFlow({
     user,
