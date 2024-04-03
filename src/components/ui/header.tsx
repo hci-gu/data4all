@@ -17,7 +17,7 @@ export default function Header({ usersName }: { usersName?: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="" />
+                            <Image src={Box} alt="Kungsbacka dataportal loga" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
@@ -38,7 +38,7 @@ export default function Header({ usersName }: { usersName?: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="" />
+                            <Image src={Box} alt="Kungsbacka dataportal loga" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link className="h-fit text-sm" href={'/logga-in'}>
