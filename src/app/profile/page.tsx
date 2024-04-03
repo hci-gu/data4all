@@ -1,7 +1,7 @@
 import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
-import UpdateUserForm from '@/components/updateUserForm'
+import { UpdateUserForm } from '@/components/auth'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
