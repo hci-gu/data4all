@@ -1,24 +1,16 @@
-import LogoutButton from '@/components/logoutButton'
+import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
-import UpdateUserForm from '@/components/updateUserForm'
+import { UpdateUserForm } from '@/components/auth'
 import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
-import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
-import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import DatasetCard from '@/components/datasetCard'
 import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage() {
     const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
-    const datasets = await api.getDatasetFromUserEvent(user?.id as string)
+    const datasets = await api.getDatasetFromUser(user.id)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
@@ -51,35 +43,10 @@ async function ProfilePage() {
                     Dina dataset
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
-                    {datasets.records.length > 0 ? (
-                        datasets.records.map((dataset: any) => {
-                            return (
-                                <Card key={dataset.id}>
-                                    <Link href={''}>
-                                        <CardHeader>
-                                            <div className="flex h-fit w-full justify-between">
-                                                <CardTitle>
-                                                    {dataset.title}
-                                                </CardTitle>
-                                                <ChevronRight />
-                                            </div>
-                                            <CardDescription className="line-clamp-2">
-                                                {dataset.description}
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardFooter className="flex gap-3">
-                                            <div className="flex gap-1">
-                                                <p>tags</p>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <p>last updated</p>
-                                                <p>is public?</p>
-                                            </div>
-                                        </CardFooter>
-                                    </Link>
-                                </Card>
-                            )
-                        })
+                    {datasets.length > 0 ? (
+                        datasets.map((dataset) => (
+                            <DatasetCard key={dataset.id} dataset={dataset} />
+                        ))
                     ) : (
                         <>
                             <p className="text-center">

@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { ClientResponseError } from 'pocketbase'
 
-export async function DELETE(request: Request) {
+export async function DELETE() {
     try {
         cookies().delete('PBAuth')
 

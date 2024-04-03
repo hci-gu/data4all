@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server'
 import * as utils from '../../utils'
 import { ClientResponseError } from 'pocketbase'
 
-export async function GET(req: Request, context: any) {
+export async function GET(
+    req: Request,
+    context: { params: { userId: string } }
+) {
     try {
         const { params } = context
         const records = await utils.datasetsForUserId(params.userId)
@@ -10,9 +13,7 @@ export async function GET(req: Request, context: any) {
         return NextResponse.json(
             {
                 message: 'success',
-                body: {
-                    records: records,
-                },
+                body: records,
             },
             { status: 200 }
         )

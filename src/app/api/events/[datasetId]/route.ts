@@ -3,7 +3,10 @@ import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
 import { EventSchema } from '@/types/zod'
 
-export async function GET(request: NextRequest, context: any) {
+export async function GET(
+    request: NextRequest,
+    context: { params: { datasetId: string } }
+) {
     try {
         const { params } = context
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)

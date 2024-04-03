@@ -1,6 +1,6 @@
 'use client'
 import { signOut } from '@/adapters/api'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { useState } from 'react'

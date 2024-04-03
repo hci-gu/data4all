@@ -8,58 +8,29 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { ChevronRight } from 'lucide-react'
-import DataOwner from '@/components/DataOwner'
-import Tags from '@/components/Tag'
-import Datasets from '@/components/Datasets'
-import {
-    AuthorizedUserSchema,
-    EventAPISchema,
-    UserSchema,
-    datasetSchema,
-} from '@/types/zod'
+import DataOwner from '@/components/dataOwner'
+import Tags from '@/components/tag'
+import { Datasets, ActivityFlow } from '@/components/dataset'
+import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { createTag, stringWithHyphen } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
-import ActivityFlow from '@/components/ActivityFlow'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
-import { notFound } from 'next/navigation'
 
 export default async function Page({
     params: { slug },
 }: {
-    params: { slug?: string }
+    params: { slug: string }
 }) {
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
-    let TagsData: { title: string; href: string }[] = []
-    let eventsRespond: EventAPISchema | undefined
-    let pageData: datasetSchema | null = null
-    try {
-        if (slug) {
-            pageData = datasetSchema.parse(
-                await getDataset(stringWithHyphen(decodeURI(slug)))
-            )
 
-            if (!pageData) return notFound()
-
-            eventsRespond = EventAPISchema.parse(
-                await api.getEvent(pageData.id)
-            )
-
-            TagsData = createTag(pageData.expand?.tag ?? [])
-        }
-    } catch (error) {
-        if (error instanceof ZodError) {
-            return new Error(error.errors[0].message)
-        }
-        throw new Error('Dataset hittades inte')
-    }
-
-    if (!pageData) notFound()
+    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
+    const events = await api.getEvents(dataset.id)
 
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
@@ -77,25 +48,21 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${stringWithHyphen(pageData.title)}`}
+                                href={`/dataset/${stringWithHyphen(dataset.title)}`}
                             >
-                                {pageData.title}
+                                {dataset.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <Typography level="H1">
-                    {pageData.title}
-                </Typography>
-                <p className="max-w-prose text-sm">
-                    {pageData.description}
-                </p>
+                <Typography level="H1">{dataset.title}</Typography>
+                <p className="max-w-prose text-sm">{dataset.description}</p>
                 <section aria-labelledby="DataOwner">
                     <DataOwner user={user} />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
-                    <Tags Tags={TagsData} />
+                    {<Tags Tags={dataset.tags} />}
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
@@ -104,15 +71,17 @@ export default async function Page({
                     <h2 id="RelatedDatasets" className="text-2xl font-bold">
                         Relaterade dataset
                     </h2>
-                    <Datasets datasets={pageData.expand?.related_datasets ?? []} />
+                    <Datasets datasets={dataset.relatedDatasets} />
                 </section>
             </div>
             <Separator orientation="vertical" />
-            <ActivityFlow
-                user={authorizedUser}
-                datasetId={pageData.id}
-                eventData={eventsRespond?.items ?? []}
-            />
+            {
+                <ActivityFlow
+                    user={authorizedUser}
+                    datasetId={dataset.id}
+                    initialEvents={events ?? []}
+                />
+            }
         </main>
     )
 }

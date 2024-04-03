@@ -5,17 +5,17 @@ const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 export async function GET(request: NextRequest) {
     try {
-        // gets all datasets
-        const records = await pb.collection('dataset').getFullList({
+        const title = request.nextUrl.searchParams.get('title') ?? ''
+
+        const records = await pb.collection('dataset').getList(1, 25, {
             sort: '-created',
+            filter: `title ~ "${decodeURI(title)}"`,
         })
 
         return NextResponse.json(
             {
                 message: 'success',
-                body: {
-                    records: records,
-                },
+                body: records.items,
             },
             { status: 200 }
         )

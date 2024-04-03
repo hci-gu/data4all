@@ -12,7 +12,6 @@ test.describe('Profile page', () => {
             request,
             context,
         }) => {
-            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
@@ -30,12 +29,11 @@ test.describe('Profile page', () => {
     test.describe('user has a linked dataset', () => {
         test.beforeEach(async ({ page, request, context }) => {
             const userId = await loggedInUser({ page, request, context })
-            const dataset = await createDataset()
+            const dataset = await createDataset('test title')
             const event = await createEvent(dataset.id, userId)
         })
 
         test('has dataset', async ({ page, request, context }) => {
-            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
@@ -51,7 +49,6 @@ test.describe('Profile page', () => {
         })
 
         test('does not have dataset', async ({ page, request, context }) => {
-            // await loggedInUser({ page, request, context })
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'

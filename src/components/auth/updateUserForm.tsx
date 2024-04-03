@@ -18,7 +18,7 @@ import {
 import { AuthorizedUserSchema, roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -51,7 +51,7 @@ export default function UpdateUserForm({
             setIsClicked(true)
             await updateUser(value, user.id)
             router.refresh()
-        } catch (e) {
+        } catch (event) {
             setIsClicked(false)
             toast.error('Något gick fel')
         }

@@ -8,7 +8,7 @@ test.describe('Datasets page', () => {
         })
 
         test('Can reach the datasets page', async ({ page }) => {
-            const dataset = await createDataset()
+            const dataset = await createDataset('test title')
             await page.goto(`/dataset/${dataset.title}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 dataset.title
@@ -19,7 +19,7 @@ test.describe('Datasets page', () => {
         }) => {
             await page.goto(`/dataset/not-existed-dataset`)
             await expect(page.getByRole('paragraph')).toHaveText(
-                'Dataset hittades inte'
+                'Misslyckades att hämta dataset'
             )
         })
     })
@@ -28,7 +28,7 @@ test.describe('Datasets page', () => {
         test('Can not reach the datasets page and gets redirected to the login page', async ({
             page,
         }) => {
-            const dataset = await createDataset()
+            const dataset = await createDataset('test title')
             await page.goto(`/dataset/${dataset.title}`)
 
             await expect(page).toHaveURL(`/logga-in`)
