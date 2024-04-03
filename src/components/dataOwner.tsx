@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select'
 import { UserPlus } from 'lucide-react'
 import User from './user'
+
 import { UserSchema } from '@/types/zod'
 
 export default function DataOwner({ user }: { user?: UserSchema }) {
