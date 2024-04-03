@@ -1,4 +1,10 @@
-import { EventSchema, datasetSchema } from '@/types/zod'
+import { stringWithHyphen } from '@/lib/utils'
+import {
+    EventSchema,
+    datasetSchema,
+    datasetWithRelationsSchema,
+    tagSchema,
+} from '@/types/zod'
 import { APIRequestContext, BrowserContext, Page } from '@playwright/test'
 import PocketBase from 'pocketbase'
 import uuid from 'short-uuid'
@@ -25,12 +31,34 @@ export const createUser = async () => {
 export const createDataset = async (titleValue: string) => {
     const title = titleValue
     const description = 'test description'
-    const slug = titleValue.replace(/ /g, '-')
-    const dataset = await pb.collection('dataset').create({
+    const slug = stringWithHyphen(title)
+    const dataset = await pb.collection<datasetSchema>('dataset').create({
         title,
         description,
         slug,
     })
+    return { ...dataset, title, description }
+}
+export const createDatasetWithRelation = async (
+    titleValue: string,
+    releatedDataset: datasetSchema[] = [],
+    releatedTag: tagSchema[] = []
+) => {
+    const title = titleValue
+    const description = 'test description'
+    const slug = stringWithHyphen(title)
+    const related_datasets = releatedDataset?.map((dataset) => dataset.id) ?? []
+    const tag = releatedTag?.map((tag) => tag.id) ?? []
+
+    const dataset = await pb
+        .collection<datasetWithRelationsSchema>('dataset')
+        .create({
+            title,
+            description,
+            slug,
+            related_datasets,
+            tag,
+        })
     return { ...dataset, title, description }
 }
 
