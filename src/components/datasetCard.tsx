@@ -12,7 +12,7 @@ import Link from 'next/link'
 export default function DatasetCard({ dataset }: { dataset: datasetSchema }) {
     return (
         <Card className="w-[560px]">
-            <Link href={''}>
+            <Link href={`/dataset/${dataset.slug}`}>
                 <CardHeader>
                     <div className="flex h-fit w-full justify-between">
                         <CardTitle>{dataset.title}</CardTitle>
