@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     try {
         const title = request.nextUrl.searchParams.get('title') ?? ''
 
-        const records = await pb.collection('mocDataset').getList(1, 25, {
+        const records = await pb.collection('dataset').getList(1, 25, {
             sort: '-created',
             filter: `title ~ "${decodeURI(title)}"`,
         })
