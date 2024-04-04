@@ -13,7 +13,8 @@ import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
 import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import { stringWithHyphen } from '@/lib/utils'
+import { createTag, stringWithHyphen } from '@/lib/utils'
+import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
 
@@ -49,7 +50,7 @@ export default async function Page({
                                 className="text-xl font-bold"
                                 href={`/dataset/${stringWithHyphen(dataset.title)}`}
                             >
-                                {dataset && dataset.title}
+                                {dataset.title}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>

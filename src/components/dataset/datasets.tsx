@@ -4,6 +4,10 @@ import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Datasets({ datasets }: { datasets: datasetSchema[] }) {
+    if (datasets.length === 0) {
+        return <p>Det finns inga relaterade dataset</p>
+    }
+
     return (
         <div className="flex flex-wrap gap-4">
             {datasets.map((dataset, index) => (
@@ -16,7 +20,7 @@ export default function Datasets({ datasets }: { datasets: datasetSchema[] }) {
                             <ChevronRight />
                         </CardHeader>
                         <CardContent>
-                            <p className="text-gray-500-500 text-xs">
+                            <p className="text-gray-500-500 line-clamp-3 text-xs">
                                 {dataset.description}
                             </p>
                         </CardContent>

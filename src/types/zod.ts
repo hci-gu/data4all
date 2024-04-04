@@ -48,6 +48,7 @@ export const tagSchema = z.object({
     id: z.string(),
     name: z.string(),
 })
+
 export const datasetSchema = z.object({
     id: z.string(),
     title: z.string(),
@@ -59,6 +60,7 @@ export const datasetWithRelationsSchema = datasetSchema.extend({
     relatedDatasets: z.array(datasetSchema),
     tags: z.array(tagSchema),
 })
+
 export const EventSchema = z.object({
     id: z.string().optional(),
     collectionId: z.string().optional(),

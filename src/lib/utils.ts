@@ -1,3 +1,4 @@
+import { tagSchema } from '@/types/zod'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -18,4 +19,11 @@ export const getInitials = (name: string) => {
 
 export const stringWithHyphen = (text: string) => {
     return text.toLowerCase().replaceAll(' ', '-')
+}
+
+export const createTag = (tags: tagSchema[]) => {
+    return tags.map((tag) => ({
+        title: tag.name,
+        href: `/tag/${tag.name}`,
+    }))
 }
