@@ -8,6 +8,7 @@ import {
 } from './ui/card'
 import { datasetSchema } from '@/types/zod'
 import Link from 'next/link'
+import Tags from './tag'
 
 export default function DatasetCard({ dataset }: { dataset: datasetSchema }) {
     return (
@@ -23,9 +24,8 @@ export default function DatasetCard({ dataset }: { dataset: datasetSchema }) {
                     </CardDescription>
                 </CardHeader>
                 <CardFooter className="flex gap-3">
-                    <div className="flex gap-1">
-                        <p>tags</p>
-                    </div>
+                    {/* Um coment when tags have been added to the seeding script */}
+                    {/* <Tags Tags={dataset.tag} /> */}
                     <div className="flex gap-3">
                         <p>last updated</p>
                         <p>is public?</p>

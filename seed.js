@@ -1,11 +1,34 @@
 import PocketBase from 'pocketbase'
+import { promise } from 'zod'
 
 const stringWithHyphen = (text) => {
     return text.toLowerCase().replaceAll(' ', '-')
 }
+const getRandomTag = (tags) => {
+    const randomIndex = Math.floor(Math.random() * tags.length)
+    return tags[randomIndex].id
+}
 
 ;(async () => {
     const pb = new PocketBase('http://localhost:8090')
+
+    const newTestTagsArray = [
+        'Energy',
+        'Finance',
+        'Weather',
+        'Web Analytics',
+        'Environmental',
+        'Sales',
+        'Economics',
+        'Social Media',
+        'Transportation',
+        'Employment',
+        'CRM',
+        'Economic Indicators',
+        'Climate',
+        'Market Analysis',
+        'Demographics',
+    ]
 
     const newTestRecordsArray = [
         {
@@ -79,13 +102,51 @@ const stringWithHyphen = (text) => {
                 'Time series data representing the amount of rainfall in millimeters over time.',
         },
     ]
-    const records = newTestRecordsArray.map((record) => {
-        return pb.collection('dataset').create(
+
+    const testdatasets = await pb.collection('dataset').getFullList()
+    if (testdatasets.length > 0) {
+        for (let index = 0; index < testdatasets.length; index++) {
+            for (let j = 0; j < newTestRecordsArray.length; j++) {
+                const testRecord = newTestRecordsArray[j]
+                if (testdatasets[index].title.includes(testRecord.title)) {
+                    await pb
+                        .collection('dataset')
+                        .delete(testdatasets[index].id)
+                }
+            }
+        }
+    }
+
+    const testTags = await pb.collection('tag').getFullList()
+    for (let index = 0; index < testTags.length; index++) {
+        if (newTestTagsArray.includes(testTags[index].name)) {
+            await pb.collection('tag').delete(testTags[index].id)
+        }
+    }
+
+    let tags = []
+    for (let i = 0; i < newTestTagsArray.length; i++) {
+        const tag = newTestTagsArray[i]
+        tags.push(
+            pb.collection('tag').create(
+                {
+                    name: tag,
+                },
+                { $autoCancel: false }
+            )
+        )
+    }
+    await Promise.all(tags)
+
+    for (let i = 0; i < newTestRecordsArray.length; i++) {
+        const record = newTestRecordsArray[i]
+        await pb.collection('dataset').create(
             {
                 ...record,
                 slug: stringWithHyphen(record.title),
+                tag: [getRandomTag(tags)],
             },
             { $autoCancel: false }
         )
-    })
+    }
 })()
