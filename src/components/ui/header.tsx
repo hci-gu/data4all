@@ -17,7 +17,7 @@ export default function Header({ usersName }: { usersName?: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="Kungsbacka dataportal loga" />
+                            <Image src={Box} alt="Kungsbacka dataportal logotyp" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
