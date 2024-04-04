@@ -7,15 +7,21 @@ test.describe('Profile page', () => {
             await loggedInUser({ page, request, context })
         })
 
-        test('Can reach the profile page', async ({
-            page,
-            request,
-            context,
-        }) => {
+        test('Can reach the profile page', async ({ page }) => {
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
             )
+        })
+
+        test('Can update user name', async ({ page }) => {
+            await page.goto('/profile')
+            await page.fill('input[name="name"]', 'tester New')
+            await page.click('button[type="submit"]')
+
+            await expect(
+                page.getByRole('link', { name: 'tester New' })
+            ).toBeVisible()
         })
     })
 

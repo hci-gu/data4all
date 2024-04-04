@@ -6,7 +6,7 @@ setup('setup', async () => {
     const users = await pb.collection('users').getFullList()
 
     for (const user of users) {
-        if (user.name === 'tester') {
+        if (user.name.includes('tester')) {
             await pb.collection('users').delete(user.id)
         }
     }
