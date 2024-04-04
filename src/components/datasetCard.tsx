@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from './ui/card'
-import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
+import { datasetWithRelationsSchema } from '@/types/zod'
 import Link from 'next/link'
 import Tags from './tag'
 
@@ -18,7 +18,10 @@ export default function DatasetCard({
     return (
         <Card className="w-[560px]">
             <CardHeader>
-                <Link href={`/dataset/${dataset.slug}`} className="flex h-fit w-full justify-between">
+                <Link
+                    href={`/dataset/${dataset.slug}`}
+                    className="flex h-fit w-full justify-between"
+                >
                     <CardTitle>{dataset.title}</CardTitle>
                     <ChevronRight />
                 </Link>
@@ -29,8 +32,7 @@ export default function DatasetCard({
             <CardFooter className="flex gap-3">
                 <Tags Tags={dataset.tags} />
                 <div className="flex gap-3">
-                    <p>last updated</p>
-                    <p>is public?</p>
+                    {/* add last updated & is public later when relevant */}
                 </div>
             </CardFooter>
         </Card>
