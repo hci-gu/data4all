@@ -70,9 +70,8 @@ export default function SearchBar({
     }
 
     const autoComplete = async () => {
-        if (!!isFocused) {
+        if (debouncedSearchTerm !== '') {
             setSugestions(await api.getDatasets(debouncedSearchTerm))
-            console.log(sugestions)
         }
     }
 
@@ -125,7 +124,7 @@ export default function SearchBar({
                             </Button>
                         )}
                     </div>
-                    {!!isFocused && (
+                    {!!isFocused && debouncedSearchTerm !== '' && (
                         <>
                             <div className="absolute left-[-4px] top-[0.30rem] z-10 mt-11 h-fit w-[392px] rounded-md  bg-white shadow">
                                 <div className="flex w-full flex-col py-2">

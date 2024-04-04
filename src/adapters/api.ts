@@ -77,11 +77,18 @@ export const getAllDatasets = async () => {
         .parse(await apiRequest(apiUrl('datasets'), 'GET'))
 }
 export const getDatasets = async (datasetTitle: string) => {
-    return datasetSchema
-        .array()
-        .parse(
-            await apiRequest(apiUrl(`datasets?title=${datasetTitle}`), 'GET')
-        )
+    const datasets = await apiRequest(
+        apiUrl(`datasets?title=${datasetTitle}`),
+        'GET'
+    )
+
+    let cleanDatasets = []
+    for (let i = 0; datasets.length > i; i++) {
+        const cleanDataset = responseDatasetCleanup(datasets[i])
+        cleanDatasets.push(cleanDataset)
+    }
+
+    return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
 export const getDataset = async (datasetTitle: string) => {
     const dataset = await apiRequest(
@@ -107,12 +114,13 @@ export const getDatasetFromUser = async (userId: string) => {
 }
 
 function responseDatasetCleanup(res: any) {
-    return {
-        id: res?.id,
-        title: res?.title,
-        description: res?.description,
-        slug: res?.slug,
+    const cleanDataset = {
+        id: res.id,
+        title: res.title,
+        description: res.description,
+        slug: res.slug,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
     }
+    return cleanDataset
 }

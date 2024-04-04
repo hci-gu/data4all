@@ -128,7 +128,7 @@ const getRandomTag = (tags) => {
     for (let i = 0; i < newTestTagsArray.length; i++) {
         const tag = newTestTagsArray[i]
         tags.push(
-            pb.collection('tag').create(
+            await pb.collection('tag').create(
                 {
                     name: tag,
                 },
