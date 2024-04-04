@@ -51,6 +51,7 @@ export default function UpdateUserForm({
             setIsClicked(true)
             await updateUser(value, user.id)
             router.refresh()
+            setIsClicked(false)
         } catch (event) {
             setIsClicked(false)
             toast.error('Något gick fel')
