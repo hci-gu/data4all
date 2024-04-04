@@ -17,12 +17,11 @@ export default function DatasetCard({
 }) {
     return (
         <Card className="w-[560px]">
-            {/* <Link href={`/dataset/${dataset.slug}`}> */}
             <CardHeader>
-                <div className="flex h-fit w-full justify-between">
+                <Link href={`/dataset/${dataset.slug}`} className="flex h-fit w-full justify-between">
                     <CardTitle>{dataset.title}</CardTitle>
                     <ChevronRight />
-                </div>
+                </Link>
                 <CardDescription className="line-clamp-2">
                     {dataset.description}
                 </CardDescription>
