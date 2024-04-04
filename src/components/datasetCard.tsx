@@ -17,24 +17,23 @@ export default function DatasetCard({
 }) {
     return (
         <Card className="w-[560px]">
-            <Link href={`/dataset/${dataset.slug}`}>
-                <CardHeader>
-                    <div className="flex h-fit w-full justify-between">
-                        <CardTitle>{dataset.title}</CardTitle>
-                        <ChevronRight />
-                    </div>
-                    <CardDescription className="line-clamp-2">
-                        {dataset.description}
-                    </CardDescription>
-                </CardHeader>
-                <CardFooter className="flex gap-3">
-                    <Tags Tags={dataset.tags} />
-                    <div className="flex gap-3">
-                        <p>last updated</p>
-                        <p>is public?</p>
-                    </div>
-                </CardFooter>
-            </Link>
+            {/* <Link href={`/dataset/${dataset.slug}`}> */}
+            <CardHeader>
+                <div className="flex h-fit w-full justify-between">
+                    <CardTitle>{dataset.title}</CardTitle>
+                    <ChevronRight />
+                </div>
+                <CardDescription className="line-clamp-2">
+                    {dataset.description}
+                </CardDescription>
+            </CardHeader>
+            <CardFooter className="flex gap-3">
+                <Tags Tags={dataset.tags} />
+                <div className="flex gap-3">
+                    <p>last updated</p>
+                    <p>is public?</p>
+                </div>
+            </CardFooter>
         </Card>
     )
 }

@@ -70,7 +70,7 @@ export default function SearchBar({
     }
 
     const autoComplete = async () => {
-        if (debouncedSearchTerm !== '') {
+        if (!!isFocused) {
             setSugestions(await api.getDatasets(debouncedSearchTerm))
         }
     }
@@ -81,6 +81,10 @@ export default function SearchBar({
 
     const slowClose = () => {
         setTimeout(() => setIsFocused(false), 225)
+    }
+
+    const sugestionsOnFocus = async () => {
+        setSugestions(await api.getDatasets(debouncedSearchTerm))
     }
 
     return (
@@ -102,7 +106,10 @@ export default function SearchBar({
                                             className="w-[384px]"
                                             placeholder="T.ex. Grillplatser"
                                             {...field}
-                                            onFocus={() => setIsFocused(true)}
+                                            onFocus={() => {
+                                                setIsFocused(true)
+                                                sugestionsOnFocus()
+                                            }}
                                             onBlur={() => slowClose()}
                                         />
                                     </FormControl>
@@ -131,6 +138,10 @@ export default function SearchBar({
                                     {sugestions.map((sugestion) => (
                                         <>
                                             <Link
+                                                key={
+                                                    sugestion.id +
+                                                    sugestion.title
+                                                }
                                                 href={`/dataset/${sugestion.slug}`}
                                                 className="w-full px-3 py-1 text-sm hover:bg-slate-50"
                                             >
