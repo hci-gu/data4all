@@ -62,6 +62,7 @@ export default function UpdateUserForm({
             <form
                 className="flex w-[384px] flex-col gap-[10px]"
                 onSubmit={form.handleSubmit(submit)}
+                method='POST'
             >
                 <FormField
                     control={form.control}
