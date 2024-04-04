@@ -159,7 +159,6 @@ export default function UpdateUserForm({
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
-                                    disabled
                                 >
                                     <FormControl>
                                         <SelectTrigger>
