@@ -17,7 +17,7 @@ export default function Header({ usersName }: { usersName?: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="Kungsbacka dataportal loga" />
+                            <Image src={Box} alt="Kungsbacka dataportal logotyp" />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
@@ -53,7 +53,10 @@ export default function Header({ usersName }: { usersName?: string }) {
                 <>
                     <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
                         <Link href={'/'} className="flex items-center gap-4">
-                            <Image src={Logo} alt="Kungsbacka dataportal loga" />
+                            <Image
+                                src={Logo}
+                                alt="Kungsbacka dataportal loga"
+                            />
                             <Typography level="Large">
                                 Kungsbacka dataportal
                             </Typography>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
+import { EventSchema } from '@/types/zod'
 
 export async function GET(
     request: NextRequest,
@@ -10,9 +11,11 @@ export async function GET(
         const { params } = context
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
-        const records = await pb.collection('events').getList(1, 50, {
-            filter: `dataset="${params.datasetId}"`,
-        })
+        const records = await pb
+            .collection<EventSchema>('events')
+            .getList(1, 50, {
+                filter: `dataset="${params.datasetId}"`,
+            })
 
         return NextResponse.json(
             { message: 'success', body: records },

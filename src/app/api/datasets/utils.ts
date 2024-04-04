@@ -13,7 +13,9 @@ async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
 export async function datasetForTitle(datasetTitle: string) {
     const records = await pb
         .collection<datasetSchema>('dataset')
-        .getFirstListItem(`title="${datasetTitle}"`, { expand: 'tag' })
+        .getFirstListItem(`title="${datasetTitle}"`, {
+            expand: 'related_datasets,tag',
+        })
 
     return records
 }
@@ -21,7 +23,9 @@ export async function datasetForSlug(datasetSlug: string) {
     datasetSlug = stringWithHyphen(datasetSlug)
     const records = await pb
         .collection<datasetWithRelationsSchema>('dataset')
-        .getFirstListItem(`slug="${datasetSlug}"`, { expand: 'tag' })
+        .getFirstListItem(`slug="${datasetSlug}"`, {
+            expand: 'related_datasets,tag',
+        })
 
     return records
 }

@@ -1,5 +1,23 @@
 import test, { expect } from '@playwright/test'
-import { createDataset, loggedInUser } from './setup/utils'
+import {
+    createDataset,
+    createDatasetWithRelation,
+    loggedInUser,
+} from './setup/utils'
+
+const searchTerms = [
+    'dataset test title 1',
+    'dataset test title 2',
+    'dataset test title related 3',
+]
+
+test.describe.configure({ mode: 'serial' })
+
+test.beforeAll(async () => {
+    const dataset1 = await createDataset(searchTerms[0])
+    const dataset2 = await createDataset(searchTerms[1])
+    await createDatasetWithRelation(searchTerms[2], [dataset1, dataset2])
+})
 
 test.describe('Datasets page', () => {
     test.describe('Logged in user', () => {
@@ -8,10 +26,9 @@ test.describe('Datasets page', () => {
         })
 
         test('Can reach the datasets page', async ({ page }) => {
-            const dataset = await createDataset('test title')
-            await page.goto(`/dataset/${dataset.title}`)
+            await page.goto(`/dataset/${searchTerms[0]}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-                dataset.title
+                searchTerms[0]
             )
         })
         test('Gets a 404 page when going to a non existent dataset', async ({
@@ -22,14 +39,34 @@ test.describe('Datasets page', () => {
                 'Misslyckades att hämta dataset'
             )
         })
+
+        test('Can see two attached related datasets', async ({ page }) => {
+            await page.goto(`/dataset/${searchTerms[2]}`)
+            await page.click(`text=${searchTerms[0]}`)
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                searchTerms[0]
+            )
+
+            await page.goBack()
+            await page.click(`text=${searchTerms[1]}`)
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                searchTerms[1]
+            )
+        })
+        test('Can not see related datasets', async ({ page }) => {
+            await page.goto(`/dataset/${searchTerms[0]}`)
+            await expect(
+                page.getByText('Det finns inga relaterade dataset')
+            ).toBeVisible()
+        })
     })
 
     test.describe('Not logged in user', () => {
         test('Can not reach the datasets page and gets redirected to the login page', async ({
             page,
         }) => {
-            const dataset = await createDataset('test title')
-            await page.goto(`/dataset/${dataset.title}`)
+            // const dataset = await createDataset('test title')
+            await page.goto(`/dataset/${searchTerms[0]}`)
 
             await expect(page).toHaveURL(`/logga-in`)
         })
