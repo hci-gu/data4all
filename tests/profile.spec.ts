@@ -1,5 +1,6 @@
 import test, { expect } from '@playwright/test'
 import { createDataset, createEvent, loggedInUser } from './setup/utils'
+import uuid from 'short-uuid'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
@@ -22,6 +23,22 @@ test.describe('Profile page', () => {
             await expect(
                 page.getByRole('link', { name: 'tester New' })
             ).toBeVisible()
+        })
+        test('Can update work role', async ({ page }) => {
+            await page.goto('/profile')
+            await page.getByLabel('Arbetsroll').click()
+            await page.getByLabel('Admin').click()
+            await page.click('button[type="submit"]')
+
+            await expect(page.getByLabel('Arbetsroll')).toHaveText('Admin')
+        })
+        test('Can update email', async ({ page }) => {
+            const email = `test.user_${uuid.generate()}@kungsbacka.se`
+            await page.goto('/profile')
+            await page.fill('input[name="email"]', email)
+            await page.click('button[type="submit"]')
+
+            await expect(page.getByLabel('email')).toHaveText(email)
         })
     })
 
