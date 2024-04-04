@@ -2,8 +2,8 @@ import test, { expect } from '@playwright/test'
 import { createDataset, loggedInUser } from './setup/utils'
 
 const searchTerms = [
-    'unique test title -1',
-    'unique test title -2',
+    'search test title -1',
+    'search test title -2',
     'testing to see if foxes can fly',
 ]
 
@@ -43,12 +43,12 @@ test.describe('Search page', () => {
     }) => {
         await page.goto('/')
 
-        await page.fill('input[name="searchTerm"]', 'unique test title')
+        await page.fill('input[name="searchTerm"]', 'search test title')
 
         await page.click('button[type="submit"]')
 
-        await expect(page).toHaveURL(`/sok?searchTerm=unique test title`)
-        await expect(page.getByText('unique test title')).toHaveCount(2)
+        await expect(page).toHaveURL(`/sok?searchTerm=search test title`)
+        await expect(page.getByText('search test title')).toHaveCount(2)
     })
 
     test('Only returns the one dataset that matches specific query', async ({

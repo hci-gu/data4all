@@ -6,9 +6,9 @@ import {
 } from './setup/utils'
 
 const searchTerms = [
-    'unique test title 1',
-    'unique test title 2',
-    'unique test title related 3',
+    'dataset test title 1',
+    'dataset test title 2',
+    'dataset test title related 3',
 ]
 
 test.describe.configure({ mode: 'serial' })
