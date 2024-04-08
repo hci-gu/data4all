@@ -24,14 +24,6 @@ test.describe('Profile page', () => {
                 page.getByRole('link', { name: 'tester New' })
             ).toBeVisible()
         })
-        test('Can update work role', async ({ page }) => {
-            await page.goto('/profile')
-            await page.getByLabel('Arbetsroll').click()
-            await page.getByLabel('Admin').click()
-            await page.click('button[type="submit"]')
-
-            await expect(page.getByLabel('Arbetsroll')).toHaveText('Admin')
-        })
 
         test('Can update password', async ({ page }) => {
             await page.goto('/profile')
@@ -57,6 +49,34 @@ test.describe('Profile page', () => {
             expect(isInvalidPasswordInput).toBe('false')
             expect(isInvalidConfirmPasswordInput).toBe('false')
             expect(isInvalidOldPasswordInput).toBe('false')
+        })
+        test('Get error on wrong typed password', async ({ page }) => {
+            await page.goto('/profile')
+            const passwordInput = page.locator('input[name="password"]')
+            const confirmPasswordInput = page.locator(
+                'input[name="passwordConfirm"]'
+            )
+            const oldPasswordInput = page.locator('input[name="oldPassword"]')
+
+            await passwordInput.fill('New password')
+            await confirmPasswordInput.fill('Not the same password')
+            await oldPasswordInput.fill('123456789')
+
+            await page.click('button[type="submit"]')
+
+            const isInvalidConfirmPasswordInput =
+                await confirmPasswordInput.getAttribute('aria-invalid')
+
+            expect(isInvalidConfirmPasswordInput).toBe('true')
+        })
+
+        test('Can update work role', async ({ page }) => {
+            await page.goto('/profile')
+            await page.getByLabel('Arbetsroll').click()
+            await page.getByLabel('Admin').click()
+            await page.click('button[type="submit"]')
+
+            await expect(page.getByLabel('Arbetsroll')).toHaveText('Admin')
         })
     })
 
