@@ -46,18 +46,19 @@ export default function UpdateUserForm({
     const roles = Object.values(roleSchema.Values)
     const router = useRouter()
 
-    const submit = async (value: updateUserSchema) => {
+    const submit = (value: updateUserSchema) => {
         setIsClicked(true)
-        const promiseRespond = new Promise((resolve, reject) => {
+        const promiseRespond = new Promise(async (resolve, reject) => {
             try {
-                updateUser(value, user.id)
-                setTimeout(async () => {
+                await updateUser(value, user.id)
+                setTimeout(() => {
                     resolve('success')
-                    setIsClicked(false)
                     router.refresh()
+                    setIsClicked(false)
                 }, 700)
             } catch (error) {
                 reject()
+                setIsClicked(false)
             }
         })
 
