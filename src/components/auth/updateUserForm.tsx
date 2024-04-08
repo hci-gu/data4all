@@ -48,22 +48,20 @@ export default function UpdateUserForm({
 
     const submit = (value: updateUserSchema) => {
         setIsClicked(true)
-        const promiseRespond = new Promise(async (resolve, reject) => {
-            try {
-                await updateUser(value, user.id)
-                setTimeout(() => {
-                    resolve('success')
-                    router.refresh()
-                    setIsClicked(false)
-                }, 700)
-            } catch (error) {
-                reject()
+        const request = Promise.allSettled([
+            updateUser(value, user.id),
+            new Promise((resolve) => setTimeout(resolve, 700)),
+        ])
+            .then(() => {
+                router.refresh()
                 setIsClicked(false)
-            }
-        })
+            })
+            .catch(() => {
+                setIsClicked(false)
+            })
 
         if (!isClicked) {
-            toast.promise(promiseRespond, {
+            toast.promise(request, {
                 loading: 'Uppdaterar användaren',
                 success: 'Användaren uppdaterad',
                 error: 'Något gick fel',
