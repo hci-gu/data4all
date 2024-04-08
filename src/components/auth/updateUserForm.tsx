@@ -48,9 +48,9 @@ export default function UpdateUserForm({
 
     const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
-        const promiseRespond = new Promise(async (resolve, reject) => {
+        const promiseRespond = new Promise((resolve, reject) => {
             try {
-                await updateUser(value, user.id)
+                updateUser(value, user.id)
                 setTimeout(async () => {
                     resolve('success')
                     setIsClicked(false)
