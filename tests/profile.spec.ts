@@ -32,13 +32,31 @@ test.describe('Profile page', () => {
 
             await expect(page.getByLabel('Arbetsroll')).toHaveText('Admin')
         })
-        test('Can update email', async ({ page }) => {
-            const email = `test.user_${uuid.generate()}@kungsbacka.se`
+
+        test('Can update password', async ({ page }) => {
             await page.goto('/profile')
-            await page.fill('input[name="email"]', email)
+            const passwordInput = page.locator('input[name="password"]')
+            const confirmPasswordInput = page.locator(
+                'input[name="passwordConfirm"]'
+            )
+            const oldPasswordInput = page.locator('input[name="oldPassword"]')
+
+            await passwordInput.fill('New password')
+            await confirmPasswordInput.fill('New password')
+            await oldPasswordInput.fill('123456789')
+
             await page.click('button[type="submit"]')
 
-            await expect(page.getByLabel('email')).toHaveText(email)
+            const isInvalidPasswordInput =
+                await passwordInput.getAttribute('aria-invalid')
+            const isInvalidConfirmPasswordInput =
+                await confirmPasswordInput.getAttribute('aria-invalid')
+            const isInvalidOldPasswordInput =
+                await oldPasswordInput.getAttribute('aria-invalid')
+
+            expect(isInvalidPasswordInput).toBe('false')
+            expect(isInvalidConfirmPasswordInput).toBe('false')
+            expect(isInvalidOldPasswordInput).toBe('false')
         })
     })
 
