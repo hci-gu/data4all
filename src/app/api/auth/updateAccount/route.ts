@@ -1,5 +1,6 @@
 import { env } from '@/lib/env'
 import { updateUserSchema } from '@/types/zod'
+import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
@@ -12,6 +13,19 @@ export async function PUT(request: Request) {
         const userId = z.string().parse(data?.id)
 
         await pb.collection('users').update(userId, formData)
+
+        const authorizedUser = cookies().get('PBAuth')
+        if (!authorizedUser) {
+            return
+        }
+        pb.authStore.loadFromCookie(authorizedUser.value)
+
+        const dbUser = await pb.collection('users').getOne(userId)
+        const token = pb.authStore.token
+
+        pb.authStore.save(token, dbUser)
+        const authCookie = pb.authStore.exportToCookie()
+        cookies().set('PBAuth', authCookie)
 
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {

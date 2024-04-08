@@ -8,7 +8,6 @@ import {
     datasetWithRelationsSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
-import { z } from 'zod'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 pb.autoCancellation(false)
 

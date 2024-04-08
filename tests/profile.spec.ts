@@ -1,5 +1,6 @@
 import test, { expect } from '@playwright/test'
 import { createDataset, createEvent, loggedInUser } from './setup/utils'
+import uuid from 'short-uuid'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
@@ -7,15 +8,75 @@ test.describe('Profile page', () => {
             await loggedInUser({ page, request, context })
         })
 
-        test('Can reach the profile page', async ({
-            page,
-            request,
-            context,
-        }) => {
+        test('Can reach the profile page', async ({ page }) => {
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
             )
+        })
+
+        test('Can update user name', async ({ page }) => {
+            await page.goto('/profile')
+            await page.fill('input[name="name"]', 'tester New')
+            await page.click('button[type="submit"]')
+
+            await expect(
+                page.getByRole('link', { name: 'tester New' })
+            ).toBeVisible()
+        })
+
+        test('Can update password', async ({ page }) => {
+            await page.goto('/profile')
+            const passwordInput = page.locator('input[name="password"]')
+            const confirmPasswordInput = page.locator(
+                'input[name="passwordConfirm"]'
+            )
+            const oldPasswordInput = page.locator('input[name="oldPassword"]')
+
+            await passwordInput.fill('New password')
+            await confirmPasswordInput.fill('New password')
+            await oldPasswordInput.fill('123456789')
+
+            await page.click('button[type="submit"]')
+
+            const isInvalidPasswordInput =
+                await passwordInput.getAttribute('aria-invalid')
+            const isInvalidConfirmPasswordInput =
+                await confirmPasswordInput.getAttribute('aria-invalid')
+            const isInvalidOldPasswordInput =
+                await oldPasswordInput.getAttribute('aria-invalid')
+
+            expect(isInvalidPasswordInput).toBe('false')
+            expect(isInvalidConfirmPasswordInput).toBe('false')
+            expect(isInvalidOldPasswordInput).toBe('false')
+        })
+        test('Get error on wrong typed password', async ({ page }) => {
+            await page.goto('/profile')
+            const passwordInput = page.locator('input[name="password"]')
+            const confirmPasswordInput = page.locator(
+                'input[name="passwordConfirm"]'
+            )
+            const oldPasswordInput = page.locator('input[name="oldPassword"]')
+
+            await passwordInput.fill('New password')
+            await confirmPasswordInput.fill('Not the same password')
+            await oldPasswordInput.fill('123456789')
+
+            await page.click('button[type="submit"]')
+
+            const isInvalidConfirmPasswordInput =
+                await confirmPasswordInput.getAttribute('aria-invalid')
+
+            expect(isInvalidConfirmPasswordInput).toBe('true')
+        })
+
+        test('Can update work role', async ({ page }) => {
+            await page.goto('/profile')
+            await page.getByLabel('Arbetsroll').click()
+            await page.getByLabel('Admin').click()
+            await page.click('button[type="submit"]')
+
+            await expect(page.getByLabel('Arbetsroll')).toHaveText('Admin')
         })
     })
 
