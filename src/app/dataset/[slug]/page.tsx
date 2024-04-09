@@ -7,16 +7,19 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
 import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import { createTag, stringWithHyphen } from '@/lib/utils'
-import { ZodError } from 'zod'
+import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
+import Image from 'next/image'
+import Dataportal from '../../../../public/dataportal.png'
+import Entryscape from '../../../../public/entryscape.png'
+import Link from 'next/link'
 
 export default async function Page({
     params: { slug },
@@ -33,7 +36,7 @@ export default async function Page({
     const events = await api.getEvents(dataset.id)
 
     return (
-        <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">
+        <main className="grid items-stretch gap-9 px-4 py-8 sm:px-28 sm:py-9 lg:grid-cols-[1fr_auto_1fr]">
             <div className="flex flex-col gap-4">
                 <Breadcrumb className="mb-2">
                     <BreadcrumbList>
@@ -42,7 +45,7 @@ export default async function Page({
                                 Home
                             </BreadcrumbLink>
                         </BreadcrumbItem>
-                        <BreadcrumbSeparator className="text-2xl [&>svg]:size-5">
+                        <BreadcrumbSeparator className="[&>svg]:size-5">
                             <ChevronRight />
                         </BreadcrumbSeparator>
                         <BreadcrumbItem>
@@ -63,6 +66,50 @@ export default async function Page({
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
                     {<Tags Tags={dataset.tags} />}
+                </section>
+                <section className="flex flex-col gap-1">
+                    <Typography level="Large">Externa länkar</Typography>
+
+                    <ul className="flex flex-col gap-1">
+                        <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
+                            <div className="flex items-center gap-2">
+                                <Image
+                                    width={44}
+                                    src={Dataportal}
+                                    alt="Dataportal.se logo"
+                                />
+                                <b className="flex gap-1">
+                                    Öppna på
+                                    <Link
+                                        href={`/dataset/${dataset.slug}`}
+                                        className="text-cyan-700 underline"
+                                    >
+                                        Dataportal.se
+                                    </Link>
+                                </b>
+                            </div>
+                            <ExternalLink />
+                        </li>
+                        <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
+                            <div className="flex items-center gap-2">
+                                <Image
+                                    width={44}
+                                    src={Entryscape}
+                                    alt="Dataportal.se logo"
+                                />
+                                <b className="flex gap-1">
+                                    Öppna på
+                                    <Link
+                                        href={`/dataset/${dataset.slug}`}
+                                        className="text-cyan-700 underline"
+                                    >
+                                        Entryscape.se
+                                    </Link>
+                                </b>
+                            </div>
+                            <ExternalLink />
+                        </li>
+                    </ul>
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"
