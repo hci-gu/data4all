@@ -34,7 +34,7 @@ export async function datasetsForUserId(userId: string) {
         filter: `user = "${userId}"`,
     })
 
-    if (userEvents.items.length < 1) {
+    if (userEvents.items.length === 0) {
         return []
     }
 
@@ -46,5 +46,10 @@ export async function datasetsForUserId(userId: string) {
         )
     )
 
-    return await datasetsForIds(datasetIds as string[])
+    const datasets = await datasetsForIds(datasetIds)
+    console.log(datasets)
+
+    await Promise.all(datasets)
+
+    return datasets
 }

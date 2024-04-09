@@ -107,7 +107,10 @@ export const createEvent = async (event: EventSchema) => {
     return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
 }
 export const getDatasetFromUser = async (userId: string) => {
+
     const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
+
+    console.log(datasets)
 
     let cleanDatasets = []
     for (let i = 0; datasets.length > i; i++) {
