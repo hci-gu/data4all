@@ -41,7 +41,7 @@ export const updateUserSchema = z
     .merge(AuthorizedUserSchema.pick({ email: true, role: true, name: true }))
     .refine((data) => data.password === data.passwordConfirm, {
         path: ['passwordConfirm'],
-        message: 'Passwords does not match',
+        message: 'Lösenorden måste matcha',
     })
 
 export const tagSchema = z.object({

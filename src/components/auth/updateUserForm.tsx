@@ -46,14 +46,26 @@ export default function UpdateUserForm({
     const roles = Object.values(roleSchema.Values)
     const router = useRouter()
 
-    const submit = async (value: updateUserSchema) => {
-        try {
-            setIsClicked(true)
-            await updateUser(value, user.id)
-            router.refresh()
-        } catch (event) {
-            setIsClicked(false)
-            toast.error('Något gick fel')
+    const submit = (value: updateUserSchema) => {
+        setIsClicked(true)
+        const request = Promise.allSettled([
+            updateUser(value, user.id),
+            new Promise((resolve) => setTimeout(resolve, 700)),
+        ])
+            .then(() => {
+                router.refresh()
+                setIsClicked(false)
+            })
+            .catch(() => {
+                setIsClicked(false)
+            })
+
+        if (!isClicked) {
+            toast.promise(request, {
+                loading: 'Uppdaterar användaren',
+                success: 'Användaren uppdaterad',
+                error: 'Något gick fel',
+            })
         }
     }
     return (
@@ -61,6 +73,7 @@ export default function UpdateUserForm({
             <form
                 className="flex w-[384px] flex-col gap-[10px]"
                 onSubmit={form.handleSubmit(submit)}
+                method="POST"
             >
                 <FormField
                     control={form.control}
@@ -82,7 +95,11 @@ export default function UpdateUserForm({
                         <FormItem>
                             <FormLabel>Mejl</FormLabel>
                             <FormControl>
-                                <Input placeholder="email" {...field} />
+                                <Input
+                                    placeholder="email"
+                                    disabled
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
