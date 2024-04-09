@@ -110,8 +110,6 @@ export const getDatasetFromUser = async (userId: string) => {
 
     const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
 
-    console.log(datasets)
-
     let cleanDatasets = []
     for (let i = 0; datasets.length > i; i++) {
         const cleanDataset = responseDatasetCleanup(datasets[i])

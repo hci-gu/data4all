@@ -47,7 +47,6 @@ export async function datasetsForUserId(userId: string) {
     )
 
     const datasets = await datasetsForIds(datasetIds)
-    console.log(datasets)
 
     await Promise.all(datasets)
 
