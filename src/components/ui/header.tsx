@@ -5,8 +5,13 @@ import Typography from './Typography'
 import Image from 'next/image'
 import Box from '../../../public/boxes.png'
 import Logo from '../../../public/logo.svg'
+import { Button } from './button'
+import { Search } from 'lucide-react'
+import { useState } from 'react'
+import SearchBar from '../searchBar'
 
 export default function Header({ usersName }: { usersName?: string }) {
+    const [isSearchOpen, setIsSearchOpen] = useState(false)
     const pathname = usePathname()
     switch (pathname) {
         case '/logga-in':
@@ -17,7 +22,10 @@ export default function Header({ usersName }: { usersName?: string }) {
                             <Typography level="H2">
                                 Kungsbacka dataportal
                             </Typography>
-                            <Image src={Box} alt="Kungsbacka dataportal logotyp" />
+                            <Image
+                                src={Box}
+                                alt="Kungsbacka dataportal logotyp"
+                            />
                         </div>
                         <div className="flex w-[50%] items-center justify-end">
                             <Link
@@ -52,7 +60,10 @@ export default function Header({ usersName }: { usersName?: string }) {
             return (
                 <>
                     <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
-                        <Link href={'/'} className="flex items-center gap-4">
+                        <Link
+                            href={'/'}
+                            className="flex items-center gap-4 [&>div]:hidden"
+                        >
                             <Image
                                 src={Logo}
                                 alt="Kungsbacka dataportal loga"
@@ -61,10 +72,20 @@ export default function Header({ usersName }: { usersName?: string }) {
                                 Kungsbacka dataportal
                             </Typography>
                         </Link>
-                        <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg">
+                        <div className="flex items-center justify-end font-semibold max-sm:sr-only [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
                             <Link href={'/profile'}>{usersName}</Link>
                         </div>
+                        <Button
+                            className="w-10 p-2"
+                            variant={'outline'}
+                            onClick={() => setIsSearchOpen(!isSearchOpen)}
+                        >
+                            <Search />
+                        </Button>
                     </header>
+                    <div className="absolute left-0 top-15 flex w-full justify-center sm:hidden">
+                        {isSearchOpen && <SearchBar />}
+                    </div>
                 </>
             )
     }

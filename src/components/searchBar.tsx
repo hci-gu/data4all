@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -16,18 +16,71 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Loader2, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-
+import * as api from '@/adapters/api'
+import { datasetSchema } from '@/types/zod'
+import Link from 'next/link'
 const searchSchema = z.object({
     searchTerm: z.string().min(1),
 })
 type searchSchema = z.infer<typeof searchSchema>
-export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
+
+const useDebouncedValue = (inputValue: string, delay: number) => {
+    const [debouncedValue, setDebouncedValue] = useState(inputValue)
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(inputValue)
+        }, delay)
+
+        return () => {
+            clearTimeout(handler)
+        }
+    }, [inputValue, delay])
+
+    return debouncedValue
+}
+
+const Highlight = ({
+    text,
+    highlight,
+}: {
+    text: string
+    highlight: string
+}) => {
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
+    return (
+        <span>
+            {parts.map((part, index) => (
+                <span
+                    key={index}
+                    style={
+                        part.toLowerCase() === highlight.toLowerCase()
+                            ? { fontWeight: 'bold' }
+                            : {}
+                    }
+                >
+                    {part}
+                </span>
+            ))}
+        </span>
+    )
+}
+
+export default function SearchBar({
+    initialSearchTerm,
+}: {
+    initialSearchTerm?: string
+}) {
     const [isClicked, setIsClicked] = useState(false)
+    const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
+    const [isFocused, setIsFocused] = useState(false)
+    const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
+    const [suggestions, setSuggestions] = useState<datasetSchema[]>([])
     const router = useRouter()
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
         defaultValues: {
-            searchTerm: prevSearch ?? '',
+            searchTerm: initialSearchTerm ?? '',
         },
     })
 
@@ -41,24 +94,62 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
         }
     }
 
+    const autoComplete = async () => {
+        if (!!isFocused) {
+            setSuggestions(await api.getDatasets(debouncedSearchTerm))
+        }
+    }
+
+    useEffect(() => {
+        console.log('asd')
+
+        autoComplete()
+    }, [debouncedSearchTerm])
+
+    const slowClose = () => {
+        setTimeout(() => setIsFocused(false), 225)
+    }
+
+    const sugestionsOnFocus = async () => {
+        setSuggestions(await api.getDatasets(debouncedSearchTerm))
+    }
+
+    suggestions.sort((a, b) => {
+        const aTitle = a.title.toLowerCase()
+        const bTitle = b.title.toLowerCase()
+        if (aTitle.startsWith(debouncedSearchTerm.toLowerCase())) {
+            return -1
+        }
+        if (bTitle.startsWith(debouncedSearchTerm.toLowerCase())) {
+            return 1
+        }
+        return 0
+    })
+
     return (
         <>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    className="flex w-fit flex-col items-start"
+                    className="relative z-50 flex w-fit flex-col items-start max-sm:w-full max-sm:px-4 max-sm:mt-1"
+                    onChange={() => setSearchTerm(form.getValues('searchTerm'))}
                 >
-                    <div className="mb-[6px] flex max-w-[432px] gap-2">
+                    <div className="mb-[6px] flex max-w-[432px] gap-2 max-sm:w-full">
                         <FormField
                             control={form.control}
                             name="searchTerm"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="max-sm:w-full">
                                     <FormControl>
                                         <Input
-                                            className="w-[384px]"
+                                            className="w-[384px] max-sm:w-full"
                                             placeholder="T.ex. Grillplatser"
                                             {...field}
+                                            onFocus={() => {
+                                                setIsFocused(true)
+                                                sugestionsOnFocus()
+                                            }}
+                                            onBlur={() => slowClose()}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -79,6 +170,34 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
                             </Button>
                         )}
                     </div>
+                    {!!isFocused && debouncedSearchTerm !== '' && (
+                        <div className="absolute left-[-4px] top-[0.30rem] z-10 mt-11 h-fit w-[392px] rounded-md bg-white shadow">
+                            {suggestions.length > 0 ? (
+                                <div className="flex w-full flex-col py-2">
+                                    {suggestions.map((suggestion) => (
+                                        <Link
+                                            key={
+                                                suggestion.id + suggestion.title
+                                            }
+                                            href={`/dataset/${suggestion.slug}`}
+                                            className="w-full px-3 py-1 text-sm hover:bg-slate-50"
+                                        >
+                                            <Highlight
+                                                text={suggestion.title}
+                                                highlight={debouncedSearchTerm}
+                                            />
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex w-full flex-col p-2">
+                                    <p className="text-sm">
+                                        Hittade inga resultat
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    )}
                     <FormDescription>
                         Du kan söka på titlar, beskrivning eller taggar.
                     </FormDescription>
