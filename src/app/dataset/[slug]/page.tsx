@@ -121,7 +121,7 @@ export default async function Page({
                     <Datasets datasets={dataset.relatedDatasets} />
                 </section>
             </div>
-            <Separator orientation="vertical" />
+            <Separator orientation="horizontal" />
             {
                 <ActivityFlow
                     user={authorizedUser}

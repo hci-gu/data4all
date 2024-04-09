@@ -66,8 +66,8 @@ export default function EventForm({
                             <FormLabel className="sr-only">Kommentar</FormLabel>
                             <FormControl>
                                 <div className="flex gap-2">
-                                    <Avatar>
-                                        <AvatarFallback>
+                                    <Avatar className="sm:h-6 sm:w-6">
+                                        <AvatarFallback className="text-[0.5625rem]">
                                             {getInitials(user.name)}
                                         </AvatarFallback>
                                     </Avatar>
