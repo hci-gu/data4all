@@ -46,17 +46,17 @@ export default function SearchBar({ prevSearch }: { prevSearch?: string }) {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    className="flex w-fit flex-col items-start"
+                    className="flex w-fit flex-col items-start px-4 max-sm:w-full max-sm:mt-1"
                 >
-                    <div className="mb-[6px] flex max-w-[432px] gap-2">
+                    <div className="mb-[6px] flex max-w-[432px] gap-2 max-sm:w-full">
                         <FormField
                             control={form.control}
                             name="searchTerm"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="max-sm:w-full">
                                     <FormControl>
                                         <Input
-                                            className="w-[384px]"
+                                            className="w-[384px] max-sm:w-full"
                                             placeholder="T.ex. Grillplatser"
                                             {...field}
                                         />
