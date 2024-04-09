@@ -25,7 +25,7 @@ export default async function page({
                     </Link>
                     <Typography level="H2">Sök dataset</Typography>
                 </div>
-                <SearchBar prevSearch={searchTerm} />
+                <SearchBar initialSearchTerm={searchTerm} />
                 <SearchResults records={datasets} />
             </main>
         </>

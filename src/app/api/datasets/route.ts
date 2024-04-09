@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
         const records = await pb.collection('dataset').getList(1, 25, {
             sort: '-created',
             filter: `title ~ "${decodeURI(title)}"`,
+            expand: 'tag',
         })
 
         return NextResponse.json(
