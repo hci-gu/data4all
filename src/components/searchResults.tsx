@@ -1,4 +1,4 @@
-import { datasetSchema } from '@/types/zod'
+import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
 import Typography from './ui/Typography'
 import DatasetCard from './datasetCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -7,7 +7,7 @@ import { Settings, Settings2 } from 'lucide-react'
 export default function SearchResults({
     records,
 }: {
-    records: datasetSchema[]
+    records: datasetWithRelationsSchema[]
 }) {
     return (
         <>
@@ -18,7 +18,7 @@ export default function SearchResults({
                         <p>resultat</p>
                     </div>
                     {records.length > 0 ? (
-                        records.map((dataset: datasetSchema) => {
+                        records.map((dataset) => {
                             return (
                                 <DatasetCard
                                     key={dataset.id}
