@@ -54,7 +54,7 @@ export default function SearchResults({
                     <TabsContent value="dataset">
                         <div className="flex flex-col gap-[10px]">
                             {records.length > 0 ? (
-                                records.map((dataset: datasetSchema) => {
+                                records.map((dataset) => {
                                     return (
                                         <DatasetCard
                                             key={dataset.id}
