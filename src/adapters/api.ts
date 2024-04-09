@@ -93,8 +93,11 @@ export const getDataset = async (datasetTitle: string) => {
     return datasetWithRelationsSchema.parse(cleanDataset)
 }
 export const getEvents = async (datasetId: string) => {
-    const events = await apiRequest(apiUrl(`events/${datasetId}`), 'GET')
-    return EventSchema.array().parse(events.items)
+    const events = await apiRequest(apiUrl(`events/${datasetId}`), 'GET') as any[]
+
+    const cleanEvent = events.map(responseEventCleanup)
+
+    return EventSchema.array().parse(cleanEvent)
 }
 export const createEvent = async (event: EventSchema) => {
     return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
@@ -113,5 +116,12 @@ function responseDatasetCleanup(res: any) {
         slug: res?.slug,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
+    }
+}
+function responseEventCleanup(res: any) {
+    return {
+        ...res,
+        user: res?.expand?.user,
+        subject: res?.expand?.subject,
     }
 }
