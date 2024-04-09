@@ -41,6 +41,32 @@ const useDebouncedValue = (inputValue: string, delay: number) => {
     return debouncedValue
 }
 
+const Highlight = ({
+    text,
+    highlight,
+}: {
+    text: string
+    highlight: string
+}) => {
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
+    return (
+        <span>
+            {parts.map((part, index) => (
+                <span
+                    key={index}
+                    style={
+                        part.toLowerCase() === highlight.toLowerCase()
+                            ? { fontWeight: 'bold' }
+                            : {}
+                    }
+                >
+                    {part}
+                </span>
+            ))}
+        </span>
+    )
+}
+
 export default function SearchBar({
     initialSearchTerm,
 }: {
@@ -50,7 +76,7 @@ export default function SearchBar({
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
     const [isFocused, setIsFocused] = useState(false)
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
-    const [sugestions, setSugestions] = useState<datasetSchema[]>([])
+    const [suggestions, setSuggestions] = useState<datasetSchema[]>([])
     const router = useRouter()
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
@@ -71,7 +97,7 @@ export default function SearchBar({
 
     const autoComplete = async () => {
         if (!!isFocused) {
-            setSugestions(await api.getDatasets(debouncedSearchTerm))
+            setSuggestions(await api.getDatasets(debouncedSearchTerm))
         }
     }
 
@@ -84,8 +110,20 @@ export default function SearchBar({
     }
 
     const sugestionsOnFocus = async () => {
-        setSugestions(await api.getDatasets(debouncedSearchTerm))
+        setSuggestions(await api.getDatasets(debouncedSearchTerm))
     }
+
+    suggestions.sort((a, b) => {
+        const aTitle = a.title.toLowerCase()
+        const bTitle = b.title.toLowerCase()
+        if (aTitle.startsWith(debouncedSearchTerm.toLowerCase())) {
+            return -1
+        }
+        if (bTitle.startsWith(debouncedSearchTerm.toLowerCase())) {
+            return 1
+        }
+        return 0
+    })
 
     return (
         <>
@@ -132,26 +170,32 @@ export default function SearchBar({
                         )}
                     </div>
                     {!!isFocused && debouncedSearchTerm !== '' && (
-                        <>
-                            <div className="absolute left-[-4px] top-[0.30rem] z-10 mt-11 h-fit w-[392px] rounded-md  bg-white shadow">
+                        <div className="absolute left-[-4px] top-[0.30rem] z-10 mt-11 h-fit w-[392px] rounded-md bg-white shadow">
+                            {suggestions.length > 0 ? (
                                 <div className="flex w-full flex-col py-2">
-                                    {sugestions.map((sugestion) => (
-                                        <>
-                                            <Link
-                                                key={
-                                                    sugestion.id +
-                                                    sugestion.title
-                                                }
-                                                href={`/dataset/${sugestion.slug}`}
-                                                className="w-full px-3 py-1 text-sm hover:bg-slate-50"
-                                            >
-                                                {sugestion.title}
-                                            </Link>
-                                        </>
+                                    {suggestions.map((suggestion) => (
+                                        <Link
+                                            key={
+                                                suggestion.id + suggestion.title
+                                            }
+                                            href={`/dataset/${suggestion.slug}`}
+                                            className="w-full px-3 py-1 text-sm hover:bg-slate-50"
+                                        >
+                                            <Highlight
+                                                text={suggestion.title}
+                                                highlight={debouncedSearchTerm}
+                                            />
+                                        </Link>
                                     ))}
                                 </div>
-                            </div>
-                        </>
+                            ) : (
+                                <div className="flex w-full flex-col p-2">
+                                    <p className="text-sm">
+                                        Hittade inga resultat
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     )}
                     <FormDescription>
                         Du kan söka på titlar, beskrivning eller taggar.
