@@ -107,9 +107,15 @@ export const createEvent = async (event: EventSchema) => {
     return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
 }
 export const getDatasetFromUser = async (userId: string) => {
-    return datasetSchema
-        .array()
-        .parse(await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET'))
+    const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
+
+    let cleanDatasets = []
+    for (let i = 0; datasets.length > i; i++) {
+        const cleanDataset = responseDatasetCleanup(datasets[i])
+        cleanDatasets.push(cleanDataset)
+    }
+
+    return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
 
 function responseDatasetCleanup(res: any) {
