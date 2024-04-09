@@ -101,6 +101,8 @@ export default function SearchBar({
     }
 
     useEffect(() => {
+        console.log('asd')
+
         autoComplete()
     }, [debouncedSearchTerm])
 
@@ -129,10 +131,10 @@ export default function SearchBar({
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    className="relative z-50 flex w-fit flex-col items-start"
+                    className="relative z-50 flex w-fit flex-col items-start max-sm:w-full max-sm:px-4 max-sm:mt-1"
                     onChange={() => setSearchTerm(form.getValues('searchTerm'))}
                 >
-                    <div className="mb-[6px] flex max-w-[432px] flex-wrap gap-2">
+                    <div className="mb-[6px] flex max-w-[432px] gap-2 max-sm:w-full">
                         <FormField
                             control={form.control}
                             name="searchTerm"
