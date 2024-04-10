@@ -100,17 +100,22 @@ export const getDataset = async (datasetTitle: string) => {
     return datasetWithRelationsSchema.parse(cleanDataset)
 }
 export const getEvents = async (datasetId: string) => {
-    const events = await apiRequest(apiUrl(`events/${datasetId}`), 'GET') as any[]
+    const events = (await apiRequest(
+        apiUrl(`events/${datasetId}`),
+        'GET'
+    )) as any[]
 
     const cleanEvent = events.map(responseEventCleanup)
 
     return EventSchema.array().parse(cleanEvent)
 }
 export const createEvent = async (event: EventSchema) => {
-    return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
+    const cleanEvent = responseEventCleanup(
+        await apiRequest(apiUrl(`events`), 'POST', event)
+    )
+    return EventSchema.parse(cleanEvent)
 }
 export const getDatasetFromUser = async (userId: string) => {
-
     const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
 
     let cleanDatasets = []

@@ -17,8 +17,6 @@ export async function GET(
                 filter: `dataset="${params.datasetId}"`,
                 expand: 'user,subject',
             })
-        console.log({records: records.items});
-        
 
         return NextResponse.json(
             { message: 'success', body: records.items },

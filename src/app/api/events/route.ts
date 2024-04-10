@@ -9,7 +9,9 @@ export async function POST(request: NextRequest) {
 
         const data = EventSchema.parse(await request.json())
 
-        const record = await pb.collection<EventSchema>('events').create(data)
+        const record = await pb
+            .collection('events')
+            .create({ ...data, user: data.user.id }, { expand: 'user,subject' })
 
         return NextResponse.json(
             { message: 'success', body: record },
