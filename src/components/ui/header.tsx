@@ -79,14 +79,17 @@ export default function Header({ usersName }: { usersName?: string }) {
                         </Link>
                         <div className="flex gap-6">
                             <Button
-                                className="w-10 p-2"
+                                className="w-10 p-2 sm:hidden"
                                 variant={'outline'}
                                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                             >
                                 <Search />
                             </Button>
                             <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
-                                <Link href={'/profile'}>
+                                <Link
+                                    href={'/profile'}
+                                    className="flex items-center justify-center gap-2"
+                                >
                                     <span className="max-sm:sr-only">
                                         {usersName}
                                     </span>
