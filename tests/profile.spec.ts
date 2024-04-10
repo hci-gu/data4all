@@ -20,7 +20,7 @@ test.describe('Profile page', () => {
             await page.click('button[type="submit"]')
 
             await expect(
-                page.getByRole('link', { name: 'tester New' })
+                page.getByRole('link', { name: 'tester New tN' })
             ).toBeVisible()
         })
 
