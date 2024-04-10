@@ -1,8 +1,6 @@
 'use client'
 import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
-import moment from 'moment'
 import { useState } from 'react'
-import { Avatar, AvatarFallback } from '../ui/avatar'
 import { EventForm } from '.'
 import Comment from './comment'
 
