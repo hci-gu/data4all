@@ -18,14 +18,15 @@ export default function SearchResults({
                         <p>resultat</p>
                     </div>
                     {records.length > 0 ? (
-                        records.map((dataset) => {
-                            return (
-                                <DatasetCard
-                                    key={dataset.id}
-                                    dataset={dataset}
-                                />
-                            )
-                        })
+                        <ul className='flex flex-col gap-[10px]'>
+                            {records.map((dataset) => {
+                                return (
+                                    <li key={dataset.id}>
+                                        <DatasetCard dataset={dataset} />
+                                    </li>
+                                )
+                            })}
+                        </ul>
                     ) : (
                         <p>Hittade inga resultat</p>
                     )}
@@ -52,20 +53,19 @@ export default function SearchResults({
                         </div>
                     </TabsList>
                     <TabsContent value="dataset">
-                        <div className="flex flex-col gap-[10px]">
+                        <ul className="flex flex-col gap-[10px]">
                             {records.length > 0 ? (
                                 records.map((dataset) => {
                                     return (
-                                        <DatasetCard
-                                            key={dataset.id}
-                                            dataset={dataset}
-                                        />
+                                        <li key={dataset.id}>
+                                            <DatasetCard dataset={dataset} />
+                                        </li>
                                     )
                                 })
                             ) : (
                                 <p>Hittade inga resultat</p>
                             )}
-                        </div>
+                        </ul>
                     </TabsContent>
                     <TabsContent value="personer">
                         <div className="flex flex-col gap-[10px]">Personer</div>
