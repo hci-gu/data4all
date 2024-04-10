@@ -35,7 +35,9 @@ test.describe('Search page', () => {
         await expect(page).toHaveURL(
             '/sok?searchTerm=Some search query that has no matches'
         )
-        await expect(page.getByText('Hittade inga resultat')).toHaveCount(1)
+        await expect(
+            page.getByText('Hittade inga resultat').first()
+        ).toHaveCount(1)
     })
 
     test('finds multiple matches when search matches multiple', async ({
