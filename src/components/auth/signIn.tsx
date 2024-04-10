@@ -15,6 +15,8 @@ import { signInSchema } from '@/types/zod'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import * as api from '@/adapters/api'
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
 export default function SignIn() {
     const router = useRouter()
@@ -74,9 +76,21 @@ export default function SignIn() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">
-                    <EnvelopeClosedIcon className="mr-2" /> Logga in med mejl
-                </Button>
+                <div className="flex flex-col items-center gap-4">
+                    <Button type="submit">
+                        <EnvelopeClosedIcon className="mr-2" /> Logga in med
+                        mejl
+                    </Button>
+                    <Button className="sm:hidden" type="button" variant="link">
+                        <Link
+                            href="/skapa-konto"
+                            className="flex items-center gap-1"
+                        >
+                            Skapa ett konto
+                            <ChevronRight />
+                        </Link>
+                    </Button>
+                </div>
             </form>
         </Form>
     )
