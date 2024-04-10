@@ -9,10 +9,15 @@ import { Button } from './button'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
 import SearchBar from '../searchBar'
+import { Avatar, AvatarFallback } from './avatar'
+import { getInitials } from '@/lib/utils'
+import { z } from 'zod'
 
 export default function Header({ usersName }: { usersName?: string }) {
+    let userName = ''
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     const pathname = usePathname()
+    if (z.string().safeParse(usersName)) userName = usersName as string
     switch (pathname) {
         case '/logga-in':
             return (
@@ -72,18 +77,29 @@ export default function Header({ usersName }: { usersName?: string }) {
                                 Kungsbacka dataportal
                             </Typography>
                         </Link>
-                        <div className="flex items-center justify-end font-semibold max-sm:sr-only [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
-                            <Link href={'/profile'}>{usersName}</Link>
+                        <div className="flex gap-6">
+                            <Button
+                                className="w-10 p-2"
+                                variant={'outline'}
+                                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                            >
+                                <Search />
+                            </Button>
+                            <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
+                                <Link href={'/profile'}>
+                                    <span className="max-sm:sr-only">
+                                        {usersName}
+                                    </span>
+                                    <Avatar>
+                                        <AvatarFallback>
+                                            {getInitials(userName)}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </Link>
+                            </div>
                         </div>
-                        <Button
-                            className="w-10 p-2"
-                            variant={'outline'}
-                            onClick={() => setIsSearchOpen(!isSearchOpen)}
-                        >
-                            <Search />
-                        </Button>
                     </header>
-                    <div className="absolute left-0 top-15 flex w-full justify-center sm:hidden">
+                    <div className="top-15 absolute left-0 flex w-full justify-center bg-white sm:hidden">
                         {isSearchOpen && <SearchBar />}
                     </div>
                 </>
