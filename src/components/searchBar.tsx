@@ -127,11 +127,11 @@ export default function SearchBar({
     })
 
     return (
-        <>
+        <search>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    className="relative z-50 flex w-fit flex-col items-start max-sm:w-full max-sm:px-4 max-sm:mt-1"
+                    className="relative z-50 flex w-fit flex-col items-start max-sm:mt-1 max-sm:w-full max-sm:px-4"
                     onChange={() => setSearchTerm(form.getValues('searchTerm'))}
                 >
                     <div className="mb-[6px] flex max-w-[432px] gap-2 max-sm:w-full">
@@ -142,6 +142,7 @@ export default function SearchBar({
                                 <FormItem className="max-sm:w-full">
                                     <FormControl>
                                         <Input
+                                            type="search"
                                             className="w-[384px] max-sm:w-full"
                                             placeholder="T.ex. Grillplatser"
                                             {...field}
@@ -203,6 +204,6 @@ export default function SearchBar({
                     </FormDescription>
                 </form>
             </Form>
-        </>
+        </search>
     )
 }

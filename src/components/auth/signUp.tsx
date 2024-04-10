@@ -52,7 +52,11 @@ export default function SignUp() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(submit)}
+                className="space-y-8"
+                method="post"
+            >
                 <FormField
                     control={form.control}
                     name="email"
@@ -60,7 +64,11 @@ export default function SignUp() {
                         <FormItem>
                             <FormLabel>Mail</FormLabel>
                             <FormControl>
-                                <Input placeholder="Mail" {...field} />
+                                <Input
+                                    type="email"
+                                    placeholder="Mail"
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

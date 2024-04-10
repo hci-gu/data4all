@@ -37,7 +37,11 @@ export default function SignIn() {
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(submit)}
+                method="post"
+                className="space-y-8"
+            >
                 <FormField
                     control={form.control}
                     name="email"
@@ -45,7 +49,11 @@ export default function SignIn() {
                         <FormItem>
                             <FormLabel>Mail</FormLabel>
                             <FormControl>
-                                <Input placeholder="Mail" {...field} />
+                                <Input
+                                    type="email"
+                                    placeholder="Mail"
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -76,7 +84,7 @@ export default function SignIn() {
                         </FormItem>
                     )}
                 />
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-4 sm:items-start">
                     <Button type="submit">
                         <EnvelopeClosedIcon className="mr-2" /> Logga in med
                         mejl
