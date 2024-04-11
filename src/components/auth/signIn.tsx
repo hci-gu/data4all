@@ -40,13 +40,13 @@ export default function SignIn() {
             <form
                 onSubmit={form.handleSubmit(submit)}
                 method="post"
-                className="space-y-8"
+                className="space-y-4"
             >
                 <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem >
                             <FormLabel>Mail</FormLabel>
                             <FormControl>
                                 <Input

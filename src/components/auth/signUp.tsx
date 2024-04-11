@@ -54,7 +54,7 @@ export default function SignUp() {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(submit)}
-                className="space-y-8"
+                className="space-y-4"
                 method="post"
             >
                 <FormField
