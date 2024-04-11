@@ -11,14 +11,14 @@ export default function SearchResults({
 }) {
     return (
         <>
-            <div className="mt-8 grid w-full max-w-[1220px] grid-cols-2 gap-8 max-sm:flex max-sm:flex-col">
+            <div className="mt-8 grid w-full max-w-[1220px] grid-cols-2 gap-8 max-sm:mt-0 max-sm:flex max-sm:flex-col">
                 <div className="flex flex-col gap-[10px] max-sm:hidden">
                     <div className="flex flex-col">
                         <Typography level="H3">Dataset</Typography>
                         <p>resultat</p>
                     </div>
                     {records.length > 0 ? (
-                        <ul className='flex flex-col gap-[10px]'>
+                        <ul className="flex flex-col gap-[10px]">
                             {records.map((dataset) => {
                                 return (
                                     <li key={dataset.id}>
@@ -39,7 +39,7 @@ export default function SearchResults({
                 </div>
                 <Tabs
                     defaultValue="dataset"
-                    className="mt-10 flex w-full flex-col items-center px-4 sm:hidden"
+                    className="flex w-full flex-col items-center px-4 sm:hidden"
                 >
                     <TabsList className="w-full">
                         <div className="flex w-full items-center pr-1">

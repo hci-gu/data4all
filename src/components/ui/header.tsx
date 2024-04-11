@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Box from '../../../public/boxes.png'
 import Logo from '../../../public/logo.svg'
 import { Button } from './button'
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { useState } from 'react'
 import SearchBar from '../searchBar'
 import { Avatar, AvatarFallback } from './avatar'
@@ -64,7 +64,9 @@ export default function Header({ usersName }: { usersName?: string }) {
         default:
             return (
                 <>
-                    <header className="sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 px-4">
+                    <header
+                        className={`sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 ${!!isSearchOpen ? 'max-sm:justify-evenly' : 'px-4'}`}
+                    >
                         <Link
                             href={'/'}
                             className="flex items-center gap-4 [&>div]:hidden"
@@ -77,34 +79,44 @@ export default function Header({ usersName }: { usersName?: string }) {
                                 Kungsbacka dataportal
                             </Typography>
                         </Link>
-                        <div className="flex gap-6">
-                            <Button
-                                className="w-10 p-2 sm:hidden"
-                                variant={'outline'}
-                                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                            >
-                                <Search />
-                            </Button>
-                            <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
-                                <Link
-                                    href={'/profile'}
-                                    className="flex items-center justify-center gap-2"
+                        {!isSearchOpen ? (
+                            <div className="flex gap-6">
+                                <Button
+                                    className="w-10 p-2 sm:hidden"
+                                    variant={'outline'}
+                                    onClick={() => setIsSearchOpen(true)}
                                 >
-                                    <span className="max-sm:sr-only">
-                                        {usersName}
-                                    </span>
-                                    <Avatar>
-                                        <AvatarFallback>
-                                            {getInitials(userName)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </Link>
+                                    <Search />
+                                </Button>
+                                <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
+                                    <Link
+                                        href={'/profile'}
+                                        className="flex items-center justify-center gap-2"
+                                    >
+                                        <span className="max-sm:sr-only">
+                                            {usersName}
+                                        </span>
+                                        <Avatar>
+                                            <AvatarFallback>
+                                                {getInitials(userName)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="flex items-center gap-2 bg-white sm:hidden">
+                                <SearchBar />
+                                <Button
+                                    className="w-10 p-2 sm:hidden"
+                                    variant={'ghost'}
+                                    onClick={() => setIsSearchOpen(false)}
+                                >
+                                    <X />
+                                </Button>
+                            </div>
+                        )}
                     </header>
-                    <div className="top-15 absolute left-0 flex w-full justify-center bg-white sm:hidden">
-                        {isSearchOpen && <SearchBar />}
-                    </div>
                 </>
             )
     }
