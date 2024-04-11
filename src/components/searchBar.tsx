@@ -8,7 +8,6 @@ import { z } from 'zod'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
 } from './ui/form'
@@ -201,9 +200,6 @@ export default function SearchBar({
                             )}
                         </div>
                     )}
-                    {/* <FormDescription>
-                        Du kan söka på titlar, beskrivning eller taggar.
-                    </FormDescription> */}
                 </form>
             </Form>
         </search>

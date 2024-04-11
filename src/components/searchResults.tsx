@@ -1,8 +1,8 @@
-import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
+import {  datasetWithRelationsSchema } from '@/types/zod'
 import Typography from './ui/Typography'
 import DatasetCard from './datasetCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Settings, Settings2 } from 'lucide-react'
+import {  Settings2 } from 'lucide-react'
 
 export default function SearchResults({
     records,
