@@ -11,7 +11,7 @@ import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 pb.autoCancellation(false)
 
-const baseURL = 'http://localhost:3000'
+const baseURL = env.NEXT_PUBLIC_API
 
 const apiUrl = (endpoint: string) => `${baseURL}/api/${endpoint}`
 const handleResponse = async (Response: Response) => {
