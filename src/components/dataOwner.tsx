@@ -26,6 +26,8 @@ import { Search } from 'lucide-react'
 import { useState } from 'react'
 
 import SuggestDataOwner from './dataset/suggestDataOwner'
+import { getUsers } from '@/adapters/api'
+import { ScrollArea } from './ui/scroll-area'
 
 export default function DataOwner({
     user,
@@ -33,10 +35,23 @@ export default function DataOwner({
     dataset,
 }: {
     user: AuthorizedUserSchema | null
-    signInUser: AuthorizedUserSchema 
+    signInUser: AuthorizedUserSchema
     dataset: datasetSchema
 }) {
-    const [users, setUsers] = useState<AuthorizedUserSchema[]>([
+    const recommendedUsers: AuthorizedUserSchema[] = [
+        {
+            collectionId: '_pb_users_auth_',
+            collectionName: 'users',
+            created: '2024-03-18 12:56:08.789Z',
+            email: 'Sebastian.Andreasson@kungsbacka.se',
+            emailVisibility: true,
+            id: '5sufjyr2vdad3s0',
+            name: 'Sebastian Andreasson',
+            role: 'Admin',
+            updated: '2024-03-18 12:56:08.789Z',
+            username: 'users36283',
+            verified: false,
+        },
         {
             collectionId: '_pb_users_auth_',
             collectionName: 'users',
@@ -73,15 +88,16 @@ export default function DataOwner({
             emailVisibility: true,
             id: '0zfiwpwiv1myhrc',
             name: 'Josef',
-            role: 'Admin',
+            role: 'User',
             updated: '2024-04-11 09:14:09.924Z',
             username: 'users48961',
             verified: false,
         },
-    ])
+    ]
+    const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
 
     const formSchema = z.object({
-        dataset: z.string().min(1, 'Sökningen måste innehålla minst 1 tecken'),
+        dataset: z.string(),
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -92,7 +108,12 @@ export default function DataOwner({
     })
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        console.log(data)
+        const users = await getUsers(data.dataset)
+        setUsers(users)
+
+        if (data.dataset === '') {
+            setUsers(recommendedUsers)
+        }
     }
 
     if (!user) {
@@ -115,9 +136,10 @@ export default function DataOwner({
                                     control={form.control}
                                     name="dataset"
                                     render={({ field }) => (
-                                        <FormItem>
+                                        <FormItem className="w-full">
                                             <FormControl>
                                                 <Input
+                                                    type="search"
                                                     placeholder="Sök efter användare"
                                                     {...field}
                                                 />
@@ -129,7 +151,7 @@ export default function DataOwner({
                                 <Button
                                     type="submit"
                                     variant={'outline'}
-                                    className="w-10 p-2 sr-only"
+                                    className="sr-only w-10 p-2"
                                 >
                                     Sök
                                     {/* <Search /> */}
@@ -139,16 +161,21 @@ export default function DataOwner({
 
                         <p className="text-sm font-bold">Relevanta användare</p>
                         <ul className="flex flex-col gap-4">
-                            {users &&
-                                users.map((user, index) => (
-                                    <li key={index}>
-                                        <SuggestDataOwner
-                                            user={user}
-                                            signInUser={signInUser}
-                                            dataset={dataset}
-                                        />
-                                    </li>
-                                ))}
+                            <ScrollArea className="h-48">
+                                {users &&
+                                    users.map((user, index) => (
+                                        <li key={index}>
+                                            <SuggestDataOwner
+                                                user={user}
+                                                signInUser={signInUser}
+                                                dataset={dataset}
+                                            />
+                                        </li>
+                                    ))}
+                                {users.length === 0 && (
+                                    <p>Inga användare hittades</p>
+                                )}
+                            </ScrollArea>
                         </ul>
                     </PopoverContent>
                 </Popover>

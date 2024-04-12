@@ -6,6 +6,7 @@ import {
     EventSchema,
     datasetSchema,
     datasetWithRelationsSchema,
+    AuthorizedUserSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -67,6 +68,12 @@ export const removeUser = async (userId: string): Promise<void> => {
     apiRequest(apiUrl('auth/removeAccount'), 'DELETE', {
         id: userId,
     })
+}
+
+export const getUsers = async (
+    userName: string
+): Promise<AuthorizedUserSchema[]> => {
+    return await apiRequest(apiUrl(`auth?name=${userName}`), 'GET')
 }
 
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
