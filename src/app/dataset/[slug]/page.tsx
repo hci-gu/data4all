@@ -13,7 +13,7 @@ import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
 import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import { stringWithHyphen } from '@/lib/utils'
+import { getEventWithUserAccepted, stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
 import Image from 'next/image'
@@ -27,13 +27,12 @@ export default async function Page({
     params: { slug: string }
 }) {
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
-    const user: UserSchema = {
-        name: 'Sebastian Andreasson',
-        role: 'Admin',
-    }
 
     const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
     const events = await api.getEvents(dataset.id)
+
+    const EventWithUserAccepted = getEventWithUserAccepted(events)
+    const dataOwnerUser: AuthorizedUserSchema | null = EventWithUserAccepted && EventWithUserAccepted.user  
 
     return (
         <main className="grid items-stretch gap-9 px-4 py-8 sm:px-28 sm:py-9 lg:grid-cols-[1fr_auto_1fr]">
@@ -61,7 +60,11 @@ export default async function Page({
                 <Typography level="H1">{dataset.title}</Typography>
                 <p className="max-w-prose text-sm">{dataset.description}</p>
                 <section aria-labelledby="DataOwner">
-                    <DataOwner user={user} />
+                    <DataOwner
+                        user={dataOwnerUser}
+                        signInUser={authorizedUser}
+                        dataset={dataset}
+                    />
                 </section>
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Taggar</Typography>
@@ -121,7 +124,7 @@ export default async function Page({
                     <Datasets datasets={dataset.relatedDatasets} />
                 </section>
             </div>
-            <Separator orientation="horizontal" />
+            <Separator orientation="vertical" />
             {
                 <ActivityFlow
                     user={authorizedUser}

@@ -1,37 +1,99 @@
+'use client'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { UserPlus } from 'lucide-react'
 import User from './user'
 
-import { UserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, UserSchema, datasetSchema } from '@/types/zod'
+import { z } from 'zod'
+import { Button } from './ui/button'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Search } from 'lucide-react'
+import { useState } from 'react'
 
-export default function DataOwner({ user }: { user?: UserSchema }) {
-    const users: UserSchema[] = [
+import SuggestDataOwner from './dataset/suggestDataOwner'
+
+export default function DataOwner({
+    user,
+    signInUser,
+    dataset,
+}: {
+    user: AuthorizedUserSchema | null
+    signInUser: AuthorizedUserSchema 
+    dataset: datasetSchema
+}) {
+    const [users, setUsers] = useState<AuthorizedUserSchema[]>([
         {
-            name: 'Sebastian Andreasson',
+            collectionId: '_pb_users_auth_',
+            collectionName: 'users',
+            created: '2024-03-18 12:56:08.789Z',
+            email: 'styris.n@gmail.com',
+            emailVisibility: true,
+            id: '5sufjyr2vdad3s0',
+            name: 'styris.n@gmail.com',
+            role: 'User',
+            updated: '2024-03-18 12:56:08.789Z',
+            username: 'users36283',
+            verified: false,
+        },
+        {
+            avatar: '',
+            collectionId: '_pb_users_auth_',
+            collectionName: 'users',
+            created: '2024-04-02 12:59:18.094Z',
+            email: 'exampel@kungsbacka.se',
+            emailVisibility: true,
+            id: '0zfiwpwiv1myhrc',
+            name: 'exampel',
+            role: 'User',
+            updated: '2024-04-11 09:14:09.924Z',
+            username: 'users48961',
+            verified: false,
+        },
+        {
+            avatar: '',
+            collectionId: '_pb_users_auth_',
+            collectionName: 'users',
+            created: '2024-04-02 12:59:18.094Z',
+            email: 'Josef@kungsbacka.se',
+            emailVisibility: true,
+            id: '0zfiwpwiv1myhrc',
+            name: 'Josef',
             role: 'Admin',
+            updated: '2024-04-11 09:14:09.924Z',
+            username: 'users48961',
+            verified: false,
         },
-        {
-            name: 'Styrbjörn Nordberg',
-            role: 'User',
+    ])
+
+    const formSchema = z.object({
+        dataset: z.string().min(1, 'Sökningen måste innehålla minst 1 tecken'),
+    })
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            dataset: '',
         },
-        {
-            name: 'Josef Forkman',
-            role: 'User',
-        },
-    ]
+    })
+
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        console.log(data)
+    }
 
     if (!user) {
         return (
@@ -44,34 +106,46 @@ export default function DataOwner({ user }: { user?: UserSchema }) {
                         <UserPlus /> Föreslå dataägare
                     </PopoverTrigger>
                     <PopoverContent className="flex flex-col gap-2">
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Sök efter användare" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Användare</SelectLabel>
-                                    {users &&
-                                        users.map((user, index) => (
-                                            <SelectItem
-                                                key={index}
-                                                value={user.name.replaceAll(
-                                                    ' ',
-                                                    ''
-                                                )}
-                                            >
-                                                {user.name}
-                                            </SelectItem>
-                                        ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <Form {...form}>
+                            <form
+                                onSubmit={form.handleSubmit(onSubmit)}
+                                className="flex gap-2"
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="dataset"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Sök efter användare"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button
+                                    type="submit"
+                                    variant={'outline'}
+                                    className="w-10 p-2"
+                                >
+                                    <Search />
+                                </Button>
+                            </form>
+                        </Form>
+
                         <p className="text-sm font-bold">Relevanta användare</p>
                         <ul className="flex flex-col gap-4">
                             {users &&
                                 users.map((user, index) => (
                                     <li key={index}>
-                                        <User user={user} />
+                                        <SuggestDataOwner
+                                            user={user}
+                                            signInUser={signInUser}
+                                            dataset={dataset}
+                                        />
                                     </li>
                                 ))}
                         </ul>

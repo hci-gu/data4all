@@ -27,11 +27,11 @@ export default function User({
         )
     }
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex gap-4">
             <Avatar>
                 <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col">
+            <div className="flex text-start flex-col">
                 <p>
                     <b className="text-lg">{user.name}</b>
                 </p>

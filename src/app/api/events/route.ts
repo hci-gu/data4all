@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
         const record = await pb
             .collection('events')
-            .create({ ...data, user: data.user.id }, { expand: 'user,subject' })
+            .create({ ...data, user: data.user.id, subject: data.subject?.id }, { expand: 'user,subject' })
 
         return NextResponse.json(
             { message: 'success', body: record },
