@@ -129,9 +129,10 @@ export default function DataOwner({
                                 <Button
                                     type="submit"
                                     variant={'outline'}
-                                    className="w-10 p-2"
+                                    className="w-10 p-2 sr-only"
                                 >
-                                    <Search />
+                                    Sök
+                                    {/* <Search /> */}
                                 </Button>
                             </form>
                         </Form>
