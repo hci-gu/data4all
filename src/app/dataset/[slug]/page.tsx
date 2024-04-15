@@ -17,6 +17,7 @@ import { createTag, stringWithHyphen } from '@/lib/utils'
 import { ZodError } from 'zod'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
+import { cookies } from 'next/headers'
 
 export default async function Page({
     params: { slug },
@@ -24,13 +25,17 @@ export default async function Page({
     params: { slug: string }
 }) {
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
+    const authCookie = cookies().get('PBAuth')?.value
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
 
-    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
-    const events = await api.getEvents(dataset.id)
+    const dataset = await getDataset(
+        stringWithHyphen(decodeURI(slug)),
+        authCookie as string
+    )
+    const events = await api.getEvents(dataset.id, authCookie as string)
 
     return (
         <main className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-9 px-28 py-9">

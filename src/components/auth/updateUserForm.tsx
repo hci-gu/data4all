@@ -27,8 +27,10 @@ import { Loader2 } from 'lucide-react'
 
 export default function UpdateUserForm({
     user,
+    authCookie,
 }: {
     user: AuthorizedUserSchema
+    authCookie: string
 }) {
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
@@ -49,7 +51,7 @@ export default function UpdateUserForm({
     const submit = (value: updateUserSchema) => {
         setIsClicked(true)
         const request = Promise.allSettled([
-            updateUser(value, user.id),
+            updateUser(value, user.id, authCookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then(() => {

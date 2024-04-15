@@ -8,6 +8,12 @@ import { z } from 'zod'
 export async function PUT(request: Request) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     try {
+        const cookie = request.headers.get('auth')
+        pb.authStore.loadFromCookie(cookie as string)
+
+        if (!pb.authStore.isValid) {
+            throw 'forbidden'
+        }
         const data = await request.json()
         const formData = updateUserSchema.parse(data?.formData)
         const userId = z.string().parse(data?.id)
@@ -36,5 +42,12 @@ export async function PUT(request: Request) {
                 { status: 400 }
             )
         }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
+            )
+        }
+        return NextResponse.json({ message: 'Något gick fel' }, { status: 500 })
     }
 }

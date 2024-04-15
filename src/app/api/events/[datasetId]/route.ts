@@ -10,6 +10,12 @@ export async function GET(
     try {
         const { params } = context
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+        const cookie = request.headers.get('auth')
+        pb.authStore.loadFromCookie(cookie as string)
+
+        if (!pb.authStore.isValid) {
+            throw 'forbidden'
+        }
 
         const records = await pb
             .collection<EventSchema>('events')
@@ -27,6 +33,12 @@ export async function GET(
             return NextResponse.json(
                 { message: 'misslyckades att hämta event' },
                 { status: 400 }
+            )
+        }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
             )
         }
         return NextResponse.json(

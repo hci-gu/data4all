@@ -26,6 +26,7 @@ const handleResponse = async (Response: Response) => {
 const apiRequest = async (
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    authCookie?: string,
     body?: any
 ) => {
     try {
@@ -33,6 +34,7 @@ const apiRequest = async (
             method,
             headers: {
                 'Content-Type': 'application/json',
+                auth: `${authCookie}`,
             },
             cache: 'no-store',
             body: body ? JSON.stringify(body) : undefined,
@@ -46,25 +48,29 @@ const apiRequest = async (
 }
 
 export const signUp = async (user: signUpSchema): Promise<void> =>
-    apiRequest(apiUrl('auth/sign-up'), 'POST', user)
+    apiRequest(apiUrl('auth/sign-up'), 'POST', undefined, user)
 
 export const signIn = async (user: signInSchema): Promise<void> =>
-    apiRequest(apiUrl('auth/sign-in'), 'POST', user)
+    apiRequest(apiUrl('auth/sign-in'), 'POST', undefined, user)
 
 export const signOut = async (): Promise<void> =>
     apiRequest(apiUrl('auth/sign-out'), 'DELETE')
 
 export const updateUser = async (
     formData: updateUserSchema,
-    userId: string
+    userId: string,
+    authCookie: string
 ): Promise<void> =>
-    apiRequest(apiUrl('auth/updateAccount'), 'PUT', {
+    apiRequest(apiUrl('auth/updateAccount'), 'PUT', authCookie, {
         id: userId,
         formData,
     })
 
-export const removeUser = async (userId: string): Promise<void> => {
-    apiRequest(apiUrl('auth/removeAccount'), 'DELETE', {
+export const removeUser = async (
+    userId: string,
+    authCookie: string
+): Promise<void> => {
+    apiRequest(apiUrl('auth/removeAccount'), 'DELETE', authCookie, {
         id: userId,
     })
 }
@@ -75,10 +81,11 @@ export const getAllDatasets = async () => {
         .array()
         .parse(await apiRequest(apiUrl('datasets'), 'GET'))
 }
-export const getDatasets = async (datasetTitle: string) => {
+export const getDatasets = async (datasetTitle: string, authCookie: string) => {
     const datasets = await apiRequest(
         apiUrl(`datasets?title=${datasetTitle}`),
-        'GET'
+        'GET',
+        authCookie
     )
 
     let cleanDatasets = []
@@ -89,26 +96,39 @@ export const getDatasets = async (datasetTitle: string) => {
 
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
-export const getDataset = async (datasetTitle: string) => {
+export const getDataset = async (datasetTitle: string, authCookie: string) => {
     const dataset = await apiRequest(
         apiUrl(`datasets/${encodeURI(datasetTitle)}`),
-        'GET'
+        'GET',
+        authCookie
     )
 
     const cleanDataset = responseDatasetCleanup(dataset)
 
     return datasetWithRelationsSchema.parse(cleanDataset)
 }
-export const getEvents = async (datasetId: string) => {
-    const events = await apiRequest(apiUrl(`events/${datasetId}`), 'GET')
+export const getEvents = async (datasetId: string, authCookie: string) => {
+    const events = await apiRequest(
+        apiUrl(`events/${datasetId}`),
+        'GET',
+        authCookie
+    )
     return EventSchema.array().parse(events.items)
 }
-export const createEvent = async (event: EventSchema) => {
-    return EventSchema.parse(await apiRequest(apiUrl(`events`), 'POST', event))
+export const createEvent = async (event: EventSchema, authCookie: string) => {
+    return EventSchema.parse(
+        await apiRequest(apiUrl(`events`), 'POST', '', event)
+    )
 }
-export const getDatasetFromUser = async (userId: string) => {
-
-    const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
+export const getDatasetFromUser = async (
+    userId: string,
+    authCookie: string
+) => {
+    const datasets = await apiRequest(
+        apiUrl(`datasets/user/${userId}`),
+        'GET',
+        authCookie
+    )
 
     let cleanDatasets = []
     for (let i = 0; datasets.length > i; i++) {

@@ -6,6 +6,12 @@ const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 export async function GET(request: NextRequest) {
     try {
         const title = request.nextUrl.searchParams.get('title') ?? ''
+        const cookie = request.headers.get('auth')
+        pb.authStore.loadFromCookie(cookie as string)
+
+        if (!pb.authStore.isValid) {
+            throw 'forbidden'
+        }
 
         const records = await pb.collection('dataset').getList(1, 25, {
             sort: '-created',
@@ -26,6 +32,12 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(
                 { message: 'misslyckades att hämta dataset' },
                 { status: 400 }
+            )
+        }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
             )
         }
         return NextResponse.json({ message: 'Något gick fel' }, { status: 500 })
