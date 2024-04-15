@@ -11,6 +11,8 @@ import {
 import User from '../user'
 import { AuthorizedUserSchema, EventSchema, datasetSchema } from '@/types/zod'
 import { createEvent } from '@/adapters/api'
+import { useContext } from 'react'
+import { EventContext } from '@/lib/context/eventContext'
 export default function SuggestDataOwner({
     user,
     dataset,
@@ -21,6 +23,13 @@ export default function SuggestDataOwner({
     dataset: datasetSchema
 }) {
     if (!user) return
+
+    const events = useContext(EventContext)
+
+    if (!events) {
+        throw new Error('EventContext is not provided')
+    }
+
     const onSubmit = async () => {
         const content =
             signInUser?.id === user.id
@@ -36,7 +45,7 @@ export default function SuggestDataOwner({
         }
 
         const respond = await createEvent(data)
-        console.log(respond)
+        events.setEvents((prev) => [respond, ...prev])
     }
 
     return (
