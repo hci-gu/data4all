@@ -125,10 +125,6 @@ export default function DataOwner({
         setTimeout(() => setIsFocused(false), time - 25)
     }
 
-    const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        setUsers(await getUsers(data.dataset))
-    }
-
     if (!user) {
         return (
             <>
@@ -142,7 +138,6 @@ export default function DataOwner({
                     <PopoverContent className="flex flex-col gap-2">
                         <Form {...form}>
                             <form
-                                onSubmit={form.handleSubmit(onSubmit)}
                                 onChange={() =>
                                     setSearchTerm(form.getValues('dataset'))
                                 }
