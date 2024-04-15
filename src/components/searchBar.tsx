@@ -19,26 +19,11 @@ import { useRouter } from 'next/navigation'
 import * as api from '@/adapters/api'
 import { datasetSchema } from '@/types/zod'
 import Link from 'next/link'
+import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
 const searchSchema = z.object({
     searchTerm: z.string().min(1),
 })
 type searchSchema = z.infer<typeof searchSchema>
-
-const useDebouncedValue = (inputValue: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(inputValue)
-
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(inputValue)
-        }, delay)
-
-        return () => {
-            clearTimeout(handler)
-        }
-    }, [inputValue, delay])
-
-    return debouncedValue
-}
 
 const Highlight = ({
     text,
@@ -101,8 +86,6 @@ export default function SearchBar({
     }
 
     useEffect(() => {
-        console.log('asd')
-
         autoComplete()
     }, [debouncedSearchTerm])
 

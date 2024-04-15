@@ -7,27 +7,25 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { UserPlus } from 'lucide-react'
 import User from './user'
 
-import { AuthorizedUserSchema, UserSchema, datasetSchema } from '@/types/zod'
-import { z } from 'zod'
+import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
+import { set, z } from 'zod'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Search } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import SuggestDataOwner from './dataset/suggestDataOwner'
 import { getUsers } from '@/adapters/api'
 import { ScrollArea } from './ui/scroll-area'
+import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
 
 export default function DataOwner({
     user,
@@ -95,6 +93,10 @@ export default function DataOwner({
         },
     ]
     const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
+    const [searchTerm, setSearchTerm] = useState('')
+    const [isFocused, setIsFocused] = useState(false)
+    const time = 250
+    const debouncedSearchTerm = useDebouncedValue(searchTerm, time)
 
     const formSchema = z.object({
         dataset: z.string(),
@@ -107,13 +109,24 @@ export default function DataOwner({
         },
     })
 
-    const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        const users = await getUsers(data.dataset)
-        setUsers(users)
-
-        if (data.dataset === '') {
-            setUsers(recommendedUsers)
+    const autoComplete = async () => {
+        if (isFocused) {
+            debouncedSearchTerm
+                ? setUsers(await getUsers(debouncedSearchTerm))
+                : setUsers(recommendedUsers)
         }
+    }
+
+    useEffect(() => {
+        autoComplete()
+    }, [debouncedSearchTerm])
+
+    const slowClose = () => {
+        setTimeout(() => setIsFocused(false), time - 25)
+    }
+
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        setUsers(await getUsers(data.dataset))
     }
 
     if (!user) {
@@ -130,6 +143,9 @@ export default function DataOwner({
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
+                                onChange={() =>
+                                    setSearchTerm(form.getValues('dataset'))
+                                }
                                 className="flex gap-2"
                             >
                                 <FormField
@@ -142,6 +158,10 @@ export default function DataOwner({
                                                     type="search"
                                                     placeholder="Sök efter användare"
                                                     {...field}
+                                                    onFocus={() => {
+                                                        setIsFocused(true)
+                                                    }}
+                                                    onBlur={() => slowClose()}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -154,7 +174,6 @@ export default function DataOwner({
                                     className="sr-only w-10 p-2"
                                 >
                                     Sök
-                                    {/* <Search /> */}
                                 </Button>
                             </form>
                         </Form>

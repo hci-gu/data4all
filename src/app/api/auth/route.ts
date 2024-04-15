@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
-                { message: 'misslyckades att hämta dataset' },
+                { message: 'misslyckades att hämta användare' },
                 { status: 400 }
             )
         }
