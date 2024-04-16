@@ -10,7 +10,11 @@ async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
     return records
 }
 
-export async function datasetForTitle(datasetTitle: string) {
+export async function datasetForTitle(
+    datasetTitle: string,
+    authCookie: string
+) {
+    pb.authStore.loadFromCookie(authCookie as string)
     const records = await pb
         .collection<datasetSchema>('dataset')
         .getFirstListItem(`title="${datasetTitle}"`, {
@@ -19,8 +23,11 @@ export async function datasetForTitle(datasetTitle: string) {
 
     return records
 }
-export async function datasetForSlug(datasetSlug: string) {
+export async function datasetForSlug(datasetSlug: string, authCookie: string) {
+    pb.authStore.loadFromCookie(authCookie as string)
     datasetSlug = stringWithHyphen(datasetSlug)
+    console.log(datasetSlug)
+
     const records = await pb
         .collection<datasetWithRelationsSchema>('dataset')
         .getFirstListItem(`slug="${datasetSlug}"`, {
@@ -29,7 +36,8 @@ export async function datasetForSlug(datasetSlug: string) {
 
     return records
 }
-export async function datasetsForUserId(userId: string) {
+export async function datasetsForUserId(userId: string, authCookie: string) {
+    pb.authStore.loadFromCookie(authCookie as string)
     const userEvents = await pb.collection('events').getList(1, 50, {
         filter: `user = "${userId}"`,
     })

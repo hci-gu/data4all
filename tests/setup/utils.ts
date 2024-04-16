@@ -29,7 +29,8 @@ export const createUser = async () => {
 }
 
 export const createDataset = async (titleValue: string) => {
-    const title = titleValue
+await pb.admins.authWithPassword('admin@email.com', 'password123')
+const title = titleValue
     const description = 'test description'
     const slug = stringWithHyphen(title)
     const dataset = await pb.collection<datasetSchema>('dataset').create({
@@ -44,7 +45,8 @@ export const createDatasetWithRelation = async (
     releatedDataset: datasetSchema[] = [],
     releatedTag: tagSchema[] = []
 ) => {
-    const title = titleValue
+await pb.admins.authWithPassword('admin@email.com', 'password123')
+const title = titleValue
     const description = 'test description'
     const slug = stringWithHyphen(title)
     const related_datasets = releatedDataset?.map((dataset) => dataset.id) ?? []
@@ -63,7 +65,8 @@ export const createDatasetWithRelation = async (
 }
 
 export const createEvent = async (datasetId: string, userId: string) => {
-    const type = 'comment'
+await pb.admins.authWithPassword('admin@email.com', 'password123')
+const type = 'comment'
     const event = await pb.collection<EventSchema>('events').create({
         dataset: datasetId,
         types: 'comment',

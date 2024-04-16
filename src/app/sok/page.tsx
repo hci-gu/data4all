@@ -14,7 +14,11 @@ export default async function page({
 }) {
     const authCookie = cookies().get('PBAuth')?.value
     const searchTerm = searchParams?.searchTerm
-    const datasets = await api.getDatasets(searchTerm as string, authCookie as string)
+    api.pb.authStore.loadFromCookie(authCookie as string)
+    const datasets = await api.getDatasets(
+        searchTerm as string,
+        authCookie as string
+    )
 
     return (
         <>

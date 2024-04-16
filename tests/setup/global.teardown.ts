@@ -3,6 +3,14 @@ import PocketBase from 'pocketbase'
 const pb = new PocketBase('http://localhost:8090')
 
 setup('setup', async () => {
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
+    const events = await pb.collection('events').getFullList()
+
+    for (const event of events) {
+        if (event.content === 'test')
+            await pb.collection('events').delete(event.id)
+    }
+
     const users = await pb.collection('users').getFullList()
 
     for (const user of users) {
@@ -28,12 +36,5 @@ setup('setup', async () => {
         if (dataset.title.includes('test')) {
             await pb.collection('dataset').delete(dataset.id)
         }
-    }
-
-    const events = await pb.collection('events').getFullList()
-
-    for (const event of events) {
-        if (event.content === 'test')
-            await pb.collection('events').delete(event.id)
     }
 })

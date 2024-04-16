@@ -12,12 +12,15 @@ export async function GET(
         const { params } = context
         const cookie = req.headers.get('auth')
         pb.authStore.loadFromCookie(cookie as string)
-        
+
         if (!pb.authStore.isValid) {
             throw 'forbidden'
         }
-        const records = await utils.datasetsForUserId(params.userId)
-        
+        const records = await utils.datasetsForUserId(
+            params.userId,
+            cookie as string
+        )
+
         return NextResponse.json(
             {
                 message: 'success',

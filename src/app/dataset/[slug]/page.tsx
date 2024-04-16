@@ -30,11 +30,13 @@ export default async function Page({
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
+    console.log('before fetch')
 
     const dataset = await getDataset(
         stringWithHyphen(decodeURI(slug)),
         authCookie as string
     )
+    console.log('after dataset fetch')
     const events = await api.getEvents(dataset.id, authCookie as string)
 
     return (

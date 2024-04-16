@@ -13,7 +13,10 @@ export async function GET(req: Request, context: any) {
         if (!pb.authStore.isValid) {
             throw 'forbidden'
         }
-        const records = await utils.datasetForSlug(params.slug)
+
+        console.log('slug:', params.slug)
+
+        const records = await utils.datasetForSlug(params.slug, cookie as string)
 
         return NextResponse.json(
             {
@@ -24,6 +27,8 @@ export async function GET(req: Request, context: any) {
         )
     } catch (error) {
         if (error instanceof ClientResponseError) {
+            console.log(error)
+
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
                 { message: 'Misslyckades att hämta dataset' },
