@@ -14,7 +14,6 @@ export async function GET(req: Request, context: any) {
             throw 'forbidden'
         }
 
-        console.log('slug:', params.slug)
 
         const records = await utils.datasetForSlug(params.slug, cookie as string)
 
@@ -27,7 +26,6 @@ export async function GET(req: Request, context: any) {
         )
     } catch (error) {
         if (error instanceof ClientResponseError) {
-            console.log(error)
 
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(

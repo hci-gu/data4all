@@ -97,14 +97,12 @@ export const getDatasets = async (datasetTitle: string, authCookie: string) => {
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
 export const getDataset = async (datasetTitle: string, authCookie: string) => {
-    console.log('start of func')
 
     const dataset = await apiRequest(
         apiUrl(`datasets/${encodeURI(datasetTitle)}`),
         'GET',
         authCookie
     )
-    console.log('mid func')
 
     const cleanDataset = responseDatasetCleanup(dataset)
 

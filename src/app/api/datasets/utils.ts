@@ -26,7 +26,6 @@ export async function datasetForTitle(
 export async function datasetForSlug(datasetSlug: string, authCookie: string) {
     pb.authStore.loadFromCookie(authCookie as string)
     datasetSlug = stringWithHyphen(datasetSlug)
-    console.log(datasetSlug)
 
     const records = await pb
         .collection<datasetWithRelationsSchema>('dataset')

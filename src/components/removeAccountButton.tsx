@@ -16,7 +16,6 @@ export default function RemoveAccountButton({ userId, authCookie }: { userId: st
             router.push('/skapa-konto')
         } catch (e) {
             setIsClicked(false)
-            console.log(e)
             toast.error('Något gick fel')
         }
     }

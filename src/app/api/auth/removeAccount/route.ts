@@ -13,14 +13,12 @@ export async function DELETE(request: Request) {
             throw 'forbidden'
         }
         const user = await request.json()
-        console.log(user?.id)
 
         cookies().delete('PBAuth')
         await pb.collection('users').delete(user?.id)
 
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
-        console.log(error)
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
