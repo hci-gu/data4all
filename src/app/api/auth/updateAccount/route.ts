@@ -18,7 +18,8 @@ export async function PUT(request: Request) {
         const formData = updateUserSchema.parse(data?.formData)
         const userId = z.string().parse(data?.id)
 
-        await pb.collection('users').update(userId, formData)
+        const records = await pb.collection('users').update(userId, formData)
+        console.log(records)
 
         const authorizedUser = cookies().get('PBAuth')
         if (!authorizedUser) {
@@ -36,11 +37,13 @@ export async function PUT(request: Request) {
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
         if (error instanceof ClientResponseError) {
+            console.log(error)
+
             // using return as thats what the nextjs docs recommend
-            throw NextResponse.json(
-                { message: 'misslyckades att uppdatera användare' },
-                { status: 400 }
-            )
+            // throw NextResponse.json(
+            //     { message: 'misslyckades att uppdatera användare' },
+            //     { status: 400 }
+            // )
         }
         if (error === 'forbidden') {
             return NextResponse.json(
