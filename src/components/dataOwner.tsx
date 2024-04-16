@@ -16,7 +16,7 @@ import { UserPlus } from 'lucide-react'
 import User from './user'
 
 import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -94,7 +94,6 @@ export default function DataOwner({
     ]
     const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
     const [searchTerm, setSearchTerm] = useState('')
-    const [isFocused, setIsFocused] = useState(false)
     const time = 250
     const debouncedSearchTerm = useDebouncedValue(searchTerm, time)
 
@@ -110,20 +109,17 @@ export default function DataOwner({
     })
 
     const autoComplete = async () => {
-        if (isFocused) {
+        await Promise.allSettled([
             debouncedSearchTerm
                 ? setUsers(await getUsers(debouncedSearchTerm))
-                : setUsers(recommendedUsers)
-        }
+                : setUsers(recommendedUsers),
+            new Promise((resolve) => setTimeout(resolve, time)),
+        ])
     }
 
     useEffect(() => {
         autoComplete()
     }, [debouncedSearchTerm])
-
-    const slowClose = () => {
-        setTimeout(() => setIsFocused(false), time - 25)
-    }
 
     if (!user) {
         return (
@@ -141,6 +137,7 @@ export default function DataOwner({
                                 onChange={() =>
                                     setSearchTerm(form.getValues('dataset'))
                                 }
+                                onSubmit={(event) => event.preventDefault()}
                                 className="flex gap-2"
                             >
                                 <FormField
@@ -153,10 +150,6 @@ export default function DataOwner({
                                                     type="search"
                                                     placeholder="Sök efter användare"
                                                     {...field}
-                                                    onFocus={() => {
-                                                        setIsFocused(true)
-                                                    }}
-                                                    onBlur={() => slowClose()}
                                                 />
                                             </FormControl>
                                             <FormMessage />
