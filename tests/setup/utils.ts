@@ -30,19 +30,6 @@ export const createUser = async () => {
         password,
     }
 }
-export const createByUserName = async (name: string) => {
-    const email = `test.user_${uuid.generate()}@kungsbacka.se`
-    const password = '123456789'
-    const user = await pb.collection('users').create({
-        email,
-        emailVisibility: true,
-        password,
-        passwordConfirm: password,
-        role: 'User',
-        name,
-    })
-    return user
-}
 
 export const createDataset = async (titleValue: string) => {
     const title = titleValue

@@ -6,9 +6,8 @@ import { EventCreateSchema, EventSchema } from '@/types/zod'
 export async function POST(request: NextRequest) {
     try {
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const body = await request.json()
 
-        const data = EventCreateSchema.parse(body)
+        const data = EventCreateSchema.parse(await request.json())
 
         const record = await pb
             .collection('events')
