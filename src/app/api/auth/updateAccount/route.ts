@@ -19,7 +19,6 @@ export async function PUT(request: Request) {
         const userId = z.string().parse(data?.id)
 
         const records = await pb.collection('users').update(userId, formData)
-        console.log(records)
 
         const authorizedUser = cookies().get('PBAuth')
         if (!authorizedUser) {
