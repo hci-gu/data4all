@@ -65,7 +65,7 @@ export default function Header({ usersName }: { usersName?: string }) {
             return (
                 <>
                     <header
-                        className={`sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 ${!!isSearchOpen ? 'max-sm:justify-evenly' : 'px-4'}`}
+                        className={`sticky flex h-[60px] w-full items-center justify-between border-b-2 bg-white border-slate-200 ${!!isSearchOpen ? 'max-sm:justify-evenly' : 'px-4'}`}
                     >
                         <Link
                             href={'/'}
