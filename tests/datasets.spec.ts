@@ -1,5 +1,6 @@
 import test, { expect } from '@playwright/test'
 import {
+    createByUserName,
     createDataset,
     createDatasetWithRelation,
     loggedInUser,
@@ -11,12 +12,18 @@ const searchTerms = [
     'dataset test title related 3',
 ]
 
+const userNames = ['tester user 1', 'tester user 2', 'tester user 3']
+
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async () => {
     const dataset1 = await createDataset(searchTerms[0])
     const dataset2 = await createDataset(searchTerms[1])
     await createDatasetWithRelation(searchTerms[2], [dataset1, dataset2])
+
+    await createByUserName(userNames[0])
+    await createByUserName(userNames[1])
+    await createByUserName(userNames[2])
 })
 
 test.describe('Datasets page', () => {
@@ -57,6 +64,37 @@ test.describe('Datasets page', () => {
             await page.goto(`/dataset/${searchTerms[0]}`)
             await expect(
                 page.getByText('Det finns inga relaterade dataset')
+            ).toBeVisible()
+        })
+        test('can suggested another user', async ({ page }) => {
+            await page.goto(`/dataset/${searchTerms[0]}`)
+            await page.click('text= Föreslå dataägare')
+            await page.fill('input[name="dataset"]', userNames[0])
+
+            await page.getByRole('button', { name: userNames[0] }).click()
+            await page.getByRole('button', { name: 'Godkänn' }).click()
+            await expect(
+                page.getByText('ttester föreslog tester user')
+            ).toBeVisible()
+        })
+        test('can suggested themselves', async ({ page }) => {
+            await page.goto(`/dataset/${searchTerms[0]}`)
+            await page.click('text= Föreslå dataägare')
+            await page.fill('input[name="dataset"]', 'tester')
+
+            await page.getByRole('button', { name: 't tester User' }).first().click()
+            await page.getByRole('button', { name: 'Godkänn' }).click()
+            await expect(
+                page.getByText('ttester föreslog sig själv som dataägare')
+            ).toBeVisible()
+        })
+        test('can suggested non-existent user', async ({ page }) => {
+            await page.goto(`/dataset/${searchTerms[0]}`)
+            await page.click('text= Föreslå dataägare')
+            await page.fill('input[name="dataset"]', 'non-existent user')
+
+            await expect(
+                page.getByText('Inga användare hittades')
             ).toBeVisible()
         })
     })
