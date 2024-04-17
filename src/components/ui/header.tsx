@@ -14,10 +14,10 @@ import { getInitials } from '@/lib/utils'
 import { z } from 'zod'
 
 export default function Header({ usersName }: { usersName?: string }) {
-    let userName = ''
+    // let userName = ''
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     const pathname = usePathname()
-    if (z.string().safeParse(usersName)) userName = usersName as string
+    // if (z.string().safeParse(usersName)) userName = usersName as string
     switch (pathname) {
         case '/logga-in':
             return (
@@ -65,7 +65,7 @@ export default function Header({ usersName }: { usersName?: string }) {
             return (
                 <>
                     <header
-                        className={`sticky flex h-[60px] w-full items-center justify-between border-b-2 bg-white border-slate-200 ${!!isSearchOpen ? 'max-sm:justify-evenly' : 'px-4'}`}
+                        className={`sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 bg-white ${!!isSearchOpen ? 'max-sm:justify-evenly' : 'px-4'}`}
                     >
                         <Link
                             href={'/'}
@@ -96,11 +96,13 @@ export default function Header({ usersName }: { usersName?: string }) {
                                         <span className="max-sm:sr-only">
                                             {usersName}
                                         </span>
-                                        <Avatar>
-                                            <AvatarFallback>
-                                                {getInitials(userName)}
-                                            </AvatarFallback>
-                                        </Avatar>
+                                        {usersName && (
+                                            <Avatar>
+                                                <AvatarFallback>
+                                                    {getInitials(usersName)}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        )}
                                     </Link>
                                 </div>
                             </div>

@@ -5,12 +5,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-} from './ui/form'
+import { Form, FormControl, FormField, FormItem } from './ui/form'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Loader2, Search } from 'lucide-react'
@@ -100,8 +95,6 @@ export default function SearchBar({
     }
 
     useEffect(() => {
-        console.log('asd')
-
         autoComplete()
     }, [debouncedSearchTerm])
 
