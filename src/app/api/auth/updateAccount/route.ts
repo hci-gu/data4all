@@ -37,13 +37,11 @@ export async function PUT(request: Request) {
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
         if (error instanceof ClientResponseError) {
-            console.log(error)
-
             // using return as thats what the nextjs docs recommend
-            // throw NextResponse.json(
-            //     { message: 'misslyckades att uppdatera användare' },
-            //     { status: 400 }
-            // )
+            return NextResponse.json(
+                { message: 'misslyckades att uppdatera användare' },
+                { status: 400 }
+            )
         }
         if (error === 'forbidden') {
             return NextResponse.json(
