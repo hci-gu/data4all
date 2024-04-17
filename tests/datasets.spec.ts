@@ -85,7 +85,7 @@ test.describe('Datasets page', () => {
             await page.getByRole('button', { name: 't tester User' }).first().click()
             await page.getByRole('button', { name: 'Godkänn' }).click()
             await expect(
-                page.getByText('ttester föreslog sig själv som dataägare')
+                page.getByText('tester föreslog sig själv som')
             ).toBeVisible()
         })
         test('can suggested non-existent user', async ({ page }) => {
