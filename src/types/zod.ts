@@ -74,6 +74,10 @@ export const EventSchema = z.object({
     subject: AuthorizedUserSchema.optional(),
 })
 
+export const EventCreateSchema = EventSchema.extend({
+    user: z.string(),
+})
+
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
@@ -84,4 +88,5 @@ export type datasetWithRelationsSchema = z.infer<
 >
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
+export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>

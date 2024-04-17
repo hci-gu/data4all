@@ -7,6 +7,7 @@ import {
     datasetSchema,
     datasetWithRelationsSchema,
     AuthorizedUserSchema,
+    EventCreateSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -116,7 +117,7 @@ export const getEvents = async (datasetId: string) => {
 
     return EventSchema.array().parse(cleanEvent)
 }
-export const createEvent = async (event: EventSchema) => {
+export const createEvent = async (event: EventCreateSchema) => {
     const cleanEvent = responseEventCleanup(
         await apiRequest(apiUrl(`events`), 'POST', event)
     )

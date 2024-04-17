@@ -44,7 +44,7 @@ export default function SuggestDataOwner({
             subject: user,
         }
 
-        const respond = await createEvent(data)
+        const respond = await createEvent({ ...data, user: data.user.id })
         events.setEvents((prev) => [respond, ...prev])
     }
 

@@ -47,7 +47,7 @@ export default function EventForm({
             dataset: datasetId,
             types: 'comment',
         }
-        await createEvent(event)
+        await createEvent({ ...event, user: user.id })
         events?.setEvents((prev) => [event, ...prev])
         form.reset()
     }

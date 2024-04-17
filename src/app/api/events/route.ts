@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
-import { EventSchema } from '@/types/zod'
+import { EventCreateSchema, EventSchema } from '@/types/zod'
 
 export async function POST(request: NextRequest) {
     try {
         const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
         const body = await request.json()
 
-        const data = EventSchema.parse(body)
+        const data = EventCreateSchema.parse(body)
 
         const record = await pb
             .collection('events')
             .create(
-                { ...data, user: data.user.id, subject: data.subject?.id },
+                { ...data, user: data.user, subject: data.subject?.id },
                 { expand: 'user,subject' }
             )
 
