@@ -13,8 +13,8 @@ async function ProfilePage() {
     const datasets = await api.getDatasetFromUser(user.id)
 
     return (
-        <main className="flex h-[96vh] w-full justify-center gap-9 pt-8">
-            <div className="flex w-[573.5px] flex-col gap-[10px]">
+        <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
+            <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
                 <UpdateUserForm user={user} />
                 <Separator />
@@ -32,13 +32,17 @@ async function ProfilePage() {
                 </p>
 
                 <Separator />
-                <div className="flex justify-start gap-[10px]">
+                <div className="flex justify-start gap-[10px] max-sm:flex-col">
                     <LogoutButton />
                     <RemoveAccountButton userId={user.id} />
                 </div>
             </div>
-            <Separator orientation="vertical" />
-            <div className="w-[573.5px] flex-col gap-[10px]">
+            <Separator
+                orientation="vertical"
+                className="max-sm:hidden sm:visible"
+            />
+            <Separator orientation="horizontal" className="sm:hidden" />
+            <div className="w-[573.5px] flex-col gap-[10px] pb-12 max-sm:w-full">
                 <h2 className="text-center text-3xl font-semibold">
                     Dina dataset
                 </h2>

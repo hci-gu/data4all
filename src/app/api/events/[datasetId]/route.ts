@@ -15,10 +15,11 @@ export async function GET(
             .collection<EventSchema>('events')
             .getList(1, 50, {
                 filter: `dataset="${params.datasetId}"`,
+                expand: 'user,subject',
             })
 
         return NextResponse.json(
-            { message: 'success', body: records },
+            { message: 'success', body: records.items },
             { status: 200 }
         )
     } catch (error) {

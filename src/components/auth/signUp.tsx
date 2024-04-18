@@ -22,6 +22,8 @@ import { roleSchema, signUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as api from '@/adapters/api'
+import { ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
 export default function SignUp() {
     const router = useRouter()
@@ -50,7 +52,11 @@ export default function SignUp() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(submit)}
+                className="space-y-4"
+                method="post"
+            >
                 <FormField
                     control={form.control}
                     name="email"
@@ -58,7 +64,11 @@ export default function SignUp() {
                         <FormItem>
                             <FormLabel>Mail</FormLabel>
                             <FormControl>
-                                <Input placeholder="Mail" {...field} />
+                                <Input
+                                    type="email"
+                                    placeholder="Mail"
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -135,10 +145,21 @@ export default function SignUp() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">
-                    <EnvelopeClosedIcon className="mr-2" />
-                    Skapa konto
-                </Button>
+                <div className="flex flex-col items-center gap-4">
+                    <Button type="submit">
+                        <EnvelopeClosedIcon className="mr-2" />
+                        Skapa konto
+                    </Button>
+                    <Button className="sm:hidden" type="button" variant="link">
+                        <Link
+                            href="/logga-in"
+                            className="flex items-center gap-1"
+                        >
+                            Logga in istället
+                            <ChevronRight />
+                        </Link>
+                    </Button>
+                </div>
             </form>
         </Form>
     )

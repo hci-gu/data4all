@@ -39,9 +39,9 @@ export default function EventForm({
             comment: '',
         },
     })
-    async function onSubmit(values: formSchema, datasetId: string) {
+    async function onSubmit(values: formSchema) {
         const event: EventSchema = {
-            user: user.id,
+            user,
             content: values.comment,
             dataset: datasetId,
             types: 'comment',
@@ -53,9 +53,7 @@ export default function EventForm({
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((value) =>
-                    onSubmit(value, datasetId)
-                )}
+                onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
             >
                 <FormField
@@ -65,9 +63,9 @@ export default function EventForm({
                         <FormItem>
                             <FormLabel className="sr-only">Kommentar</FormLabel>
                             <FormControl>
-                                <div className="flex gap-2">
-                                    <Avatar>
-                                        <AvatarFallback>
+                                <div className="flex items-center gap-2">
+                                    <Avatar className="h-6 w-6">
+                                        <AvatarFallback className="text-[0.5625rem]">
                                             {getInitials(user.name)}
                                         </AvatarFallback>
                                     </Avatar>

@@ -16,7 +16,7 @@ export default function DatasetCard({
     dataset: datasetWithRelationsSchema
 }) {
     return (
-        <Card className="w-[560px]">
+        <Card className="w-[560px] max-sm:w-full">
             <CardHeader>
                 <Link
                     href={`/dataset/${dataset.slug}`}
@@ -30,9 +30,12 @@ export default function DatasetCard({
                 </CardDescription>
             </CardHeader>
             <CardFooter className="flex gap-3">
-                <Tags Tags={dataset.tags} />
+                <div className="flex gap-1">
+                    <p>tags</p>
+                </div>
                 <div className="flex gap-3">
-                    {/* add last updated & is public later when relevant */}
+                    <p>last updated</p>
+                    <p>is public?</p>
                 </div>
             </CardFooter>
         </Card>
