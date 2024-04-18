@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
-const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+import { ClientResponseError } from 'pocketbase'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function GET(request: NextRequest) {
     try {
+        const pb = pbForRequest(request)
         const title = request.nextUrl.searchParams.get('title') ?? ''
+
 
         const records = await pb.collection('dataset').getList(1, 25, {
             sort: '-created',
@@ -26,6 +27,12 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(
                 { message: 'misslyckades att hämta dataset' },
                 { status: 400 }
+            )
+        }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
             )
         }
         return NextResponse.json({ message: 'Något gick fel' }, { status: 500 })

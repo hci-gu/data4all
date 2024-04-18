@@ -16,6 +16,7 @@ import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
+import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Dataportal from '../../../../public/dataportal.png'
 import Entryscape from '../../../../public/entryscape.png'
@@ -27,13 +28,17 @@ export default async function Page({
     params: { slug: string }
 }) {
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
+    const authCookie = cookies().get('PBAuth')?.value
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
     }
 
-    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
-    const events = await api.getEvents(dataset.id)
+    const dataset = await getDataset(
+        stringWithHyphen(decodeURI(slug)),
+        authCookie as string
+    )
+    const events = await api.getEvents(dataset.id, authCookie as string)
 
     return (
         <main className="grid items-stretch gap-9 px-4 py-8 sm:px-28 sm:py-9 lg:grid-cols-[1fr_auto_1fr]">

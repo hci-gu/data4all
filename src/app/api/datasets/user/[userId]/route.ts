@@ -1,14 +1,20 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import * as utils from '../../utils'
 import { ClientResponseError } from 'pocketbase'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function GET(
-    req: Request,
+    req: NextRequest,
     context: { params: { userId: string } }
 ) {
     try {
+        const pb = pbForRequest(req)
         const { params } = context
-        const records = await utils.datasetsForUserId(params.userId)
+
+        const records = await utils.datasetsForUserId(
+            params.userId,
+            pb.authStore.exportToCookie()
+        )
 
         return NextResponse.json(
             {
@@ -23,6 +29,12 @@ export async function GET(
             return NextResponse.json(
                 { message: 'misslyckades att hämta dataset' },
                 { status: 400 }
+            )
+        }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
             )
         }
         return NextResponse.json({ message: 'Något gick fel' }, { status: 500 })

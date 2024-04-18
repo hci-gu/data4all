@@ -1,5 +1,4 @@
 import PocketBase from 'pocketbase'
-import { promise } from 'zod'
 
 const stringWithHyphen = (text) => {
     return text.toLowerCase().replaceAll(' ', '-')
@@ -11,6 +10,7 @@ const getRandomTag = (tags) => {
 
 ;(async () => {
     const pb = new PocketBase('http://localhost:8090')
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
 
     const newTestTagsArray = [
         'Energy',

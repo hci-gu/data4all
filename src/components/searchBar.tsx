@@ -67,9 +67,12 @@ const Highlight = ({
 
 export default function SearchBar({
     initialSearchTerm,
+    authCookie,
 }: {
     initialSearchTerm?: string
+    authCookie?: string
 }) {
+
     const [isClicked, setIsClicked] = useState(false)
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
     const [isFocused, setIsFocused] = useState(false)
@@ -95,7 +98,9 @@ export default function SearchBar({
 
     const autoComplete = async () => {
         if (!!isFocused) {
-            setSuggestions(await api.getDatasets(debouncedSearchTerm))
+            setSuggestions(
+                await api.getDatasets(debouncedSearchTerm, authCookie as string)
+            )
         }
     }
 
@@ -110,7 +115,9 @@ export default function SearchBar({
     }
 
     const sugestionsOnFocus = async () => {
-        setSuggestions(await api.getDatasets(debouncedSearchTerm))
+        setSuggestions(
+            await api.getDatasets(debouncedSearchTerm, authCookie as string)
+        )
     }
 
     suggestions.sort((a, b) => {
