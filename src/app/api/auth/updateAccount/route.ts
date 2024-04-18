@@ -1,19 +1,15 @@
+import { pbForRequest } from '@/adapters/pocketbase'
 import { env } from '@/lib/env'
 import { updateUserSchema } from '@/types/zod'
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 
-export async function PUT(request: Request) {
-    const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+export async function PUT(request: NextRequest) {
     try {
-        const cookie = request.headers.get('auth')
-        pb.authStore.loadFromCookie(cookie as string)
-
-        if (!pb.authStore.isValid) {
-            throw 'forbidden'
-        }
+        const pb = pbForRequest(request)
+        
         const data = await request.json()
         const formData = updateUserSchema.parse(data?.formData)
         const userId = z.string().parse(data?.id)

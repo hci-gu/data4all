@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
 import { EventSchema } from '@/types/zod'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function GET(
     request: NextRequest,
@@ -9,13 +9,7 @@ export async function GET(
 ) {
     try {
         const { params } = context
-        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const cookie = request.headers.get('auth')
-        pb.authStore.loadFromCookie(cookie as string)
-
-        if (!pb.authStore.isValid) {
-            throw 'forbidden'
-        }
+        const pb = pbForRequest(request)
 
         const records = await pb
             .collection<EventSchema>('events')

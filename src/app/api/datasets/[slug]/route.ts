@@ -1,21 +1,20 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import * as utils from './../utils'
-import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
-const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+import { ClientResponseError } from 'pocketbase'
+import { pbForRequest } from '@/adapters/pocketbase'
 
-export async function GET(req: Request, context: any) {
+export async function GET(req: NextRequest, context: any) {
     try {
+        const pb = pbForRequest(req)
         const { params } = context
         const cookie = req.headers.get('auth')
-        pb.authStore.loadFromCookie(cookie as string)
 
-        if (!pb.authStore.isValid) {
-            throw 'forbidden'
-        }
+        
 
-
-        const records = await utils.datasetForSlug(params.slug, cookie as string)
+        const records = await utils.datasetForSlug(
+            params.slug,
+            cookie as string
+        )
 
         return NextResponse.json(
             {
@@ -26,7 +25,6 @@ export async function GET(req: Request, context: any) {
         )
     } catch (error) {
         if (error instanceof ClientResponseError) {
-
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
                 { message: 'Misslyckades att hämta dataset' },

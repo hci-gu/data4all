@@ -1,17 +1,13 @@
-import { env } from '@/lib/env'
+import { pbForRequest } from '@/adapters/pocketbase'
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
-import PocketBase, { ClientResponseError } from 'pocketbase'
+import { NextRequest, NextResponse } from 'next/server'
+import { ClientResponseError } from 'pocketbase'
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
     try {
-        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const cookie = request.headers.get('auth')
-        pb.authStore.loadFromCookie(cookie as string)
+        const pb = pbForRequest(request)
 
-        if (!pb.authStore.isValid) {
-            throw 'forbidden'
-        }
+        
         const user = await request.json()
 
         cookies().delete('PBAuth')

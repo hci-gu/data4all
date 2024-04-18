@@ -2,16 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
 import { env } from '@/lib/env'
 import { EventSchema } from '@/types/zod'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function POST(request: NextRequest) {
     try {
-        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-        const cookie = request.headers.get('auth')
-        pb.authStore.loadFromCookie(cookie as string)
+        const pb = pbForRequest(request)
 
-        if (!pb.authStore.isValid) {
-            throw 'forbidden'
-        }
+        
         const data = EventSchema.parse(await request.json())
 
         const record = await pb.collection<EventSchema>('events').create(data)
