@@ -6,6 +6,7 @@ import {
     EventSchema,
     datasetSchema,
     datasetWithRelationsSchema,
+    AuthorizedUserSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -48,20 +49,21 @@ const apiRequest = async (
 export const signUp = async (user: signUpSchema): Promise<void> =>
     apiRequest(apiUrl('auth/sign-up'), 'POST', user)
 
-export const signIn = async (user: signInSchema): Promise<void> =>
-    apiRequest(apiUrl('auth/sign-in'), 'POST', user)
+export const signIn = async (user: signInSchema) =>
+    AuthorizedUserSchema.parse(
+        await apiRequest(apiUrl('auth/sign-in'), 'POST', user)
+    )
 
 export const signOut = async (): Promise<void> =>
     apiRequest(apiUrl('auth/sign-out'), 'DELETE')
 
-export const updateUser = async (
-    formData: updateUserSchema,
-    userId: string
-): Promise<void> =>
-    apiRequest(apiUrl('auth/updateAccount'), 'PUT', {
-        id: userId,
-        formData,
-    })
+export const updateUser = async (formData: updateUserSchema, userId: string) =>
+    AuthorizedUserSchema.parse(
+        await apiRequest(apiUrl('auth/updateAccount'), 'PUT', {
+            id: userId,
+            formData,
+        })
+    )
 
 export const removeUser = async (userId: string): Promise<void> => {
     apiRequest(apiUrl('auth/removeAccount'), 'DELETE', {

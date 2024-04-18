@@ -1,14 +1,19 @@
+'use client'
 import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
-import { loadAuthorizedUser } from '../api/auth/utils'
 import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
-import { AuthorizedUserSchema } from '@/types/zod'
+import { useContext } from 'react'
+import { authContext } from '@/lib/context/authContext'
 
 async function ProfilePage() {
-    const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
+    const userContext = useContext(authContext)
+    const user = userContext?.auth
+    if (!user) {
+        throw new Error('User is not authenticated')
+    }
 
     const datasets = await api.getDatasetFromUser(user.id)
 
@@ -16,7 +21,7 @@ async function ProfilePage() {
         <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
-                <UpdateUserForm user={user} />
+                <UpdateUserForm />
                 <Separator />
                 <h2 className="text-3xl font-semibold">
                     Om Kungsbacka dataportal
@@ -34,7 +39,7 @@ async function ProfilePage() {
                 <Separator />
                 <div className="flex justify-start gap-[10px] max-sm:flex-col">
                     <LogoutButton />
-                    <RemoveAccountButton userId={user.id} />
+                    <RemoveAccountButton />
                 </div>
             </div>
             <Separator
@@ -52,11 +57,9 @@ async function ProfilePage() {
                             <DatasetCard key={dataset.id} dataset={dataset} />
                         ))
                     ) : (
-                        <>
-                            <p className="text-center">
-                                Du har inga relaterade dataset.
-                            </p>
-                        </>
+                        <p className="text-center">
+                            Du har inga relaterade dataset.
+                        </p>
                     )}
                 </div>
             </div>

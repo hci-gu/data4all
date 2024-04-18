@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import Header from '@/components/ui/header'
 import { loadAuthorizedUser } from './api/auth/utils'
 import { Toaster } from 'react-hot-toast'
+import { AuthProvider } from '@/lib/context/authContext'
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -30,12 +31,14 @@ export default function RootLayout({
                     fontSans.variable
                 )}
             >
-                <Toaster
-                    position="bottom-right"
-                    toastOptions={{ duration: 2500 }}
-                />
-                <Header usersName={user?.name} />
-                {children}
+                <AuthProvider user={user}>
+                    <Toaster
+                        position="bottom-right"
+                        toastOptions={{ duration: 2500 }}
+                    />
+                    <Header />
+                    {children}
+                </AuthProvider>
             </body>
         </html>
     )

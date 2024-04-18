@@ -15,21 +15,24 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { AuthorizedUserSchema, roleSchema, updateUserSchema } from '@/types/zod'
+import { roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { updateUser } from '@/adapters/api'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { authContext } from '@/lib/context/authContext'
 
-export default function UpdateUserForm({
-    user,
-}: {
-    user: AuthorizedUserSchema
-}) {
+export default function UpdateUserForm() {
+    const userContext = useContext(authContext)
+    const user = userContext?.auth
+    if (!user) {
+        throw new Error('User is not authenticated')
+    }
+
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
@@ -46,14 +49,15 @@ export default function UpdateUserForm({
     const roles = Object.values(roleSchema.Values)
     const router = useRouter()
 
-    const submit = (value: updateUserSchema) => {
+    const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
         const request = Promise.allSettled([
             updateUser(value, user.id),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
-            .then(() => {
-                router.refresh()
+            .then((res) => {
+                userContext.setAuth(res[0].status === 'fulfilled' ? res[0].value : user)
+                // router.refresh()
                 setIsClicked(false)
             })
             .catch(() => {

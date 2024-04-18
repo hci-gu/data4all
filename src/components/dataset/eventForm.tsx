@@ -11,21 +11,25 @@ import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
+import { EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
 import { z } from 'zod'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useContext } from 'react'
+import { authContext } from '@/lib/context/authContext'
 
 export default function EventForm({
-    user,
     datasetId,
     setEvents,
 }: {
-    user: AuthorizedUserSchema
     datasetId: string
     setEvents: Dispatch<SetStateAction<EventSchema[]>>
 }) {
+    const userContext = useContext(authContext)
+    const user = userContext?.auth
+    if (!user) {
+        throw new Error('User is not authenticated')
+    }
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
@@ -40,8 +44,11 @@ export default function EventForm({
         },
     })
     async function onSubmit(values: formSchema) {
+        if (!user) {
+            throw new Error('User is not authenticated')
+        }
         const event: EventSchema = {
-            user,
+            user: user,
             content: values.comment,
             dataset: datasetId,
             types: 'comment',
@@ -52,10 +59,7 @@ export default function EventForm({
     }
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="comment"

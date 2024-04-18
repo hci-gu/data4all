@@ -3,16 +3,23 @@ import { removeUser } from '@/adapters/api'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { authContext } from '@/lib/context/authContext'
 
-export default function RemoveAccountButton({ userId }: { userId: string }) {
+export default function RemoveAccountButton() {
+    const userContext = useContext(authContext)
+    const user = userContext?.auth
+    if (!user) {
+        throw new Error('User is not authenticated')
+    }
+
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
-    const removeAccount = async (userId: string) => {
+    const removeAccount = async () => {
         try {
             setIsClicked(true)
-            await removeUser(userId)
+            await removeUser(user.id)
             router.push('/skapa-konto')
         } catch (e) {
             setIsClicked(false)
@@ -25,7 +32,7 @@ export default function RemoveAccountButton({ userId }: { userId: string }) {
             <>
                 <Button
                     variant={'destructive'}
-                    onClick={() => removeAccount(userId)}
+                    onClick={() => removeAccount()}
                 >
                     Ta bort konto
                 </Button>
@@ -37,7 +44,7 @@ export default function RemoveAccountButton({ userId }: { userId: string }) {
             <Button
                 variant={'destructive'}
                 disabled
-                onClick={() => removeAccount(userId)}
+                onClick={() => removeAccount()}
             >
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Ta bort konto

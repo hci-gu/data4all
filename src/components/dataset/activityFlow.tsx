@@ -1,15 +1,13 @@
 'use client'
-import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
+import { EventSchema } from '@/types/zod'
 import { useState } from 'react'
 import { EventForm } from '.'
 import Comment from './comment'
 
 export default function ActivityFlow({
-    user,
     datasetId,
     initialEvents,
 }: {
-    user: AuthorizedUserSchema
     datasetId: string
     initialEvents: EventSchema[]
 }) {
@@ -23,7 +21,6 @@ export default function ActivityFlow({
             </p>
 
             <EventForm
-                user={user}
                 datasetId={datasetId}
                 setEvents={setEvents}
             />

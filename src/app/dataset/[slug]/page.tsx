@@ -15,7 +15,6 @@ import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
-import { loadAuthorizedUser } from '@/app/api/auth/utils'
 import Image from 'next/image'
 import Dataportal from '../../../../public/dataportal.png'
 import Entryscape from '../../../../public/entryscape.png'
@@ -26,7 +25,6 @@ export default async function Page({
 }: {
     params: { slug: string }
 }) {
-    const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
@@ -124,7 +122,6 @@ export default async function Page({
             <Separator orientation="horizontal" />
             {
                 <ActivityFlow
-                    user={authorizedUser}
                     datasetId={dataset.id}
                     initialEvents={events ?? []}
                 />

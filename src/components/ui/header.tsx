@@ -7,17 +7,21 @@ import Box from '../../../public/boxes.png'
 import Logo from '../../../public/logo.svg'
 import { Button } from './button'
 import { Search, X } from 'lucide-react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import SearchBar from '../searchBar'
 import { Avatar, AvatarFallback } from './avatar'
 import { getInitials } from '@/lib/utils'
-import { z } from 'zod'
+import { authContext } from '@/lib/context/authContext'
 
-export default function Header({ usersName }: { usersName?: string }) {
-    // let userName = ''
+export default function Header() {
+    const userContext = useContext(authContext)
+    if (!userContext) {
+        throw new Error('Auth context is missing')
+    }
+    const usersName = userContext.auth?.name
+
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     const pathname = usePathname()
-    // if (z.string().safeParse(usersName)) userName = usersName as string
     switch (pathname) {
         case '/logga-in':
             return (
