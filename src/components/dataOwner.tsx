@@ -131,7 +131,7 @@ export default function DataOwner({
                     <PopoverTrigger className="flex gap-4 rounded-sm bg-slate-500 px-4 py-2 text-primary-foreground hover:bg-slate-600">
                         <UserPlus /> Föreslå dataägare
                     </PopoverTrigger>
-                    <PopoverContent className="flex flex-col gap-2">
+                    <PopoverContent className="flex w-screen min-w-80 flex-col gap-2 sm:w-fit">
                         <Form {...form}>
                             <form
                                 onChange={() =>
@@ -167,8 +167,8 @@ export default function DataOwner({
                         </Form>
 
                         <p className="text-sm font-bold">Relevanta användare</p>
-                        <ul className="flex flex-col gap-4">
-                            <ScrollArea className="h-48">
+                        <ul className="flex h-80 flex-col gap-4">
+                            <ScrollArea className="">
                                 {users &&
                                     users.map((user, index) => (
                                         <li key={index}>
