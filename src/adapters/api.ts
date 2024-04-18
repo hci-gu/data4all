@@ -29,7 +29,6 @@ const apiRequest = async (
     authCookie?: string,
     body?: any
 ) => {
-    console.log('cookie', authCookie)
 
     try {
         const options: RequestInit = {
@@ -84,7 +83,6 @@ export const getAllDatasets = async () => {
         .parse(await apiRequest(apiUrl('datasets'), 'GET'))
 }
 export const getDatasets = async (datasetTitle: string, authCookie: string) => {
-    console.log(`datasets?title=${datasetTitle}`)
     const datasets = await apiRequest(
         apiUrl(`datasets?title=${datasetTitle}`),
         'GET',

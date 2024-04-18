@@ -7,7 +7,6 @@ export async function GET(request: NextRequest) {
         const pb = pbForRequest(request)
         const title = request.nextUrl.searchParams.get('title') ?? ''
 
-        console.log(pb.authStore.isValid)
 
         const records = await pb.collection('dataset').getList(1, 25, {
             sort: '-created',

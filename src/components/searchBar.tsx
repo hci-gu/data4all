@@ -73,7 +73,6 @@ export default function SearchBar({
     initialSearchTerm?: string
     authCookie?: string
 }) {
-    console.log('search: ', authCookie)
 
     const [isClicked, setIsClicked] = useState(false)
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
