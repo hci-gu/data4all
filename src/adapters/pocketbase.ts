@@ -5,10 +5,10 @@ import { cookies } from 'next/headers'
 
 export const pbForRequest = (request: NextRequest) => {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-    const authorizedUser = cookies().get('PBAuth')
-
-    if (authorizedUser) {
-        pb.authStore.loadFromCookie(authorizedUser.value)
+    const cookie = request.headers.get('auth')
+    console.log(cookie)
+    if (cookie) {
+        pb.authStore.loadFromCookie(cookie)
     }
     return pb
 }

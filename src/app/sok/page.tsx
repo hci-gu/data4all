@@ -15,6 +15,7 @@ export default async function page({
     const authCookie = cookies().get('PBAuth')?.value
     const searchTerm = searchParams?.searchTerm
     api.pb.authStore.loadFromCookie(authCookie as string)
+
     const datasets = await api.getDatasets(
         searchTerm as string,
         authCookie as string
@@ -31,7 +32,10 @@ export default async function page({
                     </Link>
                     <Typography level="H2">Sök dataset</Typography>
                 </div>
-                <SearchBar initialSearchTerm={searchTerm} />
+                <SearchBar
+                    initialSearchTerm={searchTerm}
+                    authCookie={authCookie}
+                />
                 <SearchResults records={datasets} />
             </main>
         </>

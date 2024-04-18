@@ -7,6 +7,8 @@ export function middleware(request: NextRequest) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
+console.log(path, authorizedUser);
+
 
     if (authorizedUser) {
         pb.authStore.loadFromCookie(authorizedUser.value)
