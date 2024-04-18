@@ -8,7 +8,6 @@ import { z } from 'zod'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
 } from './ui/form'
@@ -114,7 +113,7 @@ export default function SearchBar({
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    className="relative z-50 flex w-fit flex-col items-start max-sm:mt-1 max-sm:w-full max-sm:px-4"
+                    className="z-50 flex w-fit flex-col items-start max-sm:mt-1 max-sm:w-full"
                     onChange={() => setSearchTerm(form.getValues('searchTerm'))}
                 >
                     <div className="mb-[6px] flex max-w-[432px] gap-2 max-sm:w-full">
@@ -154,9 +153,10 @@ export default function SearchBar({
                             </Button>
                         )}
                     </div>
-                    {!!isFocused && debouncedSearchTerm !== '' && (
-                        <div className="absolute left-[-4px] top-[0.30rem] z-10 mt-11 h-fit w-[392px] rounded-md bg-white shadow">
-                            {suggestions.length > 0 ? (
+                    {!!isFocused && (
+                        <div className="absolute left-0 right-0 top-[1rem] z-10 mx-auto mt-11 h-fit w-[392px] rounded-md bg-white shadow max-sm:w-screen">
+                            {suggestions.length > 0 &&
+                            debouncedSearchTerm !== '' ? (
                                 <div className="flex w-full flex-col py-2">
                                     {suggestions.map((suggestion) => (
                                         <Link
@@ -176,15 +176,13 @@ export default function SearchBar({
                             ) : (
                                 <div className="flex w-full flex-col p-2">
                                     <p className="text-sm">
-                                        Hittade inga resultat
+                                        Du kan söka på titlar, beskrivning eller
+                                        taggar.
                                     </p>
                                 </div>
                             )}
                         </div>
                     )}
-                    <FormDescription>
-                        Du kan söka på titlar, beskrivning eller taggar.
-                    </FormDescription>
                 </form>
             </Form>
         </search>
