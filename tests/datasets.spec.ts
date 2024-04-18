@@ -66,36 +66,44 @@ test.describe('Datasets page', () => {
                 page.getByText('Det finns inga relaterade dataset')
             ).toBeVisible()
         })
-        test('can suggested another user', async ({ page }) => {
-            await page.goto(`/dataset/${searchTerms[0]}`)
-            await page.click('text= Föreslå dataägare')
-            await page.fill('input[name="dataset"]', userNames[0])
 
-            await page.getByRole('button', { name: userNames[0] }).click()
-            await page.getByRole('button', { name: 'Godkänn' }).click()
-            await expect(
-                page.getByText('ttester föreslog tester user')
-            ).toBeVisible()
-        })
-        test('can suggested themselves', async ({ page }) => {
-            await page.goto(`/dataset/${searchTerms[0]}`)
-            await page.click('text= Föreslå dataägare')
-            await page.fill('input[name="dataset"]', 'tester')
+        test.describe('Suggest data owner', () => {
+            test('Can suggest another user', async ({ page }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', userNames[0])
 
-            await page.getByRole('button', { name: 't tester User' }).first().click()
-            await page.getByRole('button', { name: 'Godkänn' }).click()
-            await expect(
-                page.getByText('tester föreslog sig själv som')
-            ).toBeVisible()
-        })
-        test('can suggested non-existent user', async ({ page }) => {
-            await page.goto(`/dataset/${searchTerms[0]}`)
-            await page.click('text= Föreslå dataägare')
-            await page.fill('input[name="dataset"]', 'non-existent user')
+                await page.getByRole('button', { name: userNames[0] }).click()
+                await page.getByRole('button', { name: 'Godkänn' }).click()
+                await expect(
+                    page.getByText('ttester föreslog tester user')
+                ).toBeVisible()
+            })
+            test('Can suggest themselves', async ({ page }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', 'tester')
 
-            await expect(
-                page.getByText('Inga användare hittades')
-            ).toBeVisible()
+                await page
+                    .getByRole('button', { name: 't tester User' })
+                    .first()
+                    .click()
+                await page.getByRole('button', { name: 'Godkänn' }).click()
+                await expect(
+                    page.getByText('tester föreslog sig själv som')
+                ).toBeVisible()
+            })
+            test('Get empty state if there is no matching user', async ({
+                page,
+            }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', 'non-existent user')
+
+                await expect(
+                    page.getByText('Inga användare hittades')
+                ).toBeVisible()
+            })
         })
     })
 

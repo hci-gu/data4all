@@ -12,9 +12,9 @@ export default function ActivityFlow({
     user: AuthorizedUserSchema
     datasetId: string
 }) {
-    const events = useContext(EventContext)
+    const eventContext = useContext(EventContext)
 
-    if (!events) {
+    if (!eventContext) {
         throw new Error('EventContext is not provided')
     }
 
@@ -28,7 +28,7 @@ export default function ActivityFlow({
             <EventForm user={user} datasetId={datasetId} />
 
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-                {events.events.map((event, index) => (
+                {eventContext.events.map((event, index) => (
                     <Comment event={event} key={index} />
                 ))}
             </ul>

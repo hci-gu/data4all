@@ -25,7 +25,7 @@ export default function EventForm({
     user: AuthorizedUserSchema
     datasetId: string
 }) {
-    const events = useContext(EventContext)
+    const eventContext = useContext(EventContext)
 
     const formSchema = z.object({
         comment: z.string().min(2, {
@@ -48,7 +48,7 @@ export default function EventForm({
             types: 'comment',
         }
         await createEvent({ ...event, user: user.id })
-        events?.setEvents((prev) => [event, ...prev])
+        eventContext?.setEvents((prev) => [event, ...prev])
         form.reset()
     }
     return (

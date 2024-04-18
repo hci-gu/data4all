@@ -24,9 +24,9 @@ export default function SuggestDataOwner({
 }) {
     if (!user) return
 
-    const events = useContext(EventContext)
+    const eventContext = useContext(EventContext)
 
-    if (!events) {
+    if (!eventContext) {
         throw new Error('EventContext is not provided')
     }
 
@@ -45,7 +45,7 @@ export default function SuggestDataOwner({
         }
 
         const respond = await createEvent({ ...data, user: data.user.id })
-        events.setEvents((prev) => [respond, ...prev])
+        eventContext.setEvents((prev) => [respond, ...prev])
     }
 
     return (
