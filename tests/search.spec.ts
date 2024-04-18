@@ -35,7 +35,9 @@ test.describe('Search page', () => {
         await expect(page).toHaveURL(
             '/sok?searchTerm=Some search query that has no matches'
         )
-        await expect(page.getByText('Hittade inga resultat')).toHaveCount(1)
+        await expect(
+            page.getByText('Hittade inga resultat').first()
+        ).toHaveCount(1)
     })
 
     test('finds multiple matches when search matches multiple', async ({
@@ -48,7 +50,11 @@ test.describe('Search page', () => {
         await page.click('button[type="submit"]')
 
         await expect(page).toHaveURL(`/sok?searchTerm=search test title`)
-        await expect(page.getByText('search test title')).toHaveCount(2)
+        await expect(
+            page
+                .getByRole('heading', { level: 3 })
+                .getByText('search test title')
+        ).toHaveCount(2)
     })
 
     test('Only returns the one dataset that matches specific query', async ({
@@ -61,6 +67,8 @@ test.describe('Search page', () => {
         await page.click('button[type="submit"]')
 
         await expect(page).toHaveURL(`/sok?searchTerm=${searchTerms[2]}`)
-        await expect(page.getByText(searchTerms[2])).toHaveCount(1)
+        await expect(
+            page.getByRole('heading', { level: 3 }).getByText(searchTerms[2])
+        ).toHaveCount(1)
     })
 })

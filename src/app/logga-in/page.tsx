@@ -5,11 +5,11 @@ import { SignIn } from '@/components/auth'
 
 function LoginPage() {
     return (
-        <main className="grid h-screen grid-cols-2">
-            <div className="flex items-center bg-black px-40">
+        <main className="grid h-screen sm:grid-cols-2">
+            <div className="hidden items-center bg-black sm:px-12 md:px-24 xl:px-40 sm:flex">
                 <Image src={absurd} priority={true} alt="" />
             </div>
-            <div className="mx-auto flex flex-col justify-center gap-12">
+            <div className="flex flex-col justify-center gap-12 px-4 sm:mx-auto">
                 <div>
                     <Typography level="H1">Logga in</Typography>
                     <Typography level="P">

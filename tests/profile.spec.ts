@@ -1,6 +1,5 @@
 import test, { expect } from '@playwright/test'
 import { createDataset, createEvent, loggedInUser } from './setup/utils'
-import uuid from 'short-uuid'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
@@ -21,7 +20,7 @@ test.describe('Profile page', () => {
             await page.click('button[type="submit"]')
 
             await expect(
-                page.getByRole('link', { name: 'tester New' })
+                page.getByRole('link', { name: 'tester New tN' })
             ).toBeVisible()
         })
 
@@ -91,7 +90,7 @@ test.describe('Profile page', () => {
         test.beforeEach(async ({ page, request, context }) => {
             const userId = await loggedInUser({ page, request, context })
             const dataset = await createDataset('test title')
-            const event = await createEvent(dataset.id, userId)
+            await createEvent(dataset.id, userId)
         })
 
         test('has dataset', async ({ page, request, context }) => {

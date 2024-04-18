@@ -68,10 +68,10 @@ export const EventSchema = z.object({
     created: z.string().optional(),
     updated: z.string().optional(),
     dataset: z.string(),
-    types: z.enum(['comment', 'ownerReq', 'OwnerAccept']),
-    user: z.string(),
+    types: z.enum(['comment', 'ownerReq', 'OwnerAccept', 'OwnerPublished']),
+    user: AuthorizedUserSchema,
     content: z.string(),
-    subject: z.string().optional(),
+    subject: AuthorizedUserSchema.optional(),
 })
 
 export type signInSchema = z.infer<typeof signInSchema>

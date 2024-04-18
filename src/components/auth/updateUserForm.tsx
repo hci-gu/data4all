@@ -73,7 +73,7 @@ export default function UpdateUserForm({
     return (
         <Form {...form}>
             <form
-                className="flex w-[384px] flex-col gap-[10px]"
+                className="flex w-[384px] flex-col gap-[10px] max-sm:w-full"
                 onSubmit={form.handleSubmit(submit)}
                 method="POST"
             >
@@ -195,14 +195,16 @@ export default function UpdateUserForm({
                         </FormItem>
                     )}
                 />
-                <div>
+                <div className="w-full">
                     {isClicked ? (
-                        <Button type="submit" disabled>
+                        <Button type="submit" disabled className="w-full">
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             Uppdatera
                         </Button>
                     ) : (
-                        <Button type="submit">Uppdatera</Button>
+                        <Button type="submit" className="w-full">
+                            Uppdatera
+                        </Button>
                     )}
                 </div>
             </form>

@@ -63,23 +63,24 @@ const title = titleValue
         })
     return { ...dataset, title, description }
 }
+export const createEvent = async (
+    datasetId: string,
+    userId: string,
+    subject?: string
+): Promise<EventSchema> => {
+    const type = 'comment'
+    const event = await pb.collection<EventSchema>('events').create(
+        {
+            dataset: datasetId,
+            types: 'comment',
+            user: userId,
+            content: 'test',
+            subject,
+        },
+        { expand: 'user,subject' }
+    )
 
-export const createEvent = async (datasetId: string, userId: string) => {
-await pb.admins.authWithPassword('admin@email.com', 'password123')
-const type = 'comment'
-    const event = await pb.collection<EventSchema>('events').create({
-        dataset: datasetId,
-        types: 'comment',
-        user: userId,
-        content: 'test',
-        subject: 'test',
-    })
-    return {
-        ...event,
-        datasetId,
-        type,
-        userId,
-    }
+    return responseEventCleanup(event)
 }
 
 function parseCookie(cookieString: string): any {
@@ -118,4 +119,12 @@ export const loggedInUser = async ({
         await context.addCookies([parseCookie(setCookieHeader)])
     }
     return id
+}
+
+function responseEventCleanup(res: any) {
+    return {
+        ...res,
+        user: res?.expand?.user,
+        subject: res?.expand?.subject,
+    }
 }

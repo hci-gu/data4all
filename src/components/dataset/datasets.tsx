@@ -11,7 +11,7 @@ export default function Datasets({ datasets }: { datasets: datasetSchema[] }) {
     return (
         <div className="flex flex-wrap gap-4">
             {datasets.map((dataset, index) => (
-                <Card key={index} className="w-[276px]">
+                <Card key={index} className="w-full sm:w-[276px]">
                     <Link href={`/dataset/${dataset.slug}`}>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-sm">

@@ -11,7 +11,7 @@ import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 pb.autoCancellation(false)
 
-const baseURL = 'http://localhost:3000'
+const baseURL = env.NEXT_PUBLIC_API
 
 const apiUrl = (endpoint: string) => `${baseURL}/api/${endpoint}`
 const handleResponse = async (Response: Response) => {
@@ -109,17 +109,20 @@ export const getDataset = async (datasetTitle: string, authCookie: string) => {
     return datasetWithRelationsSchema.parse(cleanDataset)
 }
 export const getEvents = async (datasetId: string, authCookie: string) => {
-    const events = await apiRequest(
+    const events = (await apiRequest(
         apiUrl(`events/${datasetId}`),
         'GET',
         authCookie
-    )
-    return EventSchema.array().parse(events.items)
+    )) as []
+    const cleanEvent = events.map(responseEventCleanup)
+
+    return EventSchema.array().parse(cleanEvent)
 }
 export const createEvent = async (event: EventSchema, authCookie: string) => {
-    return EventSchema.parse(
-        await apiRequest(apiUrl(`events`), 'POST', '', event)
+    const cleanEvent = responseEventCleanup(
+        await apiRequest(apiUrl(`events`), 'POST', event)
     )
+    return EventSchema.parse(cleanEvent)
 }
 export const getDatasetFromUser = async (
     userId: string,
@@ -150,4 +153,11 @@ function responseDatasetCleanup(res: any) {
         tags: res?.expand?.tag ?? [],
     }
     return cleanDataset
+}
+function responseEventCleanup(res: any) {
+    return {
+        ...res,
+        user: res?.expand?.user,
+        subject: res?.expand?.subject,
+    }
 }

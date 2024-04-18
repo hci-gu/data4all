@@ -1,9 +1,8 @@
 'use client'
 import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
-import moment from 'moment'
 import { useState } from 'react'
-import { Avatar, AvatarFallback } from '../ui/avatar'
 import { EventForm } from '.'
+import Comment from './comment'
 
 export default function ActivityFlow({
     user,
@@ -31,21 +30,7 @@ export default function ActivityFlow({
 
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
                 {events.map((event, index) => (
-                    <li className="flex gap-2" key={index}>
-                        <Avatar>
-                            <AvatarFallback>e</AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-1">
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: event.content,
-                                }}
-                            />
-                            <b className="text-xs">
-                                {moment(event.created).fromNow()}
-                            </b>
-                        </div>
-                    </li>
+                    <Comment event={event} key={index} />
                 ))}
             </ul>
         </section>
