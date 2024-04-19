@@ -3,20 +3,17 @@ import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
-import * as api from '@/adapters/api'
-import DatasetCard from '@/components/datasetCard'
+import ProfileDatasetList from '@/components/profileDatasetList'
 import { useContext } from 'react'
 import { authContext } from '@/lib/context/authContext'
 
 async function ProfilePage() {
     const userContext = useContext(authContext)
     const user = userContext?.auth
+
     if (!user) {
         throw new Error('User is not authenticated')
     }
-
-    const datasets = await api.getDatasetFromUser(user.id)
-
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
@@ -52,15 +49,7 @@ async function ProfilePage() {
                     Dina dataset
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
-                    {datasets.length > 0 ? (
-                        datasets.map((dataset) => (
-                            <DatasetCard key={dataset.id} dataset={dataset} />
-                        ))
-                    ) : (
-                        <p className="text-center">
-                            Du har inga relaterade dataset.
-                        </p>
-                    )}
+                    <ProfileDatasetList userId={user.id} />
                 </div>
             </div>
         </main>
