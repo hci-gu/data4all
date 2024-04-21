@@ -8,6 +8,7 @@ export function middleware(request: NextRequest) {
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
 
+
     if (authorizedUser) {
         pb.authStore.loadFromCookie(authorizedUser.value)
     }

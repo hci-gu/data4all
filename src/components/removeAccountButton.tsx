@@ -6,17 +6,16 @@ import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 
-export default function RemoveAccountButton({ userId }: { userId: string }) {
+export default function RemoveAccountButton({ userId, authCookie }: { userId: string, authCookie: string }) {
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
     const removeAccount = async (userId: string) => {
         try {
             setIsClicked(true)
-            await removeUser(userId)
+            await removeUser(userId, authCookie)
             router.push('/skapa-konto')
         } catch (e) {
             setIsClicked(false)
-            console.log(e)
             toast.error('Något gick fel')
         }
     }

@@ -4,6 +4,7 @@ import SearchResults from '@/components/searchResults'
 import Typography from '@/components/ui/Typography'
 import WelcomeBack from '@/components/welcomeBack'
 import { X } from 'lucide-react'
+import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 export default async function page({
@@ -11,8 +12,14 @@ export default async function page({
 }: {
     searchParams?: { [key: string]: string | undefined }
 }) {
+    const authCookie = cookies().get('PBAuth')?.value
     const searchTerm = searchParams?.searchTerm
-    const datasets = await api.getDatasets(searchTerm as string)
+    api.pb.authStore.loadFromCookie(authCookie as string)
+
+    const datasets = await api.getDatasets(
+        searchTerm as string,
+        authCookie as string
+    )
 
     return (
         <>
@@ -24,9 +31,14 @@ export default async function page({
                     </Link>
                     <Typography level="H2">Sök dataset</Typography>
                 </div>
+
                 <div className="max-sm:hidden">
-                    <SearchBar initialSearchTerm={searchTerm as string} />
+                  <SearchBar
+                      initialSearchTerm={searchTerm}
+                      authCookie={authCookie}
+                  />
                 </div>
+
                 <SearchResults records={datasets} />
             </main>
         </>

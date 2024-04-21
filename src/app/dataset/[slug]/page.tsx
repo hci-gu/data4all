@@ -16,6 +16,7 @@ import { getDataset } from '@/adapters/api'
 import { getEventWithUserAccepted, stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
 import { loadAuthorizedUser } from '@/app/api/auth/utils'
+import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Dataportal from '../../../../public/dataportal.png'
 import Entryscape from '../../../../public/entryscape.png'
@@ -37,13 +38,17 @@ export default async function Page({
         return aDate < bDate ? 1 : -1
     }
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
+    const authCookie = cookies().get('PBAuth')?.value
+    const user: UserSchema = {
+        name: 'Sebastian Andreasson',
+        role: 'Admin',
+    }
 
-    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
-    const events = (await api.getEvents(dataset.id)).sort(sortEvents)
-
-    const EventWithUserAccepted = getEventWithUserAccepted(events)
-    const dataOwnerUser: AuthorizedUserSchema | null =
-        EventWithUserAccepted && EventWithUserAccepted.user
+    const dataset = await getDataset(
+        stringWithHyphen(decodeURI(slug)),
+        authCookie as string
+    )
+    const events = await api.getEvents(dataset.id, authCookie as string)
 
     return (
         <EventProvider event={events}>

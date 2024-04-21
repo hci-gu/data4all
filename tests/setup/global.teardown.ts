@@ -4,7 +4,14 @@ const pb = new PocketBase('http://localhost:8090')
 
 setup('setup', async () => {
     const datasets = await pb.collection('dataset').getFullList()
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
     const events = await pb.collection('events').getFullList()
+
+    for (const event of events) {
+        if (event.content === 'test')
+            await pb.collection('events').delete(event.id)
+    }
+
     const users = await pb.collection('users').getFullList()
 
     const datasetWithRelations = datasets.filter(
