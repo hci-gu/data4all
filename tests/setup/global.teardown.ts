@@ -31,7 +31,7 @@ setup('setup', async () => {
             await pb.collection('events').delete(event.id)
         }
     }
-    
+
     for (const user of users) {
         if (user.name.includes('tester')) {
             await pb.collection('users').delete(user.id)

@@ -14,7 +14,7 @@ export async function datasetForTitle(
     datasetTitle: string,
     authCookie: string
 ) {
-    pb.authStore.loadFromCookie(authCookie as string)
+    pb.authStore.loadFromCookie(authCookie)
     const records = await pb
         .collection<datasetSchema>('dataset')
         .getFirstListItem(`title="${datasetTitle}"`, {
@@ -24,7 +24,7 @@ export async function datasetForTitle(
     return records
 }
 export async function datasetForSlug(datasetSlug: string, authCookie: string) {
-    pb.authStore.loadFromCookie(authCookie as string)
+    pb.authStore.loadFromCookie(authCookie)
     datasetSlug = stringWithHyphen(datasetSlug)
 
     const records = await pb

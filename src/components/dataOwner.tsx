@@ -26,14 +26,17 @@ import SuggestDataOwner from './dataset/suggestDataOwner'
 import { getUsers } from '@/adapters/api'
 import { ScrollArea } from './ui/scroll-area'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
+import { cookies } from 'next/headers'
 
 export default function DataOwner({
     user,
     signInUser,
+    authCookie,
     dataset,
 }: {
     user: AuthorizedUserSchema | null
     signInUser: AuthorizedUserSchema
+    authCookie: string
     dataset: datasetSchema
 }) {
     const recommendedUsers: AuthorizedUserSchema[] = [
@@ -108,10 +111,11 @@ export default function DataOwner({
         },
     })
 
+
     const autoComplete = async () => {
         await Promise.allSettled([
             debouncedSearchTerm
-                ? setUsers(await getUsers(debouncedSearchTerm))
+                ? setUsers(await getUsers(debouncedSearchTerm, authCookie))
                 : setUsers(recommendedUsers),
             new Promise((resolve) => setTimeout(resolve, time)),
         ])
@@ -175,6 +179,7 @@ export default function DataOwner({
                                             <SuggestDataOwner
                                                 user={user}
                                                 signInUser={signInUser}
+                                                authCookie={authCookie}
                                                 dataset={dataset}
                                             />
                                         </li>

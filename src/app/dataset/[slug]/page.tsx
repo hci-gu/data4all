@@ -39,6 +39,9 @@ export default async function Page({
     }
     const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
     const authCookie = cookies().get('PBAuth')?.value
+    if (!authCookie) {
+        throw new Error('Du är inte inloggad')
+    }
     const user: UserSchema = {
         name: 'Sebastian Andreasson',
         role: 'Admin',
@@ -48,7 +51,7 @@ export default async function Page({
         stringWithHyphen(decodeURI(slug)),
         authCookie as string
     )
-    const events = await api.getEvents(dataset.id, authCookie as string)
+    const events = await api.getEvents(dataset.id, authCookie)
 
     return (
         <EventProvider event={events}>
@@ -80,6 +83,7 @@ export default async function Page({
                         <DataOwner
                             user={null}
                             signInUser={authorizedUser}
+                            authCookie={authCookie}
                             dataset={dataset}
                         />
                     </section>

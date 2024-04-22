@@ -13,13 +13,16 @@ import { AuthorizedUserSchema, EventSchema, datasetSchema } from '@/types/zod'
 import { createEvent } from '@/adapters/api'
 import { useContext } from 'react'
 import { EventContext } from '@/lib/context/eventContext'
+import { cookies } from 'next/headers'
 export default function SuggestDataOwner({
     user,
     dataset,
     signInUser,
+    authCookie,
 }: {
     user: AuthorizedUserSchema | null
     signInUser: AuthorizedUserSchema
+    authCookie: string
     dataset: datasetSchema
 }) {
     if (!user) return
@@ -44,7 +47,10 @@ export default function SuggestDataOwner({
             subject: user,
         }
 
-        const respond = await createEvent({ ...data, user: data.user.id })
+        const respond = await createEvent(
+            { ...data, user: data.user.id },
+            authCookie
+        )
         eventContext.setEvents((prev) => [respond, ...prev])
     }
 
