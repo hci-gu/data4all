@@ -11,7 +11,7 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
-import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
+import { AuthorizedUserSchema, EventSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { getEventWithUserAccepted, stringWithHyphen } from '@/lib/utils'
 import * as api from '@/adapters/api'
@@ -78,7 +78,7 @@ export default async function Page({
                     <p className="max-w-prose text-sm">{dataset.description}</p>
                     <section aria-labelledby="DataOwner">
                         <DataOwner
-                            user={dataOwnerUser}
+                            user={null}
                             signInUser={authorizedUser}
                             dataset={dataset}
                         />
