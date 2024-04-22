@@ -105,8 +105,6 @@ export default function SearchBar({
     }
 
     useEffect(() => {
-        console.log('asd')
-
         autoComplete()
     }, [debouncedSearchTerm])
 
