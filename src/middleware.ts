@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers'
-import type { NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import PocketBase from 'pocketbase'
 import { env } from './lib/env'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
-
+    const response = NextResponse.next()
 
     if (authorizedUser) {
         pb.authStore.loadFromCookie(authorizedUser.value)
@@ -23,6 +23,18 @@ export function middleware(request: NextRequest) {
     }
     if (authorizedUser && isLoginPage) {
         return Response.redirect(new URL('/profile', request.url))
+    }
+    if (authorizedUser && !isLoginPage) {
+        try {
+            const user = await pb
+                .collection('users')
+                .getOne(pb.authStore.model?.id)
+        } catch (error) {
+            response.cookies.delete(authorizedUser)
+            response.cookies.delete('PBAuth')
+            
+            return Response.redirect(new URL('/logga-in', request.url))
+        }
     }
 }
 
