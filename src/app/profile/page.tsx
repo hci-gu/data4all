@@ -6,6 +6,8 @@ import { UpdateUserForm } from '@/components/auth'
 import ProfileDatasetList from '@/components/profileDatasetList'
 import { useContext } from 'react'
 import { authContext } from '@/lib/context/authContext'
+import { cookies } from 'next/headers'
+import { notFound } from 'next/navigation'
 
 async function ProfilePage() {
     const userContext = useContext(authContext)

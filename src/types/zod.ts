@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const roleSchema = z.enum(['User', 'Admin'])
 export const AuthorizedUserSchema = z.object({
-    avatar: z.string(),
+    avatar: z.string().optional(),
     collectionId: z.string(),
     collectionName: z.string(),
     created: z.string(),
@@ -68,10 +68,14 @@ export const EventSchema = z.object({
     created: z.string().optional(),
     updated: z.string().optional(),
     dataset: z.string(),
-    types: z.enum(['comment', 'ownerReq', 'OwnerAccept', 'OwnerPublished']),
+    types: z.enum(['comment', 'ownerReq', 'ownerAccept', 'OwnerPublished']),
     user: AuthorizedUserSchema,
     content: z.string(),
     subject: AuthorizedUserSchema.optional(),
+})
+
+export const EventCreateSchema = EventSchema.extend({
+    user: z.string(),
 })
 
 export type signInSchema = z.infer<typeof signInSchema>
@@ -84,4 +88,5 @@ export type datasetWithRelationsSchema = z.infer<
 >
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
+export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>

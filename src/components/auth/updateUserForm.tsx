@@ -50,7 +50,7 @@ export default function UpdateUserForm() {
     const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
         const request = Promise.allSettled([
-            updateUser(value, user.id),
+            updateUser(value, user.id, authCookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {

@@ -1,4 +1,4 @@
-import { tagSchema } from '@/types/zod'
+import { EventSchema, tagSchema } from '@/types/zod'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -26,4 +26,13 @@ export const createTag = (tags: tagSchema[]) => {
         title: tag.name,
         href: `/tag/${tag.name}`,
     }))
+}
+
+export const getEventWithUserAccepted = (
+    user: EventSchema[]
+): EventSchema | null => {
+    const allAccepted = user.filter((event) => event.types === 'ownerAccept')
+    const lastAcceptedIndex = allAccepted.length - 1
+
+    return allAccepted[lastAcceptedIndex]
 }

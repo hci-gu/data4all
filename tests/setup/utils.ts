@@ -14,13 +14,15 @@ const pb = new PocketBase('http://localhost:8090')
 export const createUser = async () => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
-    const user = await pb.collection('users').create({
+    const userData = {
         email,
+        emailVisibility: true,
         password,
         passwordConfirm: password,
         role: 'User',
         name: 'tester',
-    })
+    }
+    const user = await pb.collection('users').create(userData)
     return {
         ...user,
         email,
@@ -28,8 +30,23 @@ export const createUser = async () => {
     }
 }
 
+export const createByUserName = async (name: string) => {
+    const email = `test.user_${uuid.generate()}@kungsbacka.se`
+    const password = '123456789'
+    const user = await pb.collection('users').create({
+        email,
+        emailVisibility: true,
+        password,
+        passwordConfirm: password,
+        role: 'User',
+        name,
+    })
+    return user
+}
+
 export const createDataset = async (titleValue: string) => {
-    const title = titleValue
+await pb.admins.authWithPassword('admin@email.com', 'password123')
+const title = titleValue
     const description = 'test description'
     const slug = stringWithHyphen(title)
     const dataset = await pb.collection<datasetSchema>('dataset').create({
@@ -44,7 +61,8 @@ export const createDatasetWithRelation = async (
     releatedDataset: datasetSchema[] = [],
     releatedTag: tagSchema[] = []
 ) => {
-    const title = titleValue
+await pb.admins.authWithPassword('admin@email.com', 'password123')
+const title = titleValue
     const description = 'test description'
     const slug = stringWithHyphen(title)
     const related_datasets = releatedDataset?.map((dataset) => dataset.id) ?? []
@@ -61,7 +79,6 @@ export const createDatasetWithRelation = async (
         })
     return { ...dataset, title, description }
 }
-
 export const createEvent = async (
     datasetId: string,
     userId: string,
@@ -107,9 +124,9 @@ export const loggedInUser = async ({
     request: APIRequestContext
     context: BrowserContext
 }) => {
-    const { email, password, id } = await createUser()
+    const user = await createUser()
     const response = await request.post('/api/auth/sign-in', {
-        data: { email: email, password: password },
+        data: { email: user.email, password: user.password },
         headers: { 'Content-Type': 'application/json' },
     })
     const headers = await response.headers()
@@ -117,7 +134,7 @@ export const loggedInUser = async ({
     if (setCookieHeader) {
         await context.addCookies([parseCookie(setCookieHeader)])
     }
-    return id
+    return user
 }
 
 function responseEventCleanup(res: any) {

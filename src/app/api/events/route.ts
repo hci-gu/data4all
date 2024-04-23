@@ -1,17 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
-import { EventSchema } from '@/types/zod'
+import { ClientResponseError } from 'pocketbase'
+import { EventCreateSchema } from '@/types/zod'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function POST(request: NextRequest) {
     try {
-        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+        const pb = pbForRequest(request)
+        const cookie = request.headers.get('auth')
 
-        const data = EventSchema.parse(await request.json())
+        if (!cookie) {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
+            )
+        }
 
+        const data = EventCreateSchema.parse(await request.json())
+        
+        pb.authStore.loadFromCookie(cookie)
         const record = await pb
             .collection('events')
-            .create({ ...data, user: data.user.id }, { expand: 'user,subject' })
+            .create(
+                { ...data, user: data.user, subject: data.subject?.id },
+                { expand: 'user,subject' }
+            )
 
         return NextResponse.json(
             { message: 'success', body: record },
@@ -22,6 +34,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json(
                 { message: 'misslyckades att hämta event' },
                 { status: 400 }
+            )
+        }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
             )
         }
         return NextResponse.json({ message: 'något gick fel' }, { status: 500 })

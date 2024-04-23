@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
 import { EventSchema } from '@/types/zod'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function GET(
     request: NextRequest,
@@ -9,7 +9,7 @@ export async function GET(
 ) {
     try {
         const { params } = context
-        const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+        const pb = pbForRequest(request)
 
         const records = await pb
             .collection<EventSchema>('events')
@@ -28,6 +28,12 @@ export async function GET(
             return NextResponse.json(
                 { message: 'misslyckades att hämta event' },
                 { status: 400 }
+            )
+        }
+        if (error === 'forbidden') {
+            return NextResponse.json(
+                { message: 'Du har inte tillgång' },
+                { status: 403 }
             )
         }
         return NextResponse.json(

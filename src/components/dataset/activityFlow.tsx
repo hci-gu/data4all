@@ -1,17 +1,20 @@
 'use client'
-import { EventSchema } from '@/types/zod'
-import { useState } from 'react'
+import { AuthorizedUserSchema } from '@/types/zod'
+import { useContext } from 'react'
 import { EventForm } from '.'
 import Comment from './comment'
+import { EventContext } from '@/lib/context/eventContext'
 
 export default function ActivityFlow({
     datasetId,
-    initialEvents,
 }: {
     datasetId: string
-    initialEvents: EventSchema[]
 }) {
-    const [events, setEvents] = useState(initialEvents)
+    const eventContext = useContext(EventContext)
+
+    if (!eventContext) {
+        throw new Error('EventContext is not provided')
+    }
 
     return (
         <section className="flex flex-col gap-4">
@@ -20,13 +23,10 @@ export default function ActivityFlow({
                 Bli den första att skriva något kring det här datasetet.
             </p>
 
-            <EventForm
-                datasetId={datasetId}
-                setEvents={setEvents}
-            />
+            <EventForm user={user} datasetId={datasetId} />
 
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-                {events.map((event, index) => (
+                {eventContext.events.map((event, index) => (
                     <Comment event={event} key={index} />
                 ))}
             </ul>
