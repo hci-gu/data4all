@@ -6,6 +6,7 @@ import Header from '@/components/ui/header'
 import { loadAuthorizedUser } from './api/auth/utils'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from '@/lib/context/authContext'
+import { cookies } from 'next/headers'
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -23,6 +24,8 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     const user = loadAuthorizedUser()
+    const authCookie = cookies().get('PBAuth')
+
     return (
         <html lang="en">
             <body
@@ -31,7 +34,7 @@ export default function RootLayout({
                     fontSans.variable
                 )}
             >
-                <AuthProvider user={user}>
+                <AuthProvider user={user} authCookie={authCookie?.value}>
                     <Toaster
                         position="bottom-right"
                         toastOptions={{ duration: 2500 }}
