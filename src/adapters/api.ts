@@ -37,6 +37,7 @@ const apiRequest = async (
             headers: {
                 'Content-Type': 'application/json',
                 auth: `${authCookie}`,
+                'Access-Control-Allow-Origin': env.NEXT_PUBLIC_POCKETBASE,
             },
             cache: 'no-store',
             body: body ? JSON.stringify(body) : undefined,
@@ -62,11 +63,13 @@ export const updateUser = async (
     formData: updateUserSchema,
     userId: string,
     authCookie: string
-): Promise<void> =>
-    apiRequest(apiUrl('auth/updateAccount'), 'PUT', authCookie, {
-        id: userId,
-        formData,
-    })
+) =>
+    AuthorizedUserSchema.parse(
+        await apiRequest(apiUrl('auth/updateAccount'), 'PUT', authCookie, {
+            id: userId,
+            formData,
+        })
+    )
 
 export const removeUser = async (
     userId: string,

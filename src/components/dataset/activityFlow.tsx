@@ -1,9 +1,9 @@
 'use client'
-import { AuthorizedUserSchema } from '@/types/zod'
 import { useContext } from 'react'
 import { EventForm } from '.'
 import Comment from './comment'
 import { EventContext } from '@/lib/context/eventContext'
+import { authContext } from '@/lib/context/authContext'
 
 export default function ActivityFlow({
     datasetId,
@@ -23,7 +23,7 @@ export default function ActivityFlow({
                 Bli den första att skriva något kring det här datasetet.
             </p>
 
-            <EventForm user={user} datasetId={datasetId} />
+            <EventForm datasetId={datasetId} />
 
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
                 {eventContext.events.map((event, index) => (

@@ -28,7 +28,8 @@ import { authContext } from '@/lib/context/authContext'
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
     const user = userContext?.auth
-    if (!user) {
+    const authCookie = userContext?.cookie
+    if (!user || !authCookie) {
         throw new Error('User is not authenticated')
     }
 
@@ -47,14 +48,16 @@ export default function UpdateUserForm() {
 
     const roles = Object.values(roleSchema.Values)
 
-    const submit = async (value: updateUserSchema) => {
+    const submit = (value: updateUserSchema) => {
         setIsClicked(true)
         const request = Promise.allSettled([
             updateUser(value, user.id, authCookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {
-                userContext.setAuth(res[0].status === 'fulfilled' ? res[0].value : user)
+                userContext.setAuth(
+                    res[0].status === 'fulfilled' ? res[0].value : user
+                )
                 setIsClicked(false)
             })
             .catch(() => {

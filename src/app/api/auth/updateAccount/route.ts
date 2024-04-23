@@ -25,7 +25,7 @@ export async function PUT(request: NextRequest) {
 
         const records = await pb.collection('users').update(userId, formData)
 
-        // const dbUser = await pb.collection('users').getOne(userId)
+        const dbUser = await pb.collection('users').getOne(userId)
         const token = pb.authStore.token
 
         pb.authStore.save(token, records)

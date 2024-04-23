@@ -19,22 +19,16 @@ import { EventContext } from '@/lib/context/eventContext'
 import { useContext } from 'react'
 import { authContext } from '@/lib/context/authContext'
 
-export default function EventForm({
-    user,
-    datasetId,
-    setEvents,
-}: {
-    user: AuthorizedUserSchema
-    datasetId: string
-    setEvents: Dispatch<SetStateAction<EventSchema[]>>
-}) {
+export default function EventForm({ datasetId }: { datasetId: string }) {
     const eventContext = useContext(EventContext)
-
     const userContext = useContext(authContext)
+
     const user = userContext?.auth
+    const cookie = userContext?.cookie
     if (!user) {
         throw new Error('User is not authenticated')
     }
+
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
@@ -49,7 +43,7 @@ export default function EventForm({
         },
     })
     async function onSubmit(values: formSchema) {
-        if (!user) {
+        if (!user || !cookie) {
             throw new Error('User is not authenticated')
         }
         const event: EventSchema = {
@@ -58,16 +52,13 @@ export default function EventForm({
             dataset: datasetId,
             types: 'comment',
         }
-        await createEvent({ ...event, user: user.id })
+        await createEvent({ ...event, user: user.id }, cookie)
         eventContext?.setEvents((prev) => [event, ...prev])
         form.reset()
     }
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="comment"
