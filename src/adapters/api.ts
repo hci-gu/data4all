@@ -6,6 +6,8 @@ import {
     EventSchema,
     datasetSchema,
     datasetWithRelationsSchema,
+    AuthorizedUserSchema,
+    EventCreateSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -29,7 +31,6 @@ const apiRequest = async (
     authCookie?: string,
     body?: any
 ) => {
-
     try {
         const options: RequestInit = {
             method,
@@ -76,6 +77,13 @@ export const removeUser = async (
     })
 }
 
+export const getUsers = async (
+    userName: string,
+    authCookie: string
+): Promise<AuthorizedUserSchema[]> => {
+    return await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
+}
+
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
     return datasetSchema
@@ -118,9 +126,12 @@ export const getEvents = async (datasetId: string, authCookie: string) => {
 
     return EventSchema.array().parse(cleanEvent)
 }
-export const createEvent = async (event: EventSchema, authCookie: string) => {
+export const createEvent = async (
+    event: EventCreateSchema,
+    authCookie: string
+) => {
     const cleanEvent = responseEventCleanup(
-        await apiRequest(apiUrl(`events`), 'POST', event)
+        await apiRequest(apiUrl(`events`), 'POST', authCookie, event)
     )
     return EventSchema.parse(cleanEvent)
 }
@@ -154,7 +165,7 @@ function responseDatasetCleanup(res: any) {
     }
     return cleanDataset
 }
-function responseEventCleanup(res: any) {
+function responseEventCleanup(res: any): EventSchema {
     return {
         ...res,
         user: res?.expand?.user,

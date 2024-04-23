@@ -7,18 +7,23 @@ import * as api from '@/adapters/api'
 import DatasetCard from '@/components/datasetCard'
 import { AuthorizedUserSchema } from '@/types/zod'
 import { cookies } from 'next/headers'
+import { notFound } from 'next/navigation'
 
 async function ProfilePage() {
     const authCookie = cookies().get('PBAuth')?.value
     const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
 
-    const datasets = await api.getDatasetFromUser(user.id, authCookie as string)
+    if (!authCookie) {
+        return notFound()
+    }
+
+    const datasets = await api.getDatasetFromUser(user.id, authCookie)
 
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
-                <UpdateUserForm user={user} authCookie={authCookie as string} />
+                <UpdateUserForm user={user} authCookie={authCookie} />
                 <Separator />
                 <h2 className="text-3xl font-semibold">
                     Om Kungsbacka dataportal
@@ -38,7 +43,7 @@ async function ProfilePage() {
                     <LogoutButton />
                     <RemoveAccountButton
                         userId={user.id}
-                        authCookie={authCookie as string}
+                        authCookie={authCookie}
                     />
                 </div>
             </div>

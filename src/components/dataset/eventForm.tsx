@@ -15,17 +15,18 @@ import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
 import { z } from 'zod'
-import { Dispatch, SetStateAction } from 'react'
+import { EventContext } from '@/lib/context/eventContext'
+import { useContext } from 'react'
 
 export default function EventForm({
     user,
     datasetId,
-    setEvents,
 }: {
     user: AuthorizedUserSchema
     datasetId: string
-    setEvents: Dispatch<SetStateAction<EventSchema[]>>
 }) {
+    const eventContext = useContext(EventContext)
+
     const formSchema = z.object({
         comment: z.string().min(2, {
             message: 'Kommentaren måste vara minst 2 tecken lång.',
@@ -46,16 +47,13 @@ export default function EventForm({
             dataset: datasetId,
             types: 'comment',
         }
-        await createEvent(event)
-        setEvents((prev) => [...prev, event])
+        await createEvent({ ...event, user: user.id })
+        eventContext?.setEvents((prev) => [event, ...prev])
         form.reset()
     }
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="comment"
