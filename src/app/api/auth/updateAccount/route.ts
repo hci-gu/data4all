@@ -23,7 +23,6 @@ export async function PUT(request: NextRequest) {
 
         pb.authStore.loadFromCookie(authorizedUser)
 
-        // console.log({ userId, authorizedUser, user: pb.authStore.model })
         const records = await pb.collection('users').update(userId, formData)
 
         // const dbUser = await pb.collection('users').getOne(userId)
@@ -37,8 +36,6 @@ export async function PUT(request: NextRequest) {
     } catch (error) {
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
-            console.log('error', error);
-            
             return NextResponse.json(
                 { message: 'misslyckades att uppdatera användare' },
                 { status: 400 }
