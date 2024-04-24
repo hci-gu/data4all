@@ -11,50 +11,46 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
-import { AuthorizedUserSchema, EventSchema, UserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
-import {  stringWithHyphen } from '@/lib/utils'
-import * as api from '@/adapters/api'
-import { loadAuthorizedUser } from '@/app/api/auth/utils'
-import { cookies } from 'next/headers'
+import { stringWithHyphen } from '@/lib/utils'
+
 import Image from 'next/image'
 import Dataportal from '../../../../public/dataportal.png'
 import Entryscape from '../../../../public/entryscape.png'
 import Link from 'next/link'
 import { EventProvider } from '@/lib/context/eventContext'
+import { cookies } from 'next/headers'
 
 export default async function Page({
     params: { slug },
 }: {
     params: { slug: string }
 }) {
-    const sortEvents = (a: EventSchema, b: EventSchema) => {
-        if (!a.created || !b.created) return 0
+    const cookie = cookies().get('PBAuth')?.value
 
-        const aDate = new Date(a.created)
-        const bDate = new Date(b.created)
-
-        if (aDate === bDate) return 0
-        return aDate < bDate ? 1 : -1
-    }
-    const authorizedUser = AuthorizedUserSchema.parse(loadAuthorizedUser())
-    const authCookie = cookies().get('PBAuth')?.value
-    if (!authCookie) {
-        throw new Error('Du är inte inloggad')
-    }
-    const user: UserSchema = {
+    const user: AuthorizedUserSchema = {
+        collectionId: '_pb_users_auth_',
+        collectionName: 'users',
+        created: '2024-03-18 12:56:08.789Z',
+        email: 'Sebastian.Andreasson@kungsbacka.se',
+        emailVisibility: true,
+        id: '5sufjyr2vdad3s0',
         name: 'Sebastian Andreasson',
         role: 'Admin',
+        updated: '2024-03-18 12:56:08.789Z',
+        username: 'users36283',
+        verified: false,
     }
 
-    const dataset = await getDataset(
-        stringWithHyphen(decodeURI(slug)),
-        authCookie as string
-    )
-    const events = await api.getEvents(dataset.id, authCookie)
+    if (!cookie) {
+        throw new Error('Användaren är inte inloggad')
+    }
+
+    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)), cookie)
 
     return (
-        <EventProvider event={events}>
+        <EventProvider event={undefined}>
             <main className="grid items-stretch gap-9 px-4 py-8 sm:px-28 sm:py-9 lg:grid-cols-[1fr_auto_1fr]">
                 <div className="flex flex-col gap-4">
                     <Breadcrumb className="mb-2">
@@ -80,12 +76,7 @@ export default async function Page({
                     <Typography level="H1">{dataset.title}</Typography>
                     <p className="max-w-prose text-sm">{dataset.description}</p>
                     <section aria-labelledby="DataOwner">
-                        <DataOwner
-                            user={null}
-                            signInUser={authorizedUser}
-                            authCookie={authCookie}
-                            dataset={dataset}
-                        />
+                        <DataOwner user={user} dataset={dataset} />
                     </section>
                     <section className="flex flex-col gap-1">
                         <Typography level="Large">Taggar</Typography>
@@ -146,12 +137,7 @@ export default async function Page({
                     </section>
                 </div>
                 <Separator orientation="vertical" />
-                {
-                    <ActivityFlow
-                        user={authorizedUser}
-                        datasetId={dataset.id}
-                    />
-                }
+                {<ActivityFlow datasetId={dataset.id} slug={dataset.slug} />}
             </main>
         </EventProvider>
     )

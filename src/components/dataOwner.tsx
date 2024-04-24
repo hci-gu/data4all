@@ -20,23 +20,19 @@ import { z } from 'zod'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import SuggestDataOwner from './dataset/suggestDataOwner'
 import { getUsers } from '@/adapters/api'
 import { ScrollArea } from './ui/scroll-area'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
-import { cookies } from 'next/headers'
+import { authContext } from '@/lib/context/authContext'
 
 export default function DataOwner({
     user,
-    signInUser,
-    authCookie,
     dataset,
 }: {
     user: AuthorizedUserSchema | null
-    signInUser: AuthorizedUserSchema
-    authCookie: string
     dataset: datasetSchema
 }) {
     const recommendedUsers: AuthorizedUserSchema[] = [
@@ -95,6 +91,14 @@ export default function DataOwner({
             verified: false,
         },
     ]
+    const userContext = useContext(authContext)
+
+    const authCookie = userContext?.cookie
+
+    if (!authCookie) {
+        throw new Error('Användaren är inte inloggad')
+    }
+
     const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
     const [searchTerm, setSearchTerm] = useState('')
     const time = 250
@@ -110,7 +114,6 @@ export default function DataOwner({
             dataset: '',
         },
     })
-
 
     const autoComplete = async () => {
         await Promise.allSettled([
@@ -178,8 +181,6 @@ export default function DataOwner({
                                         <li key={index}>
                                             <SuggestDataOwner
                                                 user={user}
-                                                signInUser={signInUser}
-                                                authCookie={authCookie}
                                                 dataset={dataset}
                                             />
                                         </li>
