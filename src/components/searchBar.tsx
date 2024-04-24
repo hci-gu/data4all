@@ -87,6 +87,8 @@ export default function SearchBar({
             setSuggestions(
                 await api.getDatasets(debouncedSearchTerm, authCookie)
             )
+            const test = await api.getUsers(debouncedSearchTerm, authCookie)
+            console.log(test)
         }
     }
 
@@ -99,9 +101,7 @@ export default function SearchBar({
     }
 
     const sugestionsOnFocus = async () => {
-        setSuggestions(
-            await api.getDatasets(debouncedSearchTerm, authCookie)
-        )
+        setSuggestions(await api.getDatasets(debouncedSearchTerm, authCookie))
     }
 
     suggestions.sort((a, b) => {

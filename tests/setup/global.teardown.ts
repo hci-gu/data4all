@@ -3,8 +3,8 @@ import PocketBase from 'pocketbase'
 const pb = new PocketBase('http://localhost:8090')
 
 setup('setup', async () => {
-    const datasets = await pb.collection('dataset').getFullList()
     await pb.admins.authWithPassword('admin@email.com', 'password123')
+    const datasets = await pb.collection('dataset').getFullList()
     const events = await pb.collection('events').getFullList()
 
     const users = await pb.collection('users').getFullList()

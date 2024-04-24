@@ -1,4 +1,3 @@
-import * as api from '@/adapters/api'
 import SearchBar from '@/components/searchBar'
 import SearchResults from '@/components/searchResults'
 import Typography from '@/components/ui/Typography'

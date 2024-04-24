@@ -6,7 +6,7 @@ import { Settings2 } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import * as api from '@/adapters/api'
-import { datasetWithRelationsSchema } from '@/types/zod'
+import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
 
 export default function SearchResults({
     searchTerm,
@@ -17,6 +17,7 @@ export default function SearchResults({
     const authCookie = userContext?.cookie
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
+    const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
@@ -27,9 +28,12 @@ export default function SearchResults({
                 return
             }
             setDatasets(await api.getDatasets(searchTerm, authCookie))
+            setUsers(await api.getUsers(searchTerm, authCookie))
         }
         fetchData()
     }, [])
+
+    console.log(users)
 
     return (
         <>
