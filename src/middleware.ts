@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type NextRequest } from 'next/server'
 import PocketBase from 'pocketbase'
 import { env } from './lib/env'
 
@@ -7,7 +7,6 @@ export async function middleware(request: NextRequest) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     const path = request.nextUrl.pathname
-    const response = NextResponse.next()
 
     if (authorizedUser) {
         pb.authStore.loadFromCookie(authorizedUser.value)
@@ -18,17 +17,18 @@ export async function middleware(request: NextRequest) {
     const isInvalidAuth =
         authorizedUser && !pb.authStore.isValid && !isLoginPage
 
-    if (isUnauthorized || isInvalidAuth) {
+    if (isUnauthorized) {
         return Response.redirect(new URL('/logga-in', request.url))
     }
     if (authorizedUser && isLoginPage) {
         return Response.redirect(new URL('/profile', request.url))
     }
+    if (isInvalidAuth && !path.startsWith('/panic')) {
+        return Response.redirect(new URL('/panic', request.url))
+    }
     if (authorizedUser && !isLoginPage && !path.startsWith('/panic')) {
         try {
-            const user = await pb
-                .collection('users')
-                .getOne(pb.authStore.model?.id)
+            await pb.collection('users').getOne(pb.authStore.model?.id)
         } catch (error) {
             return Response.redirect(new URL('/panic', request.url))
         }
