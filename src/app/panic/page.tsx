@@ -26,7 +26,7 @@ export default function panic() {
         return (
             <main className="grid h-screen place-content-center">
                 <Typography level="H1">
-                    Något hände med din in loggning
+                    Något hände med din inloggning
                 </Typography>
                 <div className="mt-2 flex gap-4">
                     <LogoutButton text="Gå till logga in" />
