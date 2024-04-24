@@ -2,18 +2,27 @@
 import { signOut } from '@/adapters/api'
 import { LogoutButton } from '@/components/auth'
 import Typography from '@/components/ui/Typography'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-async function test() {
-    const router = useRouter()
+async function RedirectToLogin(router: AppRouterInstance) {
     await signOut()
     router.push('/logga-in')
 }
-export default async function panic() {
-    try {
-        test()
-        return
-    } catch (error) {
+export default function panic() {
+    const router = useRouter()
+    const [redirectFailed, setRedirectFailed] = useState(false)
+
+    useEffect(() => {
+        try {
+            RedirectToLogin(router)
+            return
+        } catch (error) {
+            setRedirectFailed(true)
+        }
+    })
+    if (redirectFailed) {
         return (
             <main className="grid h-screen place-content-center">
                 <Typography level="H1">
@@ -25,4 +34,5 @@ export default async function panic() {
             </main>
         )
     }
+    return
 }

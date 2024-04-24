@@ -23,8 +23,8 @@ export default function SignIn() {
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'testEmail@gmail.com',
+            password: 'password123',
         },
     })
     const submit = async (value: signInSchema) => {
