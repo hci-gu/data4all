@@ -5,12 +5,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-} from './ui/form'
+import { Form, FormControl, FormField, FormItem } from './ui/form'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Loader2, Search } from 'lucide-react'
@@ -57,7 +52,6 @@ export default function SearchBar({
     initialSearchTerm?: string
     authCookie?: string
 }) {
-
     const [isClicked, setIsClicked] = useState(false)
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
     const [isFocused, setIsFocused] = useState(false)
@@ -120,7 +114,7 @@ export default function SearchBar({
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
-                    className="z-50 flex w-fit flex-col items-start max-sm:mt-1 max-sm:w-full"
+                    className="z-50 flex w-fit flex-col items-start max-sm:mt-1 max-sm:w-full sm:relative"
                     onChange={() => setSearchTerm(form.getValues('searchTerm'))}
                 >
                     <div className="mb-[6px] flex max-w-[432px] gap-2 max-sm:w-full">
@@ -161,7 +155,7 @@ export default function SearchBar({
                         )}
                     </div>
                     {!!isFocused && (
-                        <div className="absolute left-0 right-0 top-[1rem] z-10 mx-auto mt-11 h-fit w-[392px] rounded-md bg-white shadow max-sm:w-screen">
+                        <div className="absolute left-0 right-0 top-[1rem] z-10 mx-auto mt-11 h-fit w-[392px] rounded-md bg-white shadow max-sm:w-screen sm:right-12 sm:mx-0">
                             {suggestions.length > 0 &&
                             debouncedSearchTerm !== '' ? (
                                 <div className="flex w-full flex-col py-2">
