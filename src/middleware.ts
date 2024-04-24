@@ -24,16 +24,13 @@ export async function middleware(request: NextRequest) {
     if (authorizedUser && isLoginPage) {
         return Response.redirect(new URL('/profile', request.url))
     }
-    if (authorizedUser && !isLoginPage) {
+    if (authorizedUser && !isLoginPage && !path.startsWith('/panic')) {
         try {
             const user = await pb
                 .collection('users')
                 .getOne(pb.authStore.model?.id)
         } catch (error) {
-            response.cookies.delete(authorizedUser)
-            response.cookies.delete('PBAuth')
-            
-            return Response.redirect(new URL('/logga-in', request.url))
+            return Response.redirect(new URL('/panic', request.url))
         }
     }
 }
