@@ -76,7 +76,7 @@ export default async function Page({
                     <Typography level="H1">{dataset.title}</Typography>
                     <p className="max-w-prose text-sm">{dataset.description}</p>
                     <section aria-labelledby="DataOwner">
-                        <DataOwner user={user} dataset={dataset} />
+                        <DataOwner user={null} dataset={dataset} />
                     </section>
                     <section className="flex flex-col gap-1">
                         <Typography level="Large">Taggar</Typography>

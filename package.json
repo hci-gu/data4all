@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "next dev -- -H 0.0.0.0",
+        "dev": "next dev",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
@@ -30,6 +30,7 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "cmdk": "^1.0.0",
+        "dotenv": "^16.4.5",
         "jiti": "^1.21.0",
         "lucide-react": "^0.344.0",
         "moment": "^2.30.1",
