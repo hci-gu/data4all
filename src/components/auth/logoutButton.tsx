@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 
-export default function LogoutButton() {
+export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
     const logout = async () => {
@@ -23,7 +23,7 @@ export default function LogoutButton() {
         return (
             <>
                 <Button variant={'outline'} onClick={() => logout()}>
-                    Logga ut
+                    {text}
                 </Button>
             </>
         )
@@ -32,7 +32,7 @@ export default function LogoutButton() {
         <>
             <Button variant={'outline'} disabled onClick={() => logout()}>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Logga ut
+                {text}
             </Button>
         </>
     )
