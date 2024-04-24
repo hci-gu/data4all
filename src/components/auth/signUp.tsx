@@ -30,9 +30,9 @@ export default function SignUp() {
     const form = useForm<signUpSchema>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
-            email: 'testEmail@gmail.com',
-            password: 'password123',
-            passwordConfirmation: 'password123',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
         },
         resetOptions: {
             keepIsSubmitSuccessful: true,
