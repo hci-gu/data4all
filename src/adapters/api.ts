@@ -53,8 +53,10 @@ const apiRequest = async (
 export const signUp = async (user: signUpSchema): Promise<void> =>
     apiRequest(apiUrl('auth/sign-up'), 'POST', undefined, user)
 
-export const signIn = async (user: signInSchema): Promise<void> =>
-    apiRequest(apiUrl('auth/sign-in'), 'POST', undefined, user)
+export const signIn = async (user: signInSchema) =>
+    AuthorizedUserSchema.parse(
+        await apiRequest(apiUrl('auth/sign-in'), 'POST', undefined, user)
+    )
 
 export const signOut = async (): Promise<void> =>
     apiRequest(apiUrl('auth/sign-out'), 'DELETE')
@@ -138,15 +140,8 @@ export const createEvent = async (
     )
     return EventSchema.parse(cleanEvent)
 }
-export const getDatasetFromUser = async (
-    userId: string,
-    authCookie: string
-) => {
-    const datasets = await apiRequest(
-        apiUrl(`datasets/user/${userId}`),
-        'GET',
-        authCookie
-    )
+export const getDatasetFromUser = async (userId: string) => {
+    const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
 
     const cleanDatasets = datasets.map(responseDatasetCleanup)
 

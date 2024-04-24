@@ -2,20 +2,29 @@
 import DatasetCard from '@/components/datasetCard'
 import * as api from '@/adapters/api'
 
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
+import { datasetWithRelationsSchema } from '@/types/zod'
 
-export default async function ProfileDatasetList({
-    userId,
-}: {
-    userId: string
-}) {
-    // const userContext = useContext(authContext)
-    // const user = userContext?.auth
-    // if (!user) {
-    //     throw new Error('User is not authenticated')
-    // }
-    const datasets = await api.getDatasetFromUser(userId)
+export default function ProfileDatasetList() {
+    const userContext = useContext(authContext)
+    const user = userContext?.auth?.id
+
+    const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
+
+    useEffect(() => {
+        async function fetchData() {
+            if (!user) {
+                throw new Error('Användaren är inte inloggad.')
+            }
+            try {
+                setDatasets(await api.getDatasetFromUser(user))
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchData()
+    }, [])
 
     if (datasets.length > 0) {
         return datasets.map((dataset) => (

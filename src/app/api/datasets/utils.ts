@@ -2,10 +2,12 @@ import { pb } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
 
-async function datasetsForIds(datasetIds: string[]): Promise<any[]> {
-    const records = await pb.collection('dataset').getFullList({
-        filter: datasetIds.map((id) => `id="${id}"`).join('||'),
-    })
+async function datasetsForIds(datasetIds: string[]) {
+    const records = datasetSchema.array().parse(
+        await pb.collection('dataset').getFullList({
+            filter: datasetIds.map((id) => `id="${id}"`).join('||'),
+        })
+    )
 
     return records
 }
@@ -36,7 +38,7 @@ export async function datasetForSlug(datasetSlug: string, authCookie: string) {
     return records
 }
 export async function datasetsForUserId(userId: string, authCookie: string) {
-    pb.authStore.loadFromCookie(authCookie as string)
+    pb.authStore.loadFromCookie(authCookie)
     const userEvents = await pb.collection('events').getList(1, 50, {
         filter: `user = "${userId}"`,
     })

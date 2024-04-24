@@ -1,21 +1,10 @@
-'use client'
 import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
 import ProfileDatasetList from '@/components/profileDatasetList'
-import { useContext } from 'react'
-import { authContext } from '@/lib/context/authContext'
-import { cookies } from 'next/headers'
-import { notFound } from 'next/navigation'
 
-async function ProfilePage() {
-    const userContext = useContext(authContext)
-    const user = userContext?.auth
-
-    if (!user) {
-        throw new Error('User is not authenticated')
-    }
+function ProfilePage() {
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
@@ -51,7 +40,7 @@ async function ProfilePage() {
                     Dina dataset
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
-                    <ProfileDatasetList userId={user.id} />
+                    <ProfileDatasetList />
                 </div>
             </div>
         </main>
