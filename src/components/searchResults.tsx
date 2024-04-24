@@ -1,14 +1,36 @@
-import {  datasetWithRelationsSchema } from '@/types/zod'
+'use client'
 import Typography from './ui/Typography'
 import DatasetCard from './datasetCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {  Settings2 } from 'lucide-react'
+import { Settings2 } from 'lucide-react'
+import { useContext, useEffect, useState } from 'react'
+import { authContext } from '@/lib/context/authContext'
+import * as api from '@/adapters/api'
+import { datasetWithRelationsSchema } from '@/types/zod'
 
 export default function SearchResults({
-    records,
+    searchTerm,
 }: {
-    records: datasetWithRelationsSchema[]
+    searchTerm: string | undefined
 }) {
+    const userContext = useContext(authContext)
+    const authCookie = userContext?.cookie
+
+    const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
+
+    useEffect(() => {
+        async function fetchData() {
+            if (!authCookie) {
+                throw new Error('Användaren är inte inloggad')
+            }
+            if (!searchTerm) {
+                return
+            }
+            setDatasets(await api.getDatasets(searchTerm, authCookie))
+        }
+        fetchData()
+    }, [])
+
     return (
         <>
             <div className="mt-8 grid w-full max-w-[1220px] grid-cols-2 gap-8 max-sm:mt-0 max-sm:flex max-sm:flex-col">
@@ -17,9 +39,9 @@ export default function SearchResults({
                         <Typography level="H3">Dataset</Typography>
                         <p>resultat</p>
                     </div>
-                    {records.length > 0 ? (
+                    {datasets.length > 0 ? (
                         <ul className="flex flex-col gap-[10px]">
-                            {records.map((dataset) => {
+                            {datasets.map((dataset) => {
                                 return (
                                     <li key={dataset.id}>
                                         <DatasetCard dataset={dataset} />
@@ -54,8 +76,8 @@ export default function SearchResults({
                     </TabsList>
                     <TabsContent value="dataset">
                         <ul className="flex flex-col gap-[10px]">
-                            {records.length > 0 ? (
-                                records.map((dataset) => {
+                            {datasets.length > 0 ? (
+                                datasets.map((dataset) => {
                                     return (
                                         <li key={dataset.id}>
                                             <DatasetCard dataset={dataset} />
