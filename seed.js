@@ -103,6 +103,69 @@ const getRandomTag = (tags) => {
         },
     ]
 
+    const newTestUsers = [
+        {
+            name: 'Suzuka Nakamoto',
+            email: 'Suzuka_Nakamoto@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Moa Kikuchi',
+            email: 'Moa_Kikuchi@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Momoko Okazaki',
+            email: 'Momoko_Okazaki@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'John Smith',
+            email: 'john_smith@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Maria Rodriguez',
+            email: 'maria_rodriguez@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Chen Wei',
+            email: 'chen_wei@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Emily Johnson',
+            email: 'emily_johnson@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Muhammad Khan',
+            email: 'muhammad_khan@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Sophie Martin',
+            email: 'sophie_martin@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+        {
+            name: 'Kim Sung',
+            email: 'kim_sung@kungsbacka.com',
+            role: 'User',
+            password: 'password123',
+        },
+    ]
+
     const testdatasets = await pb.collection('dataset').getFullList()
     if (testdatasets.length > 0) {
         for (let index = 0; index < testdatasets.length; index++) {
@@ -149,4 +212,37 @@ const getRandomTag = (tags) => {
             { $autoCancel: false }
         )
     }
+
+    const allusers = await pb.collection('users').getFullList()
+    if (allusers.length > 0) {
+        for (let index = 0; index < allusers.length; index++) {
+            for (let j = 0; j < newTestUsers.length; j++) {
+                const testUser = newTestUsers[j]
+                if (allusers[index].email.includes(testUser.email)) {
+                    await pb.collection('users').delete(allusers[index].id)
+                }
+            }
+        }
+    }
+
+    let testUsers = []
+    for (let index = 0; index < newTestUsers.length; index++) {
+        const user = newTestUsers[index]
+        testUsers.push(
+            await pb.collection('users').create(
+                {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    password: user.password,
+                    passwordConfirm: user.password,
+                },
+                {
+                    $autoCancel: false,
+                }
+            )
+        )
+    }
+
+    await Promise.all(testUsers)
 })()
