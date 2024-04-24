@@ -3,8 +3,8 @@ import { EventSchema } from '@/types/zod'
 import { Dispatch, SetStateAction, createContext, useState } from 'react'
 
 type contextSchema = {
-    events: EventSchema[]
-    setEvents: Dispatch<SetStateAction<EventSchema[]>>
+    events: EventSchema[] | undefined
+    setEvents: Dispatch<SetStateAction<EventSchema[] | undefined>>
 }
 
 export const EventContext = createContext<contextSchema | null>(null)
@@ -14,9 +14,9 @@ export const EventProvider = ({
     event,
 }: {
     children: React.ReactNode
-    event: EventSchema[]
+    event: EventSchema[] | undefined
 }) => {
-    const [events, setEvents] = useState<EventSchema[]>(event)
+    const [events, setEvents] = useState<EventSchema[] | undefined>(event)
     return (
         <EventContext.Provider value={{ events, setEvents }}>
             {children}

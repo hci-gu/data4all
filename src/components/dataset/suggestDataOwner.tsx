@@ -13,24 +13,29 @@ import { AuthorizedUserSchema, EventSchema, datasetSchema } from '@/types/zod'
 import { createEvent } from '@/adapters/api'
 import { useContext } from 'react'
 import { EventContext } from '@/lib/context/eventContext'
-import { cookies } from 'next/headers'
+import { authContext } from '@/lib/context/authContext'
 export default function SuggestDataOwner({
     user,
     dataset,
-    signInUser,
-    authCookie,
 }: {
     user: AuthorizedUserSchema | null
-    signInUser: AuthorizedUserSchema
-    authCookie: string
     dataset: datasetSchema
 }) {
     if (!user) return
 
     const eventContext = useContext(EventContext)
+    const setEvents = eventContext?.setEvents
 
-    if (!eventContext) {
+    const userContext = useContext(authContext)
+    const signInUser = userContext?.auth
+    const authCookie = userContext?.cookie
+
+    if (!eventContext || !setEvents) {
         throw new Error('EventContext is not provided')
+    }
+
+    if (!signInUser || !authCookie) {
+        throw new Error('Användaren är inte inloggad')
     }
 
     const onSubmit = async () => {
@@ -51,7 +56,7 @@ export default function SuggestDataOwner({
             { ...data, user: data.user.id },
             authCookie
         )
-        eventContext.setEvents((prev) => [respond, ...prev])
+        eventContext.setEvents((prev) => [respond, ...(prev ?? [])])
     }
 
     return (

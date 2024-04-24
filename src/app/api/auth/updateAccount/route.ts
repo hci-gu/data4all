@@ -25,14 +25,17 @@ export async function PUT(request: NextRequest) {
 
         const records = await pb.collection('users').update(userId, formData)
 
-        // const dbUser = await pb.collection('users').getOne(userId)
+        const dbUser = await pb.collection('users').getOne(userId)
         const token = pb.authStore.token
 
         pb.authStore.save(token, records)
         const authCookie = pb.authStore.exportToCookie()
         cookies().set('PBAuth', authCookie)
 
-        return NextResponse.json({ message: 'success' }, { status: 200 })
+        return NextResponse.json(
+            { message: 'success', body: dbUser },
+            { status: 200 }
+        )
     } catch (error) {
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend

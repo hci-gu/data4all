@@ -2,28 +2,14 @@ import { LogoutButton } from '@/components/auth'
 import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
-import { loadAuthorizedUser } from '../api/auth/utils'
-import * as api from '@/adapters/api'
-import DatasetCard from '@/components/datasetCard'
-import { AuthorizedUserSchema } from '@/types/zod'
-import { cookies } from 'next/headers'
-import { notFound } from 'next/navigation'
+import ProfileDatasetList from '@/components/profileDatasetList'
 
-async function ProfilePage() {
-    const authCookie = cookies().get('PBAuth')?.value
-    const user = AuthorizedUserSchema.parse(loadAuthorizedUser())
-
-    if (!authCookie) {
-        return notFound()
-    }
-
-    const datasets = await api.getDatasetFromUser(user.id, authCookie)
-
+function ProfilePage() {
     return (
         <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
-                <UpdateUserForm user={user} authCookie={authCookie} />
+                <UpdateUserForm />
                 <Separator />
                 <h2 className="text-3xl font-semibold">
                     Om Kungsbacka dataportal
@@ -41,10 +27,7 @@ async function ProfilePage() {
                 <Separator />
                 <div className="flex justify-start gap-[10px] max-sm:flex-col">
                     <LogoutButton />
-                    <RemoveAccountButton
-                        userId={user.id}
-                        authCookie={authCookie}
-                    />
+                    <RemoveAccountButton />
                 </div>
             </div>
             <Separator
@@ -57,17 +40,7 @@ async function ProfilePage() {
                     Dina dataset
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
-                    {datasets.length > 0 ? (
-                        datasets.map((dataset) => (
-                            <DatasetCard key={dataset.id} dataset={dataset} />
-                        ))
-                    ) : (
-                        <>
-                            <p className="text-center">
-                                Du har inga relaterade dataset.
-                            </p>
-                        </>
-                    )}
+                    <ProfileDatasetList />
                 </div>
             </div>
         </main>

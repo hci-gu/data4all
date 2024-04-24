@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -14,6 +14,7 @@ import * as api from '@/adapters/api'
 import { datasetSchema } from '@/types/zod'
 import Link from 'next/link'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
+import { authContext } from '@/lib/context/authContext'
 const searchSchema = z.object({
     searchTerm: z.string().min(1),
 })
@@ -47,10 +48,8 @@ const Highlight = ({
 
 export default function SearchBar({
     initialSearchTerm,
-    authCookie,
 }: {
     initialSearchTerm?: string
-    authCookie?: string
 }) {
     const [isClicked, setIsClicked] = useState(false)
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
@@ -58,6 +57,14 @@ export default function SearchBar({
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
     const [suggestions, setSuggestions] = useState<datasetSchema[]>([])
     const router = useRouter()
+
+    const userContext = useContext(authContext)
+    const authCookie = userContext?.cookie
+
+    if (!authCookie) {
+        throw new Error('Användaren är inte inloggad')
+    }
+
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
         defaultValues: {
@@ -78,7 +85,7 @@ export default function SearchBar({
     const autoComplete = async () => {
         if (!!isFocused) {
             setSuggestions(
-                await api.getDatasets(debouncedSearchTerm, authCookie as string)
+                await api.getDatasets(debouncedSearchTerm, authCookie)
             )
         }
     }
@@ -93,7 +100,7 @@ export default function SearchBar({
 
     const sugestionsOnFocus = async () => {
         setSuggestions(
-            await api.getDatasets(debouncedSearchTerm, authCookie as string)
+            await api.getDatasets(debouncedSearchTerm, authCookie)
         )
     }
 
