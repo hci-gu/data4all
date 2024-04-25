@@ -3,10 +3,10 @@ import { AuthorizedUserSchema } from '@/types/zod'
 import { Dispatch, SetStateAction, createContext, useState } from 'react'
 
 type AuthContextType = {
-    auth: AuthorizedUserSchema | undefined
-    setAuth: Dispatch<SetStateAction<AuthorizedUserSchema | undefined>>
-    cookie: string | undefined
-    setCookie: Dispatch<SetStateAction<string | undefined>>
+    auth: AuthorizedUserSchema
+    setAuth: Dispatch<SetStateAction<AuthorizedUserSchema>>
+    cookie: string
+    setCookie: Dispatch<SetStateAction<string>>
 }
 
 export const authContext = createContext<AuthContextType | null>(null)
@@ -17,11 +17,11 @@ export const AuthProvider = ({
     authCookie,
 }: {
     children: React.ReactNode
-    user: AuthorizedUserSchema | undefined
-    authCookie: string | undefined
+    user: AuthorizedUserSchema
+    authCookie: string
 }) => {
-    const [auth, setAuth] = useState<AuthorizedUserSchema | undefined>(user)
-    const [cookie, setCookie] = useState<string | undefined>(authCookie)
+    const [auth, setAuth] = useState<AuthorizedUserSchema>(user)
+    const [cookie, setCookie] = useState<string>(authCookie)
 
     return (
         <authContext.Provider value={{ auth, setAuth, cookie, setCookie }}>
