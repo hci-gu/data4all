@@ -1,10 +1,8 @@
-import * as api from '@/adapters/api'
 import SearchBar from '@/components/searchBar'
 import SearchResults from '@/components/searchResults'
 import Typography from '@/components/ui/Typography'
 import WelcomeBack from '@/components/welcomeBack'
 import { X } from 'lucide-react'
-import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 export default async function page({
@@ -12,14 +10,7 @@ export default async function page({
 }: {
     searchParams?: { [key: string]: string | undefined }
 }) {
-    const authCookie = cookies().get('PBAuth')?.value
     const searchTerm = searchParams?.searchTerm
-    api.pb.authStore.loadFromCookie(authCookie as string)
-
-    const datasets = await api.getDatasets(
-        searchTerm as string,
-        authCookie as string
-    )
 
     return (
         <>
@@ -33,13 +24,10 @@ export default async function page({
                 </div>
 
                 <div className="max-sm:hidden">
-                  <SearchBar
-                      initialSearchTerm={searchTerm}
-                      authCookie={authCookie}
-                  />
+                    <SearchBar initialSearchTerm={searchTerm} />
                 </div>
 
-                <SearchResults records={datasets} />
+                <SearchResults searchTerm={searchTerm} />
             </main>
         </>
     )

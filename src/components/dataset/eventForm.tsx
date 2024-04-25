@@ -11,21 +11,23 @@ import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { AuthorizedUserSchema, EventSchema } from '@/types/zod'
+import { EventSchema } from '@/types/zod'
 import { getInitials } from '@/lib/utils'
 import { createEvent } from '@/adapters/api'
 import { z } from 'zod'
 import { EventContext } from '@/lib/context/eventContext'
 import { useContext } from 'react'
+import { authContext } from '@/lib/context/authContext'
 
-export default function EventForm({
-    user,
-    datasetId,
-}: {
-    user: AuthorizedUserSchema
-    datasetId: string
-}) {
+export default function EventForm({ datasetId }: { datasetId: string }) {
     const eventContext = useContext(EventContext)
+    const userContext = useContext(authContext)
+
+    const user = userContext?.auth
+    const cookie = userContext?.cookie
+    if (!user) {
+        throw new Error('User is not authenticated')
+    }
 
     const formSchema = z.object({
         comment: z.string().min(2, {
@@ -41,13 +43,16 @@ export default function EventForm({
         },
     })
     async function onSubmit(values: formSchema) {
+        if (!user || !cookie) {
+            throw new Error('User is not authenticated')
+        }
         const event: EventSchema = {
-            user,
+            user: user,
             content: values.comment,
             dataset: datasetId,
             types: 'comment',
         }
-        await createEvent({ ...event, user: user.id })
+        await createEvent({ ...event, user: user.id }, cookie)
         eventContext?.setEvents((prev) => [event, ...prev])
         form.reset()
     }

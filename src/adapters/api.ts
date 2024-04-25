@@ -37,6 +37,7 @@ const apiRequest = async (
             headers: {
                 'Content-Type': 'application/json',
                 auth: `${authCookie}`,
+                'Access-Control-Allow-Origin': env.NEXT_PUBLIC_POCKETBASE,
             },
             cache: 'no-store',
             body: body ? JSON.stringify(body) : undefined,
@@ -52,8 +53,10 @@ const apiRequest = async (
 export const signUp = async (user: signUpSchema): Promise<void> =>
     apiRequest(apiUrl('auth/sign-up'), 'POST', undefined, user)
 
-export const signIn = async (user: signInSchema): Promise<void> =>
-    apiRequest(apiUrl('auth/sign-in'), 'POST', undefined, user)
+export const signIn = async (user: signInSchema) =>
+    AuthorizedUserSchema.parse(
+        await apiRequest(apiUrl('auth/sign-in'), 'POST', undefined, user)
+    )
 
 export const signOut = async (): Promise<void> =>
     apiRequest(apiUrl('auth/sign-out'), 'DELETE')
@@ -62,11 +65,13 @@ export const updateUser = async (
     formData: updateUserSchema,
     userId: string,
     authCookie: string
-): Promise<void> =>
-    apiRequest(apiUrl('auth/updateAccount'), 'PUT', authCookie, {
-        id: userId,
-        formData,
-    })
+) =>
+    AuthorizedUserSchema.parse(
+        await apiRequest(apiUrl('auth/updateAccount'), 'PUT', authCookie, {
+            id: userId,
+            formData,
+        })
+    )
 
 export const removeUser = async (
     userId: string,
@@ -135,21 +140,10 @@ export const createEvent = async (
     )
     return EventSchema.parse(cleanEvent)
 }
-export const getDatasetFromUser = async (
-    userId: string,
-    authCookie: string
-) => {
-    const datasets = await apiRequest(
-        apiUrl(`datasets/user/${userId}`),
-        'GET',
-        authCookie
-    )
+export const getDatasetFromUser = async (userId: string) => {
+    const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET')
 
-    let cleanDatasets = []
-    for (let i = 0; datasets.length > i; i++) {
-        const cleanDataset = responseDatasetCleanup(datasets[i])
-        cleanDatasets.push(cleanDataset)
-    }
+    const cleanDatasets = datasets.map(responseDatasetCleanup)
 
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
