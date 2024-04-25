@@ -3,15 +3,22 @@ import { signOut } from '@/adapters/api'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { authContext } from '@/lib/context/authContext'
 
 export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
+    const userContext = useContext(authContext)
+    if (!userContext) {
+        throw new Error('User context is not defined')
+    }
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
     const logout = async () => {
         try {
             setIsClicked(true)
+            userContext.setAuth(undefined)
+            userContext.setCookie(undefined)
             await signOut()
             router.push('/logga-in')
         } catch (e) {

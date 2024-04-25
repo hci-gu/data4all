@@ -37,7 +37,7 @@ export default function SignIn() {
         try {
             const user = await api.signIn(value)
             userContext.setAuth(user)
-            
+            userContext.setCookie(api.pb.authStore.exportToCookie())
             router.push('/')
         } catch (event) {
             form.setError('root', { message: 'Inloggnings uppgifter är fel' })
