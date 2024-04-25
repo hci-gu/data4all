@@ -27,11 +27,10 @@ import { authContext } from '@/lib/context/authContext'
 
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
-    const user = userContext?.auth
-    const authCookie = userContext?.cookie
-    if (!user || !authCookie) {
-        throw new Error('User is not authenticated')
+    if (!userContext) {
+        throw new Error('userContext is not defined')
     }
+    const user = userContext.auth
 
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
@@ -51,7 +50,7 @@ export default function UpdateUserForm() {
     const submit = (value: updateUserSchema) => {
         setIsClicked(true)
         const request = Promise.allSettled([
-            updateUser(value, user.id, authCookie),
+            updateUser(value, user.id, userContext.cookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {

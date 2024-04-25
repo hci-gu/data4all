@@ -37,7 +37,7 @@ const apiRequest = async (
             headers: {
                 'Content-Type': 'application/json',
                 auth: `${authCookie}`,
-                'Access-Control-Allow-Origin': env.NEXT_PUBLIC_POCKETBASE,
+                // 'Access-Control-Allow-Origin': env.NEXT_PUBLIC_POCKETBASE,
             },
             cache: 'no-store',
             body: body ? JSON.stringify(body) : undefined,

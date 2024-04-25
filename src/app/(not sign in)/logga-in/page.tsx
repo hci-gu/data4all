@@ -1,6 +1,6 @@
 import Typography from '@/components/ui/Typography'
 import Image from 'next/image'
-import absurd from '../../../public/absurd 1.png'
+import absurd from '../../../../public/absurd 1.png'
 import { SignIn } from '@/components/auth'
 
 function LoginPage() {
