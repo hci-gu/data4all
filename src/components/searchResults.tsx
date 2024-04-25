@@ -14,15 +14,12 @@ export default function SearchResults({
     searchTerm: string | undefined
 }) {
     const userContext = useContext(authContext)
-    const authCookie = userContext?.cookie
+    const authCookie = userContext.cookie
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
-            if (!authCookie) {
-                throw new Error('Användaren är inte inloggad')
-            }
             if (!searchTerm) {
                 return
             }

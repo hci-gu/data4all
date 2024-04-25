@@ -59,11 +59,7 @@ export default function SearchBar({
     const router = useRouter()
 
     const userContext = useContext(authContext)
-    const authCookie = userContext?.cookie
-
-    if (!authCookie) {
-        throw new Error('Användaren är inte inloggad')
-    }
+    const authCookie = userContext.cookie
 
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
@@ -99,9 +95,7 @@ export default function SearchBar({
     }
 
     const sugestionsOnFocus = async () => {
-        setSuggestions(
-            await api.getDatasets(debouncedSearchTerm, authCookie)
-        )
+        setSuggestions(await api.getDatasets(debouncedSearchTerm, authCookie))
     }
 
     suggestions.sort((a, b) => {

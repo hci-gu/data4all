@@ -50,7 +50,7 @@ export default async function Page({
     const dataset = await getDataset(stringWithHyphen(decodeURI(slug)), cookie)
 
     return (
-        <EventProvider event={undefined}>
+        <EventProvider event={[]}>
             <main className="grid items-stretch gap-9 px-4 py-8 sm:px-28 sm:py-9 lg:grid-cols-[1fr_auto_1fr]">
                 <div className="flex flex-col gap-4">
                     <Breadcrumb className="mb-2">

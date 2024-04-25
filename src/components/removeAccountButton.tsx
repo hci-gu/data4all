@@ -9,17 +9,14 @@ import { authContext } from '@/lib/context/authContext'
 
 export default function RemoveAccountButton() {
     const userContext = useContext(authContext)
-    const user = userContext?.auth
-    if (!user) {
-        throw new Error('User is not authenticated')
-    }
+    const user = userContext.auth
 
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
     const removeAccount = async () => {
         try {
             setIsClicked(true)
-            await removeUser(user.id)
+            await removeUser(user.id, userContext.cookie)
             router.push('/skapa-konto')
         } catch (e) {
             setIsClicked(false)

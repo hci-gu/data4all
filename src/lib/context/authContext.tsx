@@ -9,7 +9,24 @@ type AuthContextType = {
     setCookie: Dispatch<SetStateAction<string>>
 }
 
-export const authContext = createContext<AuthContextType | null>(null)
+export const authContext = createContext<AuthContextType>({
+    auth: {
+        id: '',
+        username: '',
+        name: '',
+        email: '',
+        role: 'User',
+        collectionId: '',
+        collectionName: '',
+        emailVisibility: true,
+        verified: false,
+        created: '',
+        updated: '',
+    },
+    setAuth: () => {},
+    cookie: '',
+    setCookie: () => {},
+})
 
 export const AuthProvider = ({
     children,

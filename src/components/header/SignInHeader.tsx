@@ -16,7 +16,7 @@ export default function SignInHeader() {
     if (!userContext) {
         throw new Error('Auth context is missing')
     }
-    const usersName = userContext.auth?.name
+    const usersName = userContext.auth.name
 
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     return (

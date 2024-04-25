@@ -23,11 +23,8 @@ export default function EventForm({ datasetId }: { datasetId: string }) {
     const eventContext = useContext(EventContext)
     const userContext = useContext(authContext)
 
-    const user = userContext?.auth
-    const cookie = userContext?.cookie
-    if (!user) {
-        throw new Error('User is not authenticated')
-    }
+    const user = userContext.auth
+    const cookie = userContext.cookie
 
     const formSchema = z.object({
         comment: z.string().min(2, {
@@ -43,9 +40,6 @@ export default function EventForm({ datasetId }: { datasetId: string }) {
         },
     })
     async function onSubmit(values: formSchema) {
-        if (!user || !cookie) {
-            throw new Error('User is not authenticated')
-        }
         const event: EventSchema = {
             user: user,
             content: values.comment,
@@ -53,7 +47,7 @@ export default function EventForm({ datasetId }: { datasetId: string }) {
             types: 'comment',
         }
         await createEvent({ ...event, user: user.id }, cookie)
-        eventContext?.setEvents((prev) => [event, ...prev])
+        eventContext.setEvents((prev) => [event, ...prev])
         form.reset()
     }
     return (

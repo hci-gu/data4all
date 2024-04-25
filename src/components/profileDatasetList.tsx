@@ -8,17 +8,14 @@ import { datasetWithRelationsSchema } from '@/types/zod'
 
 export default function ProfileDatasetList() {
     const userContext = useContext(authContext)
-    const user = userContext?.auth?.id
+    const userId = userContext.auth.id
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
-            if (!user) {
-                throw new Error('Användaren är inte inloggad.')
-            }
             try {
-                setDatasets(await api.getDatasetFromUser(user))
+                setDatasets(await api.getDatasetFromUser(userId))
             } catch (error) {
                 console.error(error)
             }

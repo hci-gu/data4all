@@ -27,9 +27,6 @@ import { authContext } from '@/lib/context/authContext'
 
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
-    if (!userContext) {
-        throw new Error('userContext is not defined')
-    }
     const user = userContext.auth
 
     const [isClicked, setIsClicked] = useState(false)
