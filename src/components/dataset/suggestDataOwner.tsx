@@ -21,10 +21,9 @@ export default function SuggestDataOwner({
     user: AuthorizedUserSchema | null
     dataset: datasetSchema
 }) {
-    if (!user) return
-
     const eventContext = useContext(EventContext)
     const userContext = useContext(authContext)
+    if (!user) return
 
     const onSubmit = async () => {
         const content =

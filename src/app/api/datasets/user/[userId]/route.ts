@@ -11,10 +11,7 @@ export async function GET(
         const pb = pbForRequest(req)
         const { params } = context
 
-        const records = await utils.datasetsForUserId(
-            params.userId,
-            pb.authStore.exportToCookie()
-        )
+        const records = await utils.datasetsForUserId(params.userId, pb)
 
         return NextResponse.json(
             {

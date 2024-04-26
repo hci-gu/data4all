@@ -10,7 +10,7 @@ async function RedirectToLogin(router: AppRouterInstance) {
     await signOut()
     router.push('/logga-in')
 }
-export default function panic() {
+export default function Panic() {
     const router = useRouter()
     const [redirectFailed, setRedirectFailed] = useState(false)
 

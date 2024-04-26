@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useState } from 'react'
@@ -13,9 +13,6 @@ import Logo from '../../../public/logo.svg'
 
 export default function SignInHeader() {
     const userContext = useContext(authContext)
-    if (!userContext) {
-        throw new Error('Auth context is missing')
-    }
     const usersName = userContext.auth.name
 
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -42,13 +39,11 @@ export default function SignInHeader() {
                             className="flex items-center justify-center gap-2"
                         >
                             <span className="max-sm:sr-only">{usersName}</span>
-                            {usersName && (
-                                <Avatar>
-                                    <AvatarFallback>
-                                        {getInitials(usersName)}
-                                    </AvatarFallback>
-                                </Avatar>
-                            )}
+                            <Avatar>
+                                <AvatarFallback>
+                                    {getInitials(usersName)}
+                                </AvatarFallback>
+                            </Avatar>
                         </Link>
                     </div>
                 </div>
