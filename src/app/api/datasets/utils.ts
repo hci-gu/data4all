@@ -1,6 +1,10 @@
-import PocketBase from "pocketbase";
+import PocketBase from 'pocketbase'
 import { stringWithHyphen } from '@/lib/utils'
-import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
+import {
+    EventSchema,
+    datasetSchema,
+    datasetWithRelationsSchema,
+} from '@/types/zod'
 
 async function datasetsForIds(datasetIds: string[], pb: PocketBase) {
     const records = datasetSchema.array().parse(
@@ -12,10 +16,7 @@ async function datasetsForIds(datasetIds: string[], pb: PocketBase) {
     return records
 }
 
-export async function datasetForTitle(
-    datasetTitle: string,
-    pb: PocketBase
-) {
+export async function datasetForTitle(datasetTitle: string, pb: PocketBase) {
     const records = await pb
         .collection<datasetSchema>('dataset')
         .getFirstListItem(`title="${datasetTitle}"`, {
@@ -36,20 +37,18 @@ export async function datasetForSlug(datasetSlug: string, pb: PocketBase) {
     return records
 }
 export async function datasetsForUserId(userId: string, pb: PocketBase) {
-    const userEvents = await pb.collection('events').getList(1, 50, {
-        filter: `user = "${userId}"`,
-    })
+    const userEvents = await pb
+        .collection<EventSchema>('events')
+        .getList(1, 50, {
+            filter: `user = "${userId}"`,
+        })
 
     if (userEvents.items.length === 0) {
         return []
     }
 
     const datasetIds = Array.from(
-        new Set(
-            userEvents.items.map((e) => {
-                return e.dataset
-            })
-        )
+        new Set(userEvents.items.map((e) => e.dataset))
     )
 
     const datasets = await datasetsForIds(datasetIds, pb)
