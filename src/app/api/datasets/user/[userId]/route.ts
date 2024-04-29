@@ -7,7 +7,6 @@ export async function GET(
     req: NextRequest,
     context: { params: { userId: string } }
 ) {
-    console.log('req', req.cookies.getAll());
     try {
         const pb = pbForRequest(req)
         const { params } = context
