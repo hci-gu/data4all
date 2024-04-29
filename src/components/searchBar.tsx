@@ -11,7 +11,7 @@ import { Button } from './ui/button'
 import { Loader2, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import * as api from '@/adapters/api'
-import { datasetSchema } from '@/types/zod'
+import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
 import Link from 'next/link'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
 import { authContext } from '@/lib/context/authContext'
@@ -19,6 +19,39 @@ const searchSchema = z.object({
     searchTerm: z.string().min(1),
 })
 type searchSchema = z.infer<typeof searchSchema>
+
+type autoCompleteSuggestion = {
+    name: string
+    type: string
+    slug: string
+}
+
+const datasetToSuggestion = (datasets: datasetSchema[]) => {
+    let newDatasetArray: autoCompleteSuggestion[] = []
+
+    datasets.map((dataset) => {
+        const newDataset: autoCompleteSuggestion = {
+            name: dataset.title,
+            type: 'dataset',
+            slug: dataset.slug,
+        }
+        newDatasetArray.push(newDataset)
+    })
+    return newDatasetArray
+}
+const userToSuggestion = (users: AuthorizedUserSchema[]) => {
+    let newUserArray: autoCompleteSuggestion[] = []
+
+    users.map((user) => {
+        const newUser: autoCompleteSuggestion = {
+            name: user.name,
+            type: 'user',
+            slug: '',
+        }
+        newUserArray.push(newUser)
+    })
+    return newUserArray
+}
 
 const Highlight = ({
     text,
@@ -55,7 +88,7 @@ export default function SearchBar({
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '')
     const [isFocused, setIsFocused] = useState(false)
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
-    const [suggestions, setSuggestions] = useState<datasetSchema[]>([])
+    const [suggestions, setSuggestions] = useState<autoCompleteSuggestion[]>([])
     const router = useRouter()
 
     const userContext = useContext(authContext)
@@ -80,9 +113,15 @@ export default function SearchBar({
 
     const autoComplete = async () => {
         if (!!isFocused) {
-            setSuggestions(
-                await api.getDatasets(debouncedSearchTerm, authCookie)
+            const datasets = await api.getDatasets(
+                debouncedSearchTerm,
+                authCookie
             )
+            const users = await api.getUsers(debouncedSearchTerm, authCookie)
+            setSuggestions([
+                ...datasetToSuggestion(datasets),
+                ...userToSuggestion(users),
+            ])
         }
     }
 
@@ -95,12 +134,17 @@ export default function SearchBar({
     }
 
     const sugestionsOnFocus = async () => {
-        setSuggestions(await api.getDatasets(debouncedSearchTerm, authCookie))
+        const datasets = await api.getDatasets(debouncedSearchTerm, authCookie)
+        const users = await api.getUsers(debouncedSearchTerm, authCookie)
+        setSuggestions([
+            ...datasetToSuggestion(datasets),
+            ...userToSuggestion(users),
+        ])
     }
 
     suggestions.sort((a, b) => {
-        const aTitle = a.title.toLowerCase()
-        const bTitle = b.title.toLowerCase()
+        const aTitle = a.name.toLowerCase()
+        const bTitle = b.name.toLowerCase()
         if (aTitle.startsWith(debouncedSearchTerm.toLowerCase())) {
             return -1
         }
@@ -162,14 +206,12 @@ export default function SearchBar({
                                 <div className="flex w-full flex-col py-2">
                                     {suggestions.map((suggestion) => (
                                         <Link
-                                            key={
-                                                suggestion.id + suggestion.title
-                                            }
+                                            key={suggestion.name}
                                             href={`/dataset/${suggestion.slug}`}
                                             className="w-full px-3 py-1 text-sm hover:bg-slate-50"
                                         >
                                             <Highlight
-                                                text={suggestion.title}
+                                                text={suggestion.name}
                                                 highlight={debouncedSearchTerm}
                                             />
                                         </Link>

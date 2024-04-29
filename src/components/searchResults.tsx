@@ -6,7 +6,8 @@ import { Settings2 } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import * as api from '@/adapters/api'
-import { datasetWithRelationsSchema } from '@/types/zod'
+import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
+import UserCard from './userCard'
 
 export default function SearchResults({
     searchTerm,
@@ -17,6 +18,7 @@ export default function SearchResults({
     const authCookie = userContext.cookie
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
+    const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
@@ -24,6 +26,7 @@ export default function SearchResults({
                 return
             }
             setDatasets(await api.getDatasets(searchTerm, authCookie))
+            setUsers(await api.getUsers(searchTerm, authCookie))
         }
         fetchData()
     }, [])
@@ -55,6 +58,19 @@ export default function SearchResults({
                         <Typography level="H3">Personer</Typography>
                         <p>resultat</p>
                     </div>
+                    {users.length > 0 ? (
+                        <ul className="flex flex-col gap-[10px]">
+                            {users.map((user) => {
+                                return (
+                                    <li key={user.id}>
+                                        <UserCard user={user} />
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    ) : (
+                        <p>Hittade inga resultat</p>
+                    )}
                 </div>
                 <Tabs
                     defaultValue="dataset"
@@ -87,7 +103,21 @@ export default function SearchResults({
                         </ul>
                     </TabsContent>
                     <TabsContent value="personer">
-                        <div className="flex flex-col gap-[10px]">Personer</div>
+                        <ul className="flex flex-col gap-[10px]">
+                            {users.length > 0 ? (
+                                <ul className="flex flex-col gap-[10px]">
+                                    {users.map((user) => {
+                                        return (
+                                            <li key={user.id}>
+                                                <UserCard user={user} />
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            ) : (
+                                <p>Hittade inga resultat</p>
+                            )}
+                        </ul>
                     </TabsContent>
                 </Tabs>
             </div>
