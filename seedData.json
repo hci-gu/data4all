@@ -80,6 +80,7 @@
         {
             "name": "Suzuka Nakamoto",
             "email": "Suzuka_Nakamoto@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -87,6 +88,7 @@
         {
             "name": "Moa Kikuchi",
             "email": "Moa_Kikuchi@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -94,6 +96,7 @@
         {
             "name": "Momoko Okazaki",
             "email": "Momoko_Okazaki@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -101,6 +104,7 @@
         {
             "name": "John Smith",
             "email": "john_smith@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -108,6 +112,7 @@
         {
             "name": "Maria Rodriguez",
             "email": "maria_rodriguez@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -115,6 +120,7 @@
         {
             "name": "Chen Wei",
             "email": "chen_wei@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -122,6 +128,7 @@
         {
             "name": "Emily Johnson",
             "email": "emily_johnson@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -129,6 +136,7 @@
         {
             "name": "Muhammad Khan",
             "email": "muhammad_khan@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -136,6 +144,7 @@
         {
             "name": "Sophie Martin",
             "email": "sophie_martin@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
@@ -143,6 +152,7 @@
         {
             "name": "Kim Sung",
             "email": "kim_sung@kungsbacka.com",
+            "emailVisibility": true,
             "role": "User",
             "password": "password123",
             "passwordConfirm": "password123"
