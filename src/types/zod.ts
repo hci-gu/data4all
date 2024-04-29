@@ -15,7 +15,10 @@ export const AuthorizedUserSchema = z.object({
     username: z.string(),
     verified: z.boolean(),
 })
-export type UserSchema = Pick<AuthorizedUserSchema, 'name' | 'role'>
+export const UserSchema = AuthorizedUserSchema.omit({
+    email: true,
+})
+
 export const signInSchema = z
     .object({
         password: z.string().min(8),
@@ -71,7 +74,7 @@ export const EventSchema = z.object({
     types: z.enum(['comment', 'ownerReq', 'ownerAccept', 'OwnerPublished']),
     user: AuthorizedUserSchema,
     content: z.string(),
-    subject: AuthorizedUserSchema.optional(),
+    subject: UserSchema.optional(),
 })
 
 export const EventCreateSchema = EventSchema.extend({

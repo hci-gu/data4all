@@ -139,8 +139,15 @@ export const createEvent = async (
     )
     return EventSchema.parse(cleanEvent)
 }
-export const getDatasetFromUser = async (userId: string, authCookie: string) => {
-    const datasets = await apiRequest(apiUrl(`datasets/user/${userId}`), 'GET', authCookie)
+export const getDatasetFromUser = async (
+    userId: string,
+    authCookie: string
+) => {
+    const datasets = await apiRequest(
+        apiUrl(`datasets/user/${userId}`),
+        'GET',
+        authCookie
+    )
 
     const cleanDatasets = datasets.map(responseDatasetCleanup)
 

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
         }
 
         const data = EventCreateSchema.parse(await request.json())
-        
+
         pb.authStore.loadFromCookie(cookie)
         const record = await pb
             .collection('events')
