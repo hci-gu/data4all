@@ -9,20 +9,20 @@ import { datasetWithRelationsSchema } from '@/types/zod'
 export default function ProfileDatasetList() {
     const userContext = useContext(authContext)
     const userId = userContext.auth.id
+    const cookie = userContext.cookie
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
             try {
-                setDatasets(await api.getDatasetFromUser(userId))
+                setDatasets(await api.getDatasetFromUser(userId, cookie))
             } catch (error) {
                 console.error(error)
             }
         }
         fetchData()
         // console.log(datasets);
-        
     }, [])
 
     if (datasets.length > 0) {
