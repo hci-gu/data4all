@@ -22,7 +22,6 @@ export default function ProfileDatasetList() {
             }
         }
         fetchData()
-        // console.log(datasets);
     }, [])
 
     if (datasets.length > 0) {
