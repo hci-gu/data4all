@@ -12,7 +12,7 @@ import UserCard from './userCard'
 export default function SearchResults({
     searchTerm,
 }: {
-    searchTerm: string | undefined
+    searchTerm: string | undefined,
 }) {
     const userContext = useContext(authContext)
     const authCookie = userContext.cookie
@@ -29,7 +29,7 @@ export default function SearchResults({
             setUsers(await api.getUsers(searchTerm, authCookie))
         }
         fetchData()
-    }, [])
+    }, [searchTerm])
 
     return (
         <>
