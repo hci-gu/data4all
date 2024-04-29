@@ -1,5 +1,6 @@
 import { EventSchema, tagSchema } from '@/types/zod'
 import { type ClassValue, clsx } from 'clsx'
+import { usePathname } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -35,4 +36,12 @@ export const getEventWithUserAccepted = (
     const lastAcceptedIndex = allAccepted.length - 1
 
     return allAccepted[lastAcceptedIndex]
+}
+
+export const getUserFromURL = () => {
+    const user = decodeURI(usePathname().split('/').pop() ?? '').replaceAll(
+        '-',
+        ' '
+    )
+    return user ? user : null
 }
