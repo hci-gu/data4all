@@ -8,7 +8,6 @@ import {
 } from './ui/card'
 import { datasetWithRelationsSchema } from '@/types/zod'
 import Link from 'next/link'
-import Tags from './tag'
 
 export default function DatasetCard({
     dataset,

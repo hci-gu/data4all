@@ -17,14 +17,8 @@ import { useRouter } from 'next/navigation'
 import * as api from '@/adapters/api'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
-import { useContext } from 'react'
-import { authContext } from '@/lib/context/authContext'
 
 export default function SignIn() {
-    const userContext = useContext(authContext)
-    if (!userContext) {
-        throw new Error('Auth context is missing')
-    }
     const router = useRouter()
     const form = useForm<signInSchema>({
         resolver: zodResolver(signInSchema),
@@ -36,8 +30,6 @@ export default function SignIn() {
     const submit = async (value: signInSchema) => {
         try {
             const user = await api.signIn(value)
-            userContext.setAuth(user)
-            
             router.push('/')
         } catch (event) {
             form.setError('root', { message: 'Inloggnings uppgifter är fel' })

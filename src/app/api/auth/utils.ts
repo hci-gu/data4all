@@ -7,10 +7,9 @@ export function loadAuthorizedUser() {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     if (!authorizedUser) {
-        return
+        throw new Error('Användaren är inte inloggad')
     }
     pb.authStore.loadFromCookie(authorizedUser.value)
 
-    const user = AuthorizedUserSchema.parse(pb.authStore.model)
-    return user
+    return AuthorizedUserSchema.parse(pb.authStore.model)
 }

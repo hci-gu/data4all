@@ -16,7 +16,7 @@ export default function ActivityFlow({
     slug: string
 }) {
     const events = useContext(EventContext)
-    const cookie = useContext(authContext)?.cookie
+    const user = useContext(authContext)
 
     const sortEvents = (a: EventSchema, b: EventSchema) => {
         if (!a.created || !b.created) return 0
@@ -29,22 +29,16 @@ export default function ActivityFlow({
     }
     useEffect(() => {
         async function setData() {
-            if (!cookie) {
-                throw new Error('Användaren är inte inloggad')
-            }
             const dataset = await api.getDataset(
                 stringWithHyphen(decodeURI(slug)),
-                cookie
+                user.cookie
             )
-            events?.setEvents(
-                (await api.getEvents(dataset.id, cookie)).sort(sortEvents)
+            events.setEvents(
+                (await api.getEvents(dataset.id, user.cookie)).sort(sortEvents)
             )
         }
         setData()
     }, [])
-    if (!events) {
-        throw new Error('EventContext is not provided')
-    }
     return (
         <section className="flex flex-col gap-4">
             <h2 className="text-2xl font-bold">Aktivitet</h2>
@@ -55,7 +49,7 @@ export default function ActivityFlow({
             <EventForm datasetId={datasetId} />
 
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-                {events.events?.map((event, index) => (
+                {events.events.map((event, index) => (
                     <Comment event={event} key={index} />
                 ))}
             </ul>

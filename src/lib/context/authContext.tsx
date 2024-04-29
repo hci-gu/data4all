@@ -3,12 +3,30 @@ import { AuthorizedUserSchema } from '@/types/zod'
 import { Dispatch, SetStateAction, createContext, useState } from 'react'
 
 type AuthContextType = {
-    auth: AuthorizedUserSchema | undefined
-    setAuth: Dispatch<SetStateAction<AuthorizedUserSchema | undefined>>
-    cookie: string | undefined
+    auth: AuthorizedUserSchema
+    setAuth: Dispatch<SetStateAction<AuthorizedUserSchema>>
+    cookie: string
+    setCookie: Dispatch<SetStateAction<string>>
 }
 
-export const authContext = createContext<AuthContextType | null>(null)
+export const authContext = createContext<AuthContextType>({
+    auth: {
+        id: '',
+        username: '',
+        name: '',
+        email: '',
+        role: 'User',
+        collectionId: '',
+        collectionName: '',
+        emailVisibility: true,
+        verified: false,
+        created: '',
+        updated: '',
+    },
+    setAuth: () => {},
+    cookie: '',
+    setCookie: () => {},
+})
 
 export const AuthProvider = ({
     children,
@@ -16,13 +34,14 @@ export const AuthProvider = ({
     authCookie,
 }: {
     children: React.ReactNode
-    user: AuthorizedUserSchema | undefined
-    authCookie: string | undefined
+    user: AuthorizedUserSchema
+    authCookie: string
 }) => {
-    const [auth, setAuth] = useState<AuthorizedUserSchema | undefined>(user)
+    const [auth, setAuth] = useState<AuthorizedUserSchema>(user)
+    const [cookie, setCookie] = useState<string>(authCookie)
 
     return (
-        <authContext.Provider value={{ auth, setAuth, cookie: authCookie }}>
+        <authContext.Provider value={{ auth, setAuth, cookie, setCookie }}>
             {children}
         </authContext.Provider>
     )

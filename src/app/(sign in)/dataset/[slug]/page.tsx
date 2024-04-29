@@ -11,13 +11,13 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
-import { AuthorizedUserSchema, UserSchema } from '@/types/zod'
+import { AuthorizedUserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 
 import Image from 'next/image'
-import Dataportal from '../../../../public/dataportal.png'
-import Entryscape from '../../../../public/entryscape.png'
+import Dataportal from '../../../../../public/dataportal.png'
+import Entryscape from '../../../../../public/entryscape.png'
 import Link from 'next/link'
 import { EventProvider } from '@/lib/context/eventContext'
 import { cookies } from 'next/headers'
@@ -50,7 +50,7 @@ export default async function Page({
     const dataset = await getDataset(stringWithHyphen(decodeURI(slug)), cookie)
 
     return (
-        <EventProvider event={undefined}>
+        <EventProvider event={[]}>
             <main className="grid items-stretch gap-9 px-4 py-8 sm:px-28 sm:py-9 lg:grid-cols-[1fr_auto_1fr]">
                 <div className="flex flex-col gap-4">
                     <Breadcrumb className="mb-2">

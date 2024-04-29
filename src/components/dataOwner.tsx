@@ -92,12 +92,7 @@ export default function DataOwner({
         },
     ]
     const userContext = useContext(authContext)
-
-    const authCookie = userContext?.cookie
-
-    if (!authCookie) {
-        throw new Error('Användaren är inte inloggad')
-    }
+    const authCookie = userContext.cookie
 
     const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
     const [searchTerm, setSearchTerm] = useState('')

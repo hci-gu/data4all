@@ -12,19 +12,16 @@ import UserCard from './userCard'
 export default function SearchResults({
     searchTerm,
 }: {
-    searchTerm: string | undefined
+    searchTerm: string | undefined,
 }) {
     const userContext = useContext(authContext)
-    const authCookie = userContext?.cookie
+    const authCookie = userContext.cookie
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
     const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
-            if (!authCookie) {
-                throw new Error('Användaren är inte inloggad')
-            }
             if (!searchTerm) {
                 return
             }
@@ -32,7 +29,7 @@ export default function SearchResults({
             setUsers(await api.getUsers(searchTerm, authCookie))
         }
         fetchData()
-    }, [])
+    }, [searchTerm])
 
     return (
         <>

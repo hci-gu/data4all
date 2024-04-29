@@ -21,40 +21,27 @@ export default function SuggestDataOwner({
     user: AuthorizedUserSchema | null
     dataset: datasetSchema
 }) {
-    if (!user) return
-
     const eventContext = useContext(EventContext)
-    const setEvents = eventContext?.setEvents
-
     const userContext = useContext(authContext)
-    const signInUser = userContext?.auth
-    const authCookie = userContext?.cookie
-
-    if (!eventContext || !setEvents) {
-        throw new Error('EventContext is not provided')
-    }
-
-    if (!signInUser || !authCookie) {
-        throw new Error('Användaren är inte inloggad')
-    }
+    if (!user) return
 
     const onSubmit = async () => {
         const content =
-            signInUser?.id === user.id
-                ? `<b>${signInUser.name}</b> föreslog sig själv som dataägare`
-                : `<b>${signInUser.name}</b> föreslog <b>${user.name}</b> som dataägare`
+            userContext.auth?.id === user.id
+                ? `<b>${userContext.auth.name}</b> föreslog sig själv som dataägare`
+                : `<b>${userContext.auth.name}</b> föreslog <b>${user.name}</b> som dataägare`
 
         const data: EventSchema = {
             content,
             dataset: dataset.id,
-            user: signInUser,
+            user: userContext.auth,
             types: 'ownerReq',
             subject: user,
         }
 
         const respond = await createEvent(
             { ...data, user: data.user.id },
-            authCookie
+            userContext.cookie
         )
         eventContext.setEvents((prev) => [respond, ...(prev ?? [])])
     }

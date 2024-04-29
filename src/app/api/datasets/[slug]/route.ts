@@ -7,20 +7,8 @@ export async function GET(req: NextRequest, context: any) {
     try {
         const pb = pbForRequest(req)
         const { params } = context
-        const cookie = req.headers.get('auth')
 
-        if (!cookie) {
-            return NextResponse.json(
-                { message: 'Du har inte tillgång att se användare' },
-                { status: 403 }
-            )
-        }
-        
-
-        const records = await utils.datasetForSlug(
-            params.slug,
-            cookie
-        )
+        const records = await utils.datasetForSlug(params.slug, pb)
 
         return NextResponse.json(
             {

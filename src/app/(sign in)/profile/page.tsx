@@ -6,7 +6,7 @@ import ProfileDatasetList from '@/components/profileDatasetList'
 
 function ProfilePage() {
     return (
-        <main className="flex h-[96vh] w-full justify-center gap-9 px-4 pt-8 max-sm:flex-col max-sm:items-center max-sm:justify-start">
+        <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:w-fit lg:mx-auto xl:grid-cols-[1fr_auto_1fr]">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
                 <UpdateUserForm />
