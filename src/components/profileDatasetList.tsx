@@ -5,10 +5,13 @@ import * as api from '@/adapters/api'
 import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { datasetWithRelationsSchema } from '@/types/zod'
+import { getUserFromURL } from '@/lib/utils'
 
 export default function ProfileDatasetList() {
+    const userURL = getUserFromURL()
+
     const userContext = useContext(authContext)
-    const userId = userContext.auth.id
+    const user = userContext.auth
     const cookie = userContext.cookie
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
@@ -16,7 +19,7 @@ export default function ProfileDatasetList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                setDatasets(await api.getDatasetFromUser(userId, cookie))
+                setDatasets(await api.getDatasetFromUser(user.id, cookie))
             } catch (error) {
                 console.error(error)
             }
@@ -28,6 +31,13 @@ export default function ProfileDatasetList() {
         return datasets.map((dataset) => (
             <DatasetCard key={dataset.id} dataset={dataset} />
         ))
+    }
+    if (userURL && userURL.toLowerCase() !== user.name.toLowerCase()) {
+        return (
+            <p className="text-center">
+                {userURL} har inga relaterade dataset.
+            </p>
+        )
     }
 
     return <p className="text-center">Du har inga relaterade dataset.</p>

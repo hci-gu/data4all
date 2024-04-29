@@ -6,7 +6,7 @@ import Typography from '../ui/Typography'
 import { Button } from '../ui/button'
 import { Search, X } from 'lucide-react'
 import { Avatar, AvatarFallback } from '../ui/avatar'
-import { getInitials } from '@/lib/utils'
+import { getInitials, getUserFromURL, stringWithHyphen } from '@/lib/utils'
 import SearchBar from '../searchBar'
 import { authContext } from '@/lib/context/authContext'
 import Logo from '../../../public/logo.svg'
@@ -15,13 +15,18 @@ import { usePathname, useRouter } from 'next/navigation'
 export default function SignInHeader() {
     const userContext = useContext(authContext)
     const usersName = userContext.auth.name
+    const userURL = getUserFromURL()
+
 
     const router = useRouter()
     const path = usePathname()
 
     useEffect(() => {
+        if (userURL && userURL.toLowerCase() !== usersName.toLowerCase()) {
+            return
+        }
         if (path.startsWith('/profile')) {
-            router.replace(`/profile/${usersName}`)
+            router.replace(`/profile/${stringWithHyphen(usersName)}`)
         }
     }, [usersName])
 
@@ -45,7 +50,7 @@ export default function SignInHeader() {
                     </Button>
                     <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
                         <Link
-                            href={`/profile/${usersName}`}
+                            href={`/profile/${stringWithHyphen(usersName)}`}
                             className="flex items-center justify-center gap-2"
                         >
                             <span className="max-sm:sr-only">{usersName}</span>

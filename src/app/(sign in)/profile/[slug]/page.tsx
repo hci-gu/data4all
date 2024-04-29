@@ -3,12 +3,13 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
 import ProfileDatasetList from '@/components/profileDatasetList'
+import ProfileHeader from '@/components/auth/profileHeader'
 
 function ProfilePage() {
     return (
-        <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:w-fit lg:mx-auto xl:grid-cols-[1fr_auto_1fr]">
+        <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
-                <h1 className="text-5xl font-extrabold">Profil</h1>
+                <ProfileHeader />
                 <UpdateUserForm />
                 <Separator />
                 <h2 className="text-3xl font-semibold">
