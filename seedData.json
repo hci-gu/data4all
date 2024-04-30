@@ -147,5 +147,15 @@
             "password": "password123",
             "passwordConfirm": "password123"
         }
+    ],
+
+    "events": [
+        { "types": "comment", "content": "Väldigt viktig kommentar" },
+        { "types": "comment", "content": "Väldigt viktig kommentar" },
+        { "types": "comment", "content": "Väldigt viktig kommentar" },
+        { "types": "comment", "content": "Väldigt viktig kommentar" },
+        { "types": "ownerReq", "content": "vill äga detta dataset" },
+        { "types": "ownerReq", "content": "vill äga detta dataset" },
+        { "types": "ownerAccept", "content": "blev ägare av datasettet" }
     ]
 }

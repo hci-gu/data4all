@@ -11,21 +11,35 @@ const getRandomTag = (tags) => {
 
 ;(async () => {
     const jsonData = await fs.readFile('seedData.json', 'utf-8')
-    const { tags, datasets, users } = JSON.parse(jsonData)
+    const { tags, datasets, users, events } = JSON.parse(jsonData)
 
     const pb = new PocketBase('http://localhost:8090')
     await pb.admins.authWithPassword('admin@email.com', 'password123')
 
     try {
-        await deleteExistingData(pb, 'dataset', datasets)
+        await deleteExistingData(pb, 'events', events, 'content')
         await deleteExistingData(pb, 'users', users, 'email')
+        await deleteExistingData(pb, 'dataset', datasets)
         await deleteExistingData(pb, 'tag', tags, 'name')
 
         const createdTags = await seedData(pb, 'tag', tags)
 
-        await seedData(pb, 'users', users)
+        const createdUsers = await seedData(pb, 'users', users)
 
-        await seedDataset(pb, 'dataset', datasets, createdTags)
+        const createdDataset = await seedDataset(
+            pb,
+            'dataset',
+            datasets,
+            createdTags
+        )
+
+        const createdEvent = await seedEvents(
+            pb,
+            'events',
+            events,
+            createdUsers,
+            createdDataset
+        )
     } catch (error) {
         console.error('There was an error: ', error)
     }
@@ -60,8 +74,9 @@ async function seedData(pb, collectionName, data) {
 }
 
 async function seedDataset(pb, collectionName, data, tags) {
+    const items = []
     for (const itemData of data) {
-        await pb.collection(collectionName).create(
+        const newItem = await pb.collection(collectionName).create(
             {
                 ...itemData,
                 slug: stringWithHyphen(itemData.title),
@@ -69,5 +84,23 @@ async function seedDataset(pb, collectionName, data, tags) {
             },
             { $autoCancel: false }
         )
+        items.push(newItem)
+    }
+    return items
+}
+
+async function seedEvents(pb, collectionName, data, users, dataset) {
+    const items = []
+
+    for (let i = 0; i < data.length; i++) {
+        const newItem = await pb.collection(collectionName).create(
+            {
+                ...data[i],
+                dataset: dataset[i].id,
+                user: users[i].id,
+            },
+            { $autoCancel: false }
+        )
+        items.push(newItem)
     }
 }
