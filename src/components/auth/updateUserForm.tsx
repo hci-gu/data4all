@@ -24,15 +24,10 @@ import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
-import { getUserFromURL } from '@/lib/utils'
 
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
     const user = userContext.auth
-
-    const userURL = getUserFromURL()
-
-    if (userURL && user.name.toLowerCase() !== userURL.toLowerCase()) return
 
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({

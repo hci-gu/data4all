@@ -1,34 +1,19 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import Typography from '../ui/Typography'
 import { Button } from '../ui/button'
 import { Search, X } from 'lucide-react'
 import { Avatar, AvatarFallback } from '../ui/avatar'
-import { getInitials, getUserFromURL, stringWithHyphen } from '@/lib/utils'
+import { getInitials, stringWithHyphen } from '@/lib/utils'
 import SearchBar from '../searchBar'
 import { authContext } from '@/lib/context/authContext'
 import Logo from '../../../public/logo.svg'
-import { usePathname, useRouter } from 'next/navigation'
 
 export default function SignInHeader() {
     const userContext = useContext(authContext)
     const usersName = userContext.auth.name
-    const userURL = getUserFromURL()
-
-
-    const router = useRouter()
-    const path = usePathname()
-
-    useEffect(() => {
-        if (userURL && userURL.toLowerCase() !== usersName.toLowerCase()) {
-            return
-        }
-        if (path.startsWith('/profile')) {
-            router.replace(`/profile/${stringWithHyphen(usersName)}`)
-        }
-    }, [usersName])
 
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     return (
@@ -50,7 +35,7 @@ export default function SignInHeader() {
                     </Button>
                     <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
                         <Link
-                            href={`/profile/${stringWithHyphen(usersName)}`}
+                            href={`/profile`}
                             className="flex items-center justify-center gap-2"
                         >
                             <span className="max-sm:sr-only">{usersName}</span>

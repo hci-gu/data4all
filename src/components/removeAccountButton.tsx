@@ -11,7 +11,6 @@ import { getUserFromURL } from '@/lib/utils'
 export default function RemoveAccountButton() {
     const userContext = useContext(authContext)
     const user = userContext.auth
-    const userURL = getUserFromURL()
 
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
@@ -25,7 +24,6 @@ export default function RemoveAccountButton() {
             toast.error('Något gick fel')
         }
     }
-    if (userURL && user.name.toUpperCase() !== userURL.toUpperCase()) return
     if (!isClicked) {
         return (
             <>

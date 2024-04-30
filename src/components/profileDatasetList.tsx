@@ -6,9 +6,11 @@ import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { datasetWithRelationsSchema } from '@/types/zod'
 import { getUserFromURL } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 export default function ProfileDatasetList() {
     const userURL = getUserFromURL()
+    const path = usePathname()
 
     const userContext = useContext(authContext)
     const user = userContext.auth
@@ -32,7 +34,7 @@ export default function ProfileDatasetList() {
             <DatasetCard key={dataset.id} dataset={dataset} />
         ))
     }
-    if (userURL && userURL.toLowerCase() !== user.name.toLowerCase()) {
+    if (path.startsWith('/profile/')) {
         return (
             <p className="text-center">
                 {userURL} har inga relaterade dataset.

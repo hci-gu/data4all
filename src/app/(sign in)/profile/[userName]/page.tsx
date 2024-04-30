@@ -1,16 +1,31 @@
-import { LogoutButton } from '@/components/auth'
-import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
-import { UpdateUserForm } from '@/components/auth'
 import ProfileDatasetList from '@/components/profileDatasetList'
-import ProfileHeader from '@/components/auth/profileHeader'
+import { getUser } from '@/adapters/api'
+import { cookies } from 'next/headers'
+import { notFound } from 'next/navigation'
 
-function ProfilePage() {
+async function ProfilePage({
+    params: { userName },
+}: {
+    params: { userName: string }
+}) {
+    const cookie = cookies().get('PBAuth')
+    try {
+        if (cookie) {
+            await getUser(
+                userName.replaceAll('-', ' '),
+                cookie.value
+            )
+        }
+    } catch (error) {
+        notFound()
+    }
     return (
         <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
-                <ProfileHeader />
-                <UpdateUserForm />
+                <h1 className="text-5xl font-extrabold">
+                    {decodeURI(userName.replaceAll('-', ' '))}
+                </h1>
                 <Separator />
                 <h2 className="text-3xl font-semibold">
                     Om Kungsbacka dataportal
@@ -26,10 +41,6 @@ function ProfilePage() {
                 </p>
 
                 <Separator />
-                <div className="flex justify-start gap-[10px] max-sm:flex-col">
-                    <LogoutButton />
-                    <RemoveAccountButton />
-                </div>
             </div>
             <Separator
                 orientation="vertical"

@@ -11,7 +11,6 @@ import { getUserFromURL } from '@/lib/utils'
 export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
     const userContext = useContext(authContext)
     const user = userContext.auth
-    const userURL = getUserFromURL()
 
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
@@ -25,7 +24,6 @@ export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
             toast.error('Något gick fel')
         }
     }
-    if (userURL && user.name.toLowerCase() !== userURL.toLowerCase()) return
     if (!isClicked) {
         return (
             <>
