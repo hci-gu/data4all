@@ -48,7 +48,7 @@ export default function SignUp() {
         }
     }
 
-    const rols = Object.values(roleSchema.Values)
+    const rols = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
 
     return (
         <Form {...form}>

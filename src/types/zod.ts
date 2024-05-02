@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const roleSchema = z.enum(['User', 'Admin'])
+export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin'])
 export const AuthorizedUserSchema = z.object({
     avatar: z.string().optional(),
     collectionId: z.string(),
