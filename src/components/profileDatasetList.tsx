@@ -9,19 +9,30 @@ import { getUserFromURL } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 
 export default function ProfileDatasetList() {
-    const userURL = getUserFromURL()
+    const userNameURL = getUserFromURL()
     const path = usePathname()
 
     const userContext = useContext(authContext)
     const user = userContext.auth
     const cookie = userContext.cookie
-
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
     useEffect(() => {
         async function fetchData() {
             try {
-                setDatasets(await api.getDatasetFromUser(user.id, cookie))
+                if (path === `/profile`) {
+                    setDatasets(await api.getDatasetFromUser(user.id, cookie))
+                }
+
+                if (userNameURL && path.startsWith('/profile/')) {
+                    const userURL = await api.getUser(
+                        userNameURL,
+                        cookie
+                    )
+                    setDatasets(
+                        await api.getDatasetFromUser(userURL.id, cookie)
+                    )
+                }
             } catch (error) {
                 console.error(error)
             }
@@ -37,7 +48,7 @@ export default function ProfileDatasetList() {
     if (path.startsWith('/profile/')) {
         return (
             <p className="text-center">
-                {userURL} har inga relaterade dataset.
+                {userNameURL} har inga relaterade dataset.
             </p>
         )
     }
