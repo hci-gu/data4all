@@ -13,6 +13,15 @@ test.describe('Profile page', () => {
                 'Profil'
             )
         })
+        test('Can reach someone else profile page', async ({ page }) => {
+            const name = 'tester New user'
+            await createByUserName(name)
+
+            await page.goto(`/profile/${name}`)
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                name
+            )
+        })
 
         test('Can update user name', async ({ page }) => {
             await page.goto('/profile')
