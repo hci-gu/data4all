@@ -14,6 +14,15 @@ import {
     SheetTrigger,
 } from './ui/sheet'
 import { Button } from './ui/button'
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from './ui/alert-dialog'
 
 export default function ActivityFeed({ events }: { events: EventSchema[] }) {
     const user = useContext(authContext)
@@ -41,11 +50,11 @@ export default function ActivityFeed({ events }: { events: EventSchema[] }) {
         <>
             <div className="relative flex flex-col items-center gap-8 [&>h2]:border-none">
                 <Typography level="H2">Flöde</Typography>
-                <Sheet>
+                {/* <Sheet>
                     <SheetTrigger className="absolute right-0 top-0">
                         open
                     </SheetTrigger>
-                    {/* having the sheet not at the side makes the open and close animation kind of jank */}
+                    having the sheet not at the side makes the open and close animation kind of jank 
                     <SheetContent className="mr-[38%] mt-[15%] flex h-fit min-h-[355px] min-w-[440px] flex-col">
                         <SheetHeader>
                             <SheetTitle>Filtrera flöde</SheetTitle>
@@ -118,7 +127,88 @@ export default function ActivityFeed({ events }: { events: EventSchema[] }) {
                             </div>
                         </>
                     </SheetContent>
-                </Sheet>
+                </Sheet> */}
+
+                <AlertDialog>
+                    <AlertDialogTrigger className="absolute right-0 top-0">
+                        open
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader className="relative [&>*]:m-0">
+                            <div className="flex justify-center">
+                                <AlertDialogTitle>
+                                    Filtrera flöde
+                                </AlertDialogTitle>
+                                <AlertDialogCancel asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="absolute right-0 top-0 border-none bg-transparent"
+                                    >
+                                        close
+                                    </Button>
+                                </AlertDialogCancel>
+                            </div>
+                            <AlertDialogDescription>
+                                Flödet sorterar alltid de mest relevanta
+                                händelserna för dig längst upp.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <div className="grid grid-cols-1 grid-rows-3 gap-2">
+                            <Button
+                                onClick={() => setEventsToDefualt()}
+                                variant={
+                                    sortHighlight == 0 ? 'secondary' : 'ghost'
+                                }
+                                className="h-full w-full"
+                            >
+                                <div className="h-full w-full [&>div]:w-fit">
+                                    <Typography level="Large">
+                                        Visa allt
+                                    </Typography>
+                                    <p className="text-wrap text-left text-sm text-slate-500">
+                                        Se senaste kommentarer och händelser i
+                                        alla dataset
+                                    </p>
+                                </div>
+                            </Button>
+                            <Button
+                                onClick={() => setEventsToTagged()}
+                                variant={
+                                    sortHighlight == 1 ? 'secondary' : 'ghost'
+                                }
+                                className="h-full w-full"
+                            >
+                                <div className="h-full w-full [&>div]:w-fit">
+                                    <Typography level="Large">
+                                        Taggningar
+                                    </Typography>
+                                    <p className="text-wrap text-left text-sm text-slate-500">
+                                        Se händelser där du eller din roll är
+                                        taggad eller när något hänt i dataset du
+                                        kommenterat.
+                                    </p>
+                                </div>
+                            </Button>
+                            <Button
+                                onClick={() => setEventsToDefualt()}
+                                variant={
+                                    sortHighlight == 2 ? 'secondary' : 'ghost'
+                                }
+                                className="h-full w-full"
+                            >
+                                <div className="h-full w-full [&>div]:w-fit">
+                                    <Typography level="Large">
+                                        Endast mina dataset
+                                    </Typography>
+                                    <p className="text-wrap text-left text-sm text-slate-500">
+                                        Se bara händelser i dina egna dataset
+                                    </p>
+                                </div>
+                            </Button>
+                        </div>
+                    </AlertDialogContent>
+                </AlertDialog>
+
                 <ul className="flex w-full flex-col gap-4">
                     {eventsDisplay.map((event) => (
                         <Comment event={event} key={event.id} />
