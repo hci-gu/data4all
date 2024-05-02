@@ -1,12 +1,11 @@
 'use client'
 import { signOut } from '@/adapters/api'
 import { Button } from '../ui/button'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
-import { getUserFromURL } from '@/lib/utils'
 
 export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
     const userContext = useContext(authContext)

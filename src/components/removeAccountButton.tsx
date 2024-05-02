@@ -6,7 +6,6 @@ import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
-import { getUserFromURL } from '@/lib/utils'
 
 export default function RemoveAccountButton() {
     const userContext = useContext(authContext)

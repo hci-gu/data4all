@@ -44,14 +44,14 @@ export default function ProfileDatasetList() {
         return datasets.map((dataset) => (
             <DatasetCard key={dataset.id} dataset={dataset} />
         ))
-    }
+    } 
     if (path.startsWith('/profile/')) {
         return (
             <p className="text-center">
-                {userNameURL} har inga relaterade dataset.
+                {userNameURL} har inga dataset ännu, när {userNameURL} är dataägare dyker det upp här.
             </p>
         )
     }
 
-    return <p className="text-center">Du har inga relaterade dataset.</p>
+    return <p className="text-center">Du har inga dataset ännu, när du är dataägare dyker det upp här.</p>
 }
