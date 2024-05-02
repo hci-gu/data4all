@@ -1,5 +1,10 @@
 import test, { expect } from '@playwright/test'
-import { createDataset, createEvent, loggedInUser } from './setup/utils'
+import {
+    createByUserName,
+    createDataset,
+    createEvent,
+    loggedInUser,
+} from './setup/utils'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
@@ -123,7 +128,9 @@ test.describe('Profile page', () => {
                 'Profil'
             )
             await expect(
-                page.getByText('Du har inga relaterade dataset')
+                page.getByText(
+                    'Du har inga dataset ännu, när du är dataägare dyker det upp här.'
+                )
             ).toBeVisible()
         })
     })
