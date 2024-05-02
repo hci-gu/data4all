@@ -162,10 +162,7 @@ export const getDatasetFromUser = async (
 
 function responseDatasetCleanup(res: any) {
     const cleanDataset = {
-        id: res.id,
-        title: res.title,
-        description: res.description,
-        slug: res.slug,
+        ...res,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
     }
