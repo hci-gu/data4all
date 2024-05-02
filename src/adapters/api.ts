@@ -17,6 +17,8 @@ const baseURL = env.NEXT_PUBLIC_API
 
 const apiUrl = (endpoint: string) => `${baseURL}/api/${endpoint}`
 const handleResponse = async (Response: Response) => {
+    console.log(await Response)
+
     const json = await Response.json()
 
     if (!Response.ok) {
@@ -152,6 +154,13 @@ export const getDatasetFromUser = async (
     const cleanDatasets = datasets.map(responseDatasetCleanup)
 
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
+}
+
+export const getAllEvents = async (authCookie: string) => {
+    const events = (await apiRequest(apiUrl(`events/getAll`), 'GET', authCookie)) as []
+    const cleanEvent = events.map(responseEventCleanup)
+
+    return EventSchema.array().parse(cleanEvent)
 }
 
 function responseDatasetCleanup(res: any) {

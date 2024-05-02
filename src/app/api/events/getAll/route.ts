@@ -8,8 +8,8 @@ export async function GET(request: NextRequest) {
 
         const records = await pb
             .collection('events')
-            .getFullList({ sort: '-created' })
-        console.log('records: ', records)
+
+            .getFullList({ sort: '-created', expand: 'user,subject' })
 
         return NextResponse.json(
             {

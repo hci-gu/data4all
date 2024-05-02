@@ -2,8 +2,16 @@ import WelcomeBack from '@/components/welcomeBack'
 import Typography from '@/components/ui/Typography'
 import SearchBar from '@/components/searchBar'
 import { Separator } from '@/components/ui/separator'
+import ActivityFeed from '@/components/activityFeed'
+import * as api from '@/adapters/api'
+import { cookies } from 'next/headers'
 
-export default function Home() {
+export default async function Home() {
+    const cookie = cookies().get('PBAuth')?.value
+
+    const events = await api.getAllEvents(cookie as string)
+    console.log(events)
+
     return (
         <main className="flex w-full flex-col items-center">
             <WelcomeBack homePage={true} />
@@ -13,7 +21,7 @@ export default function Home() {
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <div>Flöde</div>
+                <ActivityFeed events={events} />
             </div>
         </main>
     )

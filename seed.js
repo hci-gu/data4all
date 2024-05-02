@@ -93,14 +93,30 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
     const items = []
 
     for (let i = 0; i < data.length; i++) {
-        const newItem = await pb.collection(collectionName).create(
-            {
-                ...data[i],
-                dataset: dataset[i].id,
-                user: users[i].id,
-            },
-            { $autoCancel: false }
-        )
-        items.push(newItem)
+        if (data[i].types == 'ownerReq' || data[i].types == 'ownerAccept') {
+            console.log('owner mod')
+            const newItem = await pb.collection(collectionName).create(
+                {
+                    ...data[i],
+                    dataset: dataset[i].id,
+                    user: users[i].id,
+                    subject: users[i + 1].id,
+                },
+                { expand: 'user,subject' },
+                { $autoCancel: false }
+            )
+            items.push(newItem)
+        } else {
+            const newItem = await pb.collection(collectionName).create(
+                {
+                    ...data[i],
+                    dataset: dataset[i].id,
+                    user: users[i].id,
+                },
+                { expand: 'user,subject' },
+                { $autoCancel: false }
+            )
+            items.push(newItem)
+        }
     }
 }
