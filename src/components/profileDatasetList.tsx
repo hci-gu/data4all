@@ -9,8 +9,8 @@ import { getUserFromURL } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 
 export default function ProfileDatasetList() {
-    const userNameURL = getUserFromURL()
     const path = usePathname()
+    const userNameURL = getUserFromURL(path)
 
     const userContext = useContext(authContext)
     const user = userContext.auth
@@ -25,10 +25,7 @@ export default function ProfileDatasetList() {
                 }
 
                 if (userNameURL && path.startsWith('/profile/')) {
-                    const userURL = await api.getUser(
-                        userNameURL,
-                        cookie
-                    )
+                    const userURL = await api.getUser(userNameURL, cookie)
                     setDatasets(
                         await api.getDatasetFromUser(userURL.id, cookie)
                     )
@@ -44,14 +41,19 @@ export default function ProfileDatasetList() {
         return datasets.map((dataset) => (
             <DatasetCard key={dataset.id} dataset={dataset} />
         ))
-    } 
+    }
     if (path.startsWith('/profile/')) {
         return (
             <p className="text-center">
-                {userNameURL} har inga dataset ännu, när {userNameURL} är dataägare dyker det upp här.
+                {userNameURL} har inga dataset ännu, när {userNameURL} är
+                dataägare dyker det upp här.
             </p>
         )
     }
 
-    return <p className="text-center">Du har inga dataset ännu, när du är dataägare dyker det upp här.</p>
+    return (
+        <p className="text-center">
+            Du har inga dataset ännu, när du är dataägare dyker det upp här.
+        </p>
+    )
 }

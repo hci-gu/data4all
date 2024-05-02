@@ -38,8 +38,8 @@ export const getEventWithUserAccepted = (
     return allAccepted[lastAcceptedIndex]
 }
 
-export const getUserFromURL = () => {
-    const user = decodeURI(usePathname().split('/').pop() ?? '').replaceAll(
+export const getUserFromURL = (urlPath: string) => {
+    const user = decodeURI(urlPath.split('/').pop() ?? '').replaceAll(
         '-',
         ' '
     )
