@@ -46,6 +46,10 @@ export const updateUserSchema = z
         path: ['passwordConfirm'],
         message: 'Lösenorden måste matcha',
     })
+export const updateFrendUserSchema = AuthorizedUserSchema.pick({
+    email: true,
+    role: true,
+})
 
 export const tagSchema = z.object({
     id: z.string(),
@@ -85,6 +89,7 @@ export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
+export type updateFrendUserSchema = z.infer<typeof updateFrendUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
 export type datasetWithRelationsSchema = z.infer<
     typeof datasetWithRelationsSchema
