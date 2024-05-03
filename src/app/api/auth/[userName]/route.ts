@@ -4,7 +4,7 @@ import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function GET(
     req: NextRequest,
-    context: { params: { userName: string } }
+    context: { params: { username: string } }
 ) {
     try {
         const pb = pbForRequest(req)
@@ -12,7 +12,7 @@ export async function GET(
 
         const records = await pb
             .collection('users')
-            .getFirstListItem(`name="${params.userName}"`)        
+            .getFirstListItem(`name="${params.username}"`)        
 
         return NextResponse.json(
             {

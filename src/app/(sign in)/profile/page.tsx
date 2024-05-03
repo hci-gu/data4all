@@ -35,14 +35,20 @@ async function ProfilePage() {
                 className="max-sm:hidden sm:visible"
             />
             <Separator orientation="horizontal" className="sm:hidden" />
-            <div className="w-[573.5px] flex-col gap-[10px] pb-12 max-sm:w-full">
-                <h2 className="text-center text-3xl font-semibold">
+            <section
+                aria-labelledby="datasetList"
+                className="w-[573.5px] flex-col gap-[10px] pb-12 max-sm:w-full"
+            >
+                <h2
+                    className="text-center text-3xl font-semibold"
+                    id="datasetList"
+                >
                     Dina dataset
                 </h2>
                 <div className="mt-[10px] flex flex-col gap-2">
                     <ProfileDatasetList />
                 </div>
-            </div>
+            </section>
         </main>
     )
 }

@@ -5,13 +5,12 @@ import * as api from '@/adapters/api'
 import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { datasetWithRelationsSchema } from '@/types/zod'
-import { getUserFromURL } from '@/lib/utils'
-import { usePathname } from 'next/navigation'
 
-export default function ProfileDatasetList() {
-    const path = usePathname()
-    const userNameURL = getUserFromURL(path)
-
+export default function ProfileDatasetList({
+    username,
+}: {
+    username?: string
+}) {
     const userContext = useContext(authContext)
     const user = userContext.auth
     const cookie = userContext.cookie
@@ -20,12 +19,10 @@ export default function ProfileDatasetList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                if (path === `/profile`) {
+                if (!username) {
                     setDatasets(await api.getDatasetFromUser(user.id, cookie))
-                }
-
-                if (userNameURL && path.startsWith('/profile/')) {
-                    const userURL = await api.getUser(userNameURL, cookie)
+                } else {
+                    const userURL = await api.getUser(username, cookie)
                     setDatasets(
                         await api.getDatasetFromUser(userURL.id, cookie)
                     )
@@ -38,21 +35,27 @@ export default function ProfileDatasetList() {
     }, [])
 
     if (datasets.length > 0) {
-        return datasets.map((dataset) => (
-            <DatasetCard key={dataset.id} dataset={dataset} />
-        ))
-    }
-    if (path.startsWith('/profile/')) {
         return (
-            <p className="text-center">
-                {userNameURL} har inga dataset ännu, när {userNameURL} är
-                dataägare dyker det upp här.
+            <ul>
+                {datasets.map((dataset) => (
+                    <li key={dataset.id}>
+                        <DatasetCard dataset={dataset} />
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+    if (username) {
+        return (
+            <p>
+                {username} har inga dataset ännu, när {username} är dataägare
+                dyker det upp här.
             </p>
         )
     }
 
     return (
-        <p className="text-center">
+        <p>
             Du har inga dataset ännu, när du är dataägare dyker det upp här.
         </p>
     )

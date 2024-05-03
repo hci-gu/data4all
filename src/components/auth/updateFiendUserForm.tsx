@@ -18,9 +18,7 @@ import {
 import { roleSchema, updateFrendUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Button } from '../ui/button'
 import { useContext, useState } from 'react'
-import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
 
 export default function UpdateFiendUserForm() {

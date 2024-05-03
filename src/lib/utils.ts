@@ -37,11 +37,3 @@ export const getEventWithUserAccepted = (
 
     return allAccepted[lastAcceptedIndex]
 }
-
-export const getUserFromURL = (urlPath: string) => {
-    const user = decodeURI(urlPath.split('/').pop() ?? '').replaceAll(
-        '-',
-        ' '
-    )
-    return user ? user : null
-}

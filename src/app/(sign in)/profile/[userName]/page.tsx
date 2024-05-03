@@ -14,14 +14,14 @@ import { ChevronRight } from 'lucide-react'
 import UpdateFiendUserForm from '@/components/auth/updateFiendUserForm'
 
 async function ProfilePage({
-    params: { userName },
+    params: { username },
 }: {
-    params: { userName: string }
+    params: { username: string }
 }) {
     const cookie = cookies().get('PBAuth')
     try {
         if (cookie) {
-            await getUser(userName.replaceAll('-', ' '), cookie.value)
+            await getUser(username.replaceAll('-', ' '), cookie.value)
         }
     } catch (error) {
         notFound()
@@ -42,46 +42,32 @@ async function ProfilePage({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl"
-                                href={`/profile/${decodeURI(userName.replaceAll('-', ' '))}`}
+                                href={`/profile/${decodeURI(username.replaceAll('-', ' '))}`}
                             >
-                                {decodeURI(userName.replaceAll('-', ' '))}
+                                {decodeURI(username.replaceAll('-', ' '))}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
                 <h1 className="text-5xl font-extrabold">
-                    {decodeURI(userName.replaceAll('-', ' '))}
+                    {decodeURI(username.replaceAll('-', ' '))}
                 </h1>
                 <UpdateFiendUserForm />
                 <Separator />
-                <h2 className="text-3xl font-semibold">
-                    Om Kungsbacka dataportal
-                </h2>
-                <p className="text-base">
-                    Kungsbacka Dataportal är en innovativ digital plattform som
-                    syftar till att öka öppenheten och tillgängligheten av data
-                    inom Kungsbacka kommun. Genom att ge invånare, företagare,
-                    forskare och andra intressenter tillgång till kvalitativ och
-                    uppdaterad information, strävar portalen efter att stimulera
-                    till innovation, förbättrad kommunikation och ökat
-                    engagemang.
-                </p>
-
-                <Separator />
+                <section aria-labelledby="datasetList">
+                    <h2 className="text-3xl font-extrabold" id="datasetList">
+                        {decodeURI(username.replaceAll('-', ' '))}s dataset
+                    </h2>
+                    <ProfileDatasetList username={username} />
+                </section>
             </div>
             <Separator
                 orientation="vertical"
                 className="max-sm:hidden sm:visible"
             />
-            <h2>{decodeURI(userName.replaceAll('-', ' '))}</h2>
-            <Separator orientation="horizontal" className="sm:hidden" />
-            <div className="col-start-3 row-start-1 w-[573.5px] flex-col gap-[10px] pb-12 max-sm:w-full">
-                <h2 className="text-center text-3xl font-semibold">
-                    Dina dataset
-                </h2>
-                <div className="mt-[10px] flex flex-col gap-2">
-                    <ProfileDatasetList />
-                </div>
+            <div className="w-[573.5px] flex-col gap-[10px] pb-12 max-sm:w-full">
+                <h2 className="text-3xl font-semibold">Aktivitet</h2>
+                <div className="mt-[10px] flex flex-col gap-2"></div>
             </div>
         </main>
     )
