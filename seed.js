@@ -23,7 +23,7 @@ const getRandomTag = (tags) => {
 
         const createdTags = await seedData(pb, 'tag', tags)
 
-        await seedData(pb, 'users', users)
+        await seedUser(pb, 'users', users)
 
         await seedDataset(pb, 'dataset', datasets, createdTags)
     } catch (error) {
@@ -66,6 +66,17 @@ async function seedDataset(pb, collectionName, data, tags) {
                 ...itemData,
                 slug: stringWithHyphen(itemData.title),
                 tag: [getRandomTag(tags)],
+            },
+            { $autoCancel: false }
+        )
+    }
+}
+async function seedUser(pb, collectionName, data) {
+    for (const itemData of data) {
+        await pb.collection(collectionName).create(
+            {
+                ...itemData,
+                slug: stringWithHyphen(itemData.name),
             },
             { $autoCancel: false }
         )
