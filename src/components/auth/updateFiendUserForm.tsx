@@ -15,17 +15,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { roleSchema, updateFrendUserSchema } from '@/types/zod'
+import {
+    AuthorizedUserSchema,
+    roleSchema,
+    updateFrendUserSchema,
+} from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useContext, useState } from 'react'
-import { authContext } from '@/lib/context/authContext'
 
-export default function UpdateFiendUserForm() {
-    const userContext = useContext(authContext)
-    const user = userContext.auth
-
-    const [isClicked, setIsClicked] = useState(false)
+export default function UpdateFiendUserForm({
+    user,
+}: {
+    user: AuthorizedUserSchema
+}) {
     const form = useForm<updateFrendUserSchema>({
         resolver: zodResolver(updateFrendUserSchema),
         defaultValues: {

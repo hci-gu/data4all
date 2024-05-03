@@ -24,6 +24,7 @@ import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
+import { stringWithHyphen } from '@/lib/utils'
 
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
@@ -46,6 +47,7 @@ export default function UpdateUserForm() {
 
     const submit = (value: updateUserSchema) => {
         setIsClicked(true)
+        value.slug = stringWithHyphen(value.name)
         const request = Promise.allSettled([
             updateUser(value, user.id, userContext.cookie),
             new Promise((resolve) => setTimeout(resolve, 700)),

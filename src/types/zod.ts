@@ -14,6 +14,7 @@ export const AuthorizedUserSchema = z.object({
     updated: z.string(),
     username: z.string(),
     verified: z.boolean(),
+    slug: z.string(),
 })
 export const UserSchema = AuthorizedUserSchema.omit({
     email: true,
@@ -41,7 +42,14 @@ export const updateUserSchema = z
         password: z.string(),
         passwordConfirm: z.string(),
     })
-    .merge(AuthorizedUserSchema.pick({ email: true, role: true, name: true }))
+    .merge(
+        AuthorizedUserSchema.pick({
+            email: true,
+            role: true,
+            name: true,
+            slug: true,
+        })
+    )
     .refine((data) => data.password === data.passwordConfirm, {
         path: ['passwordConfirm'],
         message: 'Lösenorden måste matcha',

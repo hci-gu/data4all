@@ -8,12 +8,15 @@ import { datasetWithRelationsSchema } from '@/types/zod'
 
 export default function ProfileDatasetList({
     username,
+    userId,
 }: {
     username?: string
+    userId?: string
 }) {
     const userContext = useContext(authContext)
     const user = userContext.auth
     const cookie = userContext.cookie
+    
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
     useEffect(() => {
@@ -21,11 +24,9 @@ export default function ProfileDatasetList({
             try {
                 if (!username) {
                     setDatasets(await api.getDatasetFromUser(user.id, cookie))
-                } else {
-                    const userURL = await api.getUser(username, cookie)
-                    setDatasets(
-                        await api.getDatasetFromUser(userURL.id, cookie)
-                    )
+                }
+                if (userId) {
+                    setDatasets(await api.getDatasetFromUser(userId, cookie))
                 }
             } catch (error) {
                 console.error(error)
@@ -55,8 +56,6 @@ export default function ProfileDatasetList({
     }
 
     return (
-        <p>
-            Du har inga dataset ännu, när du är dataägare dyker det upp här.
-        </p>
+        <p>Du har inga dataset ännu, när du är dataägare dyker det upp här.</p>
     )
 }

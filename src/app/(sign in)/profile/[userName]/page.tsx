@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { ChevronRight } from 'lucide-react'
 import UpdateFiendUserForm from '@/components/auth/updateFiendUserForm'
+import { AuthorizedUserSchema } from '@/types/zod'
 
 async function ProfilePage({
     params: { username },
@@ -19,16 +20,17 @@ async function ProfilePage({
     params: { username: string }
 }) {
     const cookie = cookies().get('PBAuth')
+    let user: AuthorizedUserSchema | undefined
     try {
         if (cookie) {
-            await getUser(username.replaceAll('-', ' '), cookie.value)
+            user = await getUser(username.replaceAll('-', ' '), cookie.value)
         }
     } catch (error) {
         notFound()
     }
     return (
-        <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">
-            <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
+        <main className="grid w-full justify-center gap-8 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">
+            <div className="flex w-[573.5px] flex-col gap-5 max-sm:w-full">
                 <Breadcrumb>
                     <BreadcrumbList>
                         <BreadcrumbItem>
@@ -52,13 +54,13 @@ async function ProfilePage({
                 <h1 className="text-5xl font-extrabold">
                     {decodeURI(username.replaceAll('-', ' '))}
                 </h1>
-                <UpdateFiendUserForm />
+                {user && <UpdateFiendUserForm user={user} />}
                 <Separator />
                 <section aria-labelledby="datasetList">
                     <h2 className="text-3xl font-extrabold" id="datasetList">
-                        {decodeURI(username.replaceAll('-', ' '))}s dataset
+                        {decodeURI(username)}s dataset
                     </h2>
-                    <ProfileDatasetList username={username} />
+                    {user && <ProfileDatasetList username={user.name} />}
                 </section>
             </div>
             <Separator
