@@ -48,7 +48,7 @@ export default function SignUp() {
         }
     }
 
-    const rols = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
+    const roles = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
 
     return (
         <Form {...form}>
@@ -125,7 +125,7 @@ export default function SignUp() {
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {rols.map((role) => (
+                                        {roles.map((role) => (
                                             <SelectItem value={role} key={role}>
                                                 {role}
                                             </SelectItem>
