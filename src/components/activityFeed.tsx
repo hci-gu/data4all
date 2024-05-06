@@ -69,7 +69,6 @@ export default function ActivityFeed({
         if ((value as number) == 2) {
             setEventsToShowAll()
         }
-        console.log(value)
     }, [localStorage.getItem('currentFilter')])
 
     return (
