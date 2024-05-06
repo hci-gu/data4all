@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
 import { stringWithHyphen } from '@/lib/utils'
@@ -40,6 +40,7 @@ export default function UpdateUserForm() {
             password: '',
             passwordConfirm: '',
             role: user.role,
+            slug: user.slug,
         },
     })
 
@@ -47,7 +48,6 @@ export default function UpdateUserForm() {
 
     const submit = (value: updateUserSchema) => {
         setIsClicked(true)
-        value.slug = stringWithHyphen(value.name)
         const request = Promise.allSettled([
             updateUser(value, user.id, userContext.cookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
@@ -70,6 +70,9 @@ export default function UpdateUserForm() {
             })
         }
     }
+    useEffect(() => {
+        form.setValue('slug', stringWithHyphen(form.getValues('name')))
+    }, [form.watch('name')])
     return (
         <Form {...form}>
             <form
@@ -125,7 +128,7 @@ export default function UpdateUserForm() {
                     )}
                 />
                 <div
-                    className={form.getValues().password !== '' ? '' : 'hidden'}
+                    className={form.getValues('password') ? '' : 'hidden'}
                 >
                     <FormField
                         control={form.control}
@@ -146,7 +149,7 @@ export default function UpdateUserForm() {
                     />
                 </div>
                 <div
-                    className={form.getValues().password !== '' ? '' : 'hidden'}
+                    className={form.getValues('password') ? '' : 'hidden'}
                 >
                     <FormField
                         control={form.control}
@@ -192,6 +195,22 @@ export default function UpdateUserForm() {
                                 </Select>
                             </FormControl>
                             <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="slug"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="sr-only">slug</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="hidden"
+                                    placeholder="Slug"
+                                    {...field}
+                                />
+                            </FormControl>
                         </FormItem>
                     )}
                 />

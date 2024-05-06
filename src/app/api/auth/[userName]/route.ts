@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ClientResponseError } from 'pocketbase'
 import { pbForRequest } from '@/adapters/pocketbase'
+import { stringWithHyphen } from '@/lib/utils'
 
 export async function GET(
     req: NextRequest,
@@ -12,7 +13,7 @@ export async function GET(
 
         const records = await pb
             .collection('users')
-            .getFirstListItem(`name="${params.username}"`)        
+            .getFirstListItem(`slug="${stringWithHyphen(params.username)}"`)
 
         return NextResponse.json(
             {

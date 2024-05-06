@@ -24,6 +24,8 @@ import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as api from '@/adapters/api'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { stringWithHyphen } from '@/lib/utils'
+import { useEffect } from 'react'
 
 export default function SignUp() {
     const router = useRouter()
@@ -48,7 +50,11 @@ export default function SignUp() {
         }
     }
 
-    const rols = Object.values(roleSchema.Values)
+    useEffect(() => {
+        form.setValue('slug', stringWithHyphen(form.getValues('email')))
+    }, [form.watch('email')])
+
+    const roles = Object.values(roleSchema.Values)
 
     return (
         <Form {...form}>
@@ -125,7 +131,7 @@ export default function SignUp() {
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {rols.map((role) => (
+                                        {roles.map((role) => (
                                             <SelectItem value={role} key={role}>
                                                 {role}
                                             </SelectItem>
@@ -142,6 +148,22 @@ export default function SignUp() {
                     render={({ field }) => (
                         <FormItem>
                             <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="slug"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="sr-only">slug</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="hidden"
+                                    placeholder="Slug"
+                                    {...field}
+                                />
+                            </FormControl>
                         </FormItem>
                     )}
                 />

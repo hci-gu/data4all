@@ -23,7 +23,7 @@ async function ProfilePage({
     let user: AuthorizedUserSchema | undefined
     try {
         if (cookie) {
-            user = await getUser(username.replaceAll('-', ' '), cookie.value)
+            user = await getUser(username, cookie.value)
         }
     } catch (error) {
         notFound()
