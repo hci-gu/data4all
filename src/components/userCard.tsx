@@ -10,7 +10,7 @@ export default function UserCard({ user }: { user: AuthorizedUserSchema }) {
         <Card className="w-[560px] max-sm:w-full">
             <CardHeader>
                 <Link
-                    href={`/`}
+                    href={`/profile/${user.slug}`}
                     className="flex h-fit w-full items-center justify-between"
                 >
                     <div className="flex gap-2">

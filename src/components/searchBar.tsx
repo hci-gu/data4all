@@ -22,7 +22,7 @@ type searchSchema = z.infer<typeof searchSchema>
 
 type autoCompleteSuggestion = {
     name: string
-    type: string
+    type: 'dataset' | 'user'
     slug: string
 }
 
@@ -46,7 +46,7 @@ const userToSuggestion = (users: AuthorizedUserSchema[]) => {
         const newUser: autoCompleteSuggestion = {
             name: user.name,
             type: 'user',
-            slug: '',
+            slug: user.slug,
         }
         newUserArray.push(newUser)
     })
@@ -204,18 +204,38 @@ export default function SearchBar({
                             {suggestions.length > 0 &&
                             debouncedSearchTerm !== '' ? (
                                 <div className="flex w-full flex-col py-2">
-                                    {suggestions.map((suggestion) => (
-                                        <Link
-                                            key={suggestion.name}
-                                            href={`/dataset/${suggestion.slug}`}
-                                            className="w-full px-3 py-1 text-sm hover:bg-slate-50"
-                                        >
-                                            <Highlight
-                                                text={suggestion.name}
-                                                highlight={debouncedSearchTerm}
-                                            />
-                                        </Link>
-                                    ))}
+                                    {suggestions.map((suggestion) => {
+                                        if (suggestion.type === 'dataset') {
+                                            return (
+                                                <Link
+                                                    key={suggestion.name}
+                                                    href={`/dataset/${suggestion.slug}`}
+                                                    className="w-full px-3 py-1 text-sm hover:bg-slate-50"
+                                                >
+                                                    <Highlight
+                                                        text={suggestion.name}
+                                                        highlight={
+                                                            debouncedSearchTerm
+                                                        }
+                                                    />
+                                                </Link>
+                                            )
+                                        }
+                                        return (
+                                            <Link
+                                                key={suggestion.name}
+                                                href={`/profile/${suggestion.slug}`}
+                                                className="w-full px-3 py-1 text-sm hover:bg-slate-50"
+                                            >
+                                                <Highlight
+                                                    text={suggestion.name}
+                                                    highlight={
+                                                        debouncedSearchTerm
+                                                    }
+                                                />
+                                            </Link>
+                                        )
+                                    })}
                                 </div>
                             ) : (
                                 <div className="flex w-full flex-col p-2">
