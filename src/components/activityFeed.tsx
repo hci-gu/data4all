@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
-import { Filter, X } from 'lucide-react'
+import { Filter } from 'lucide-react'
 import {
     Dialog,
     DialogClose,
@@ -35,12 +35,16 @@ export default function ActivityFeed({
 
     const [eventsDisplay, setEventsDisplay] = useState(events)
     const [filterHighlight, setFilterHighlight] = useState(0)
-    const fliterArray = ['Alla händelser', 'När jag blivit taggad', 'Mina dataset']
+    const fliterArray = [
+        'När jag blivit taggad',
+        'Mina dataset',
+        'Alla händelser',
+    ]
 
-    function setEventsToDefualt() {
-        setFilterHighlight(0)
+    function setEventsToShowAll() {
+        setFilterHighlight(2)
         setEventsDisplay(events)
-        localStorage.setItem('currentFilter', '0')
+        localStorage.setItem('currentFilter', '2')
     }
     function setEventsToTagged() {
         let newEventArray: EventSchema[] = []
@@ -50,9 +54,9 @@ export default function ActivityFeed({
                 newEventArray.push(event)
             }
         })
-        setFilterHighlight(1)
+        setFilterHighlight(0)
         setEventsDisplay(newEventArray)
-        localStorage.setItem('currentFilter', '1')
+        localStorage.setItem('currentFilter', '0')
     }
 
     useEffect(() => {
@@ -60,11 +64,12 @@ export default function ActivityFeed({
 
         setFilterHighlight(value as number)
         if ((value as number) == 0) {
-            setEventsToDefualt()
-        }
-        if ((value as number) == 1) {
             setEventsToTagged()
         }
+        if ((value as number) == 2) {
+            setEventsToShowAll()
+        }
+        console.log(value)
     }, [localStorage.getItem('currentFilter')])
 
     return (
@@ -93,30 +98,9 @@ export default function ActivityFeed({
                         <div className="grid grid-cols-1 grid-rows-3 gap-2">
                             <DialogClose asChild>
                                 <Button
-                                    onClick={() => setEventsToDefualt()}
-                                    variant={
-                                        filterHighlight == 0
-                                            ? 'secondary'
-                                            : 'ghost'
-                                    }
-                                    className="h-full w-full"
-                                >
-                                    <div className="h-full w-full [&>div]:w-fit">
-                                        <Typography level="Large">
-                                            Visa allt
-                                        </Typography>
-                                        <p className="text-wrap text-left text-sm text-slate-500">
-                                            Se senaste kommentarer och händelser
-                                            i alla dataset
-                                        </p>
-                                    </div>
-                                </Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                                <Button
                                     onClick={() => setEventsToTagged()}
                                     variant={
-                                        filterHighlight == 1
+                                        filterHighlight == 0
                                             ? 'secondary'
                                             : 'ghost'
                                     }
@@ -136,9 +120,9 @@ export default function ActivityFeed({
                             </DialogClose>
                             <DialogClose asChild>
                                 <Button
-                                    onClick={() => setEventsToDefualt()}
+                                    onClick={() => setEventsToShowAll()}
                                     variant={
-                                        filterHighlight == 2
+                                        filterHighlight == 1
                                             ? 'secondary'
                                             : 'ghost'
                                     }
@@ -155,18 +139,46 @@ export default function ActivityFeed({
                                     </div>
                                 </Button>
                             </DialogClose>
+                            <DialogClose asChild>
+                                <Button
+                                    onClick={() => setEventsToShowAll()}
+                                    variant={
+                                        filterHighlight == 2
+                                            ? 'secondary'
+                                            : 'ghost'
+                                    }
+                                    className="h-full w-full"
+                                >
+                                    <div className="h-full w-full [&>div]:w-fit">
+                                        <Typography level="Large">
+                                            Visa allt
+                                        </Typography>
+                                        <p className="text-wrap text-left text-sm text-slate-500">
+                                            Se senaste kommentarer och händelser
+                                            i alla dataset
+                                        </p>
+                                    </div>
+                                </Button>
+                            </DialogClose>
                         </div>
                     </DialogContent>
                 </Dialog>
 
                 <ul className="flex w-full flex-col gap-4">
-                    {eventsDisplay.map((event) => (
-                        <FeedItem
-                            event={event}
-                            dataset={getDatasetFromId(event.dataset, datasets)}
-                            key={event.id}
-                        />
-                    ))}
+                    {eventsDisplay.length > 0 ? (
+                        eventsDisplay.map((event) => (
+                            <FeedItem
+                                event={event}
+                                dataset={getDatasetFromId(
+                                    event.dataset,
+                                    datasets
+                                )}
+                                key={event.id}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-center">Hittade inga händelser</p>
+                    )}
                 </ul>
             </div>
         </>
