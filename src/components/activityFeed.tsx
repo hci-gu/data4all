@@ -1,7 +1,7 @@
 'use client'
 import { EventSchema, datasetSchema } from '@/types/zod'
 import Typography from './ui/Typography'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
@@ -34,11 +34,13 @@ export default function ActivityFeed({
     const user = useContext(authContext)
 
     const [eventsDisplay, setEventsDisplay] = useState(events)
-    const [sortHighlight, setSortHighlight] = useState(0)
+    const [filterHighlight, setFilterHighlight] = useState(0)
+    const fliterArray = ['Alla händelser', 'När jag blivit taggad', 'Mina dataset']
 
     function setEventsToDefualt() {
-        setSortHighlight(0)
+        setFilterHighlight(0)
         setEventsDisplay(events)
+        localStorage.setItem('currentFilter', '0')
     }
     function setEventsToTagged() {
         let newEventArray: EventSchema[] = []
@@ -48,16 +50,34 @@ export default function ActivityFeed({
                 newEventArray.push(event)
             }
         })
-        setSortHighlight(1)
+        setFilterHighlight(1)
         setEventsDisplay(newEventArray)
+        localStorage.setItem('currentFilter', '1')
     }
+
+    useEffect(() => {
+        const value: any = localStorage.getItem('currentFilter') || '0'
+
+        setFilterHighlight(value as number)
+        if ((value as number) == 0) {
+            setEventsToDefualt()
+        }
+        if ((value as number) == 1) {
+            setEventsToTagged()
+        }
+    }, [localStorage.getItem('currentFilter')])
 
     return (
         <>
-            <div className="relative flex flex-col items-center gap-8 [&>h2]:border-none">
-                <Typography level="H2">Flöde</Typography>
+            <div className="relative flex flex-col items-center gap-8">
+                <div className="text-center [&>h2]:border-none [&>h2]:pb-0">
+                    <Typography level="H2">Flöde</Typography>
+                    <p className="text-xs text-slate-500">
+                        {fliterArray[filterHighlight]}
+                    </p>
+                </div>
                 <Dialog>
-                    <DialogTrigger className="absolute right-0 top-0">
+                    <DialogTrigger className="absolute right-0 top-1">
                         <Filter />
                     </DialogTrigger>
                     <DialogContent>
@@ -75,7 +95,7 @@ export default function ActivityFeed({
                                 <Button
                                     onClick={() => setEventsToDefualt()}
                                     variant={
-                                        sortHighlight == 0
+                                        filterHighlight == 0
                                             ? 'secondary'
                                             : 'ghost'
                                     }
@@ -96,7 +116,7 @@ export default function ActivityFeed({
                                 <Button
                                     onClick={() => setEventsToTagged()}
                                     variant={
-                                        sortHighlight == 1
+                                        filterHighlight == 1
                                             ? 'secondary'
                                             : 'ghost'
                                     }
@@ -118,7 +138,7 @@ export default function ActivityFeed({
                                 <Button
                                     onClick={() => setEventsToDefualt()}
                                     variant={
-                                        sortHighlight == 2
+                                        filterHighlight == 2
                                             ? 'secondary'
                                             : 'ghost'
                                     }
