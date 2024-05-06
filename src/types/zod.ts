@@ -104,6 +104,7 @@ export type datasetWithRelationsSchema = z.infer<
     typeof datasetWithRelationsSchema
 >
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
+export type UserSchema = z.infer<typeof UserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>

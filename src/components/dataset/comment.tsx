@@ -12,7 +12,7 @@ export default function Comment({ event }: { event: EventSchema }) {
         return (
             <li className="flex flex-col gap-1">
                 <User
-                    user={{ name: event.user.name, role: event.user.role }}
+                    user={event.user}
                     size="small"
                 />
                 <div className="ml-8 flex flex-col gap-1">
