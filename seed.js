@@ -18,8 +18,8 @@ const getRandomTag = (tags) => {
 
     try {
         await deleteExistingData(pb, 'events', events, 'content')
-        await deleteExistingData(pb, 'users', users, 'email')
         await deleteExistingData(pb, 'dataset', datasets)
+        await deleteExistingData(pb, 'users', users, 'email')
         await deleteExistingData(pb, 'tag', tags, 'name')
 
         const createdTags = await seedData(pb, 'tag', tags)
@@ -94,7 +94,6 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
 
     for (let i = 0; i < data.length; i++) {
         if (data[i].types == 'ownerReq' || data[i].types == 'ownerAccept') {
-            console.log('owner mod')
             const newItem = await pb.collection(collectionName).create(
                 {
                     ...data[i],

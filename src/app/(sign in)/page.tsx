@@ -10,7 +10,7 @@ export default async function Home() {
     const cookie = cookies().get('PBAuth')?.value
 
     const events = await api.getAllEvents(cookie as string)
-    console.log(events)
+    const datasets = await api.getDatasets('', cookie as string)
 
     return (
         <main className="flex w-full flex-col items-center">
@@ -21,7 +21,7 @@ export default async function Home() {
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <ActivityFeed events={events} />
+                <ActivityFeed events={events} datasets={datasets} />
             </div>
         </main>
     )
