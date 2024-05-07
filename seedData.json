@@ -164,8 +164,8 @@
         { "types": "comment", "content": "Väldigt viktig kommentar" },
         { "types": "comment", "content": "Väldigt viktig kommentar" },
         { "types": "comment", "content": "Väldigt viktig kommentar" },
-        { "types": "ownerReq", "content": "föreslog sig själv som dataägare i" },
-        { "types": "ownerReq", "content": "föreslog sig själv som dataägare i" },
+        { "types": "ownerReq", "content": "föreslog sig själv som dataägare" },
+        { "types": "ownerReq", "content": "föreslog sig själv som dataägare" },
         { "types": "ownerReq", "content": "föreslog" }
     ]
 }

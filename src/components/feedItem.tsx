@@ -2,7 +2,6 @@ import { EventSchema, datasetSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import moment from 'moment'
 import Image from 'next/image'
-import Dataportal from '../../public/Dataportal.png'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 
@@ -55,7 +54,7 @@ export default function FeedItem({
                         <div className="flex gap-1 rounded-sm border border-slate-200 p-1">
                             <Image
                                 width={16}
-                                src={Dataportal}
+                                src={'Dataportal.png'}
                                 alt="Dataportal.se logo"
                             />
                             <Link className="text-cyan-700" href="/">
@@ -82,7 +81,7 @@ export default function FeedItem({
                 <div
                     className="text-xs"
                     dangerouslySetInnerHTML={{
-                        __html: event.content,
+                        __html: `${event.content} i <b>${dataset?.title}</b>`,
                     }}
                 />
                 <time className="text-xs font-bold">

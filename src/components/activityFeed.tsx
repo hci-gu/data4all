@@ -16,6 +16,12 @@ import {
     DialogTrigger,
 } from './ui/dialog'
 
+type feedEvent = {
+    
+} 
+
+
+
 function getDatasetFromId(id: string, datasets: datasetSchema[]) {
     for (const dataset of datasets) {
         if (dataset.id === id) {
@@ -58,6 +64,11 @@ export default function ActivityFeed({
         setEventsDisplay(newEventArray)
         localStorage.setItem('currentFilter', '0')
     }
+    function setEventsToMyDatasets() {
+        setFilterHighlight(1)
+        setEventsDisplay(events)
+        localStorage.setItem('currentFilter', '1')
+    }
 
     useEffect(() => {
         const value: any = localStorage.getItem('currentFilter') || '0'
@@ -69,7 +80,10 @@ export default function ActivityFeed({
         if ((value as number) == 2) {
             setEventsToShowAll()
         }
-    }, [localStorage.getItem('currentFilter')])
+    }, [])
+
+
+
 
     return (
         <>
@@ -119,7 +133,7 @@ export default function ActivityFeed({
                             </DialogClose>
                             <DialogClose asChild>
                                 <Button
-                                    onClick={() => setEventsToShowAll()}
+                                    onClick={() => setEventsToMyDatasets()}
                                     variant={
                                         filterHighlight == 1
                                             ? 'secondary'

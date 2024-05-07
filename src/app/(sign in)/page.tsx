@@ -2,15 +2,16 @@ import WelcomeBack from '@/components/welcomeBack'
 import Typography from '@/components/ui/Typography'
 import SearchBar from '@/components/searchBar'
 import { Separator } from '@/components/ui/separator'
-import ActivityFeed from '@/components/activityFeed'
 import * as api from '@/adapters/api'
 import { cookies } from 'next/headers'
+import ActivityFeed from '@/components/activityFeed'
 
 export default async function Home() {
     const cookie = cookies().get('PBAuth')?.value
-
     const events = await api.getAllEvents(cookie as string)
     const datasets = await api.getDatasets('', cookie as string)
+    const test = await api.taggedEvents(cookie as string)
+    
 
     return (
         <main className="flex w-full flex-col items-center">
