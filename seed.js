@@ -96,7 +96,6 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
         if (data[i].types == 'ownerReq' || data[i].types == 'ownerAccept') {
             let newContent = `<b>${users[i].name}</b>`
             let subjectUserId = ``
-            console.log('pre', newContent)
             if (data[i].content.length > 8) {
                 newContent = `${newContent} ${data[i].content}`
                 subjectUserId = users[i]
@@ -105,7 +104,6 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
                 newContent = `${newContent} ${data[i].content} <b>${users[randomIndex].name}</b> som dataägare`
                 subjectUserId = users[randomIndex]
             }
-            console.log('post', newContent)
 
             const newItem = await pb.collection(collectionName).create(
                 {
