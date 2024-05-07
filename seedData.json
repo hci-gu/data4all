@@ -164,8 +164,8 @@
         { "types": "comment", "content": "Väldigt viktig kommentar" },
         { "types": "comment", "content": "Väldigt viktig kommentar" },
         { "types": "comment", "content": "Väldigt viktig kommentar" },
-        { "types": "ownerReq", "content": "vill äga detta dataset" },
-        { "types": "ownerReq", "content": "vill äga detta dataset" },
-        { "types": "ownerAccept", "content": "blev ägare av datasettet" }
+        { "types": "ownerReq", "content": "föreslog sig själv som dataägare i" },
+        { "types": "ownerReq", "content": "föreslog sig själv som dataägare i" },
+        { "types": "ownerReq", "content": "föreslog" }
     ]
 }

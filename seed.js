@@ -19,8 +19,8 @@ const getRandomTag = (tags) => {
     try {
         await deleteExistingData(pb, 'events', events, 'content')
         await deleteExistingData(pb, 'dataset', datasets)
-        await deleteExistingData(pb, 'users', users, 'email')
         await deleteExistingData(pb, 'tag', tags, 'name')
+        await deleteExistingData(pb, 'users', users, 'email')
 
         const createdTags = await seedData(pb, 'tag', tags)
 
@@ -54,7 +54,7 @@ async function deleteExistingData(
     const existingData = await pb.collection(collectionName).getFullList()
     for (const existingItem of existingData) {
         for (const newItem of data) {
-            if (existingItem[identifier] === newItem[identifier]) {
+            if (existingItem[identifier].includes(newItem[identifier])) {
                 await pb.collection(collectionName).delete(existingItem.id)
                 break
             }
@@ -94,12 +94,26 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
 
     for (let i = 0; i < data.length; i++) {
         if (data[i].types == 'ownerReq' || data[i].types == 'ownerAccept') {
+            let newContent = `<b>${users[i].name}</b>`
+            let subjectUserId = ``
+            console.log('pre', newContent)
+            if (data[i].content.length > 8) {
+                newContent = `${newContent} ${data[i].content}`
+                subjectUserId = users[i]
+            } else {
+                const randomIndex = Math.floor(Math.random() * users.length)
+                newContent = `${newContent} ${data[i].content} <b>${users[randomIndex].name}</b> som dataägare`
+                subjectUserId = users[randomIndex]
+            }
+            console.log('post', newContent)
+
             const newItem = await pb.collection(collectionName).create(
                 {
                     ...data[i],
                     dataset: dataset[i].id,
                     user: users[i].id,
-                    subject: users[i + 1].id,
+                    subject: subjectUserId,
+                    content: newContent,
                 },
                 { expand: 'user,subject' },
                 { $autoCancel: false }
