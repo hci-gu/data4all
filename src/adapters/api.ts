@@ -160,20 +160,22 @@ export const getAllEvents = async (authCookie: string) => {
         'GET',
         authCookie
     )) as []
-    const cleanEvent = events.map(responseEventCleanup)
 
-    return EventSchema.array().parse(cleanEvent)
+    return events.map((event) => {
+        return responseFeedEventCleanup(event)
+    })
 }
 
-export const getMyDatasets = async (authCookie: string) => {
+export const getMyDatasetsEvents = async (authCookie: string) => {
     const events = (await apiRequest(
-        apiUrl(`events/feed/allEvents`),
+        apiUrl(`events/feed/myDatasets`),
         'GET',
         authCookie
     )) as []
-    const cleanEvent = events.map(responseEventCleanup)
 
-    return EventSchema.array().parse(cleanEvent)
+    return events.map((event) => {
+        return responseFeedEventCleanup(event)
+    })
 }
 
 export const taggedEvents = async (authCookie: string) => {
@@ -182,7 +184,9 @@ export const taggedEvents = async (authCookie: string) => {
         'GET',
         authCookie
     )) as []
-    return events
+    return events.map((event) => {
+        return responseFeedEventCleanup(event)
+    })
 }
 
 function responseDatasetCleanup(res: any) {
@@ -201,5 +205,16 @@ function responseEventCleanup(res: any): EventSchema {
         ...res,
         user: res?.expand?.user,
         subject: res?.expand?.subject,
+    }
+}
+function responseFeedEventCleanup(res: any) {
+    return {
+        id: res?.id,
+        userName: res?.expand?.user.name,
+        subject: res?.subject,
+        datasetTitle: res?.expand?.dataset.title,
+        content: res?.content,
+        created: res?.created,
+        types: res?.types
     }
 }

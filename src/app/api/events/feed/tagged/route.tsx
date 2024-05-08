@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
         const records = await pb.collection('events').getFullList({
             sort: '-created',
             filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
-            expand: 'user,subject',
+            expand: 'user,subject,dataset',
         })
 
         return NextResponse.json(

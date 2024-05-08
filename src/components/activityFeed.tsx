@@ -1,11 +1,11 @@
 'use client'
-import { EventSchema, datasetSchema } from '@/types/zod'
 import Typography from './ui/Typography'
 import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
 import { Filter } from 'lucide-react'
+import * as api from '@/adapters/api'
 import {
     Dialog,
     DialogClose,
@@ -17,56 +17,38 @@ import {
 } from './ui/dialog'
 
 type feedEvent = {
-    
-} 
-
-
-
-function getDatasetFromId(id: string, datasets: datasetSchema[]) {
-    for (const dataset of datasets) {
-        if (dataset.id === id) {
-            return dataset
-        }
-    }
+    id: string
+    userName: string
+    subject: string
+    datasetTitle: string
+    content: any
+    created: string
+    types: string
 }
 
-export default function ActivityFeed({
-    events,
-    datasets,
-}: {
-    events: EventSchema[]
-    datasets: datasetSchema[]
-}) {
-    const user = useContext(authContext)
+export default function ActivityFeed() {
+    const cookie = useContext(authContext).cookie
 
-    const [eventsDisplay, setEventsDisplay] = useState(events)
+    const [eventsDisplay, setEventsDisplay] = useState<feedEvent[]>([])
     const [filterHighlight, setFilterHighlight] = useState(0)
     const fliterArray = [
         'När jag blivit taggad',
         'Mina dataset',
         'Alla händelser',
     ]
-
-    function setEventsToShowAll() {
+    async function setEventsToShowAll() {
         setFilterHighlight(2)
-        setEventsDisplay(events)
+        setEventsDisplay(await api.getAllEvents(cookie))
         localStorage.setItem('currentFilter', '2')
     }
-    function setEventsToTagged() {
-        let newEventArray: EventSchema[] = []
-
-        events.map((event) => {
-            if (event.subject?.id == user.auth.id) {
-                newEventArray.push(event)
-            }
-        })
+    async function setEventsToTagged() {
         setFilterHighlight(0)
-        setEventsDisplay(newEventArray)
+        setEventsDisplay(await api.taggedEvents(cookie))
         localStorage.setItem('currentFilter', '0')
     }
-    function setEventsToMyDatasets() {
+    async function setEventsToMyDatasets() {
         setFilterHighlight(1)
-        setEventsDisplay(events)
+        setEventsDisplay(await api.getMyDatasetsEvents(cookie))
         localStorage.setItem('currentFilter', '1')
     }
 
@@ -77,13 +59,13 @@ export default function ActivityFeed({
         if ((value as number) == 0) {
             setEventsToTagged()
         }
+        if ((value as number) == 1) {
+            setEventsToMyDatasets()
+        }
         if ((value as number) == 2) {
             setEventsToShowAll()
         }
     }, [])
-
-
-
 
     return (
         <>
@@ -178,18 +160,15 @@ export default function ActivityFeed({
                 </Dialog>
 
                 <ul className="flex w-full flex-col gap-4">
-                    {eventsDisplay.length > 0 ? (
+                    {eventsDisplay && eventsDisplay.length > 0 ? (
                         eventsDisplay.map((event) => (
                             <FeedItem
-                                event={event}
-                                dataset={getDatasetFromId(
-                                    event.dataset,
-                                    datasets
-                                )}
-                                key={event.id}
+                            event={event}
+                            key={event.id}
                             />
+                        )
                         ))
-                    ) : (
+                     : (
                         <p className="text-center">Hittade inga händelser</p>
                     )}
                 </ul>

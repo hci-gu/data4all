@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         const records = await pb
             .collection('events')
 
-            .getFullList({ sort: '-created', expand: 'user,subject' })
+            .getFullList({ sort: '-created', expand: 'user,subject,dataset' })
 
         return NextResponse.json(
             {

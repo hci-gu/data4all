@@ -98,11 +98,11 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
             let subjectUserId = ``
             if (data[i].content.length > 8) {
                 newContent = `${newContent} ${data[i].content}`
-                subjectUserId = users[i]
+                subjectUserId = users[i].id
             } else {
                 const randomIndex = Math.floor(Math.random() * users.length)
                 newContent = `${newContent} ${data[i].content} <b>${users[randomIndex].name}</b> som dataägare`
-                subjectUserId = users[randomIndex]
+                subjectUserId = users[randomIndex].id
             }
 
             const newItem = await pb.collection(collectionName).create(
