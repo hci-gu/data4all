@@ -1,5 +1,6 @@
 import { stringWithHyphen } from '@/lib/utils'
 import {
+    AuthorizedUserSchema,
     EventSchema,
     datasetSchema,
     datasetWithRelationsSchema,
@@ -14,13 +15,15 @@ const pb = new PocketBase('http://localhost:8090')
 export const createUser = async () => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
+    const name = 'tester'
     const userData = {
         email,
         emailVisibility: true,
         password,
         passwordConfirm: password,
         role: 'User',
-        name: 'tester',
+        name,
+        slug: stringWithHyphen(name),
     }
     const user = await pb.collection('users').create(userData)
     return {
@@ -33,20 +36,21 @@ export const createUser = async () => {
 export const createByUserName = async (name: string) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
-    const user = await pb.collection('users').create({
+    const user = await pb.collection<AuthorizedUserSchema>('users').create({
         email,
         emailVisibility: true,
         password,
         passwordConfirm: password,
         role: 'User',
         name,
+        slug: stringWithHyphen(name),
     })
     return user
 }
 
 export const createDataset = async (titleValue: string) => {
-await pb.admins.authWithPassword('admin@email.com', 'password123')
-const title = titleValue
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
+    const title = titleValue
     const description = 'test description'
     const slug = stringWithHyphen(title)
     const dataset = await pb.collection<datasetSchema>('dataset').create({
@@ -61,8 +65,8 @@ export const createDatasetWithRelation = async (
     releatedDataset: datasetSchema[] = [],
     releatedTag: tagSchema[] = []
 ) => {
-await pb.admins.authWithPassword('admin@email.com', 'password123')
-const title = titleValue
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
+    const title = titleValue
     const description = 'test description'
     const slug = stringWithHyphen(title)
     const related_datasets = releatedDataset?.map((dataset) => dataset.id) ?? []
