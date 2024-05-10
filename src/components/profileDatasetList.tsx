@@ -8,10 +8,8 @@ import { datasetWithRelationsSchema } from '@/types/zod'
 
 export default function ProfileDatasetList({
     username,
-    userId,
 }: {
     username?: string
-    userId?: string
 }) {
     const userContext = useContext(authContext)
     const user = userContext.auth
@@ -22,11 +20,12 @@ export default function ProfileDatasetList({
     useEffect(() => {
         async function fetchData() {
             try {
+                if (username) {
+                    const userId = (await api.getUser(username, cookie)).id
+                    setDatasets(await api.getDatasetFromUser(userId, cookie))
+                }
                 if (!username) {
                     setDatasets(await api.getDatasetFromUser(user.id, cookie))
-                }
-                if (userId) {
-                    setDatasets(await api.getDatasetFromUser(userId, cookie))
                 }
             } catch (error) {
                 console.error(error)
@@ -37,7 +36,7 @@ export default function ProfileDatasetList({
 
     if (datasets.length > 0) {
         return (
-            <ul>
+            <ul className="space-y-3">
                 {datasets.map((dataset) => (
                     <li key={dataset.id}>
                         <DatasetCard dataset={dataset} />

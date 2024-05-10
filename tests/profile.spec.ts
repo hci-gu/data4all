@@ -31,7 +31,9 @@ test.describe('Profile page', () => {
             const name = 'tester user not existed'
 
             await page.goto(`/profile/${name}`)
-            expect(page.getByRole('paragraph')).toHaveText('Kunde inte hitta det du letade efter')
+            expect(page.getByRole('paragraph')).toHaveText(
+                'Kunde inte hitta det du letade efter'
+            )
         })
 
         test('Can update user name', async ({ page }) => {

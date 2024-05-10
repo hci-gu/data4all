@@ -62,7 +62,7 @@ async function ProfilePage({
                     <Separator />
                     <section aria-labelledby="datasetList">
                         <h2
-                            className="text-3xl font-extrabold"
+                            className="text-3xl font-extrabold mb-3"
                             id="datasetList"
                         >
                             {user.name}s dataset
