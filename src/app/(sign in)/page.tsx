@@ -2,8 +2,9 @@ import WelcomeBack from '@/components/welcomeBack'
 import Typography from '@/components/ui/Typography'
 import SearchBar from '@/components/searchBar'
 import { Separator } from '@/components/ui/separator'
+import ActivityFeed from '@/components/activityFeed'
 
-export default function Home() {
+export default async function Home() {
     return (
         <main className="flex w-full flex-col items-center">
             <WelcomeBack homePage={true} />
@@ -13,7 +14,7 @@ export default function Home() {
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <div>Flöde</div>
+                <ActivityFeed />
             </div>
         </main>
     )
