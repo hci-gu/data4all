@@ -6,10 +6,8 @@ import { useContext } from 'react'
 
 export default function CheckIfNotUserProfile({
     name,
-    children
 }: {
     name: string
-    children: React.ReactNode
 }) {
     const user = useContext(authContext).auth
     const router = useRouter()
@@ -17,6 +15,5 @@ export default function CheckIfNotUserProfile({
     if (user.name === name) {
         router.push('/profile')
     }
-
-    return <>{children}</>
+    return <></>
 }
