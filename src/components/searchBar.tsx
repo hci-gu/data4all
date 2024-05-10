@@ -21,6 +21,7 @@ const searchSchema = z.object({
 type searchSchema = z.infer<typeof searchSchema>
 
 type autoCompleteSuggestion = {
+    id: string
     name: string
     type: 'dataset' | 'user'
     slug: string
@@ -31,6 +32,7 @@ const datasetToSuggestion = (datasets: datasetSchema[]) => {
 
     datasets.map((dataset) => {
         const newDataset: autoCompleteSuggestion = {
+            id: dataset.id,
             name: dataset.title,
             type: 'dataset',
             slug: dataset.slug,
@@ -44,6 +46,7 @@ const userToSuggestion = (users: AuthorizedUserSchema[]) => {
 
     users.map((user) => {
         const newUser: autoCompleteSuggestion = {
+            id: user.id,
             name: user.name,
             type: 'user',
             slug: user.slug,
@@ -93,6 +96,7 @@ export default function SearchBar({
 
     const userContext = useContext(authContext)
     const authCookie = userContext.cookie
+    const user = userContext.auth
 
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
@@ -120,7 +124,9 @@ export default function SearchBar({
             const users = await api.getUsers(debouncedSearchTerm, authCookie)
             setSuggestions([
                 ...datasetToSuggestion(datasets),
-                ...userToSuggestion(users),
+                ...userToSuggestion(
+                    users.filter((user) => user.id !== user.id)
+                ),
             ])
         }
     }
@@ -138,7 +144,7 @@ export default function SearchBar({
         const users = await api.getUsers(debouncedSearchTerm, authCookie)
         setSuggestions([
             ...datasetToSuggestion(datasets),
-            ...userToSuggestion(users),
+            ...userToSuggestion(users.filter((user) => user.id !== user.id)),
         ])
     }
 
