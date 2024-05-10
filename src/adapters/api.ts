@@ -1,4 +1,5 @@
 import { env } from '@/lib/env'
+import { FeedFilter } from '@/types/constants'
 import {
     signUpSchema,
     signInSchema,
@@ -154,36 +155,13 @@ export const getDatasetFromUser = async (
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
 
-export const getAllEvents = async (authCookie: string) => {
+export const getFeed = async (authCookie: string, filter: FeedFilter) => {
     const events = (await apiRequest(
-        apiUrl(`events/feed/allEvents`),
+        apiUrl(`events/feed?filter=${filter}`),
         'GET',
         authCookie
     )) as []
 
-    return events.map((event) => {
-        return responseFeedEventCleanup(event)
-    })
-}
-
-export const getMyDatasetsEvents = async (authCookie: string) => {
-    const events = (await apiRequest(
-        apiUrl(`events/feed/myDatasets`),
-        'GET',
-        authCookie
-    )) as []
-
-    return events.map((event) => {
-        return responseFeedEventCleanup(event)
-    })
-}
-
-export const taggedEvents = async (authCookie: string) => {
-    const events = (await apiRequest(
-        apiUrl(`events/feed/tagged`),
-        'GET',
-        authCookie
-    )) as []
     return events.map((event) => {
         return responseFeedEventCleanup(event)
     })
@@ -215,6 +193,6 @@ function responseFeedEventCleanup(res: any) {
         datasetTitle: res?.expand?.dataset.title,
         content: res?.content,
         created: res?.created,
-        types: res?.types
+        types: res?.types,
     }
 }

@@ -15,6 +15,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from './ui/dialog'
+import { FeedFilter, descriptionForFeedFilter } from '@/types/constants'
 
 type feedEvent = {
     id: string
@@ -26,55 +27,41 @@ type feedEvent = {
     types: string
 }
 
+const filterFromStorage = () => {
+    const filter = localStorage.getItem('activeFilter')
+    if (filter) {
+        return filter as FeedFilter
+    }
+    return FeedFilter.Tagged
+}
+
 export default function ActivityFeed() {
     const cookie = useContext(authContext).cookie
-
-    const [eventsDisplay, setEventsDisplay] = useState<feedEvent[]>([])
-    const [filterHighlight, setFilterHighlight] = useState(0)
-    const fliterArray = [
-        'När jag blivit taggad',
-        'Mina dataset',
-        'Alla händelser',
-    ]
-    async function setEventsToShowAll() {
-        setFilterHighlight(2)
-        setEventsDisplay(await api.getAllEvents(cookie))
-        localStorage.setItem('currentFilter', '2')
-    }
-    async function setEventsToTagged() {
-        setFilterHighlight(0)
-        setEventsDisplay(await api.taggedEvents(cookie))
-        localStorage.setItem('currentFilter', '0')
-    }
-    async function setEventsToMyDatasets() {
-        setFilterHighlight(1)
-        setEventsDisplay(await api.getMyDatasetsEvents(cookie))
-        localStorage.setItem('currentFilter', '1')
-    }
+    const [events, setEvents] = useState<feedEvent[]>([])
+    const [loading, setLoading] = useState(true)
+    const [activeFilter, setActiveFilter] = useState<FeedFilter>(
+        FeedFilter.Tagged
+    )
+    useEffect(() => {
+        setActiveFilter(filterFromStorage())
+    }, [])
 
     useEffect(() => {
-        const value: any = localStorage.getItem('currentFilter') || '0'
-
-        setFilterHighlight(value as number)
-        if ((value as number) == 0) {
-            setEventsToTagged()
+        setLoading(true)
+        async function fetchEvents() {
+            const events = await api.getFeed(cookie, activeFilter)
+            setEvents(events)
+            setLoading(false)
         }
-        if ((value as number) == 1) {
-            setEventsToMyDatasets()
-        }
-        if ((value as number) == 2) {
-            setEventsToShowAll()
-        }
-    }, [])
+        fetchEvents()
+    }, [activeFilter])
 
     return (
         <>
             <div className="relative flex flex-col items-center gap-8">
                 <div className="text-center [&>h2]:border-none [&>h2]:pb-0">
                     <Typography level="H2">Flöde</Typography>
-                    <p className="text-xs text-slate-500">
-                        {fliterArray[filterHighlight]}
-                    </p>
+                    <p className="text-xs text-slate-500">{activeFilter}</p>
                 </div>
                 <Dialog>
                     <DialogTrigger className="absolute right-0 top-1">
@@ -91,84 +78,50 @@ export default function ActivityFeed() {
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid grid-cols-1 grid-rows-3 gap-2">
-                            <DialogClose asChild>
-                                <Button
-                                    onClick={() => setEventsToTagged()}
-                                    variant={
-                                        filterHighlight == 0
-                                            ? 'secondary'
-                                            : 'ghost'
-                                    }
-                                    className="h-full w-full"
+                            {Object.values(FeedFilter).map((filter) => (
+                                <DialogClose
+                                    asChild
+                                    key={`FeedFilter_${filter}`}
                                 >
-                                    <div className="h-full w-full [&>div]:w-fit">
-                                        <Typography level="Large">
-                                            Taggningar
-                                        </Typography>
-                                        <p className="text-wrap text-left text-sm text-slate-500">
-                                            Se händelser där du eller din roll
-                                            är taggad eller när något hänt i
-                                            dataset du kommenterat.
-                                        </p>
-                                    </div>
-                                </Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                                <Button
-                                    onClick={() => setEventsToMyDatasets()}
-                                    variant={
-                                        filterHighlight == 1
-                                            ? 'secondary'
-                                            : 'ghost'
-                                    }
-                                    className="h-full w-full"
-                                >
-                                    <div className="h-full w-full [&>div]:w-fit">
-                                        <Typography level="Large">
-                                            Endast mina dataset
-                                        </Typography>
-                                        <p className="text-wrap text-left text-sm text-slate-500">
-                                            Se bara händelser i dina egna
-                                            dataset
-                                        </p>
-                                    </div>
-                                </Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                                <Button
-                                    onClick={() => setEventsToShowAll()}
-                                    variant={
-                                        filterHighlight == 2
-                                            ? 'secondary'
-                                            : 'ghost'
-                                    }
-                                    className="h-full w-full"
-                                >
-                                    <div className="h-full w-full [&>div]:w-fit">
-                                        <Typography level="Large">
-                                            Visa allt
-                                        </Typography>
-                                        <p className="text-wrap text-left text-sm text-slate-500">
-                                            Se senaste kommentarer och händelser
-                                            i alla dataset
-                                        </p>
-                                    </div>
-                                </Button>
-                            </DialogClose>
+                                    <Button
+                                        onClick={() => {
+                                            localStorage.setItem(
+                                                'activeFilter',
+                                                filter
+                                            )
+                                            setActiveFilter(filter)
+                                        }}
+                                        variant={
+                                            filter == activeFilter
+                                                ? 'secondary'
+                                                : 'ghost'
+                                        }
+                                        className="h-full w-full"
+                                    >
+                                        <div className="h-full w-full [&>div]:w-fit">
+                                            <Typography level="Large">
+                                                {filter}
+                                            </Typography>
+                                            <p className="text-wrap text-left text-sm text-slate-500">
+                                                {descriptionForFeedFilter(
+                                                    filter
+                                                )}
+                                            </p>
+                                        </div>
+                                    </Button>
+                                </DialogClose>
+                            ))}
                         </div>
                     </DialogContent>
                 </Dialog>
-
                 <ul className="flex w-full flex-col gap-4">
-                    {eventsDisplay && eventsDisplay.length > 0 ? (
-                        eventsDisplay.map((event) => (
-                            <FeedItem
-                            event={event}
-                            key={event.id}
-                            />
-                        )
+                    {loading ? (
+                        <p className="text-center">Laddar händelser...</p>
+                    ) : events.length > 0 ? (
+                        events.map((event) => (
+                            <FeedItem event={event} key={event.id} />
                         ))
-                     : (
+                    ) : (
                         <p className="text-center">Hittade inga händelser</p>
                     )}
                 </ul>

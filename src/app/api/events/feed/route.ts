@@ -1,15 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ClientResponseError } from 'pocketbase'
 import { pbForRequest } from '@/adapters/pocketbase'
+import { FeedFilter } from '@/types/constants'
 
 export async function GET(request: NextRequest) {
     try {
         const pb = pbForRequest(request)
+        const filter =
+            (request.nextUrl.searchParams.get('filter') as FeedFilter) ??
+            FeedFilter.All
 
-        const records = await pb
-            .collection('events')
-
-            .getFullList({ sort: '-created', expand: 'user,subject,dataset' })
+        let records = []
+        switch (filter) {
+            case FeedFilter.Tagged:
+                records = await pb.collection('events').getFullList({
+                    sort: '-created',
+                    filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
+                    expand: 'user,subject,dataset',
+                })
+                break
+            case FeedFilter.MyDatasets:
+            // TODO: implement this
+            case FeedFilter.All:
+                records = await pb.collection('events').getFullList({
+                    sort: '-created',
+                    expand: 'user,subject,dataset',
+                })
+                break
+        }
 
         return NextResponse.json(
             {
