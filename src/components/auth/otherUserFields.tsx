@@ -18,11 +18,11 @@ export default function OtherUserFields({
             </h2>
             <div className="space-y-[6px]">
                 <Label>Mejl</Label>
-                <Input placeholder={user.email} disabled />
+                <Input placeholder={user.email} />
             </div>
             <div className="space-y-[6px]">
                 <Label>Arbetsroll</Label>
-                <Select disabled>
+                <Select>
                     <SelectTrigger>
                         <SelectValue placeholder={user.role} />
                     </SelectTrigger>
