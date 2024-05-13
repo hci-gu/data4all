@@ -11,21 +11,35 @@ const getRandomTag = (tags) => {
 
 ;(async () => {
     const jsonData = await fs.readFile('seedData.json', 'utf-8')
-    const { tags, datasets, users } = JSON.parse(jsonData)
+    const { tags, datasets, users, events } = JSON.parse(jsonData)
 
     const pb = new PocketBase('http://localhost:8090')
     await pb.admins.authWithPassword('admin@email.com', 'password123')
 
     try {
+        await deleteExistingData(pb, 'events', events, 'content')
         await deleteExistingData(pb, 'dataset', datasets)
-        await deleteExistingData(pb, 'users', users, 'email')
         await deleteExistingData(pb, 'tag', tags, 'name')
+        await deleteExistingData(pb, 'users', users, 'email')
 
         const createdTags = await seedData(pb, 'tag', tags)
 
-        await seedUser(pb, 'users', users)
+        const createdUsers = await seedData(pb, 'users', users)
 
-        await seedDataset(pb, 'dataset', datasets, createdTags)
+        const createdDataset = await seedDataset(
+            pb,
+            'dataset',
+            datasets,
+            createdTags
+        )
+
+        const createdEvent = await seedEvents(
+            pb,
+            'events',
+            events,
+            createdUsers,
+            createdDataset
+        )
     } catch (error) {
         console.error('There was an error: ', error)
     }
@@ -40,7 +54,7 @@ async function deleteExistingData(
     const existingData = await pb.collection(collectionName).getFullList()
     for (const existingItem of existingData) {
         for (const newItem of data) {
-            if (existingItem[identifier] === newItem[identifier]) {
+            if (existingItem[identifier].includes(newItem[identifier])) {
                 await pb.collection(collectionName).delete(existingItem.id)
                 break
             }
@@ -60,8 +74,9 @@ async function seedData(pb, collectionName, data) {
 }
 
 async function seedDataset(pb, collectionName, data, tags) {
+    const items = []
     for (const itemData of data) {
-        await pb.collection(collectionName).create(
+        const newItem = await pb.collection(collectionName).create(
             {
                 ...itemData,
                 slug: stringWithHyphen(itemData.title),
@@ -69,16 +84,50 @@ async function seedDataset(pb, collectionName, data, tags) {
             },
             { $autoCancel: false }
         )
+        items.push(newItem)
     }
+    return items
 }
-async function seedUser(pb, collectionName, data) {
-    for (const itemData of data) {
-        await pb.collection(collectionName).create(
-            {
-                ...itemData,
-                slug: stringWithHyphen(itemData.name),
-            },
-            { $autoCancel: false }
-        )
+
+async function seedEvents(pb, collectionName, data, users, dataset) {
+    const items = []
+
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].types == 'ownerReq' || data[i].types == 'ownerAccept') {
+            let newContent = `<b>${users[i].name}</b>`
+            let subjectUserId = ``
+            if (data[i].content.length > 8) {
+                newContent = `${newContent} ${data[i].content}`
+                subjectUserId = users[i].id
+            } else {
+                const randomIndex = Math.floor(Math.random() * users.length)
+                newContent = `${newContent} ${data[i].content} <b>${users[randomIndex].name}</b> som dataägare`
+                subjectUserId = users[randomIndex].id
+            }
+
+            const newItem = await pb.collection(collectionName).create(
+                {
+                    ...data[i],
+                    dataset: dataset[i].id,
+                    user: users[i].id,
+                    subject: subjectUserId,
+                    content: newContent,
+                },
+                { expand: 'user,subject' },
+                { $autoCancel: false }
+            )
+            items.push(newItem)
+        } else {
+            const newItem = await pb.collection(collectionName).create(
+                {
+                    ...data[i],
+                    dataset: dataset[i].id,
+                    user: users[i].id,
+                },
+                { expand: 'user,subject' },
+                { $autoCancel: false }
+            )
+            items.push(newItem)
+        }
     }
 }
