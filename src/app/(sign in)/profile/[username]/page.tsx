@@ -11,7 +11,7 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { ChevronRight } from 'lucide-react'
-import UpdateFiendUserForm from '@/components/auth/updateFiendUserForm'
+import { OtherUserFields } from '@/components/auth'
 import { AuthorizedUserSchema } from '@/types/zod'
 import CheckIfNotUserProfile from '@/components/CheckIfNotUserProfile'
 
@@ -58,11 +58,11 @@ async function ProfilePage({
                         </BreadcrumbList>
                     </Breadcrumb>
                     <h1 className="text-5xl font-extrabold">{user.name}</h1>
-                    <UpdateFiendUserForm user={user} />
+                    <OtherUserFields user={user} />
                     <Separator />
                     <section aria-labelledby="datasetList">
                         <h2
-                            className="text-3xl font-extrabold mb-3"
+                            className="mb-3 text-3xl font-extrabold"
                             id="datasetList"
                         >
                             {user.name}s dataset
