@@ -92,42 +92,47 @@ async function seedDataset(pb, collectionName, data, tags) {
 async function seedEvents(pb, collectionName, data, users, dataset) {
     const items = []
 
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].types == 'ownerReq' || data[i].types == 'ownerAccept') {
-            let newContent = `<b>${users[i].name}</b>`
-            let subjectUserId = ``
-            if (data[i].content.length > 8) {
-                newContent = `${newContent} ${data[i].content}`
-                subjectUserId = users[i].id
-            } else {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < data.length; j++) {
+            if (data[j].types == 'ownerReq' || data[j].types == 'ownerAccept') {
                 const randomIndex = Math.floor(Math.random() * users.length)
-                newContent = `${newContent} ${data[i].content} <b>${users[randomIndex].name}</b> som dataägare`
-                subjectUserId = users[randomIndex].id
-            }
+                let newContent = `<b>${users[randomIndex].name}</b>`
+                let subjectUserId = ``
+                if (data[j].content.length > 8) {
+                    newContent = `${newContent} ${data[j].content}`
+                    subjectUserId = users[randomIndex].id
+                } else {
+                    const randomSubjectIndex = Math.floor(
+                        Math.random() * users.length
+                    )
+                    newContent = `${newContent} ${data[j].content} <b>${users[randomSubjectIndex].name}</b> som dataägare`
+                    subjectUserId = users[randomSubjectIndex].id
+                }
 
-            const newItem = await pb.collection(collectionName).create(
-                {
-                    ...data[i],
-                    dataset: dataset[i].id,
-                    user: users[i].id,
-                    subject: subjectUserId,
-                    content: newContent,
-                },
-                { expand: 'user,subject' },
-                { $autoCancel: false }
-            )
-            items.push(newItem)
-        } else {
-            const newItem = await pb.collection(collectionName).create(
-                {
-                    ...data[i],
-                    dataset: dataset[i].id,
-                    user: users[i].id,
-                },
-                { expand: 'user,subject' },
-                { $autoCancel: false }
-            )
-            items.push(newItem)
+                const newItem = await pb.collection(collectionName).create(
+                    {
+                        ...data[j],
+                        dataset: dataset[j].id,
+                        user: users[j].id,
+                        subject: subjectUserId,
+                        content: newContent,
+                    },
+                    { expand: 'user,subject' },
+                    { $autoCancel: false }
+                )
+                items.push(newItem)
+            } else {
+                const newItem = await pb.collection(collectionName).create(
+                    {
+                        ...data[j],
+                        dataset: dataset[j].id,
+                        user: users[j].id,
+                    },
+                    { expand: 'user,subject' },
+                    { $autoCancel: false }
+                )
+                items.push(newItem)
+            }
         }
     }
 }

@@ -35,13 +35,14 @@ const filterFromStorage = () => {
     return FeedFilter.Tagged
 }
 
-export default function ActivityFeed() {
+export default function ActivityFeed({ pageNumber }: { pageNumber?: number }) {
     const cookie = useContext(authContext).cookie
     const [events, setEvents] = useState<feedEvent[]>([])
     const [loading, setLoading] = useState(true)
     const [activeFilter, setActiveFilter] = useState<FeedFilter>(
         FeedFilter.Tagged
     )
+    const [anotherPage, setAnotherPage] = useState(false)
     useEffect(() => {
         setActiveFilter(filterFromStorage())
     }, [])
@@ -49,8 +50,14 @@ export default function ActivityFeed() {
     useEffect(() => {
         setLoading(true)
         async function fetchEvents() {
-            const events = await api.getFeed(cookie, activeFilter)
-            setEvents(events)
+            const events = await api.getFeed(cookie, activeFilter, pageNumber)
+            if (events.length > 15) {
+                setAnotherPage(true)
+                const shortendEvents = events.slice(0, -1)
+                setEvents(shortendEvents)
+            } else {
+                setEvents(events)
+            }
             setLoading(false)
         }
         fetchEvents()

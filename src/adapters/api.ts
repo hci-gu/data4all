@@ -155,9 +155,13 @@ export const getDatasetFromUser = async (
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
 
-export const getFeed = async (authCookie: string, filter: FeedFilter) => {
+export const getFeed = async (
+    authCookie: string,
+    filter: FeedFilter,
+    pageNumber?: number
+) => {
     const events = (await apiRequest(
-        apiUrl(`events/feed?filter=${filter}`),
+        apiUrl(`events/feed?filter=${filter}&pageNumber=${pageNumber}`),
         'GET',
         authCookie
     )) as []

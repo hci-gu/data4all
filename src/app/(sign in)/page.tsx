@@ -4,7 +4,11 @@ import SearchBar from '@/components/searchBar'
 import { Separator } from '@/components/ui/separator'
 import ActivityFeed from '@/components/activityFeed'
 
-export default async function Home() {
+export default async function Home({
+    searchParams,
+}: {
+    searchParams?: { [key: string]: string | undefined }
+}) {
     return (
         <main className="flex w-full flex-col items-center">
             <WelcomeBack homePage={true} />
@@ -14,7 +18,7 @@ export default async function Home() {
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <ActivityFeed />
+                <ActivityFeed pageNumber={searchParams?.pageNumber as number | undefined}/>
             </div>
         </main>
     )
