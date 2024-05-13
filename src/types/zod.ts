@@ -93,3 +93,4 @@ export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>
+export type UserSchema = z.infer<typeof UserSchema>
