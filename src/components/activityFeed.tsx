@@ -44,7 +44,7 @@ const filterFromStorage = () => {
     return FeedFilter.Tagged
 }
 
-export default function ActivityFeed({ pageNumber }: { pageNumber: string }) {
+export default function ActivityFeed({ pageNumber }: { pageNumber?: string }) {
     const cookie = useContext(authContext).cookie
     const [events, setEvents] = useState<feedEvent[]>([])
     const [loading, setLoading] = useState(true)

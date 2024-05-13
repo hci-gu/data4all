@@ -14,12 +14,13 @@ export async function GET(request: NextRequest) {
             pageNumber = '1'
         }
 
-
         let records = []
         switch (filter) {
             case FeedFilter.Tagged:
+                //@ts-ignore
                 records = await pb
                     .collection('events')
+                    //@ts-ignore
                     .getList(pageNumber as number, 16, {
                         sort: '-created',
                         filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
@@ -29,8 +30,10 @@ export async function GET(request: NextRequest) {
             case FeedFilter.MyDatasets:
             // TODO: implement this
             case FeedFilter.All:
+                //@ts-ignore
                 records = await pb
                     .collection('events')
+                    //@ts-ignore
                     .getList(pageNumber as number, 16, {
                         sort: '-created',
                         expand: 'user,subject,dataset',

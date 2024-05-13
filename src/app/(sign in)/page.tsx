@@ -18,7 +18,7 @@ export default async function Home({
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <ActivityFeed pageNumber={searchParams?.pageNumber as number | undefined}/>
+                <ActivityFeed pageNumber={searchParams?.pageNumber}/>
             </div>
         </main>
     )
