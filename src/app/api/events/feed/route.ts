@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
             pageNumber = '1'
         }
 
-        console.log(pageNumber)
 
         let records = []
         switch (filter) {
@@ -38,7 +37,6 @@ export async function GET(request: NextRequest) {
                     })
                 break
         }
-        console.log(records?.items)
 
         return NextResponse.json(
             {

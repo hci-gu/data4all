@@ -16,6 +16,15 @@ import {
     DialogTrigger,
 } from './ui/dialog'
 import { FeedFilter, descriptionForFeedFilter } from '@/types/constants'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from './ui/pagination'
+import { parse } from 'path'
 
 type feedEvent = {
     id: string
@@ -35,7 +44,7 @@ const filterFromStorage = () => {
     return FeedFilter.Tagged
 }
 
-export default function ActivityFeed({ pageNumber }: { pageNumber?: number }) {
+export default function ActivityFeed({ pageNumber }: { pageNumber: string }) {
     const cookie = useContext(authContext).cookie
     const [events, setEvents] = useState<feedEvent[]>([])
     const [loading, setLoading] = useState(true)
@@ -43,6 +52,12 @@ export default function ActivityFeed({ pageNumber }: { pageNumber?: number }) {
         FeedFilter.Tagged
     )
     const [anotherPage, setAnotherPage] = useState(false)
+    const nextPage = parseInt(pageNumber as string) + 1
+    const previusPage = parseInt(pageNumber as string) - 1
+
+    console.log('next: ', nextPage)
+    console.log('previus: ', previusPage)
+
     useEffect(() => {
         setActiveFilter(filterFromStorage())
     }, [])
@@ -132,6 +147,23 @@ export default function ActivityFeed({ pageNumber }: { pageNumber?: number }) {
                         <p className="text-center">Hittade inga händelser</p>
                     )}
                 </ul>
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                href={`/?pageNumber=${previusPage}`}
+                            />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink href="">
+                                {pageNumber ?? 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationNext href={`/?pageNumber=${nextPage}`} />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
         </>
     )

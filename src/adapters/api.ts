@@ -158,7 +158,7 @@ export const getDatasetFromUser = async (
 export const getFeed = async (
     authCookie: string,
     filter: FeedFilter,
-    pageNumber?: number
+    pageNumber?: string
 ) => {
     const events = (await apiRequest(
         apiUrl(`events/feed?filter=${filter}&pageNumber=${pageNumber}`),
