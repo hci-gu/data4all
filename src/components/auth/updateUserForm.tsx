@@ -19,7 +19,7 @@ import { roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { updateUser } from '@/adapters/api'
+import { getUser, updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
 import { useContext, useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
@@ -29,6 +29,7 @@ import { stringWithHyphen } from '@/lib/utils'
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
     const user = userContext.auth
+    const cookie = userContext.cookie
 
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
@@ -46,10 +47,24 @@ export default function UpdateUserForm() {
 
     const roles = Object.values(roleSchema.Values)
 
-    const submit = (value: updateUserSchema) => {
+    const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
+
+        try {
+            const userDB = await getUser(value.name, cookie)
+            if (userDB.id !== user.id) {
+                toast.error('Användarnamnet är upptaget')
+                form.setError('name', { message: 'Användarnamnet är upptaget' })
+                setIsClicked(false)
+
+                return
+            }
+        } catch (error) {
+            setIsClicked(false)
+        }
+
         const request = Promise.allSettled([
-            updateUser(value, user.id, userContext.cookie),
+            updateUser(value, user.id, cookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {
@@ -127,9 +142,7 @@ export default function UpdateUserForm() {
                         </FormItem>
                     )}
                 />
-                <div
-                    className={form.getValues('password') ? '' : 'hidden'}
-                >
+                <div className={form.getValues('password') ? '' : 'hidden'}>
                     <FormField
                         control={form.control}
                         name="passwordConfirm"
@@ -148,9 +161,7 @@ export default function UpdateUserForm() {
                         )}
                     />
                 </div>
-                <div
-                    className={form.getValues('password') ? '' : 'hidden'}
-                >
+                <div className={form.getValues('password') ? '' : 'hidden'}>
                     <FormField
                         control={form.control}
                         name="oldPassword"
