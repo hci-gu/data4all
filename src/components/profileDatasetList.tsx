@@ -30,7 +30,10 @@ export default function ProfileDatasetList({
             console.error(error)
         }
     }
-    fetchData()
+
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     if (datasets.length > 0) {
         return (
