@@ -27,11 +27,12 @@ test.describe('Profile page', () => {
                 name
             )
         })
-        test('Can not reach not existed profile page', async ({ page }) => {
-            const name = 'tester user not existed'
+        test('Can not reach profile page that does not exist', async ({
+            page,
+        }) => {
+            await page.goto(`/profile/user-that-does-not-exist`)
 
-            await page.goto(`/profile/tester user not existed`)
-            expect(page.getByRole('paragraph')).toHaveText(
+            await expect(page.getByRole('paragraph')).toHaveText(
                 'Kunde inte hitta det du letade efter'
             )
         })
