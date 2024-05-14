@@ -22,6 +22,7 @@ export const authContext = createContext<AuthContextType>({
         verified: false,
         created: '',
         updated: '',
+        slug: '',
     },
     setAuth: () => {},
     cookie: '',

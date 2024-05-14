@@ -35,7 +35,7 @@ export default function SignInHeader() {
                     </Button>
                     <div className="flex items-center justify-end font-semibold [&>*]:border-none [&>*]:p-0 [&>*]:text-lg ">
                         <Link
-                            href={'/profile'}
+                            href={`/profile`}
                             className="flex items-center justify-center gap-2"
                         >
                             <span className="max-sm:sr-only">{usersName}</span>

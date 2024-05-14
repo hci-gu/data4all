@@ -1,5 +1,10 @@
 import test, { expect } from '@playwright/test'
-import { createDataset, createEvent, loggedInUser } from './setup/utils'
+import {
+    createByUserName,
+    createDataset,
+    createEvent,
+    loggedInUser,
+} from './setup/utils'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
@@ -11,6 +16,24 @@ test.describe('Profile page', () => {
             await page.goto('/profile')
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 'Profil'
+            )
+        })
+        test('Can reach someone else profile page', async ({ page }) => {
+            const name = 'tester logged in New user'
+            await createByUserName(name)
+
+            await page.goto(`/profile/${name}`)
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                name
+            )
+        })
+        test('Can not reach profile page that does not exist', async ({
+            page,
+        }) => {
+            await page.goto(`/profile/user-that-does-not-exist`)
+
+            await expect(page.getByRole('paragraph')).toHaveText(
+                'Kunde inte hitta det du letade efter'
             )
         })
 
@@ -103,6 +126,25 @@ test.describe('Profile page', () => {
             )
         })
     })
+    test.describe('someone else has a linked dataset', () => {
+        test.beforeEach(async ({ page, request, context }) => {
+            await loggedInUser({ page, request, context })
+            const user = await createByUserName('tester someone user')
+            const dataset = await createDataset('test title')
+            await createEvent(dataset.id, user.id)
+        })
+
+        test('has dataset', async ({ page, request, context }) => {
+            const name = 'tester someone user'
+            await page.goto(`/profile/${name}`)
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                name
+            )
+            await expect(page.getByRole('heading', { level: 3 })).toHaveText(
+                'test title'
+            )
+        })
+    })
     test.describe('user does not have dataset', () => {
         test.beforeEach(async ({ page, request, context }) => {
             await loggedInUser({ page, request, context })
@@ -114,7 +156,28 @@ test.describe('Profile page', () => {
                 'Profil'
             )
             await expect(
-                page.getByText('Du har inga relaterade dataset')
+                page.getByText(
+                    'Du har inga dataset ännu, när du är dataägare dyker det upp här.'
+                )
+            ).toBeVisible()
+        })
+    })
+    test.describe('someone else does not have dataset', () => {
+        test.beforeEach(async ({ page, request, context }) => {
+            await loggedInUser({ page, request, context })
+            await createByUserName('tester not have dataset user')
+        })
+
+        test('does not have dataset', async ({ page, request, context }) => {
+            const name = 'tester not have dataset user'
+            await page.goto(`/profile/${name}`)
+            await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+                name
+            )
+            await expect(
+                page.getByText(
+                    `${name} har inga dataset ännu, när ${name} är dataägare dyker det upp här.`
+                )
             ).toBeVisible()
         })
     })

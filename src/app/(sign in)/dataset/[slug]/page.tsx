@@ -41,6 +41,7 @@ export default async function Page({
         updated: '2024-03-18 12:56:08.789Z',
         username: 'users36283',
         verified: false,
+        slug: 'sebastian-andreasson',
     }
 
     if (!cookie) {
