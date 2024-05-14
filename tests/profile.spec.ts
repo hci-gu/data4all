@@ -19,7 +19,7 @@ test.describe('Profile page', () => {
             )
         })
         test('Can reach someone else profile page', async ({ page }) => {
-            const name = 'tester New user'
+            const name = 'tester logged in New user'
             await createByUserName(name)
 
             await page.goto(`/profile/${name}`)
@@ -167,11 +167,11 @@ test.describe('Profile page', () => {
     test.describe('someone else does not have dataset', () => {
         test.beforeEach(async ({ page, request, context }) => {
             await loggedInUser({ page, request, context })
-            await createByUserName('tester New user')
+            await createByUserName('tester not have dataset user')
         })
 
         test('does not have dataset', async ({ page, request, context }) => {
-            const name = 'tester New user'
+            const name = 'tester not have dataset user'
             await page.goto(`/profile/${name}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 name
