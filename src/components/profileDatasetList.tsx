@@ -1,10 +1,10 @@
 'use client'
 import DatasetCard from '@/components/datasetCard'
-import * as api from '@/adapters/api'
-
-import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
+
 import { datasetWithRelationsSchema } from '@/types/zod'
+import { useContext, useEffect, useState } from 'react'
+import * as api from '@/adapters/api'
 
 export default function ProfileDatasetList({
     username,
@@ -14,25 +14,23 @@ export default function ProfileDatasetList({
     const userContext = useContext(authContext)
     const user = userContext.auth
     const cookie = userContext.cookie
-    
+
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                if (username) {
-                    const userId = (await api.getUser(username, cookie)).id
-                    setDatasets(await api.getDatasetFromUser(userId, cookie))
-                }
-                if (!username) {
-                    setDatasets(await api.getDatasetFromUser(user.id, cookie))
-                }
-            } catch (error) {
-                console.error(error)
+    async function fetchData() {
+        try {
+            if (username) {
+                const userId = (await api.getUser(username, cookie)).id
+                setDatasets(await api.getDatasetFromUser(userId, cookie))
             }
+            if (!username) {
+                setDatasets(await api.getDatasetFromUser(user.id, cookie))
+            }
+        } catch (error) {
+            console.error(error)
         }
-        fetchData()
-    }, [])
+    }
+    fetchData()
 
     if (datasets.length > 0) {
         return (

@@ -128,13 +128,16 @@ test.describe('Profile page', () => {
     test.describe('someone else has a linked dataset', () => {
         test.beforeEach(async ({ page, request, context }) => {
             await loggedInUser({ page, request, context })
-            const user = await createByUserName('tester New user')
+            const user = await createByUserName('tester someone user')
             const dataset = await createDataset('test title')
-            await createEvent(dataset.id, user.id)
+            const event = await createEvent(dataset.id, user.id)
+
+            console.log('event', event);
+            
         })
 
         test('has dataset', async ({ page, request, context }) => {
-            const name = 'tester New user'
+            const name = 'tester someone user'
             await page.goto(`/profile/${name}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 name

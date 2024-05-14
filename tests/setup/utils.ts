@@ -1,6 +1,7 @@
 import { stringWithHyphen } from '@/lib/utils'
 import {
     AuthorizedUserSchema,
+    EventCreateSchema,
     EventSchema,
     datasetSchema,
     datasetWithRelationsSchema,
@@ -87,9 +88,8 @@ export const createEvent = async (
     datasetId: string,
     userId: string,
     subject?: string
-): Promise<EventSchema> => {
-    const type = 'comment'
-    const event = await pb.collection<EventSchema>('events').create(
+) => {
+    const event = await pb.collection<EventCreateSchema>('events').create(
         {
             dataset: datasetId,
             types: 'comment',
@@ -100,7 +100,7 @@ export const createEvent = async (
         { expand: 'user,subject' }
     )
 
-    return responseEventCleanup(event)
+    return EventSchema.parse(responseEventCleanup(event))
 }
 
 function parseCookie(cookieString: string): any {

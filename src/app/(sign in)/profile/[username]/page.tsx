@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import ProfileDatasetList from '@/components/profileDatasetList'
-import { getUser } from '@/adapters/api'
+import * as api from '@/adapters/api'
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import {
@@ -24,7 +24,7 @@ async function ProfilePage({
     let user: AuthorizedUserSchema | undefined
     try {
         if (cookie) {
-            user = await getUser(username, cookie.value)
+            user = await api.getUser(username, cookie.value)
         }
     } catch (error) {
         notFound()
