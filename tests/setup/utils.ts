@@ -16,7 +16,7 @@ const pb = new PocketBase('http://localhost:8090')
 export const createUser = async () => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
-    const name = 'tester'
+    const name = `tester user ${uuid.generate()}`
     const userData = {
         email,
         emailVisibility: true,
@@ -26,7 +26,9 @@ export const createUser = async () => {
         name,
         slug: stringWithHyphen(name),
     }
-    const user = await pb.collection('users').create(userData)
+    const user = await pb
+        .collection<AuthorizedUserSchema>('users')
+        .create(userData)
     return {
         ...user,
         email,

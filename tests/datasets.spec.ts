@@ -14,6 +14,8 @@ const searchTerms = [
 
 const userNames = ['tester user 1', 'tester user 2', 'tester user 3']
 
+let signedInUser: string
+
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async () => {
@@ -29,7 +31,7 @@ test.beforeAll(async () => {
 test.describe('Datasets page', () => {
     test.describe('Logged in user', () => {
         test.beforeEach(async ({ page, request, context }) => {
-            await loggedInUser({ page, request, context })
+            signedInUser = (await loggedInUser({ page, request, context })).name
         })
 
         test('Can reach the datasets page', async ({ page }) => {
@@ -76,21 +78,23 @@ test.describe('Datasets page', () => {
                 await page.getByRole('button', { name: userNames[0] }).click()
                 await page.getByRole('button', { name: 'Godkänn' }).click()
                 await expect(
-                    page.getByText('ttester föreslog tester user')
+                    page.getByText(
+                        `${signedInUser} föreslog ${userNames[0]} som dataägare`
+                    )
                 ).toBeVisible()
             })
             test('Can suggest themselves', async ({ page }) => {
                 await page.goto(`/dataset/${searchTerms[0]}`)
                 await page.click('text= Föreslå dataägare')
-                await page.fill('input[name="dataset"]', 'tester')
+                await page.fill('input[name="dataset"]', signedInUser)
 
                 await page
-                    .getByRole('button', { name: 't tester User' })
+                    .getByRole('button', { name: signedInUser })
                     .first()
                     .click()
                 await page.getByRole('button', { name: 'Godkänn' }).click()
                 await expect(
-                    page.getByText('tester föreslog sig själv som')
+                    page.getByText(`${signedInUser} föreslog sig själv som`)
                 ).toBeVisible()
             })
             test('Get empty state if there is no matching user', async ({
