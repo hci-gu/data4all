@@ -5,6 +5,7 @@ import {
     createDatasetWithRelation,
     loggedInUser,
 } from './setup/utils'
+import uuid from 'short-uuid'
 
 const searchTerms = [
     'dataset test title 1',
@@ -12,7 +13,11 @@ const searchTerms = [
     'dataset test title related 3',
 ]
 
-const userNames = ['tester user 1', 'tester user 2', 'tester user 3']
+const userNames = [
+    `tester user ${uuid.generate()}`,
+    `tester user ${uuid.generate()}`,
+    `tester user ${uuid.generate()}`,
+]
 
 let signedInUser: string
 
@@ -74,7 +79,6 @@ test.describe('Datasets page', () => {
                 await page.goto(`/dataset/${searchTerms[0]}`)
                 await page.click('text= Föreslå dataägare')
                 await page.fill('input[name="dataset"]', userNames[0])
-
                 await page.getByRole('button', { name: userNames[0] }).click()
                 await page.getByRole('button', { name: 'Godkänn' }).click()
                 await expect(

@@ -30,7 +30,7 @@ test.describe('Profile page', () => {
         test('Can not reach not existed profile page', async ({ page }) => {
             const name = 'tester user not existed'
 
-            await page.goto(`/profile/${name}`)
+            await page.goto(`/profile/tester user not existed`)
             expect(page.getByRole('paragraph')).toHaveText(
                 'Kunde inte hitta det du letade efter'
             )
@@ -130,10 +130,7 @@ test.describe('Profile page', () => {
             await loggedInUser({ page, request, context })
             const user = await createByUserName('tester someone user')
             const dataset = await createDataset('test title')
-            const event = await createEvent(dataset.id, user.id)
-
-            console.log('event', event);
-            
+            await createEvent(dataset.id, user.id)
         })
 
         test('has dataset', async ({ page, request, context }) => {
