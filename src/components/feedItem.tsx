@@ -3,18 +3,11 @@ import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
+import { EventFeedItem } from '@/types/zod'
 
-type feedEvent = {
-    id: string
-    userName: string
-    subject: string
-    datasetTitle: string
-    content: any
-    created: string
-    types: string
-}
 
-export default function FeedItem({ event }: { event: feedEvent }) {
+
+export default function FeedItem({ event }: { event: EventFeedItem }) {
     if (event.types === 'comment') {
         return (
             <li className="flex gap-1">

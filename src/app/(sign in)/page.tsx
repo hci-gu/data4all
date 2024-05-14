@@ -9,6 +9,10 @@ export default async function Home({
 }: {
     searchParams?: { [key: string]: string | undefined }
 }) {
+    let pageNumber: number = 1
+    if (!!searchParams?.pageNumber) {
+        pageNumber = Number(searchParams?.pageNumber)
+    }
     return (
         <main className="flex w-full flex-col items-center">
             <WelcomeBack homePage={true} />
@@ -18,7 +22,7 @@ export default async function Home({
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <ActivityFeed pageNumber={searchParams?.pageNumber}/>
+                <ActivityFeed pageNumber={pageNumber}/>
             </div>
         </main>
     )

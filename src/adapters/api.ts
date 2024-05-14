@@ -9,6 +9,7 @@ import {
     datasetWithRelationsSchema,
     AuthorizedUserSchema,
     EventCreateSchema,
+    EventFeedResponse,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -158,7 +159,7 @@ export const getDatasetFromUser = async (
 export const getFeed = async (
     authCookie: string,
     filter: FeedFilter,
-    pageNumber?: string
+    pageNumber: number
 ) => {
     const events = (await apiRequest(
         apiUrl(`events/feed?filter=${filter}&pageNumber=${pageNumber}`),
@@ -166,9 +167,10 @@ export const getFeed = async (
         authCookie
     )) as []
 
-    return events.map((event) => {
-        return responseFeedEventCleanup(event)
-    })
+    const clean = responseFeedCleanup(events)
+    console.log(clean)
+
+    return EventFeedResponse.parse(clean)
 }
 
 function responseDatasetCleanup(res: any) {
@@ -198,5 +200,17 @@ function responseFeedEventCleanup(res: any) {
         content: res?.content,
         created: res?.created,
         types: res?.types,
+    }
+}
+
+function responseFeedCleanup(res: any) {
+    return {
+        page: res?.page,
+        perPage: res?.perPage,
+        totalPages: res?.totalPages,
+        totalItems: res?.totalItems,
+        items: res.items?.map((item: any) => {
+            return responseFeedEventCleanup(item)
+        }),
     }
 }

@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
                 records = await pb
                     .collection('events')
                     //@ts-ignore
-                    .getList(pageNumber as number, 16, {
+                    .getList(pageNumber as number, 15, {
                         sort: '-created',
                         filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
                         expand: 'user,subject,dataset',
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
                 records = await pb
                     .collection('events')
                     //@ts-ignore
-                    .getList(pageNumber as number, 16, {
+                    .getList(pageNumber as number, 15, {
                         sort: '-created',
                         expand: 'user,subject,dataset',
                     })
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
             {
                 message: 'success',
                 //@ts-ignore
-                body: records?.items,
+                body: records,
             },
             { status: 200 }
         )

@@ -81,6 +81,24 @@ export const EventCreateSchema = EventSchema.extend({
     user: z.string(),
 })
 
+export const EventFeedItem = z.object({
+    id: z.string(),
+    userName: z.string(),
+    subject: z.string(),
+    datasetTitle: z.string(),
+    content: z.any(),
+    created: z.string(),
+    types: z.string(),
+})
+
+export const EventFeedResponse = z.object({
+    page: z.number(),
+    perPage: z.number(),
+    totalPages: z.number(),
+    totalItems: z.number(),
+    items: z.array(EventFeedItem),
+})
+
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
@@ -93,3 +111,5 @@ export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>
+export type EventFeedItem = z.infer<typeof EventFeedItem>
+export type EventFeedResponse = z.infer<typeof EventFeedResponse>

@@ -24,17 +24,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from './ui/pagination'
-import { parse } from 'path'
-
-type feedEvent = {
-    id: string
-    userName: string
-    subject: string
-    datasetTitle: string
-    content: any
-    created: string
-    types: string
-}
+import { EventFeedResponse } from '@/types/zod'
 
 const filterFromStorage = () => {
     const filter = localStorage.getItem('activeFilter')
@@ -44,20 +34,24 @@ const filterFromStorage = () => {
     return FeedFilter.Tagged
 }
 
-export default function ActivityFeed({ pageNumber }: { pageNumber?: string }) {
+export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
     const cookie = useContext(authContext).cookie
-    const [events, setEvents] = useState<feedEvent[]>([])
+    const [events, setEvents] = useState<EventFeedResponse>()
     const [loading, setLoading] = useState(true)
     const [activeFilter, setActiveFilter] = useState<FeedFilter>(
         FeedFilter.Tagged
     )
-    const [anotherPage, setAnotherPage] = useState(false)
-    const nextPage = parseInt(pageNumber as string) + 1
-    const previusPage = parseInt(pageNumber as string) - 1
 
-    console.log('next: ', nextPage)
-    console.log('previus: ', previusPage)
-
+    let nextPage = pageNumber
+    let previusPage = pageNumber
+    if (!!events) {
+        if (events.page !== events.totalPages) {
+            nextPage = events?.page + 1
+        }
+        if (events?.page !== 1) {
+            previusPage = events?.page - 1
+        }
+    }
     useEffect(() => {
         setActiveFilter(filterFromStorage())
     }, [])
@@ -66,13 +60,9 @@ export default function ActivityFeed({ pageNumber }: { pageNumber?: string }) {
         setLoading(true)
         async function fetchEvents() {
             const events = await api.getFeed(cookie, activeFilter, pageNumber)
-            if (events.length > 15) {
-                setAnotherPage(true)
-                const shortendEvents = events.slice(0, -1)
-                setEvents(shortendEvents)
-            } else {
-                setEvents(events)
-            }
+            setEvents(events)
+            console.log(events.totalPages)
+
             setLoading(false)
         }
         fetchEvents()
@@ -139,8 +129,8 @@ export default function ActivityFeed({ pageNumber }: { pageNumber?: string }) {
                 <ul className="flex w-full flex-col gap-4">
                     {loading ? (
                         <p className="text-center">Laddar händelser...</p>
-                    ) : events.length > 0 ? (
-                        events.map((event) => (
+                    ) : !!events && events.items?.length > 0 ? (
+                        events.items.map((event) => (
                             <FeedItem event={event} key={event.id} />
                         ))
                     ) : (
@@ -150,9 +140,14 @@ export default function ActivityFeed({ pageNumber }: { pageNumber?: string }) {
                 <Pagination>
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious
-                                href={`/?pageNumber=${previusPage}`}
-                            />
+                            {pageNumber == 1 ? (
+                                <div className="w-[103.72px]"></div>
+                            ) : (
+                                <PaginationPrevious
+                                    href={`/?pageNumber=${previusPage}`}
+                                    aria-disabled={true}
+                                />
+                            )}
                         </PaginationItem>
                         <PaginationItem>
                             <PaginationLink href="">
@@ -160,7 +155,13 @@ export default function ActivityFeed({ pageNumber }: { pageNumber?: string }) {
                             </PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
-                            <PaginationNext href={`/?pageNumber=${nextPage}`} />
+                            {pageNumber == events?.totalPages ? (
+                                <div className="w-[103.72px]"></div>
+                            ) : (
+                                <PaginationNext
+                                    href={`/?pageNumber=${nextPage}`}
+                                />
+                            )}
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>
