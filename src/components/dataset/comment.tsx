@@ -1,4 +1,4 @@
-import { EventSchema } from '@/types/zod'
+import { EventSchema, datasetWithRelationsSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import moment from 'moment'
 import User from '../user'
@@ -8,7 +8,11 @@ import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 import AcceptDatasetOwner from './acceptDatasetOwner'
 
-export default function Comment({ event, datasetId }: { event: EventSchema, datasetId: string }) {
+export default function Comment({
+    event,
+}: {
+    event: EventSchema
+}) {
     if (event.types === 'comment') {
         return (
             <li className="flex flex-col gap-1">
@@ -69,7 +73,7 @@ export default function Comment({ event, datasetId }: { event: EventSchema, data
                         __html: event.content,
                     }}
                 />
-                <AcceptDatasetOwner event={event} datasetId={datasetId} />
+                <AcceptDatasetOwner event={event} />
                 <time className="text-xs font-bold">
                     {moment(event.created).fromNow()}
                 </time>

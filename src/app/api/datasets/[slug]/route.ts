@@ -52,7 +52,7 @@ export async function PATCH(
         const body = datasetWithRelationsSchema.partial().parse(await data)
 
         const record = await pb
-            .collection<datasetSchema>('dataset')
+            .collection<datasetWithRelationsSchema>('dataset')
             .update(params.slug, body, { expand: 'related_datasets,tag' })
 
         return NextResponse.json(
