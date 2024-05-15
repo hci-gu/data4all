@@ -28,7 +28,7 @@ const handleResponse = async (Response: Response) => {
 }
 const apiRequest = async (
     url: string,
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     authCookie?: string,
     body?: any
 ) => {
@@ -50,6 +50,7 @@ const apiRequest = async (
     }
 }
 
+// Auth
 export const signUp = async (user: signUpSchema): Promise<void> =>
     apiRequest(apiUrl('auth/sign-up'), 'POST', undefined, user)
 
@@ -95,6 +96,7 @@ export const getUser = async (
     return await apiRequest(apiUrl(`auth/${userName}`), 'GET', authCookie)
 }
 
+// Datasets
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
     return datasetSchema
@@ -127,6 +129,23 @@ export const getDataset = async (datasetTitle: string, authCookie: string) => {
 
     return datasetWithRelationsSchema.parse(cleanDataset)
 }
+export const updateDataset = async (
+    datasetId: string,
+    dataset: Partial<datasetWithRelationsSchema>,
+    authCookie: string
+) => {
+    console.log('datasetId', datasetId)
+
+    const datasetRespond = await apiRequest(
+        apiUrl(`datasets/${encodeURI(datasetId)}`),
+        'PATCH',
+        authCookie,
+        dataset
+    )
+    
+    return responseDatasetCleanup(datasetRespond)
+}
+// Events
 export const getEvents = async (datasetId: string, authCookie: string) => {
     const events = (await apiRequest(
         apiUrl(`events/${datasetId}`),
