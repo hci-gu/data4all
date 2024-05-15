@@ -162,7 +162,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         </PaginationItem>
                         <PaginationItem>
                             {pageNumber == 1 ? (
-                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
                                     1
                                 </div>
                             ) : (
@@ -181,7 +181,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         </PaginationItem>
                         <PaginationItem>
                             {pageNumber == events?.totalPages ? (
-                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
                                     {events?.totalPages ?? 99}
                                 </div>
                             ) : (
