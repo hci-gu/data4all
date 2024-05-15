@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
-import { Filter, Loader2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Filter, Loader2 } from 'lucide-react'
 import * as api from '@/adapters/api'
 import {
     Dialog,
@@ -70,7 +70,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
 
     return (
         <>
-            <div className="relative flex min-h-[1284px] flex-col items-center gap-8 justify-between">
+            <div className="relative flex min-h-[1284px] flex-col items-center justify-between gap-8">
                 <div className="text-center [&>h2]:border-none [&>h2]:pb-0">
                     <Typography level="H2">Flöde</Typography>
                     <p className="text-xs text-slate-500">{activeFilter}</p>
@@ -147,22 +147,60 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                     <PaginationContent>
                         <PaginationItem>
                             {pageNumber == 1 ? (
-                                <div className="min-w-[77.44px]"></div>
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                    <ChevronLeft
+                                        className="h-4 w-4"
+                                        color="#cbd5e1"
+                                    />
+                                    <span>Föregående</span>
+                                </div>
                             ) : (
                                 <PaginationPrevious
                                     href={`/?pageNumber=${previusPage}`}
-                                    aria-disabled={true}
                                 />
                             )}
                         </PaginationItem>
                         <PaginationItem>
-                            <PaginationLink href="">
+                            {pageNumber == 1 ? (
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                    1
+                                </div>
+                            ) : (
+                                <PaginationLink href={`/?pageNumber=${1}`}>
+                                    {1}
+                                </PaginationLink>
+                            )}
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink
+                                isActive={true}
+                                className="cursor-default hover:bg-transparent"
+                            >
                                 {pageNumber ?? 1}
                             </PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
                             {pageNumber == events?.totalPages ? (
-                                <div className="min-w-[103.72px]"></div>
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                    {events?.totalPages ?? 99}
+                                </div>
+                            ) : (
+                                <PaginationLink
+                                    href={`/?pageNumber=${events?.totalPages ?? 99}`}
+                                >
+                                    {events?.totalPages ?? 99}
+                                </PaginationLink>
+                            )}
+                        </PaginationItem>
+                        <PaginationItem>
+                            {pageNumber == events?.totalPages ? (
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                    <span>Nästa</span>
+                                    <ChevronRight
+                                        className="h-4 w-4"
+                                        color="#cbd5e1"
+                                    />
+                                </div>
                             ) : (
                                 <PaginationNext
                                     href={`/?pageNumber=${nextPage}`}
