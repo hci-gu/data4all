@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
-import { Filter } from 'lucide-react'
+import { Filter, Loader2 } from 'lucide-react'
 import * as api from '@/adapters/api'
 import {
     Dialog,
@@ -70,7 +70,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
 
     return (
         <>
-            <div className="relative flex flex-col items-center gap-8">
+            <div className="relative flex min-h-[1284px] flex-col items-center gap-8 justify-between">
                 <div className="text-center [&>h2]:border-none [&>h2]:pb-0">
                     <Typography level="H2">Flöde</Typography>
                     <p className="text-xs text-slate-500">{activeFilter}</p>
@@ -128,7 +128,13 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                 </Dialog>
                 <ul className="flex w-full flex-col gap-4">
                     {loading ? (
-                        <p className="text-center">Laddar händelser...</p>
+                        <p className="flex flex-col items-center text-center text-slate-500">
+                            <Loader2
+                                className="h-12 w-12 animate-spin"
+                                color="#cbd5e1"
+                            />
+                            Laddar händelser...
+                        </p>
                     ) : !!events && events.items?.length > 0 ? (
                         events.items.map((event) => (
                             <FeedItem event={event} key={event.id} />
@@ -141,7 +147,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                     <PaginationContent>
                         <PaginationItem>
                             {pageNumber == 1 ? (
-                                <div className="w-[103.72px]"></div>
+                                <div className="min-w-[77.44px]"></div>
                             ) : (
                                 <PaginationPrevious
                                     href={`/?pageNumber=${previusPage}`}
@@ -156,7 +162,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         </PaginationItem>
                         <PaginationItem>
                             {pageNumber == events?.totalPages ? (
-                                <div className="w-[103.72px]"></div>
+                                <div className="min-w-[103.72px]"></div>
                             ) : (
                                 <PaginationNext
                                     href={`/?pageNumber=${nextPage}`}
