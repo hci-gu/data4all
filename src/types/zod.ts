@@ -14,6 +14,7 @@ export const AuthorizedUserSchema = z.object({
     updated: z.string(),
     username: z.string(),
     verified: z.boolean(),
+    slug: z.string(),
 })
 export const UserSchema = AuthorizedUserSchema.omit({
     email: true,
@@ -29,6 +30,7 @@ export const signUpSchema = signInSchema
     .extend({
         passwordConfirmation: z.string().min(8),
         role: roleSchema,
+        slug: z.string(),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
         message: 'Lösenorden måste matcha',
@@ -41,11 +43,22 @@ export const updateUserSchema = z
         password: z.string(),
         passwordConfirm: z.string(),
     })
-    .merge(AuthorizedUserSchema.pick({ email: true, role: true, name: true }))
+    .merge(
+        AuthorizedUserSchema.pick({
+            email: true,
+            role: true,
+            name: true,
+            slug: true,
+        })
+    )
     .refine((data) => data.password === data.passwordConfirm, {
         path: ['passwordConfirm'],
         message: 'Lösenorden måste matcha',
     })
+export const updateFrendUserSchema = AuthorizedUserSchema.pick({
+    email: true,
+    role: true,
+})
 
 export const tagSchema = z.object({
     id: z.string(),
@@ -103,11 +116,13 @@ export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
+export type updateFrendUserSchema = z.infer<typeof updateFrendUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
 export type datasetWithRelationsSchema = z.infer<
     typeof datasetWithRelationsSchema
 >
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
+export type UserSchema = z.infer<typeof UserSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>

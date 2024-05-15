@@ -24,7 +24,7 @@ const getRandomTag = (tags) => {
 
         const createdTags = await seedData(pb, 'tag', tags)
 
-        const createdUsers = await seedData(pb, 'users', users)
+        const createdUsers = await seedUser(pb, users)
 
         const createdDataset = await seedDataset(
             pb,
@@ -73,6 +73,20 @@ async function seedData(pb, collectionName, data) {
     return items
 }
 
+async function seedUser(pb, data) {
+    const items = []
+    for (const itemData of data) {
+        const newItem = await pb.collection('users').create(
+            {
+                ...itemData,
+                slug: stringWithHyphen(itemData.name),
+            },
+            { $autoCancel: false }
+        )
+        items.push(newItem)
+    }
+    return items
+}
 async function seedDataset(pb, collectionName, data, tags) {
     const items = []
     for (const itemData of data) {

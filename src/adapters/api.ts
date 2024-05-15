@@ -89,6 +89,12 @@ export const getUsers = async (
 ): Promise<AuthorizedUserSchema[]> => {
     return await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
 }
+export const getUser = async (
+    userName: string,
+    authCookie: string
+): Promise<AuthorizedUserSchema> => {
+    return await apiRequest(apiUrl(`auth/${userName}`), 'GET', authCookie)
+}
 
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
@@ -175,10 +181,7 @@ export const getFeed = async (
 
 function responseDatasetCleanup(res: any) {
     const cleanDataset = {
-        id: res.id,
-        title: res.title,
-        description: res.description,
-        slug: res.slug,
+        ...res,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
     }

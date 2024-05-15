@@ -21,8 +21,9 @@ const searchSchema = z.object({
 type searchSchema = z.infer<typeof searchSchema>
 
 type autoCompleteSuggestion = {
+    id: string
     name: string
-    type: string
+    type: 'dataset' | 'user'
     slug: string
 }
 
@@ -31,6 +32,7 @@ const datasetToSuggestion = (datasets: datasetSchema[]) => {
 
     datasets.map((dataset) => {
         const newDataset: autoCompleteSuggestion = {
+            id: dataset.id,
             name: dataset.title,
             type: 'dataset',
             slug: dataset.slug,
@@ -44,9 +46,10 @@ const userToSuggestion = (users: AuthorizedUserSchema[]) => {
 
     users.map((user) => {
         const newUser: autoCompleteSuggestion = {
+            id: user.id,
             name: user.name,
             type: 'user',
-            slug: '',
+            slug: user.slug,
         }
         newUserArray.push(newUser)
     })
@@ -93,6 +96,7 @@ export default function SearchBar({
 
     const userContext = useContext(authContext)
     const authCookie = userContext.cookie
+    const user = userContext.auth
 
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
@@ -120,7 +124,9 @@ export default function SearchBar({
             const users = await api.getUsers(debouncedSearchTerm, authCookie)
             setSuggestions([
                 ...datasetToSuggestion(datasets),
-                ...userToSuggestion(users),
+                ...userToSuggestion(
+                    users.filter((user) => user.id !== user.id)
+                ),
             ])
         }
     }
@@ -138,7 +144,7 @@ export default function SearchBar({
         const users = await api.getUsers(debouncedSearchTerm, authCookie)
         setSuggestions([
             ...datasetToSuggestion(datasets),
-            ...userToSuggestion(users),
+            ...userToSuggestion(users.filter((user) => user.id !== user.id)),
         ])
     }
 
@@ -204,18 +210,38 @@ export default function SearchBar({
                             {suggestions.length > 0 &&
                             debouncedSearchTerm !== '' ? (
                                 <div className="flex w-full flex-col py-2">
-                                    {suggestions.map((suggestion) => (
-                                        <Link
-                                            key={suggestion.name}
-                                            href={`/dataset/${suggestion.slug}`}
-                                            className="w-full px-3 py-1 text-sm hover:bg-slate-50"
-                                        >
-                                            <Highlight
-                                                text={suggestion.name}
-                                                highlight={debouncedSearchTerm}
-                                            />
-                                        </Link>
-                                    ))}
+                                    {suggestions.map((suggestion) => {
+                                        if (suggestion.type === 'dataset') {
+                                            return (
+                                                <Link
+                                                    key={suggestion.name}
+                                                    href={`/dataset/${suggestion.slug}`}
+                                                    className="w-full px-3 py-1 text-sm hover:bg-slate-50"
+                                                >
+                                                    <Highlight
+                                                        text={suggestion.name}
+                                                        highlight={
+                                                            debouncedSearchTerm
+                                                        }
+                                                    />
+                                                </Link>
+                                            )
+                                        }
+                                        return (
+                                            <Link
+                                                key={suggestion.name}
+                                                href={`/profile/${suggestion.slug}`}
+                                                className="w-full px-3 py-1 text-sm hover:bg-slate-50"
+                                            >
+                                                <Highlight
+                                                    text={suggestion.name}
+                                                    highlight={
+                                                        debouncedSearchTerm
+                                                    }
+                                                />
+                                            </Link>
+                                        )
+                                    })}
                                 </div>
                             ) : (
                                 <div className="flex w-full flex-col p-2">

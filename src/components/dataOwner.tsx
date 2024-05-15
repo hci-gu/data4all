@@ -48,6 +48,7 @@ export default function DataOwner({
             updated: '2024-03-18 12:56:08.789Z',
             username: 'users36283',
             verified: false,
+            slug: 'sebastian-andreasson',
         },
         {
             collectionId: '_pb_users_auth_',
@@ -61,6 +62,7 @@ export default function DataOwner({
             updated: '2024-03-18 12:56:08.789Z',
             username: 'users36283',
             verified: false,
+            slug: 'styris.n@gmail.com',
         },
         {
             avatar: '',
@@ -75,6 +77,7 @@ export default function DataOwner({
             updated: '2024-04-11 09:14:09.924Z',
             username: 'users48961',
             verified: false,
+            slug: 'exampel',
         },
         {
             avatar: '',
@@ -89,6 +92,7 @@ export default function DataOwner({
             updated: '2024-04-11 09:14:09.924Z',
             username: 'users48961',
             verified: false,
+            slug: 'josef',
         },
     ]
     const userContext = useContext(authContext)
