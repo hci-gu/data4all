@@ -70,6 +70,7 @@ export const datasetSchema = z.object({
     title: z.string(),
     description: z.string(),
     slug: z.string(),
+    dataowner: z.string().optional(),
 })
 
 export const datasetWithRelationsSchema = datasetSchema.extend({

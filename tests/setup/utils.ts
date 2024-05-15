@@ -22,7 +22,7 @@ export const createUser = async () => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: 'User',
+        role: 'Jurist',
         name,
         slug: stringWithHyphen(name),
     }
@@ -44,7 +44,7 @@ export const createByUserName = async (name: string) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: 'User',
+        role: 'Jurist',
         name,
         slug: stringWithHyphen(name),
     })
