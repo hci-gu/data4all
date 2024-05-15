@@ -1,4 +1,5 @@
 import { env } from '@/lib/env'
+import { FeedFilter } from '@/types/constants'
 import {
     signUpSchema,
     signInSchema,
@@ -87,6 +88,12 @@ export const getUsers = async (
 ): Promise<AuthorizedUserSchema[]> => {
     return await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
 }
+export const getUser = async (
+    userName: string,
+    authCookie: string
+): Promise<AuthorizedUserSchema> => {
+    return await apiRequest(apiUrl(`auth/${userName}`), 'GET', authCookie)
+}
 
 // this function is only for testing against the moc data in pocketbase and should not be used in prod
 export const getAllDatasets = async () => {
@@ -154,12 +161,21 @@ export const getDatasetFromUser = async (
     return datasetWithRelationsSchema.array().parse(cleanDatasets)
 }
 
+export const getFeed = async (authCookie: string, filter: FeedFilter) => {
+    const events = (await apiRequest(
+        apiUrl(`events/feed?filter=${filter}`),
+        'GET',
+        authCookie
+    )) as []
+
+    return events.map((event) => {
+        return responseFeedEventCleanup(event)
+    })
+}
+
 function responseDatasetCleanup(res: any) {
     const cleanDataset = {
-        id: res.id,
-        title: res.title,
-        description: res.description,
-        slug: res.slug,
+        ...res,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
     }
@@ -170,5 +186,16 @@ function responseEventCleanup(res: any): EventSchema {
         ...res,
         user: res?.expand?.user,
         subject: res?.expand?.subject,
+    }
+}
+function responseFeedEventCleanup(res: any) {
+    return {
+        id: res?.id,
+        userName: res?.expand?.user.name,
+        subject: res?.subject,
+        datasetTitle: res?.expand?.dataset.title,
+        content: res?.content,
+        created: res?.created,
+        types: res?.types,
     }
 }

@@ -26,10 +26,7 @@ export default function RemoveAccountButton() {
     if (!isClicked) {
         return (
             <>
-                <Button
-                    variant={'destructive'}
-                    onClick={() => removeAccount()}
-                >
+                <Button variant={'destructive'} onClick={() => removeAccount()}>
                     Ta bort konto
                 </Button>
             </>

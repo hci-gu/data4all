@@ -24,6 +24,8 @@ import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as api from '@/adapters/api'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { stringWithHyphen } from '@/lib/utils'
+import { useEffect } from 'react'
 
 export default function SignUp() {
     const router = useRouter()
@@ -48,7 +50,11 @@ export default function SignUp() {
         }
     }
 
-    const roles = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
+    useEffect(() => {
+        form.setValue('slug', stringWithHyphen(form.getValues('email')))
+    }, [form.watch('email')])
+
+    const rolees = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
 
     return (
         <Form {...form}>
@@ -142,6 +148,22 @@ export default function SignUp() {
                     render={({ field }) => (
                         <FormItem>
                             <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="slug"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="sr-only">slug</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="hidden"
+                                    placeholder="Slug"
+                                    {...field}
+                                />
+                            </FormControl>
                         </FormItem>
                     )}
                 />

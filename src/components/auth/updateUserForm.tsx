@@ -19,15 +19,17 @@ import { roleSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { updateUser } from '@/adapters/api'
+import { getUser, updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
+import { stringWithHyphen } from '@/lib/utils'
 
 export default function UpdateUserForm() {
     const userContext = useContext(authContext)
     const user = userContext.auth
+    const cookie = userContext.cookie
 
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
@@ -39,15 +41,30 @@ export default function UpdateUserForm() {
             password: '',
             passwordConfirm: '',
             role: user.role,
+            slug: user.slug,
         },
     })
 
     const roles = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
 
-    const submit = (value: updateUserSchema) => {
+    const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
+
+        try {
+            const userDB = await getUser(value.name, cookie)
+            if (userDB.id !== user.id) {
+                toast.error('Användarnamnet är upptaget')
+                form.setError('name', { message: 'Användarnamnet är upptaget' })
+                setIsClicked(false)
+
+                return
+            }
+        } catch (error) {
+            setIsClicked(false)
+        }
+
         const request = Promise.allSettled([
-            updateUser(value, user.id, userContext.cookie),
+            updateUser(value, user.id, cookie),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {
@@ -68,6 +85,9 @@ export default function UpdateUserForm() {
             })
         }
     }
+    useEffect(() => {
+        form.setValue('slug', stringWithHyphen(form.getValues('name')))
+    }, [form.watch('name')])
     return (
         <Form {...form}>
             <form
@@ -122,9 +142,7 @@ export default function UpdateUserForm() {
                         </FormItem>
                     )}
                 />
-                <div
-                    className={form.getValues().password !== '' ? '' : 'hidden'}
-                >
+                <div className={form.getValues('password') ? '' : 'hidden'}>
                     <FormField
                         control={form.control}
                         name="passwordConfirm"
@@ -143,9 +161,7 @@ export default function UpdateUserForm() {
                         )}
                     />
                 </div>
-                <div
-                    className={form.getValues().password !== '' ? '' : 'hidden'}
-                >
+                <div className={form.getValues('password') ? '' : 'hidden'}>
                     <FormField
                         control={form.control}
                         name="oldPassword"
@@ -190,6 +206,22 @@ export default function UpdateUserForm() {
                                 </Select>
                             </FormControl>
                             <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="slug"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="sr-only">slug</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="hidden"
+                                    placeholder="Slug"
+                                    {...field}
+                                />
+                            </FormControl>
                         </FormItem>
                     )}
                 />

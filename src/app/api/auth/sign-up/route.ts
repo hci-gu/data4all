@@ -13,6 +13,7 @@ export async function POST(request: Request) {
         passwordConfirm: newUser.passwordConfirmation,
         name: newUser.email,
         role: newUser.role,
+        slug: newUser.slug,
     }
     try {
         await pb.collection('users').create(data)
