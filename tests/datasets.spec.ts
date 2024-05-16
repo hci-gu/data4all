@@ -112,6 +112,44 @@ test.describe('Datasets page', () => {
                     page.getByText('Inga användare hittades')
                 ).toBeVisible()
             })
+            test('Can reject a suggestion', async ({ page }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', signedInUser)
+
+                await page
+                    .getByRole('button', { name: signedInUser })
+                    .first()
+                    .click()
+                await page.getByRole('button', { name: 'Godkänn' }).click()
+
+                await expect(
+                    page
+                        .getByText(
+                            `${signedInUser} föreslog sig själv som dataägareGodkä`
+                        )
+                        .getByRole('button', { name: 'Avböj' })
+                ).toBeHidden()
+            })
+            test('Can accept a suggestion', async ({ page }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', signedInUser)
+
+                await page
+                    .getByRole('button', { name: signedInUser })
+                    .first()
+                    .click()
+                await page.getByRole('button', { name: 'Godkänn' }).click()
+
+                await expect(
+                    page
+                        .getByText(
+                            `${signedInUser} föreslog sig själv som dataägareGodkä`
+                        )
+                        .getByRole('button', { name: 'Godkänn' })
+                ).toBeHidden()
+            })
         })
     })
 
