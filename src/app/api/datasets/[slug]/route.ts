@@ -3,7 +3,6 @@ import * as utils from './../utils'
 import { ClientResponseError } from 'pocketbase'
 import { pbForRequest } from '@/adapters/pocketbase'
 import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
-import { ZodError } from 'zod'
 
 export async function GET(
     req: NextRequest,
@@ -53,7 +52,13 @@ export async function PATCH(
 
         const record = await pb
             .collection<datasetWithRelationsSchema>('dataset')
-            .update(params.slug, body, { expand: 'related_datasets,tag' })
+            .update(
+                params.slug,
+                { ...body, dataowner: body.dataowner?.id },
+                {
+                    expand: 'related_datasets,tag,dataowner',
+                }
+            )
 
         return NextResponse.json(
             {

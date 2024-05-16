@@ -31,7 +31,7 @@ export async function datasetForSlug(datasetSlug: string, pb: PocketBase) {
     const records = await pb
         .collection<datasetWithRelationsSchema>('dataset')
         .getFirstListItem(`slug="${datasetSlug}"`, {
-            expand: 'related_datasets,tag',
+            expand: 'related_datasets,tag,dataowner',
         })
 
     return records

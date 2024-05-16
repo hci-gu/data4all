@@ -142,8 +142,10 @@ export const updateDataset = async (
         authCookie,
         dataset
     )
-    
-    return responseDatasetCleanup(datasetRespond)
+
+    return datasetWithRelationsSchema.parse(
+        responseDatasetCleanup(datasetRespond)
+    )
 }
 // Events
 export const getEvents = async (datasetId: string, authCookie: string) => {
@@ -197,6 +199,7 @@ function responseDatasetCleanup(res: any) {
         ...res,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
+        dataowner: res?.expand?.dataowner,
     }
     return cleanDataset
 }
