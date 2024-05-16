@@ -134,8 +134,6 @@ export const updateDataset = async (
     dataset: Partial<datasetWithRelationsSchema>,
     authCookie: string
 ) => {
-    console.log('datasetId', datasetId)
-
     const datasetRespond = await apiRequest(
         apiUrl(`datasets/${encodeURI(datasetId)}`),
         'PATCH',

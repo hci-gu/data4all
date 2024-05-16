@@ -37,20 +37,22 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
     }
 
     const accept = async () => {
-        setDataset(
-            await updateDataset(
-                dataset.id,
-                {
-                    dataowner: event.user,
-                },
-                cookie
-            )
-        )
+        const subject = event.subject
 
-        await updateEvent(
-            'ownerAccept',
-            `<b>${auth.name}</b> godkände <b>${event.user.name}</b> som dataägare`
-        )
+        if (subject) {
+            setDataset(
+                await updateDataset(
+                    dataset.id,
+                    { dataowner: subject },
+                    cookie
+                )
+            )
+
+            await updateEvent(
+                'ownerAccept',
+                `<b>${auth.name}</b> godkände <b>${subject.name}</b> som dataägare`
+            )
+        }
     }
     const decline = async () => {
         await updateEvent(
@@ -63,15 +65,11 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
         (e) => e.subject?.id === event.subject?.id
     )
 
-    if (dataset.dataowner) {
-        return null
-    }
-
-    if (auth.role !== 'Admin') {
-        return null
-    }
-
-    if (lastUserEvent && lastUserEvent.id !== event.id) {
+    if (
+        (lastUserEvent && lastUserEvent.id !== event.id) ||
+        auth.role !== 'Admin' ||
+        dataset.dataowner
+    ) {
         return null
     }
 
