@@ -9,29 +9,42 @@ export async function GET(request: NextRequest) {
         const filter =
             (request.nextUrl.searchParams.get('filter') as FeedFilter) ??
             FeedFilter.All
+        let pageNumber = request.nextUrl.searchParams.get('pageNumber')
+        if (pageNumber == 'undefined' || pageNumber == null) {
+            pageNumber = '1'
+        }
 
         let records = []
         switch (filter) {
             case FeedFilter.Tagged:
-                records = await pb.collection('events').getFullList({
-                    sort: '-created',
-                    filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
-                    expand: 'user,subject,dataset',
-                })
+                //@ts-ignore
+                records = await pb
+                    .collection('events')
+                    //@ts-ignore
+                    .getList(pageNumber as number, 15, {
+                        sort: '-created',
+                        filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
+                        expand: 'user,subject,dataset',
+                    })
                 break
             case FeedFilter.MyDatasets:
             // TODO: implement this
             case FeedFilter.All:
-                records = await pb.collection('events').getFullList({
-                    sort: '-created',
-                    expand: 'user,subject,dataset',
-                })
+                //@ts-ignore
+                records = await pb
+                    .collection('events')
+                    //@ts-ignore
+                    .getList(pageNumber as number, 15, {
+                        sort: '-created',
+                        expand: 'user,subject,dataset',
+                    })
                 break
         }
 
         return NextResponse.json(
             {
                 message: 'success',
+                //@ts-ignore
                 body: records,
             },
             { status: 200 }

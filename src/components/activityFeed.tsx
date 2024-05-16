@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { authContext } from '@/lib/context/authContext'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
-import { Filter } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Filter, Loader2 } from 'lucide-react'
 import * as api from '@/adapters/api'
 import {
     Dialog,
@@ -16,16 +16,15 @@ import {
     DialogTrigger,
 } from './ui/dialog'
 import { FeedFilter, descriptionForFeedFilter } from '@/types/constants'
-
-type feedEvent = {
-    id: string
-    userName: string
-    subject: string
-    datasetTitle: string
-    content: any
-    created: string
-    types: string
-}
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from './ui/pagination'
+import { EventFeedResponse } from '@/types/zod'
 
 const filterFromStorage = () => {
     const filter = localStorage.getItem('activeFilter')
@@ -35,13 +34,24 @@ const filterFromStorage = () => {
     return FeedFilter.Tagged
 }
 
-export default function ActivityFeed() {
+export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
     const cookie = useContext(authContext).cookie
-    const [events, setEvents] = useState<feedEvent[]>([])
+    const [events, setEvents] = useState<EventFeedResponse>()
     const [loading, setLoading] = useState(true)
     const [activeFilter, setActiveFilter] = useState<FeedFilter>(
         FeedFilter.Tagged
     )
+
+    let nextPage = pageNumber
+    let previusPage = pageNumber
+    if (!!events) {
+        if (events.page !== events.totalPages) {
+            nextPage = events?.page + 1
+        }
+        if (events?.page !== 1) {
+            previusPage = events?.page - 1
+        }
+    }
     useEffect(() => {
         setActiveFilter(filterFromStorage())
     }, [])
@@ -49,8 +59,10 @@ export default function ActivityFeed() {
     useEffect(() => {
         setLoading(true)
         async function fetchEvents() {
-            const events = await api.getFeed(cookie, activeFilter)
+            const events = await api.getFeed(cookie, activeFilter, pageNumber)
             setEvents(events)
+            console.log(events.totalPages)
+
             setLoading(false)
         }
         fetchEvents()
@@ -58,7 +70,7 @@ export default function ActivityFeed() {
 
     return (
         <>
-            <div className="relative flex flex-col items-center gap-8">
+            <div className="relative flex min-h-[1284px] flex-col items-center justify-between gap-8">
                 <div className="text-center [&>h2]:border-none [&>h2]:pb-0">
                     <Typography level="H2">Flöde</Typography>
                     <p className="text-xs text-slate-500">{activeFilter}</p>
@@ -116,15 +128,87 @@ export default function ActivityFeed() {
                 </Dialog>
                 <ul className="flex w-full flex-col gap-4">
                     {loading ? (
-                        <p className="text-center">Laddar händelser...</p>
-                    ) : events.length > 0 ? (
-                        events.map((event) => (
+                        <p className="flex flex-col items-center text-center text-slate-500">
+                            <Loader2
+                                className="h-12 w-12 animate-spin"
+                                color="#cbd5e1"
+                            />
+                            Laddar händelser...
+                        </p>
+                    ) : !!events && events.items?.length > 0 ? (
+                        events.items.map((event) => (
                             <FeedItem event={event} key={event.id} />
                         ))
                     ) : (
                         <p className="text-center">Hittade inga händelser</p>
                     )}
                 </ul>
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            {pageNumber == 1 ? (
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                    <ChevronLeft
+                                        className="h-4 w-4"
+                                        color="#cbd5e1"
+                                    />
+                                    <span>Föregående</span>
+                                </div>
+                            ) : (
+                                <PaginationPrevious
+                                    href={`/?pageNumber=${previusPage}`}
+                                />
+                            )}
+                        </PaginationItem>
+                        <PaginationItem>
+                            {pageNumber == 1 ? (
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
+                                    1
+                                </div>
+                            ) : (
+                                <PaginationLink href={`/?pageNumber=${1}`}>
+                                    {1}
+                                </PaginationLink>
+                            )}
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink
+                                isActive={true}
+                                className="cursor-default hover:bg-transparent"
+                            >
+                                {pageNumber ?? 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            {pageNumber == events?.totalPages ? (
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
+                                    {events?.totalPages ?? 99}
+                                </div>
+                            ) : (
+                                <PaginationLink
+                                    href={`/?pageNumber=${events?.totalPages ?? 99}`}
+                                >
+                                    {events?.totalPages ?? 99}
+                                </PaginationLink>
+                            )}
+                        </PaginationItem>
+                        <PaginationItem>
+                            {pageNumber == events?.totalPages ? (
+                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                    <span>Nästa</span>
+                                    <ChevronRight
+                                        className="h-4 w-4"
+                                        color="#cbd5e1"
+                                    />
+                                </div>
+                            ) : (
+                                <PaginationNext
+                                    href={`/?pageNumber=${nextPage}`}
+                                />
+                            )}
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
         </>
     )
