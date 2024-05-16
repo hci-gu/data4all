@@ -35,8 +35,8 @@ test.beforeAll(async () => {
 
 test.describe('Datasets page', () => {
     test.describe('Logged in user', () => {
-        test.beforeEach(async ({ page, request, context }) => {
-            signedInUser = (await loggedInUser({ page, request, context })).name
+        test.beforeEach(async ({ request, context }) => {
+            signedInUser = (await loggedInUser({ request, context })).name
         })
 
         test('Can reach the datasets page', async ({ page }) => {
@@ -110,6 +110,65 @@ test.describe('Datasets page', () => {
 
                 await expect(
                     page.getByText('Inga användare hittades')
+                ).toBeVisible()
+            })
+        })
+    })
+
+    test.describe('Logged in user with admin role', () => {
+        test.beforeEach(async ({ request, context }) => {
+            signedInUser = (
+                await loggedInUser({ request, context, userRole: 'Admin' })
+            ).name
+        })
+
+        test.describe('Suggest data owner', () => {
+            test('Can reject a suggestion', async ({ page }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', signedInUser)
+
+                await page
+                    .getByRole('button', { name: signedInUser })
+                    .first()
+                    .click()
+                await page.getByRole('button', { name: 'Godkänn' }).click()
+
+                await page
+                    .getByText(
+                        `${signedInUser} föreslog sig själv som dataägareGodkä`
+                    )
+                    .getByRole('button', { name: 'Avböj' })
+                    .click()
+
+                await expect(
+                    page.getByText(
+                        `${signedInUser} godkände inte ${signedInUser} som dataägare`
+                    )
+                ).toBeVisible()
+            })
+            test('Can accept a suggestion', async ({ page }) => {
+                await page.goto(`/dataset/${searchTerms[0]}`)
+                await page.click('text= Föreslå dataägare')
+                await page.fill('input[name="dataset"]', signedInUser)
+
+                await page
+                    .getByRole('button', { name: signedInUser })
+                    .first()
+                    .click()
+                await page.getByRole('button', { name: 'Godkänn' }).click()
+
+                await page
+                    .getByText(
+                        `${signedInUser} föreslog sig själv som dataägareGodkä`
+                    )
+                    .getByRole('button', { name: 'Godkänn' })
+                    .click()
+
+                await expect(
+                    page.getByText(
+                        `${signedInUser} godkände ${signedInUser} som dataägare`
+                    )
                 ).toBeVisible()
             })
         })
