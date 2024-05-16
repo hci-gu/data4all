@@ -11,7 +11,6 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
-import { AuthorizedUserSchema } from '@/types/zod'
 import { getDataset } from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 
@@ -29,21 +28,6 @@ export default async function Page({
     params: { slug: string }
 }) {
     const cookie = cookies().get('PBAuth')?.value
-
-    const user: AuthorizedUserSchema = {
-        collectionId: '_pb_users_auth_',
-        collectionName: 'users',
-        created: '2024-03-18 12:56:08.789Z',
-        email: 'Sebastian.Andreasson@kungsbacka.se',
-        emailVisibility: true,
-        id: '5sufjyr2vdad3s0',
-        name: 'Sebastian Andreasson',
-        role: 'Admin',
-        updated: '2024-03-18 12:56:08.789Z',
-        username: 'users36283',
-        verified: false,
-        slug: 'sebastian-andreasson',
-    }
 
     if (!cookie) {
         throw new Error('Användaren är inte inloggad')
@@ -84,7 +68,7 @@ export default async function Page({
                             {dataset.description}
                         </p>
                         <section aria-labelledby="DataOwner">
-                            <DataOwner user={null} dataset={dataset} />
+                            <DataOwner />
                         </section>
                         <section className="flex flex-col gap-1">
                             <Typography level="Large">Taggar</Typography>
