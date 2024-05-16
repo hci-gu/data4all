@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { string, z } from 'zod'
 
 export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin'])
 export const eventTypeSchema = z.enum(['comment', 'ownerReq', 'ownerAccept', "ownerDecline", 'OwnerPublished'])
@@ -71,11 +71,12 @@ export const datasetSchema = z.object({
     title: z.string(),
     description: z.string(),
     slug: z.string(),
-    dataowner: z.string().optional(),
+    dataowner: string().optional(),
 })
 
 export const datasetWithRelationsSchema = datasetSchema.extend({
     relatedDatasets: z.array(datasetSchema),
+    dataowner: AuthorizedUserSchema.optional(),
     tags: z.array(tagSchema),
 })
 
