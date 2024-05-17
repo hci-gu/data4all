@@ -7,15 +7,11 @@ import { EventSchema } from '@/types/zod'
 import * as api from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 import { authContext } from '@/lib/context/authContext'
+import { DatasetContext } from '@/lib/context/datasetContext'
 
-export default function ActivityFlow({
-    datasetId,
-    slug,
-}: {
-    datasetId: string
-    slug: string
-}) {
+export default function ActivityFlow() {
     const events = useContext(EventContext)
+    const { dataset } = useContext(DatasetContext)
     const user = useContext(authContext)
 
     const sortEvents = (a: EventSchema, b: EventSchema) => {
@@ -29,12 +25,10 @@ export default function ActivityFlow({
     }
     useEffect(() => {
         async function setData() {
-            const dataset = await api.getDataset(
-                stringWithHyphen(decodeURI(slug)),
-                user.cookie
-            )
             events.setEvents(
-                (await api.getEvents(dataset.id, user.cookie)).sort(sortEvents)
+                (await api.getEvents(dataset.id, user.cookie)).sort(
+                    sortEvents
+                )
             )
         }
         setData()
@@ -46,7 +40,7 @@ export default function ActivityFlow({
                 Bli den första att skriva något kring det här datasetet.
             </p>
 
-            <EventForm datasetId={datasetId} />
+            <EventForm datasetId={dataset.id} />
 
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
                 {events.events.map((event, index) => (

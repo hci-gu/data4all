@@ -5,6 +5,7 @@ import {
     EventSchema,
     datasetSchema,
     datasetWithRelationsSchema,
+    roleSchema,
     tagSchema,
 } from '@/types/zod'
 import { APIRequestContext, BrowserContext, Page } from '@playwright/test'
@@ -13,7 +14,7 @@ import uuid from 'short-uuid'
 
 const pb = new PocketBase('http://localhost:8090')
 
-export const createUser = async () => {
+export const createUser = async (userRole?: roleSchema) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const name = `tester user ${uuid.generate()}`
@@ -22,7 +23,7 @@ export const createUser = async () => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: 'User',
+        role: userRole ?? 'Jurist',
         name,
         slug: stringWithHyphen(name),
     }
@@ -44,7 +45,7 @@ export const createByUserName = async (name: string) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: 'User',
+        role: 'Jurist',
         name,
         slug: stringWithHyphen(name),
     })
@@ -122,15 +123,15 @@ function parseCookie(cookieString: string): any {
 }
 
 export const loggedInUser = async ({
-    page,
     request,
     context,
+    userRole = 'Jurist',
 }: {
-    page: Page
     request: APIRequestContext
     context: BrowserContext
+    userRole?: roleSchema
 }) => {
-    const user = await createUser()
+    const user = await createUser(userRole)
     const response = await request.post('/api/auth/sign-in', {
         data: { email: user.email, password: user.password },
         headers: { 'Content-Type': 'application/json' },

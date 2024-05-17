@@ -81,7 +81,7 @@
             "name": "Suzuka Nakamoto",
             "email": "Suzuka_Nakamoto@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -90,7 +90,7 @@
             "name": "Moa Kikuchi",
             "email": "Moa_Kikuchi@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -99,7 +99,7 @@
             "name": "Momoko Okazaki",
             "email": "Momoko_Okazaki@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -108,7 +108,7 @@
             "name": "John Smith",
             "email": "john_smith@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -117,7 +117,7 @@
             "name": "Maria Rodriguez",
             "email": "maria_rodriguez@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -126,7 +126,7 @@
             "name": "Chen Wei",
             "email": "chen_wei@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -135,7 +135,7 @@
             "name": "Emily Johnson",
             "email": "emily_johnson@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -144,7 +144,7 @@
             "name": "Muhammad Khan",
             "email": "muhammad_khan@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -153,7 +153,7 @@
             "name": "Sophie Martin",
             "email": "sophie_martin@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
@@ -162,7 +162,7 @@
             "name": "Kim Sung",
             "email": "kim_sung@kungsbacka.com",
             "emailVisibility": true,
-            "role": "User",
+            "role": "Jurist",
             "password": "password123",
             "passwordConfirm": "password123",
             "emailVisibility": "true"
