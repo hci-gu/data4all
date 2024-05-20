@@ -21,9 +21,11 @@ export async function PUT(request: NextRequest) {
             )
         }
 
+        const newRole = await pb.collection('roles').getFirstListItem(`name="${formData.role}"`)
+
         pb.authStore.loadFromCookie(authorizedUser)
 
-        const records = await pb.collection('users').update(userId, formData)
+        const records = await pb.collection('users').update(userId, {...formData})
 
         const dbUser = await pb.collection('users').getOne(userId)
         const token = pb.authStore.token

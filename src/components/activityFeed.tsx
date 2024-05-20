@@ -126,7 +126,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         </div>
                     </DialogContent>
                 </Dialog>
-                <ul className="flex w-full flex-col gap-4">
+                <ul className="flex w-full flex-col gap-4 h-full">
                     {loading ? (
                         <p className="flex flex-col items-center text-center text-slate-500">
                             <Loader2

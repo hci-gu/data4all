@@ -1,6 +1,5 @@
 import { string, z } from 'zod'
 
-export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin', 'User'])
 export const eventTypeSchema = z.enum([
     'comment',
     'ownerReq',
@@ -17,7 +16,7 @@ export const AuthorizedUserSchema = z.object({
     emailVisibility: z.boolean(),
     id: z.string(),
     name: z.string().min(1, 'name is required'),
-    role: roleSchema,
+    role: z.string(),
     updated: z.string(),
     username: z.string(),
     verified: z.boolean(),
@@ -36,7 +35,7 @@ export const signInSchema = z
 export const signUpSchema = signInSchema
     .extend({
         passwordConfirmation: z.string().min(8),
-        role: roleSchema,
+        role: z.string(),
         slug: z.string(),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
@@ -123,7 +122,6 @@ export const EventFeedResponse = z.object({
 
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
-export type roleSchema = z.infer<typeof roleSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
 export type updateFrendUserSchema = z.infer<typeof updateFrendUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>

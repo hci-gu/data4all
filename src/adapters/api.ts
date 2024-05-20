@@ -198,6 +198,11 @@ export const getFeed = async (
     return EventFeedResponse.parse(clean)
 }
 
+export const getRoles = async (authCookie: string) => {
+    const roles = await apiRequest(apiUrl(`auth/roles`), 'GET', authCookie)
+    return roles
+}
+
 function responseDatasetCleanup(res: any) {
     const cleanDataset = {
         ...res,
