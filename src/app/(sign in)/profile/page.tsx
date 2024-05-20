@@ -15,7 +15,13 @@ async function ProfilePage() {
         <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
-                <UpdateUserForm roles={roles} />
+                {!!roles ? (
+                    <UpdateUserForm roles={roles} />
+                ) : (
+                    <div className="h-[378px]">
+                        
+                    </div>
+                )}
                 <Separator />
                 <h2 className="text-3xl font-semibold">
                     Om Kungsbacka dataportal
