@@ -1,7 +1,13 @@
 import { string, z } from 'zod'
 
-export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin'])
-export const eventTypeSchema = z.enum(['comment', 'ownerReq', 'ownerAccept', "ownerDecline", 'OwnerPublished'])
+export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin', 'User'])
+export const eventTypeSchema = z.enum([
+    'comment',
+    'ownerReq',
+    'ownerAccept',
+    'ownerDecline',
+    'OwnerPublished',
+])
 export const AuthorizedUserSchema = z.object({
     avatar: z.string().optional(),
     collectionId: z.string(),

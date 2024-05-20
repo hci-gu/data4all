@@ -28,8 +28,8 @@ export async function loadAuthorizedUser() {
         updated: user.updated,
         username: user.username,
         verified: user.verified,
+        slug: user.slug,
     }
 
-    console.log('user', cleanUser)
     return AuthorizedUserSchema.parse(cleanUser)
 }

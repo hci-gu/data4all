@@ -3,22 +3,19 @@ migrate((db) => {
   const dao = new Dao(db)
   const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
 
-  // update
+  // add
   collection.schema.addField(new SchemaField({
     "system": false,
-    "id": "gwilshbx",
-    "name": "role",
-    "type": "select",
+    "id": "tio1oshm",
+    "name": "slug",
+    "type": "text",
     "required": true,
     "presentable": false,
     "unique": false,
     "options": {
-      "maxSelect": 1,
-      "values": [
-        "Jurist",
-        "Utvecklare",
-        "Admin"
-      ]
+      "min": null,
+      "max": null,
+      "pattern": ""
     }
   }))
 
@@ -27,23 +24,8 @@ migrate((db) => {
   const dao = new Dao(db)
   const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
 
-  // update
-  collection.schema.addField(new SchemaField({
-    "system": false,
-    "id": "gwilshbx",
-    "name": "role",
-    "type": "select",
-    "required": true,
-    "presentable": false,
-    "unique": false,
-    "options": {
-      "maxSelect": 1,
-      "values": [
-        "User",
-        "Admin"
-      ]
-    }
-  }))
+  // remove
+  collection.schema.removeField("tio1oshm")
 
   return dao.saveCollection(collection)
 })
