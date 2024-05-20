@@ -18,16 +18,37 @@ export async function GET(request: NextRequest) {
         const records = await pb.collection('users').getList(1, 25, {
             sort: '-created',
             filter: `name ~ "${decodeURI(name)}"`,
+            expand: 'role',
+        })
+
+        const cleanUsers = records.items.map((user: any) => {
+            return {
+                avatar: user.avatar,
+                collectionId: user.collectionId,
+                collectionName: user.collectionName,
+                created: user.created,
+                email: user.email,
+                emailVisibility: user.emailVisibility,
+                id: user.id,
+                name: user.name,
+                role: user.expand?.role.name,
+                updated: user.updated,
+                username: user.username,
+                verified: user.verified,
+                slug: user.slug,
+            }
         })
 
         return NextResponse.json(
             {
                 message: 'success',
-                body: records.items,
+                body: cleanUsers,
             },
             { status: 200 }
         )
     } catch (error) {
+        console.log(error)
+
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
