@@ -26,9 +26,7 @@ export default function ActivityFlow() {
     useEffect(() => {
         async function setData() {
             events.setEvents(
-                (await api.getEvents(dataset.id, user.cookie)).sort(
-                    sortEvents
-                )
+                (await api.getEvents(dataset.id, user.cookie)).sort(sortEvents)
             )
         }
         setData()

@@ -15,8 +15,10 @@ export async function GET(
             .collection<EventSchema>('events')
             .getList(1, 50, {
                 filter: `dataset="${params.datasetId}"`,
-                expand: 'user,subject',
+                expand: 'user,user.role,subject',
             })
+
+        // console.log(records.items[0].expand.user.expand.role.name)
 
         return NextResponse.json(
             { message: 'success', body: records.items },

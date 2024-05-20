@@ -3,13 +3,10 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
 import ProfileDatasetList from '@/components/profileDatasetList'
-import { cookies } from 'next/headers'
 import { getRoles } from '@/adapters/api'
 
 async function ProfilePage() {
-    const authCookie = cookies().get('PBAuth')?.value || ''
-
-    const roles = await getRoles(authCookie)
+    const roles = await getRoles()
 
     return (
         <main className="grid w-full justify-center gap-9 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">

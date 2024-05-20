@@ -22,7 +22,7 @@ export default function User({
                         <b>{user.name}</b>
                     </p>
                     <p className="text-[0.625rem] text-gray-500 sm:text-sm">
-                        {user.role}
+                        {user?.expand.role.name}
                     </p>
                 </div>
             </div>
@@ -34,10 +34,12 @@ export default function User({
                 <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col text-start">
-                <p className="text-lg line-clamp-1">
+                <p className="line-clamp-1 text-lg">
                     <b>{user.name}</b>
                 </p>
-                <p className="text-sm text-gray-500">{user.role}</p>
+                <p className="text-sm text-gray-500">
+                    {user?.expand.role.name}
+                </p>
             </div>
         </div>
     )

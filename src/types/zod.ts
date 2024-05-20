@@ -21,6 +21,7 @@ export const AuthorizedUserSchema = z.object({
     username: z.string(),
     verified: z.boolean(),
     slug: z.string(),
+    expand: z.any(),
 })
 export const UserSchema = AuthorizedUserSchema.omit({
     email: true,
