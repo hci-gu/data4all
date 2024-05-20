@@ -45,7 +45,7 @@ export default function UpdateUserForm() {
         },
     })
 
-    const roles = Object.values(roleSchema.Values)
+    const roles = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
 
     const submit = async (value: updateUserSchema) => {
         setIsClicked(true)

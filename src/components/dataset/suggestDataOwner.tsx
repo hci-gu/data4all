@@ -14,15 +14,15 @@ import { createEvent } from '@/adapters/api'
 import { useContext } from 'react'
 import { EventContext } from '@/lib/context/eventContext'
 import { authContext } from '@/lib/context/authContext'
+import { DatasetContext } from '@/lib/context/datasetContext'
 export default function SuggestDataOwner({
     user,
-    dataset,
 }: {
     user: AuthorizedUserSchema | null
-    dataset: datasetSchema
 }) {
     const eventContext = useContext(EventContext)
     const userContext = useContext(authContext)
+    const { dataset } = useContext(DatasetContext)
     if (!user) return
 
     const onSubmit = async () => {

@@ -1,6 +1,7 @@
-import { z } from 'zod'
+import { string, z } from 'zod'
 
-export const roleSchema = z.enum(['User', 'Admin'])
+export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin'])
+export const eventTypeSchema = z.enum(['comment', 'ownerReq', 'ownerAccept', "ownerDecline", 'OwnerPublished'])
 export const AuthorizedUserSchema = z.object({
     avatar: z.string().optional(),
     collectionId: z.string(),
@@ -70,10 +71,12 @@ export const datasetSchema = z.object({
     title: z.string(),
     description: z.string(),
     slug: z.string(),
+    dataowner: string().optional(),
 })
 
 export const datasetWithRelationsSchema = datasetSchema.extend({
     relatedDatasets: z.array(datasetSchema),
+    dataowner: AuthorizedUserSchema.optional(),
     tags: z.array(tagSchema),
 })
 
@@ -84,10 +87,10 @@ export const EventSchema = z.object({
     created: z.string().optional(),
     updated: z.string().optional(),
     dataset: z.string(),
-    types: z.enum(['comment', 'ownerReq', 'ownerAccept', 'OwnerPublished']),
+    types: eventTypeSchema,
     user: AuthorizedUserSchema,
     content: z.string(),
-    subject: UserSchema.optional(),
+    subject: AuthorizedUserSchema.optional(),
 })
 
 export const EventCreateSchema = EventSchema.extend({
@@ -123,6 +126,7 @@ export type datasetWithRelationsSchema = z.infer<
 >
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type UserSchema = z.infer<typeof UserSchema>
+export type eventTypeSchema = z.infer<typeof eventTypeSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>

@@ -95,10 +95,10 @@ test.describe('Profile page', () => {
         test('Can update work role', async ({ page }) => {
             await page.goto('/profile')
             await page.getByLabel('Arbetsroll').click()
-            await page.getByLabel('Admin').click()
+            await page.getByLabel('Utvecklare').click()
             await page.click('button[type="submit"]')
 
-            await expect(page.getByLabel('Arbetsroll')).toHaveText('Admin')
+            await expect(page.getByLabel('Arbetsroll')).toHaveText('Utvecklare')
         })
     })
 

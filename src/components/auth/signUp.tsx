@@ -54,7 +54,9 @@ export default function SignUp() {
         form.setValue('slug', stringWithHyphen(form.getValues('email')))
     }, [form.watch('email')])
 
-    const roles = Object.values(roleSchema.Values)
+    const roles = Object.values(roleSchema.Values).filter(
+        (role) => role !== 'Admin'
+    )
 
     return (
         <Form {...form}>

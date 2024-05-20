@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { UserPlus } from 'lucide-react'
 import User from './user'
 
-import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
+import { AuthorizedUserSchema } from '@/types/zod'
 import { z } from 'zod'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
@@ -27,14 +27,9 @@ import { getUsers } from '@/adapters/api'
 import { ScrollArea } from './ui/scroll-area'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
 import { authContext } from '@/lib/context/authContext'
+import { DatasetContext } from '@/lib/context/datasetContext'
 
-export default function DataOwner({
-    user,
-    dataset,
-}: {
-    user: AuthorizedUserSchema | null
-    dataset: datasetSchema
-}) {
+export default function DataOwner() {
     const recommendedUsers: AuthorizedUserSchema[] = [
         {
             collectionId: '_pb_users_auth_',
@@ -58,7 +53,7 @@ export default function DataOwner({
             emailVisibility: true,
             id: '5sufjyr2vdad3s0',
             name: 'styris.n@gmail.com',
-            role: 'User',
+            role: 'Utvecklare',
             updated: '2024-03-18 12:56:08.789Z',
             username: 'users36283',
             verified: false,
@@ -73,7 +68,7 @@ export default function DataOwner({
             emailVisibility: true,
             id: '0zfiwpwiv1myhrc',
             name: 'exampel',
-            role: 'User',
+            role: 'Utvecklare',
             updated: '2024-04-11 09:14:09.924Z',
             username: 'users48961',
             verified: false,
@@ -88,15 +83,15 @@ export default function DataOwner({
             emailVisibility: true,
             id: '0zfiwpwiv1myhrc',
             name: 'Josef',
-            role: 'User',
+            role: 'Utvecklare',
             updated: '2024-04-11 09:14:09.924Z',
             username: 'users48961',
             verified: false,
             slug: 'josef',
         },
     ]
-    const userContext = useContext(authContext)
-    const authCookie = userContext.cookie
+    const { cookie } = useContext(authContext)
+    const { dataset } = useContext(DatasetContext)
 
     const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
     const [searchTerm, setSearchTerm] = useState('')
@@ -117,7 +112,7 @@ export default function DataOwner({
     const autoComplete = async () => {
         await Promise.allSettled([
             debouncedSearchTerm
-                ? setUsers(await getUsers(debouncedSearchTerm, authCookie))
+                ? setUsers(await getUsers(debouncedSearchTerm, cookie))
                 : setUsers(recommendedUsers),
             new Promise((resolve) => setTimeout(resolve, time)),
         ])
@@ -127,7 +122,7 @@ export default function DataOwner({
         autoComplete()
     }, [debouncedSearchTerm])
 
-    if (!user) {
+    if (!dataset.dataowner) {
         return (
             <>
                 <h2 id="DataOwner" className="text-lg font-bold">
@@ -180,7 +175,6 @@ export default function DataOwner({
                                         <li key={index}>
                                             <SuggestDataOwner
                                                 user={user}
-                                                dataset={dataset}
                                             />
                                         </li>
                                     ))}
@@ -200,7 +194,7 @@ export default function DataOwner({
             <h2 id="DataOwner" className="text-lg font-bold">
                 Dataägare
             </h2>
-            <User user={user} />
+            <User user={dataset.dataowner} />
         </div>
     )
 }
