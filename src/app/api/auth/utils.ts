@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { env } from '@/lib/env'
 import { AuthorizedUserSchema } from '@/types/zod'
 
-export function loadAuthorizedUser() {
+export async function loadAuthorizedUser() {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const authorizedUser = cookies().get('PBAuth')
     if (!authorizedUser) {
@@ -11,5 +11,25 @@ export function loadAuthorizedUser() {
     }
     pb.authStore.loadFromCookie(authorizedUser.value)
 
-    return AuthorizedUserSchema.parse(pb.authStore.model)
+    const user = await pb
+        .collection('users')
+        .getFirstListItem(`id="${pb.authStore.model?.id}"`, { expand: 'role' })
+
+    const cleanUser = {
+        avatar: user.avatar,
+        collectionId: user.collectionId,
+        collectionName: user.collectionName,
+        created: user.created,
+        email: user.email,
+        emailVisibility: user.emailVisibility,
+        id: user.id,
+        name: user.name,
+        role: user.expand?.role.name,
+        updated: user.updated,
+        username: user.username,
+        verified: user.verified,
+    }
+
+    console.log('user', cleanUser)
+    return AuthorizedUserSchema.parse(cleanUser)
 }

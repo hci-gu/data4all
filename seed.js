@@ -74,13 +74,16 @@ async function seedData(pb, collectionName, data) {
 }
 
 async function seedUser(pb, data) {
+    const roles = await pb.collection('roles').getFullList()
     const items = []
     for (const itemData of data) {
         const newItem = await pb.collection('users').create(
             {
                 ...itemData,
+                role: roles[1].id,
                 slug: stringWithHyphen(itemData.name),
             },
+            { expand: 'roles' },
             { $autoCancel: false }
         )
         items.push(newItem)
