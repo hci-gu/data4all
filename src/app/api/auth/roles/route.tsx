@@ -5,16 +5,6 @@ const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
 
 export async function GET(request: NextRequest) {
     try {
-        const name = request.nextUrl.searchParams.get('name') ?? ''
-        const cookie = request.headers.get('auth')
-
-        if (!cookie) {
-            return NextResponse.json(
-                { message: 'Du har inte tillgång att se användare' },
-                { status: 403 }
-            )
-        }
-        pb.authStore.loadFromCookie(cookie)
         const records = await pb.collection('roles').getFullList({})
 
         return NextResponse.json(

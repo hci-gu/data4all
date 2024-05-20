@@ -18,7 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { roleSchema, signUpSchema } from '@/types/zod'
+import { signUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as api from '@/adapters/api'
@@ -27,7 +27,7 @@ import Link from 'next/link'
 import { stringWithHyphen } from '@/lib/utils'
 import { useEffect } from 'react'
 
-export default function SignUp() {
+export default function SignUp({ roles }: { roles: any[] }) {
     const router = useRouter()
     const form = useForm<signUpSchema>({
         resolver: zodResolver(signUpSchema),
@@ -53,10 +53,6 @@ export default function SignUp() {
     useEffect(() => {
         form.setValue('slug', stringWithHyphen(form.getValues('email')))
     }, [form.watch('email')])
-
-    const roles = Object.values(roleSchema.Values).filter(
-        (role) => role !== 'Admin'
-    )
 
     return (
         <Form {...form}>
@@ -134,8 +130,11 @@ export default function SignUp() {
                                     </FormControl>
                                     <SelectContent>
                                         {roles.map((role) => (
-                                            <SelectItem value={role} key={role}>
-                                                {role}
+                                            <SelectItem
+                                                value={role.name}
+                                                key={role.name}
+                                            >
+                                                {role.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
