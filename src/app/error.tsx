@@ -2,7 +2,7 @@
 
 import Typography from '@/components/ui/Typography'
 import { Button } from '@/components/ui/button'
-import absurd from '../../../public/absurd 2.png'
+import absurd from '../../public/absurd 2.png'
 import Image from 'next/image'
 import ErrorType from 'next/error'
 import { useRouter } from 'next/navigation'
