@@ -20,7 +20,7 @@ export default function Error() {
                     className="mt-6 self-start"
                     onClick={() => router.push('/')}
                 >
-                    Gå till start sidan
+                    Gå till startsidan
                 </Button>
             </div>
         </main>
