@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
         }
 
         let records = []
+
         switch (filter) {
             case FeedFilter.Tagged:
                 //@ts-ignore
@@ -29,7 +30,25 @@ export async function GET(request: NextRequest) {
 
                 break
             case FeedFilter.MyDatasets:
-            // TODO: implement this
+                const ownedDatasets = await pb
+                    .collection('dataset')
+                    .getFullList({
+                        filter: `dataowner="${pb.authStore.model?.id}"`,
+                    })
+
+                console.log(ownedDatasets)
+                //@ts-ignore
+                records = await pb
+                    .collection('events')
+                    //@ts-ignore
+                    .getList(pageNumber as number, 15, {
+                        sort: '-created',
+                        filter: ownedDatasets
+                            .map((dataset) => `dataset="${dataset.id}"`)
+                            .join('||'),
+                        expand: 'user,subject,dataset',
+                    })
+                break
             case FeedFilter.All:
                 //@ts-ignore
                 records = await pb
@@ -41,6 +60,8 @@ export async function GET(request: NextRequest) {
                     })
                 break
         }
+
+        console.log(records)
 
         return NextResponse.json(
             {

@@ -106,7 +106,7 @@ export const EventCreateSchema = EventSchema.extend({
 export const EventFeedItem = z.object({
     id: z.string(),
     userName: z.string(),
-    subject: z.string(),
+    subject: z.array(z.string()),
     datasetTitle: z.string(),
     content: z.any(),
     created: z.string(),
