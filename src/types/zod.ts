@@ -1,7 +1,13 @@
 import { string, z } from 'zod'
 
 export const roleSchema = z.enum(['Jurist', 'Utvecklare', 'Admin'])
-export const eventTypeSchema = z.enum(['comment', 'ownerReq', 'ownerAccept', "ownerDecline", 'OwnerPublished'])
+export const eventTypeSchema = z.enum([
+    'comment',
+    'ownerReq',
+    'ownerAccept',
+    'ownerDecline',
+    'OwnerPublished',
+])
 export const AuthorizedUserSchema = z.object({
     avatar: z.string().optional(),
     collectionId: z.string(),
@@ -32,6 +38,7 @@ export const signUpSchema = signInSchema
         passwordConfirmation: z.string().min(8),
         role: roleSchema,
         slug: z.string(),
+        name: z.string(),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
         message: 'Lösenorden måste matcha',
