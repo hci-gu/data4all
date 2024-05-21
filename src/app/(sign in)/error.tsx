@@ -25,7 +25,7 @@ export default function Error({
                 </Typography>
                 <div className="mt-6 flex gap-11">
                     <Button onClick={() => router.push('/')}>
-                        Gå till start sidan
+                        Gå till startsidan
                     </Button>
                 </div>
             </div>
