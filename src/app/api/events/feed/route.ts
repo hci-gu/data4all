@@ -23,9 +23,10 @@ export async function GET(request: NextRequest) {
                     //@ts-ignore
                     .getList(pageNumber as number, 15, {
                         sort: '-created',
-                        filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
+                        filter: `subject = "${pb.authStore.model?.id}"`,
                         expand: 'user,subject,dataset',
                     })
+
                 break
             case FeedFilter.MyDatasets:
             // TODO: implement this

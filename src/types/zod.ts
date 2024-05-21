@@ -96,7 +96,7 @@ export const EventSchema = z.object({
     types: eventTypeSchema,
     user: AuthorizedUserSchema,
     content: z.string(),
-    subject: AuthorizedUserSchema.optional(),
+    subject: z.array(AuthorizedUserSchema).optional(),
 })
 
 export const EventCreateSchema = EventSchema.extend({

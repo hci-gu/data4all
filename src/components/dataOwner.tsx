@@ -173,9 +173,7 @@ export default function DataOwner() {
                                 {users &&
                                     users.map((user, index) => (
                                         <li key={index}>
-                                            <SuggestDataOwner
-                                                user={user}
-                                            />
+                                            <SuggestDataOwner user={user} />
                                         </li>
                                     ))}
                                 {users.length === 0 && (

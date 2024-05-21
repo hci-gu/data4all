@@ -9,6 +9,15 @@ export default function User({
     user: UserSchema
     size?: 'default' | 'small'
 }) {
+
+    let test
+
+    if (!!user.expand?.role) {
+        test = user.expand.role.name
+    } else {
+        test = user.role
+    }
+
     if (size === 'small') {
         return (
             <div className="flex gap-2">
@@ -22,7 +31,7 @@ export default function User({
                         <b>{user.name}</b>
                     </p>
                     <p className="text-[0.625rem] text-gray-500 sm:text-sm">
-                        {user?.expand.role.name}
+                        {test}
                     </p>
                 </div>
             </div>
@@ -37,9 +46,7 @@ export default function User({
                 <p className="line-clamp-1 text-lg">
                     <b>{user.name}</b>
                 </p>
-                <p className="text-sm text-gray-500">
-                    {user?.expand.role.name}
-                </p>
+                <p className="text-sm text-gray-500">{test}</p>
             </div>
         </div>
     )

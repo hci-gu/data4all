@@ -39,6 +39,10 @@ export async function GET(request: NextRequest) {
             }
         })
 
+        console.log('fuck yo')
+
+        console.log('pre clean: ', records, 'post clean: ', cleanUsers)
+
         return NextResponse.json(
             {
                 message: 'success',
@@ -47,8 +51,6 @@ export async function GET(request: NextRequest) {
             { status: 200 }
         )
     } catch (error) {
-        console.log(error)
-
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(

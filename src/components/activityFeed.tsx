@@ -61,7 +61,6 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
         async function fetchEvents() {
             const events = await api.getFeed(cookie, activeFilter, pageNumber)
             setEvents(events)
-            console.log(events.totalPages)
 
             setLoading(false)
         }

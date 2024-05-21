@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
             .collection('events')
             .create(
                 { ...data, user: data.user, subject: data.subject?.id },
-                { expand: 'user,subject' }
+                { expand: 'user.role,subject' }
             )
 
         return NextResponse.json(
