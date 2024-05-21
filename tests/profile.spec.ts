@@ -33,7 +33,7 @@ test.describe('Profile page', () => {
             await page.goto(`/profile/user-that-does-not-exist`)
 
             await expect(page.getByRole('paragraph')).toHaveText(
-                'Kunde inte hitta det du letade efter'
+                'Ser ut som att du försöker nå en sida som inte finns.'
             )
         })
 
