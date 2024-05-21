@@ -50,7 +50,7 @@ test.describe('Datasets page', () => {
         }) => {
             await page.goto(`/dataset/not-existed-dataset`)
             await expect(page.getByRole('paragraph')).toHaveText(
-                'Ser ut som att du försöker nå en sida som inte finns.'
+                'Det blev något fel på våran sida. Försök igen senare eller prova ladda om sidan.'
             )
         })
 
