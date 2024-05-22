@@ -4,11 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 import { EventFeedItem } from '@/types/zod'
-
-
+import SlateComment from './slate/slateComment'
 
 export default function FeedItem({ event }: { event: EventFeedItem }) {
     if (event.types === 'comment') {
+        return <SlateComment event={event} />
         return (
             <li className="flex gap-1">
                 <Avatar className="h-6 w-6">

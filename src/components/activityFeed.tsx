@@ -65,7 +65,6 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
             setLoading(false)
         }
         fetchEvents()
-        
     }, [activeFilter])
 
     return (
@@ -126,7 +125,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         </div>
                     </DialogContent>
                 </Dialog>
-                <ul className="flex w-full flex-col gap-4 h-full">
+                <ul className="flex h-full w-full flex-col gap-4">
                     {loading ? (
                         <p className="flex flex-col items-center text-center text-slate-500">
                             <Loader2
