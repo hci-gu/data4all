@@ -11,7 +11,7 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
-import { getDataset } from '@/adapters/api'
+import * as api from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 
 import Image from 'next/image'
@@ -21,6 +21,7 @@ import Link from 'next/link'
 import { EventProvider } from '@/lib/context/eventContext'
 import { cookies } from 'next/headers'
 import { DatasetProvider } from '@/lib/context/datasetContext'
+import { CommentInput } from '@/components/slate/commentInput'
 
 export default async function Page({
     params: { slug },
@@ -33,7 +34,11 @@ export default async function Page({
         throw new Error('Användaren är inte inloggad')
     }
 
-    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)), cookie)
+    const dataset = await api.getDataset(
+        stringWithHyphen(decodeURI(slug)),
+        cookie
+    )
+    const users = await api.getUsers('', cookie)
 
     return (
         <DatasetProvider datasets={dataset}>
@@ -135,6 +140,9 @@ export default async function Page({
                     </div>
                     <Separator orientation="vertical" />
                     {<ActivityFlow />}
+                    <div className="col-start-3">
+                        <CommentInput users={users} />
+                    </div>
                 </main>
             </EventProvider>
         </DatasetProvider>

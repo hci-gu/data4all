@@ -39,9 +39,7 @@ export async function GET(request: NextRequest) {
             }
         })
 
-        console.log('fuck yo')
 
-        console.log('pre clean: ', records, 'post clean: ', cleanUsers)
 
         return NextResponse.json(
             {
