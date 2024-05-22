@@ -1,17 +1,27 @@
 import PocketBase from 'pocketbase'
 import fs from 'fs/promises'
+import { SeedData } from './types/types'
+import {
+    AuthorizedUserSchema,
+    EventSchema,
+    collectionNameSchema,
+    datasetSchema,
+    roleSchema,
+    tagSchema,
+} from '@/types/zod'
 
-const stringWithHyphen = (text) => {
+const stringWithHyphen = (text: string) => {
     return text.toLowerCase().replaceAll(' ', '-')
 }
-const getRandomTag = (tags) => {
+const getRandomTag = (tags: tagSchema[]) => {
     const randomIndex = Math.floor(Math.random() * tags.length)
     return tags[randomIndex].id
 }
 
 ;(async () => {
-    const jsonData = await fs.readFile('seedData.json', 'utf-8')
-    const { tags, datasets, users, events } = JSON.parse(jsonData)
+    const jsonData = await fs.readFile('seed/seedData.json', 'utf-8')
+    const { tags, datasets, users, events, roles }: SeedData =
+        JSON.parse(jsonData)
 
     const pb = new PocketBase('http://localhost:8090')
     await pb.admins.authWithPassword('admin@email.com', 'password123')
@@ -19,36 +29,33 @@ const getRandomTag = (tags) => {
     try {
         await deleteExistingData(pb, 'events', events, 'content')
         await deleteExistingData(pb, 'dataset', datasets)
-        await deleteExistingData(pb, 'tag', tags, 'name')
         await deleteExistingData(pb, 'users', users, 'email')
+        await deleteExistingData(pb, 'roles', roles, 'name')
+        await deleteExistingData(pb, 'tag', tags, 'name')
 
-        const createdTags = await seedData(pb, 'tag', tags)
+        const createdTags = await seedTag(pb, tags)
+
+        const createdRoles = await seedRole(pb, roles)
 
         const createdUsers = await seedUser(pb, users)
 
-        const createdDataset = await seedDataset(
-            pb,
-            'dataset',
-            datasets,
-            createdTags
-        )
+        const createdDataset = await seedDataset(pb, datasets, createdTags)
 
         const createdEvent = await seedEvents(
             pb,
-            'events',
             events,
             createdUsers,
             createdDataset
         )
     } catch (error) {
-        console.error('There was an error: ', error)
+        console.error('There was an error: ', JSON.stringify(error, null, 2))
     }
 })()
 
 async function deleteExistingData(
-    pb,
-    collectionName,
-    data,
+    pb: PocketBase,
+    collectionName: collectionNameSchema,
+    data: any[],
     identifier = 'title'
 ) {
     const existingData = await pb.collection(collectionName).getFullList()
@@ -62,38 +69,54 @@ async function deleteExistingData(
     }
 }
 
-async function seedData(pb, collectionName, data) {
+async function seedTag(pb: PocketBase, data: tagSchema[]) {
     const items = []
     for (const itemData of data) {
         const newItem = await pb
-            .collection(collectionName)
+            .collection<tagSchema>('tag')
+            .create(itemData, { $autoCancel: false })
+        items.push(newItem)
+    }
+    return items
+}
+async function seedRole(pb: PocketBase, data: roleSchema[]) {
+    const items = []
+    for (const itemData of data) {
+        const newItem = await pb
+            .collection<roleSchema>('roles')
             .create(itemData, { $autoCancel: false })
         items.push(newItem)
     }
     return items
 }
 
-async function seedUser(pb, data) {
+async function seedUser(pb: PocketBase, data: AuthorizedUserSchema[]) {
     const roles = await pb.collection('roles').getFullList()
     const items = []
+
     for (const itemData of data) {
-        const newItem = await pb.collection('users').create(
-            {
-                ...itemData,
-                role: roles[1].id,
-                slug: stringWithHyphen(itemData.name),
-            },
-            { expand: 'roles' },
-            { $autoCancel: false }
-        )
+        const newItem = await pb
+            .collection<AuthorizedUserSchema>('users')
+            .create(
+                {
+                    ...itemData,
+                    role: roles[1].id,
+                    slug: stringWithHyphen(itemData.name),
+                },
+                { expand: 'roles', $autoCancel: false }
+            )
         items.push(newItem)
     }
     return items
 }
-async function seedDataset(pb, collectionName, data, tags) {
+async function seedDataset(
+    pb: PocketBase,
+    data: datasetSchema[],
+    tags: tagSchema[]
+) {
     const items = []
     for (const itemData of data) {
-        const newItem = await pb.collection(collectionName).create(
+        const newItem = await pb.collection<datasetSchema>('dataset').create(
             {
                 ...itemData,
                 slug: stringWithHyphen(itemData.title),
@@ -106,7 +129,12 @@ async function seedDataset(pb, collectionName, data, tags) {
     return items
 }
 
-async function seedEvents(pb, collectionName, data, users, dataset) {
+async function seedEvents(
+    pb: PocketBase,
+    data: EventSchema[],
+    users: AuthorizedUserSchema[],
+    dataset: datasetSchema[]
+) {
     const items = []
 
     for (let i = 0; i < 10; i++) {
@@ -126,7 +154,7 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
                     subjectUserId = users[randomSubjectIndex].id
                 }
 
-                const newItem = await pb.collection(collectionName).create(
+                const newItem = await pb.collection('events').create(
                     {
                         ...data[j],
                         dataset: dataset[j].id,
@@ -134,19 +162,17 @@ async function seedEvents(pb, collectionName, data, users, dataset) {
                         subject: subjectUserId,
                         content: newContent,
                     },
-                    { expand: 'user,subject' },
-                    { $autoCancel: false }
+                    { expand: 'user,subject', $autoCancel: false }
                 )
                 items.push(newItem)
             } else {
-                const newItem = await pb.collection(collectionName).create(
+                const newItem = await pb.collection('events').create(
                     {
                         ...data[j],
                         dataset: dataset[j].id,
                         user: users[j].id,
                     },
-                    { expand: 'user,subject' },
-                    { $autoCancel: false }
+                    { expand: 'user,subject', $autoCancel: false }
                 )
                 items.push(newItem)
             }

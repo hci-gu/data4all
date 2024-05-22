@@ -7,6 +7,17 @@ export const eventTypeSchema = z.enum([
     'ownerDecline',
     'OwnerPublished',
 ])
+
+export const collectionNameSchema = z.enum(['users', 'dataset', 'events', 'roles', 'tag'])
+
+export const roleSchema = z.object({
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    id: z.string(),
+    name: z.string(),
+    updated: z.string(),
+})
 export const AuthorizedUserSchema = z.object({
     avatar: z.string().optional(),
     collectionId: z.string(),
@@ -16,7 +27,7 @@ export const AuthorizedUserSchema = z.object({
     emailVisibility: z.boolean(),
     id: z.string(),
     name: z.string().min(1, 'name is required'),
-    role: z.string(),
+    role: roleSchema.shape.name,
     updated: z.string(),
     username: z.string(),
     verified: z.boolean(),
@@ -129,9 +140,11 @@ export type datasetSchema = z.infer<typeof datasetSchema>
 export type datasetWithRelationsSchema = z.infer<
     typeof datasetWithRelationsSchema
 >
+export type roleSchema = z.infer<typeof roleSchema>
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type UserSchema = z.infer<typeof UserSchema>
 export type eventTypeSchema = z.infer<typeof eventTypeSchema>
+export type collectionNameSchema = z.infer<typeof collectionNameSchema>
 export type EventSchema = z.infer<typeof EventSchema>
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>

@@ -10,7 +10,7 @@
         "lint": "next lint",
         "test": "playwright test",
         "test:ui": "playwright test --ui",
-        "seed": "node seed.js",
+        "seed": "tsx ./seed/seed.ts",
         "format": "prettier --write ."
     },
     "dependencies": {
@@ -59,6 +59,7 @@
         "prettier": "^3.2.5",
         "prettier-plugin-tailwindcss": "^0.5.12",
         "tailwindcss": "^3.3.0",
+        "tsx": "^4.10.5",
         "typescript": "^5.3.3"
     }
 }
