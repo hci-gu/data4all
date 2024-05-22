@@ -8,6 +8,11 @@ setup('setup', async () => {
     const events = await pb.collection('events').getFullList()
 
     const users = await pb.collection('users').getFullList()
+    const roles = await pb.collection('roles').getFullList({
+        sort: '-created',
+    })
+
+    // console.log('roles', roles)
 
     const datasetWithRelations = datasets.filter(
         (dataset) => dataset.related_datasets.length > 0
@@ -35,6 +40,12 @@ setup('setup', async () => {
     for (const user of users) {
         if (user.name.includes('tester')) {
             await pb.collection('users').delete(user.id)
+        }
+    }
+
+    for (const role of roles) {
+        if (role.name.includes('tester')) {
+            await pb.collection('roles').delete(role.id)
         }
     }
 })
