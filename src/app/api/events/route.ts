@@ -14,22 +14,27 @@ export async function POST(request: NextRequest) {
                 { status: 403 }
             )
         }
-
-        const data = EventCreateSchema.parse(await request.json())
+        const json = await request.json()
+        console.log(json)
+        const data = EventCreateSchema.parse(json)
 
         pb.authStore.loadFromCookie(cookie)
-        const record = await pb
-            .collection('events')
-            .create(
-                { ...data, user: data.user, subject: data.subject?.id },
-                { expand: 'user.role,subject' }
-            )
+        const record = await pb.collection('events').create(
+            {
+                ...data,
+                user: data.user,
+                subject: data.subject?.map((s) => s.id),
+                subjectRole: data.subjectRole?.map((r) => r.id),
+            },
+            { expand: 'user.role,subject' }
+        )
 
         return NextResponse.json(
             { message: 'success', body: record },
             { status: 201 }
         )
     } catch (error) {
+        console.error(error)
         if (error instanceof ClientResponseError) {
             return NextResponse.json(
                 { message: 'misslyckades att hämta event' },

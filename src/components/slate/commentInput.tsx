@@ -1,68 +1,95 @@
 'use client'
 
-import { AuthorizedUserSchema } from '@/types/zod'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Editor } from 'slate'
-import { Descendant, Range, Transforms, createEditor } from 'slate'
-import { withHistory } from 'slate-history'
+import { AuthorizedUserSchema, MentionSchema, roleSchema } from '@/types/zod'
 import {
-    Editable,
-    ReactEditor,
-    Slate,
-    useFocused,
-    useSelected,
-    withReact,
-} from 'slate-react'
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
+import { Editor } from 'slate'
+import { Range, Transforms, createEditor } from 'slate'
+import { withHistory } from 'slate-history'
+import { ReactEditor, withReact } from 'slate-react'
 import { Portal } from './customComps'
 import { MentionElement } from './customTypes'
+import { createEvent } from '@/adapters/api'
+import { authContext } from '@/lib/context/authContext'
+import SlateComment from './slateComment'
 
-const initialValue: Descendant[] = [
-    {
-        type: 'paragraph',
-        children: [{ text: '' }],
-    },
-]
-
-export const CommentInput = ({ users }: { users: AuthorizedUserSchema[] }) => {
-    const ref = useRef<HTMLDivElement | null>()
-    const [target, setTarget] = useState<Range | undefined>()
+export const CommentInput = ({
+    users,
+    roles,
+    datasetId,
+}: {
+    users: AuthorizedUserSchema[]
+    roles: roleSchema[]
+    datasetId: string
+}) => {
+    const user = useContext(authContext)
+    const ref = useRef<HTMLDivElement>()
+    const [target, setTarget] = useState<Range | null>(null)
     const [index, setIndex] = useState(0)
     const [search, setSearch] = useState('')
-    const renderElement = useCallback(
-        (props: any) => <Element {...props} />,
-        []
-    )
-    const renderLeaf = useCallback((props: any) => <Leaf {...props} />, [])
     const editor = useMemo(
         () => withMentions(withReact(withHistory(createEditor()))),
         []
     )
+    const [mentions, setMentions] = useState<MentionSchema[]>([])
 
-    const filterdUsers = users
-        .filter((u) => u.name.toLowerCase().startsWith(search.toLowerCase()))
+    const possibleMentions = [
+        ...users.map((u) => u.name),
+        ...roles.map((r) => r.name),
+    ]
+        .filter((name) => name.toLowerCase().startsWith(search.toLowerCase()))
         .slice(0, 10)
+
+    const getMentionFromName = (name: string) => {
+        const mentionedUser = users.find((u) => u.name === name)
+        const mentionedRole = roles.find((r) => r.name === name)
+        if (mentionedUser) {
+            return {
+                name: mentionedUser.name,
+                slug: mentionedUser.slug,
+                type: 'user',
+            }
+        } else if (mentionedRole) {
+            return {
+                name: mentionedRole.name,
+                type: 'role',
+            }
+        }
+    }
 
     const onKeyDown = useCallback(
         (event: any) => {
-            if (target && filterdUsers.length > 0) {
+            if (target && possibleMentions.length > 0) {
                 switch (event.key) {
                     case 'ArrowDown':
                         event.preventDefault()
                         const prevIndex =
-                            index >= filterdUsers.length - 1 ? 0 : index + 1
+                            index >= possibleMentions.length - 1 ? 0 : index + 1
                         setIndex(prevIndex)
                         break
                     case 'ArrowUp':
                         event.preventDefault()
                         const nextIndex =
-                            index <= 0 ? filterdUsers.length - 1 : index - 1
+                            index <= 0 ? possibleMentions.length - 1 : index - 1
                         setIndex(nextIndex)
                         break
                     case 'Tab':
                     case 'Enter':
                         event.preventDefault()
                         Transforms.select(editor, target)
-                        insertMention(editor, filterdUsers[index].name)
+                        const mention = getMentionFromName(
+                            possibleMentions[index]
+                        )
+                        if (mention) {
+                            insertMention(editor, mention)
+                            setMentions([...mentions, mention])
+                        }
                         setTarget(null)
                         break
                     case 'Escape':
@@ -72,35 +99,54 @@ export const CommentInput = ({ users }: { users: AuthorizedUserSchema[] }) => {
                 }
             }
         },
-        [filterdUsers, editor, index, target]
+        [possibleMentions, editor, index, target]
     )
 
     useEffect(() => {
-        if (target && filterdUsers.length > 0) {
+        if (target && possibleMentions.length > 0) {
             const el = ref.current
             const domRange = ReactEditor.toDOMRange(editor, target)
             const rect = domRange.getBoundingClientRect()
-            el.style.top = `${rect.top + window.pageYOffset + 24}px`
-            el.style.left = `${rect.left + window.pageXOffset}px`
+            if (el) {
+                el.style.top = `${rect.top + window.pageYOffset + 24}px`
+                el.style.left = `${rect.left + window.pageXOffset}px`
+            }
         }
-    }, [filterdUsers.length, editor, index, search, target])
+    }, [possibleMentions.length, editor, index, search, target])
 
     useEffect(() => {
         console.log(editor)
     }, [editor])
 
+    const onSubmit = () => {
+        const userMentions = mentions.filter((m) => m.type === 'user')
+        const mentionedUsers = users.filter((u) =>
+            userMentions.find((m) => m.slug === u.slug)
+        )
+
+        const roleMentions = mentions.filter((m) => m.type === 'role')
+        const mentionedRoles = roles.filter((r) =>
+            roleMentions.find((m) => m.name === r.name)
+        )
+
+        createEvent(
+            {
+                content: editor.children,
+                mentions,
+                user: user.auth.id,
+                dataset: datasetId,
+                subject: mentionedUsers,
+                subjectRole: mentionedRoles,
+                types: 'comment',
+            },
+            user.cookie
+        )
+    }
+
     return (
-        <form
-            action={() => {
-                console.log('subited')
-            }}
-            onSubmit={() => {
-                console.log('subited')
-            }}
-        >
-            <Slate
+        <div>
+            <SlateComment
                 editor={editor}
-                initialValue={initialValue}
                 onChange={() => {
                     const { selection } = editor
 
@@ -132,17 +178,12 @@ export const CommentInput = ({ users }: { users: AuthorizedUserSchema[] }) => {
 
                     setTarget(null)
                 }}
+                onKeyDown={onKeyDown}
             >
-                <Editable
-                    renderElement={renderElement}
-                    renderLeaf={renderLeaf}
-                    onKeyDown={onKeyDown}
-                    placeholder="Enter some text..."
-                />
-                {target && filterdUsers.length > 0 && (
+                {target && possibleMentions.length > 0 && (
                     <Portal>
                         <div
-                            ref={ref}
+                            ref={ref as any}
                             style={{
                                 top: '-9999px',
                                 left: '-9999px',
@@ -155,12 +196,16 @@ export const CommentInput = ({ users }: { users: AuthorizedUserSchema[] }) => {
                             }}
                             data-cy="mentions-portal"
                         >
-                            {filterdUsers.map((user, i) => (
+                            {possibleMentions.map((name, i) => (
                                 <div
-                                    key={user.name + user.id}
+                                    key={name}
                                     onClick={() => {
                                         Transforms.select(editor, target)
-                                        insertMention(editor, user.name)
+                                        const mention = getMentionFromName(name)
+                                        console.log('name', name, mention)
+                                        if (mention) {
+                                            insertMention(editor, mention)
+                                        }
                                         setTarget(null)
                                     }}
                                     style={{
@@ -172,14 +217,15 @@ export const CommentInput = ({ users }: { users: AuthorizedUserSchema[] }) => {
                                                 : 'transparent',
                                     }}
                                 >
-                                    {user.name}
+                                    {name}
                                 </div>
                             ))}
                         </div>
                     </Portal>
                 )}
-            </Slate>
-        </form>
+            </SlateComment>
+            <button onClick={() => onSubmit()}>Submit</button>
+        </div>
     )
 }
 
@@ -201,94 +247,12 @@ const withMentions = (editor: any) => {
     return editor
 }
 
-const insertMention = (editor: any, user: any) => {
-    const mention: MentionElement = {
+const insertMention = (editor: any, mention: MentionSchema) => {
+    const mentionElement: MentionElement = {
         type: 'mention',
-        username: user,
+        mention,
         children: [{ text: '' }],
     }
-    Transforms.insertNodes(editor, mention)
+    Transforms.insertNodes(editor, mentionElement)
     Transforms.move(editor)
-}
-
-// Borrow Leaf renderer from the Rich Text example.
-// In a real project you would get this via `withRichText(editor)` or similar.
-const Leaf = ({
-    attributes,
-    children,
-    leaf,
-}: {
-    attributes: any
-    children: any
-    leaf: any
-}) => {
-    if (leaf.bold) {
-        children = <strong>{children}</strong>
-    }
-
-    if (leaf.code) {
-        children = <code>{children}</code>
-    }
-
-    if (leaf.italic) {
-        children = <em>{children}</em>
-    }
-
-    if (leaf.underline) {
-        children = <u>{children}</u>
-    }
-
-    return <span {...attributes}>{children}</span>
-}
-
-const Element = (props: any) => {
-    const { attributes, children, element } = props
-    switch (element.type) {
-        case 'mention':
-            console.log('element', props)
-            return <Mention {...props} />
-        default:
-            return <p {...attributes}>{children}</p>
-    }
-}
-
-const Mention = ({
-    attributes,
-    children,
-    element,
-}: {
-    attributes: any
-    children: any
-    element: any
-}) => {
-    const selected = useSelected()
-    const focused = useFocused()
-    const style: React.CSSProperties = {
-        padding: '3px 3px 2px',
-        margin: '0 1px',
-        verticalAlign: 'baseline',
-        display: 'inline-block',
-        borderRadius: '4px',
-        backgroundColor: '#eee',
-        fontSize: '0.9em',
-        boxShadow: selected && focused ? '0 0 0 2px #B4D5FF' : 'none',
-    }
-    // See if our empty text child has any styling marks applied and apply those
-    if (element.children[0].bold) {
-        style.fontWeight = 'bold'
-    }
-    if (element.children[0].italic) {
-        style.fontStyle = 'italic'
-    }
-    return (
-        <span
-            {...attributes}
-            contentEditable={false}
-            data-cy={`mention-${element.username.replace(' ', '-')}`}
-            style={style}
-        >
-            @{element.username}
-            {children}
-        </span>
-    )
 }

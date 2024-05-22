@@ -60,7 +60,6 @@ export async function GET(request: NextRequest) {
                 break
         }
 
-
         return NextResponse.json(
             {
                 message: 'success',

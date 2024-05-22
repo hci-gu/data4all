@@ -39,6 +39,7 @@ export default async function Page({
         cookie
     )
     const users = await api.getUsers('', cookie)
+    const roles = await api.getRoles()
 
     return (
         <DatasetProvider datasets={dataset}>
@@ -141,7 +142,11 @@ export default async function Page({
                     <Separator orientation="vertical" />
                     {<ActivityFlow />}
                     <div className="col-start-3">
-                        <CommentInput users={users} />
+                        <CommentInput
+                            users={users}
+                            roles={roles}
+                            datasetId={dataset.id}
+                        />
                     </div>
                 </main>
             </EventProvider>

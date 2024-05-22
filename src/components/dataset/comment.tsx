@@ -7,26 +7,11 @@ import Dataportal from '../../../public/dataportal.png'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 import AcceptDatasetOwner from './acceptDatasetOwner'
+import SlateComment from '../slate/slateComment'
 
-export default function Comment({
-    event,
-}: {
-    event: EventSchema
-}) {
+export default function Comment({ event }: { event: EventSchema }) {
     if (event.types === 'comment') {
-        return (
-            <li className="flex flex-col gap-1">
-                <User user={event.user} size="small" />
-                <div className="ml-8 flex flex-col gap-1">
-                    <div className="rounded-lg rounded-tl-none border border-slate-200 p-2">
-                        <p className="text-xs">{event.content}</p>
-                    </div>
-                    <time className="text-xs font-bold">
-                        {moment(event.created).fromNow()}
-                    </time>
-                </div>
-            </li>
-        )
+        return <SlateComment event={event} />
     }
 
     if (event.types === 'OwnerPublished') {
