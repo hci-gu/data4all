@@ -29,8 +29,9 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
                 types,
                 content,
                 user: auth,
-                subject: event.user,
+                subject: [event.user],
                 dataset: dataset.id,
+                Subject_role: [''],
             },
             ...prev,
         ])
@@ -41,11 +42,7 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
 
         if (subject) {
             setDataset(
-                await updateDataset(
-                    dataset.id,
-                    { dataowner: subject },
-                    cookie
-                )
+                await updateDataset(dataset.id, { dataowner: subject }, cookie)
             )
 
             await updateEvent(

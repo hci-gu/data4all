@@ -36,7 +36,8 @@ export default function SuggestDataOwner({
             dataset: dataset.id,
             user: userContext.auth,
             types: 'ownerReq',
-            subject: user,
+            subject: [user],
+            Subject_role: ['']
         }
 
         const respond = await createEvent(

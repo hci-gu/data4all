@@ -8,7 +8,13 @@ export const eventTypeSchema = z.enum([
     'OwnerPublished',
 ])
 
-export const collectionNameSchema = z.enum(['users', 'dataset', 'events', 'roles', 'tag'])
+export const collectionNameSchema = z.enum([
+    'users',
+    'dataset',
+    'events',
+    'roles',
+    'tag',
+])
 
 export const roleSchema = z.object({
     collectionId: z.string(),
@@ -108,6 +114,7 @@ export const EventSchema = z.object({
     user: AuthorizedUserSchema,
     content: z.string(),
     subject: z.array(AuthorizedUserSchema).optional(),
+    Subject_role: z.array(z.string().optional()),
 })
 
 export const EventCreateSchema = EventSchema.extend({

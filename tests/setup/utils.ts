@@ -14,7 +14,7 @@ import uuid from 'short-uuid'
 
 const pb = new PocketBase('http://localhost:8090')
 
-export const createUser = async (userRole?: roleSchema) => {
+export const createUser = async (userRole: string) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const name = `tester user ${uuid.generate()}`
@@ -23,7 +23,7 @@ export const createUser = async (userRole?: roleSchema) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: userRole ?? 'Jurist',
+        role: userRole,
         name,
         slug: stringWithHyphen(name),
     }
@@ -37,7 +37,7 @@ export const createUser = async (userRole?: roleSchema) => {
     }
 }
 
-export const createByUserName = async (name: string) => {
+export const createByUserName = async (name: string, role: roleSchema) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const user = await pb.collection<AuthorizedUserSchema>('users').create({
@@ -45,7 +45,7 @@ export const createByUserName = async (name: string) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: 'Jurist',
+        role: role.id,
         name,
         slug: stringWithHyphen(name),
     })
@@ -106,6 +106,15 @@ export const createEvent = async (
     return EventSchema.parse(responseEventCleanup(event))
 }
 
+export const createRole = async (roleName?: string) => {
+    if (!roleName) {
+        roleName = `tester role ${uuid.generate()}`
+    }
+    return await pb.collection<roleSchema>('roles').create({
+        name: roleName,
+    })
+}
+
 function parseCookie(cookieString: string): any {
     const [nameValue, ...attributes] = cookieString.split('; ')
     const [name, value] = nameValue.split('=')
@@ -125,13 +134,13 @@ function parseCookie(cookieString: string): any {
 export const loggedInUser = async ({
     request,
     context,
-    userRole = 'Jurist',
+    role,
 }: {
     request: APIRequestContext
     context: BrowserContext
-    userRole?: roleSchema
+    role: roleSchema
 }) => {
-    const user = await createUser(userRole)
+    const user = await createUser(role.id)
     const response = await request.post('/api/auth/sign-in', {
         data: { email: user.email, password: user.password },
         headers: { 'Content-Type': 'application/json' },

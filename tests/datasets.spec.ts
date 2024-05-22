@@ -3,6 +3,7 @@ import {
     createByUserName,
     createDataset,
     createDatasetWithRelation,
+    createRole,
     loggedInUser,
 } from './setup/utils'
 import uuid from 'short-uuid'
@@ -28,15 +29,18 @@ test.beforeAll(async () => {
     const dataset2 = await createDataset(searchTerms[1])
     await createDatasetWithRelation(searchTerms[2], [dataset1, dataset2])
 
-    await createByUserName(userNames[0])
-    await createByUserName(userNames[1])
-    await createByUserName(userNames[2])
+    const role = await createRole()
+
+    await createByUserName(userNames[0], role)
+    await createByUserName(userNames[1], role)
+    await createByUserName(userNames[2], role)
 })
 
 test.describe('Datasets page', () => {
     test.describe('Logged in user', () => {
         test.beforeEach(async ({ request, context }) => {
-            signedInUser = (await loggedInUser({ request, context })).name
+            const role = await createRole()
+            signedInUser = (await loggedInUser({ request, context, role })).name
         })
 
         test('Can reach the datasets page', async ({ page }) => {
@@ -155,9 +159,8 @@ test.describe('Datasets page', () => {
 
     test.describe('Logged in user with admin role', () => {
         test.beforeEach(async ({ request, context }) => {
-            signedInUser = (
-                await loggedInUser({ request, context, userRole: 'Admin' })
-            ).name
+            const role = await createRole()
+            signedInUser = (await loggedInUser({ request, context, role })).name
         })
 
         test.describe('Suggest data owner', () => {
