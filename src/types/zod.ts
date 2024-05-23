@@ -33,7 +33,7 @@ export const AuthorizedUserSchema = z.object({
     emailVisibility: z.boolean(),
     id: z.string(),
     name: z.string().min(1, 'name is required'),
-    role: roleSchema.shape.name,
+    role: roleSchema.shape.name.optional(),
     updated: z.string(),
     username: z.string(),
     verified: z.boolean(),
@@ -100,7 +100,7 @@ export const datasetSchema = z.object({
 
 export const datasetWithRelationsSchema = datasetSchema.extend({
     relatedDatasets: z.array(datasetSchema),
-    dataowner: AuthorizedUserSchema.optional(),
+    dataowner: AuthorizedUserSchema.nullable(),
     tags: z.array(tagSchema),
 })
 
