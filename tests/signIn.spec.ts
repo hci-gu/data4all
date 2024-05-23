@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { createUser } from './setup/utils'
+import { createRole, createUser } from './setup/utils'
 
 test.describe('Signin page', () => {
     test.describe('Navigating', () => {
@@ -18,7 +18,8 @@ test.describe('Signin page', () => {
             password = ''
 
         test.beforeEach(async ({}) => {
-            const user = await createUser()
+            const role = await createRole()
+            const user = await createUser(role.id, false)
             email = user.email
             password = user.password
         })
