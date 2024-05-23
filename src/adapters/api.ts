@@ -217,6 +217,7 @@ function responseEventCleanup(res: any): EventSchema {
         ...res,
         user: res?.expand?.user,
         subject: res?.expand?.subject,
+        subjectRole: res?.expand?.subjectRole,
     }
 }
 function responseFeedEventCleanup(res: any) {

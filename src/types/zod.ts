@@ -1,4 +1,4 @@
-import { string, z } from 'zod'
+import { any, string, z } from 'zod'
 
 export const eventTypeSchema = z.enum([
     'comment',
@@ -8,6 +8,13 @@ export const eventTypeSchema = z.enum([
     'OwnerPublished',
 ])
 
+export const collectionNameSchema = z.enum([
+    'users',
+    'dataset',
+    'events',
+    'roles',
+    'tag',
+])
 export const collectionNameSchema = z.enum([
     'users',
     'dataset',
@@ -112,13 +119,20 @@ export const EventSchema = z.object({
     dataset: z.string(),
     types: eventTypeSchema,
     user: AuthorizedUserSchema,
-    content: z.string(),
+    content: any(),
     subject: z.array(AuthorizedUserSchema).optional(),
-    Subject_role: z.array(z.string().optional()),
+    subjectRole: z.array(roleSchema).optional(),
+})
+
+export const MentionSchema = z.object({
+    name: z.string(),
+    slug: z.string().optional(),
+    type: z.string(),
 })
 
 export const EventCreateSchema = EventSchema.extend({
     user: z.string(),
+    mentions: z.array(MentionSchema),
 })
 
 export const EventFeedItem = z.object({
@@ -157,3 +171,4 @@ export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 export type tagSchema = z.infer<typeof tagSchema>
 export type EventFeedItem = z.infer<typeof EventFeedItem>
 export type EventFeedResponse = z.infer<typeof EventFeedResponse>
+export type MentionSchema = z.infer<typeof MentionSchema>

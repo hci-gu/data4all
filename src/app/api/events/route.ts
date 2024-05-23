@@ -15,8 +15,9 @@ export async function POST(request: NextRequest) {
                 { status: 403 }
             )
         }
-
-        const data = EventCreateSchema.parse(await request.json())
+        const json = await request.json()
+        console.log(json)
+        const data = EventCreateSchema.parse(json)
 
         pb.authStore.loadFromCookie(cookie)
         const record = await pb.collection('events').create(
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
                 ...data,
                 user: data.user,
                 subject: data.subject?.map((s) => s.id),
+                subjectRole: data.subjectRole?.map((r) => r.id),
             },
             { expand: 'user.role,subject' }
         )

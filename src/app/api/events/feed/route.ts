@@ -36,7 +36,6 @@ export async function GET(request: NextRequest) {
                         filter: `dataowner="${pb.authStore.model?.id}"`,
                     })
 
-                console.log(ownedDatasets)
                 //@ts-ignore
                 records = await pb
                     .collection('events')
@@ -60,8 +59,6 @@ export async function GET(request: NextRequest) {
                     })
                 break
         }
-
-        console.log(records)
 
         return NextResponse.json(
             {
