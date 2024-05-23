@@ -110,6 +110,7 @@ export const createRole = async (roleName?: string) => {
     if (!roleName) {
         roleName = `tester role ${uuid.generate()}`
     }
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
     return await pb.collection<roleSchema>('roles').create({
         name: roleName,
     })

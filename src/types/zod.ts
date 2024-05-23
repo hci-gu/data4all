@@ -15,13 +15,6 @@ export const collectionNameSchema = z.enum([
     'roles',
     'tag',
 ])
-export const collectionNameSchema = z.enum([
-    'users',
-    'dataset',
-    'events',
-    'roles',
-    'tag',
-])
 
 export const roleSchema = z.object({
     collectionId: z.string(),
