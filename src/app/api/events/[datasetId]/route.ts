@@ -15,7 +15,7 @@ export async function GET(
             .collection<EventSchema>('events')
             .getList(1, 50, {
                 filter: `dataset="${params.datasetId}"`,
-                expand: 'user,user.role,subject,subjectRole',
+                expand: 'user,user.role,subject,subject.role,subjectRole',
             })
 
         // console.log(records.items[0].expand.user.expand.role.name)

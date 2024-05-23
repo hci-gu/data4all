@@ -16,11 +16,12 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
     const updateEvent = async (types: eventTypeSchema, content: string) => {
         await createEvent(
             {
-                content,
                 types,
+                content,
                 user: auth.id,
-                subject: event.user,
+                subject: [event.user],
                 dataset: dataset.id,
+                mentions: [],
             },
             cookie
         )
@@ -40,14 +41,23 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
     const accept = async () => {
         const subject = event.subject
 
+        console.log('acceptDatasetOwner', { subject })
+        
         if (subject) {
+            const updateResponse = await updateDataset(
+                dataset.id,
+                { dataowner: subject[0] },
+                cookie
+            )
+            console.log('updateResponse', { updateResponse });
+            
             setDataset(
-                await updateDataset(dataset.id, { dataowner: subject }, cookie)
+                updateResponse
             )
 
             await updateEvent(
                 'ownerAccept',
-                `<b>${auth.name}</b> godkände <b>${subject.name}</b> som dataägare`
+                `<b>${auth.name}</b> godkände <b>${subject[0].name}</b> som dataägare`
             )
         }
     }
@@ -58,13 +68,16 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
         )
     }
 
-    const lastUserEvent = eventContext.events.find(
-        (e) => e.subject?.id === event.subject?.id
-    )
+    const lastUserEvent = eventContext.events.find((e) => {
+        if (!e.subject || !event.subject) {
+            return false
+        }
+        return e.subject[0].id === event.subject[0].id
+    })
 
     if (
         (lastUserEvent && lastUserEvent.id !== event.id) ||
-        auth.role !== 'Admin' ||
+        !auth.is_admin ||
         dataset.dataowner
     ) {
         return null

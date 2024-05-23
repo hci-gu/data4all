@@ -135,7 +135,7 @@ export const updateDataset = async (
     dataset: Partial<datasetWithRelationsSchema>,
     authCookie: string
 ) => {
-    const datasetRespond = await apiRequest(
+    const datasetResponse = await apiRequest(
         apiUrl(`datasets/${encodeURI(datasetId)}`),
         'PATCH',
         authCookie,
@@ -143,16 +143,17 @@ export const updateDataset = async (
     )
 
     return datasetWithRelationsSchema.parse(
-        responseDatasetCleanup(datasetRespond)
+        responseDatasetCleanup(datasetResponse)
     )
 }
 // Events
 export const getEvents = async (datasetId: string, authCookie: string) => {
-    const events = (await apiRequest(
+    const events = await apiRequest(
         apiUrl(`events/${datasetId}`),
         'GET',
         authCookie
-    )) as []
+    )
+
     const cleanEvent = events.map(responseEventCleanup)
 
     return EventSchema.array().parse(cleanEvent)
@@ -193,8 +194,6 @@ export const getFeed = async (
     )) as []
 
     const clean = responseFeedCleanup(events)
-    console.log(clean)
-
     return EventFeedResponse.parse(clean)
 }
 
@@ -204,19 +203,29 @@ export const getRoles = async () => {
 }
 
 function responseDatasetCleanup(res: any) {
+    const dataowner = res?.expand?.dataowner
+
     const cleanDataset = {
         ...res,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
-        dataowner: res?.expand?.dataowner,
+        dataowner: dataowner
+            ? {
+                  ...dataowner,
+                  role: dataowner?.expand?.role.name,
+              }
+            : null,
     }
     return cleanDataset
 }
 function responseEventCleanup(res: any): EventSchema {
+    const subject = res?.expand?.subject
     return {
         ...res,
         user: res?.expand?.user,
-        subject: res?.expand?.subject,
+        subject: subject.map((sub: any) => {
+            return { ...sub, role: sub?.expand?.role.name }
+        }),
         subjectRole: res?.expand?.subjectRole,
     }
 }

@@ -57,7 +57,7 @@ export async function PATCH(
                 params.slug,
                 { ...body, dataowner: body.dataowner?.id },
                 {
-                    expand: 'related_datasets,tag,dataowner',
+                    expand: 'related_datasets,tag,dataowner,dataowner.role',
                 }
             )
         return NextResponse.json(

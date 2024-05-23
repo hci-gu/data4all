@@ -10,13 +10,6 @@ export default function User({
     size?: 'default' | 'small'
 }) {
 
-    let test
-
-    if (!!user.expand?.role) {
-        test = user.expand.role.name
-    } else {
-        test = user.role
-    }
 
     if (size === 'small') {
         return (
@@ -31,7 +24,7 @@ export default function User({
                         <b>{user.name}</b>
                     </p>
                     <p className="text-[0.625rem] text-gray-500 sm:text-sm">
-                        {test}
+                        {user.role}
                     </p>
                 </div>
             </div>
@@ -46,7 +39,7 @@ export default function User({
                 <p className="line-clamp-1 text-lg">
                     <b>{user.name}</b>
                 </p>
-                <p className="text-sm text-gray-500">{test}</p>
+                <p className="text-sm text-gray-500">{user.role}</p>
             </div>
         </div>
     )
