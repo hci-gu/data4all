@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
             )
         }
         const json = await request.json()
-        console.log(json)
         const data = EventCreateSchema.parse(json)
 
         pb.authStore.loadFromCookie(cookie)

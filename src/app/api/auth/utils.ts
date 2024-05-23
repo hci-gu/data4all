@@ -15,7 +15,7 @@ export async function loadAuthorizedUser() {
         .collection('users')
         .getFirstListItem(`id="${pb.authStore.model?.id}"`, { expand: 'role' })
 
-    const cleanUser = {
+    const cleanUser: AuthorizedUserSchema = {
         avatar: user.avatar,
         collectionId: user.collectionId,
         collectionName: user.collectionName,
@@ -29,6 +29,7 @@ export async function loadAuthorizedUser() {
         username: user.username,
         verified: user.verified,
         slug: user.slug,
+        is_admin: user.is_admin,
     }
 
     return AuthorizedUserSchema.parse(cleanUser)

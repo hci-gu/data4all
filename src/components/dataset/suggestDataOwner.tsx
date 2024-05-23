@@ -9,7 +9,7 @@ import {
     DialogClose,
 } from '@/components/ui/dialog'
 import User from '../user'
-import { AuthorizedUserSchema, EventSchema, datasetSchema } from '@/types/zod'
+import { AuthorizedUserSchema, EventCreateSchema } from '@/types/zod'
 import { createEvent } from '@/adapters/api'
 import { useContext } from 'react'
 import { EventContext } from '@/lib/context/eventContext'
@@ -31,19 +31,16 @@ export default function SuggestDataOwner({
                 ? `<b>${userContext.auth.name}</b> föreslog sig själv som dataägare`
                 : `<b>${userContext.auth.name}</b> föreslog <b>${user.name}</b> som dataägare`
 
-        const data: EventSchema = {
+        const data: EventCreateSchema = {
             content,
             dataset: dataset.id,
-            user: userContext.auth,
+            user: userContext.auth.id,
             types: 'ownerReq',
             subject: [user],
-            Subject_role: ['']
+            mentions: [],
         }
 
-        const respond = await createEvent(
-            { ...data, user: data.user.id },
-            userContext.cookie
-        )
+        const respond = await createEvent(data, userContext.cookie)
         eventContext.setEvents((prev) => [respond, ...(prev ?? [])])
     }
 
