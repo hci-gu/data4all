@@ -32,21 +32,11 @@ export default function ActivityFlow() {
         setData()
     }, [])
 
-
     return (
-        <section className="flex flex-col gap-4">
-            <h2 className="text-2xl font-bold">Aktivitet</h2>
-            <p className="text-sm">
-                Bli den första att skriva något kring det här datasetet.
-            </p>
-
-            <EventForm datasetId={dataset.id} />
-
-            <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-                {events.events.map((event, index) => (
-                    <Comment event={event} key={index} />
-                ))}
-            </ul>
-        </section>
+        <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
+            {events.events.map((event, index) => (
+                <Comment event={event} key={index} />
+            ))}
+        </ul>
     )
 }

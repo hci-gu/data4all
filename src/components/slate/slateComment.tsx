@@ -32,8 +32,26 @@ const SlateComment = ({
     )
     const renderLeaf = useCallback((props: any) => <Leaf {...props} />, [])
 
+    const inputStyle = {
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        paddingInline: '0.75rem',
+        paddingBlock: '0.5rem',
+        borderWidth: '1px',
+        borderColor: '#e2e8f0',
+        display: 'flex',
+        borderRadius: '0.25rem',
+    }
+
+    const commentStyle = {
+        fontSize: '0.75rem',
+        lineHeight: '1rem',
+    }
+
     return (
-        <div className="rounded-lg bg-white p-4 shadow">
+        <div
+            className={`${!event ? '' : 'rounded-lg rounded-tl-none border border-slate-200 p-2'} `}
+        >
             <Slate
                 editor={
                     editor ??
@@ -54,7 +72,8 @@ const SlateComment = ({
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
                     onKeyDown={onKeyDown}
-                    placeholder="Enter some text..."
+                    placeholder="Skriv en kommentar"
+                    style={event ? commentStyle : inputStyle}
                 />
                 {children}
             </Slate>
@@ -135,7 +154,6 @@ const Mention = ({
         margin: '0 1px',
         verticalAlign: 'baseline',
         display: 'inline-block',
-        borderRadius: '4px',
         backgroundColor: '#eee',
         fontSize: '0.9em',
         boxShadow: selected && focused ? '0 0 0 2px #B4D5FF' : 'none',

@@ -49,6 +49,7 @@ const getRandomTag = (tags: tagSchema[]) => {
         )
     } catch (error) {
         console.error('There was an error: ', JSON.stringify(error, null, 2))
+        console.error(error)
     }
 })()
 
