@@ -160,7 +160,9 @@ test.describe('Datasets page', () => {
     test.describe('Logged in user with admin role', () => {
         test.beforeEach(async ({ request, context }) => {
             const role = await createRole()
-            signedInUser = (await loggedInUser({ request, context, role })).name
+            signedInUser = (
+                await loggedInUser({ request, context, role, is_admin: true })
+            ).name
         })
 
         test.describe('Suggest data owner', () => {

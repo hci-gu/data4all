@@ -14,7 +14,7 @@ import uuid from 'short-uuid'
 
 const pb = new PocketBase('http://localhost:8090')
 
-export const createUser = async (userRole: string) => {
+export const createUser = async (role: string, is_admin: boolean) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const name = `tester user ${uuid.generate()}`
@@ -23,9 +23,10 @@ export const createUser = async (userRole: string) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: userRole,
+        role,
         name,
         slug: stringWithHyphen(name),
+        is_admin,
     }
     const user = await pb
         .collection<AuthorizedUserSchema>('users')
@@ -136,12 +137,14 @@ export const loggedInUser = async ({
     request,
     context,
     role,
+    is_admin = false,
 }: {
     request: APIRequestContext
     context: BrowserContext
     role: roleSchema
+    is_admin?: boolean
 }) => {
-    const user = await createUser(role.id)
+    const user = await createUser(role.id, is_admin)
     const response = await request.post('/api/auth/sign-in', {
         data: { email: user.email, password: user.password },
         headers: { 'Content-Type': 'application/json' },
