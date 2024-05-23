@@ -11,8 +11,6 @@ test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
         test.beforeEach(async ({ request, context }) => {
             const role = await createRole()
-            console.log('Här är jag')
-
             await loggedInUser({ request, context, role })
         })
 
