@@ -140,13 +140,14 @@ export default async function Page({
                         </section>
                     </div>
                     <Separator orientation="vertical" />
-                    {<ActivityFlow />}
-                    <div className="col-start-3">
+                    <div className="flex flex-col gap-4">
+                        <h2 className="text-2xl font-bold">Aktivitet</h2>
                         <CommentInput
                             users={users}
                             roles={roles}
                             datasetId={dataset.id}
                         />
+                        {<ActivityFlow />}
                     </div>
                 </main>
             </EventProvider>

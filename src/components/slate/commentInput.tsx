@@ -18,6 +18,7 @@ import { MentionElement } from './customTypes'
 import { createEvent } from '@/adapters/api'
 import { authContext } from '@/lib/context/authContext'
 import SlateComment from './slateComment'
+import { Button } from '../ui/button'
 
 export const CommentInput = ({
     users,
@@ -144,7 +145,7 @@ export const CommentInput = ({
     }
 
     return (
-        <div>
+        <div className="w-full">
             <SlateComment
                 editor={editor}
                 onChange={() => {
@@ -224,7 +225,9 @@ export const CommentInput = ({
                     </Portal>
                 )}
             </SlateComment>
-            <button onClick={() => onSubmit()}>Submit</button>
+            <Button className="mt-2 w-full bg-slate-500"  onClick={() => onSubmit()}>
+                Submit
+            </Button>
         </div>
     )
 }
