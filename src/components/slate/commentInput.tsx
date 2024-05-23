@@ -19,6 +19,7 @@ import { createEvent } from '@/adapters/api'
 import { authContext } from '@/lib/context/authContext'
 import SlateComment from './slateComment'
 import { Button } from '../ui/button'
+import { EventContext } from '@/lib/context/eventContext'
 
 export const CommentInput = ({
     users,
@@ -29,6 +30,7 @@ export const CommentInput = ({
     roles: roleSchema[]
     datasetId: string
 }) => {
+    const eventContext = useContext(EventContext)
     const user = useContext(authContext)
     const ref = useRef<HTMLDivElement>()
     const [target, setTarget] = useState<Range | null>(null)
@@ -130,6 +132,22 @@ export const CommentInput = ({
             roleMentions.find((m) => m.name === r.name)
         )
 
+        const roleName = user.auth.role
+
+        //@ts-ignore
+        eventContext.setEvents((prev) => [
+            {
+                content: editor.children,
+                mentions,
+                user: { ...user.auth, expand: { role: { roleName } } },
+                dataset: datasetId,
+                subject: mentionedUsers,
+                subjectRole: mentionedRoles,
+                types: 'comment',
+            },
+            ...prev,
+        ])
+
         createEvent(
             {
                 content: editor.children,
@@ -225,7 +243,10 @@ export const CommentInput = ({
                     </Portal>
                 )}
             </SlateComment>
-            <Button className="mt-2 w-full bg-slate-500"  onClick={() => onSubmit()}>
+            <Button
+                className="mt-2 w-full bg-slate-500"
+                onClick={() => onSubmit()}
+            >
                 Submit
             </Button>
         </div>

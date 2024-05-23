@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getInitials = (name: string) => {
+    
     const parts = name.split(' ')
     let initials = ''
     for (let i = 0; i < parts.length; i++) {

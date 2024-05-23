@@ -223,7 +223,7 @@ function responseEventCleanup(res: any): EventSchema {
     return {
         ...res,
         user: res?.expand?.user,
-        subject: subject.map((sub: any) => {
+        subject: subject?.map((sub: any) => {
             return { ...sub, role: sub?.expand?.role.name }
         }),
         subjectRole: res?.expand?.subjectRole,
