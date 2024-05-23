@@ -53,7 +53,10 @@ export const createByUserName = async (name: string, role: roleSchema) => {
     return user
 }
 
-export const createDataset = async (titleValue: string) => {
+export const createDataset = async (
+    titleValue: string,
+    dataOwnerId?: string
+) => {
     await pb.admins.authWithPassword('admin@email.com', 'password123')
     const title = titleValue
     const description = 'test description'
@@ -62,6 +65,7 @@ export const createDataset = async (titleValue: string) => {
         title,
         description,
         slug,
+        dataowner: dataOwnerId,
     })
     return { ...dataset, title, description }
 }

@@ -11,8 +11,8 @@ test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
         test.beforeEach(async ({ request, context }) => {
             const role = await createRole()
-            console.log('Här är jag'); 
-            
+            console.log('Här är jag')
+
             await loggedInUser({ request, context, role })
         })
 
@@ -118,7 +118,7 @@ test.describe('Profile page', () => {
         test.beforeEach(async ({ request, context }) => {
             const role = await createRole()
             const user = await loggedInUser({ request, context, role })
-            const dataset = await createDataset('test title')
+            const dataset = await createDataset('test title', user.id)
             await createEvent(dataset.id, user.id)
         })
 
@@ -137,7 +137,7 @@ test.describe('Profile page', () => {
             const role = await createRole()
             await loggedInUser({ request, context, role })
             const user = await createByUserName('tester someone user', role)
-            const dataset = await createDataset('test title')
+            const dataset = await createDataset('test title', user.id)
             await createEvent(dataset.id, user.id)
         })
 
