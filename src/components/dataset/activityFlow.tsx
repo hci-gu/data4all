@@ -1,11 +1,9 @@
 'use client'
 import { useContext, useEffect } from 'react'
-import { EventForm } from '.'
 import Comment from './comment'
 import { EventContext } from '@/lib/context/eventContext'
 import { EventSchema } from '@/types/zod'
 import * as api from '@/adapters/api'
-import { stringWithHyphen } from '@/lib/utils'
 import { authContext } from '@/lib/context/authContext'
 import { DatasetContext } from '@/lib/context/datasetContext'
 

@@ -1,14 +1,12 @@
-import { EventSchema, datasetWithRelationsSchema } from '@/types/zod'
+import { EventSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import moment from 'moment'
-import User from '../user'
 import Image from 'next/image'
 import Dataportal from '../../../public/dataportal.png'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 import AcceptDatasetOwner from './acceptDatasetOwner'
 import SlateComment from '../slate/slateComment'
-import a from '[username]'
 
 export default function Comment({ event }: { event: EventSchema }) {
     if (event.types === 'comment') {
