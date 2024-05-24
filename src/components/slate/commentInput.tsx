@@ -128,7 +128,6 @@ export const CommentInput = ({
             roleMentions.find((m) => m.name === r.name)
         )
 
-
         const newEvent = await createEvent(
             {
                 content: editor.children,
@@ -142,6 +141,13 @@ export const CommentInput = ({
             user.cookie
         )
         eventContext.setEvents((prev) => [newEvent, ...prev])
+
+        editor.children = [
+            {
+                type: 'paragraph',
+                children: [{ text: '' }],
+            },
+        ]
     }
 
     return (
