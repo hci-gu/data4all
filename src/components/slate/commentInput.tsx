@@ -68,7 +68,11 @@ export const CommentInput = ({
 
     const onKeyDown = useCallback(
         (event: any) => {
+            console.log('non slate interaction', event.key)
+
             if (target && possibleMentions.length > 0) {
+                console.log('slate interaction', event.key)
+
                 switch (event.key) {
                     case 'ArrowDown':
                         event.preventDefault()
@@ -98,6 +102,13 @@ export const CommentInput = ({
                     case 'Escape':
                         event.preventDefault()
                         setTarget(null)
+                        break
+                }
+            } else {
+                switch (event.key) {
+                    case 'Enter':
+                        console.log('submit on enter')
+                        onSubmit()
                         break
                 }
             }
