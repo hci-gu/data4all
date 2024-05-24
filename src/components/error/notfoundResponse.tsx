@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import absurd from '../../../public/absurd 2.png'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-export default function NotFoundRespond() {
+export default function NotFoundResponse() {
     const router = useRouter()
     return (
         <main className="grid h-screen w-full grid-cols-2 items-center justify-between px-28 py-9">

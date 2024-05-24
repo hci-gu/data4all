@@ -1,4 +1,4 @@
-import ErrorRespond from './errorRespond'
-import NotfoundRespond from './notfoundRespond'
+import ErrorResponse from './errorResponse'
+import NotFoundResponse from './notfoundResponse'
 
-export { ErrorRespond, NotfoundRespond }
+export { ErrorResponse, NotFoundResponse }

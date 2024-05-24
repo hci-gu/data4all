@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import absurd from '../../../public/absurd 2.png'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-export default function ErrorRespond({ reset }: { reset: () => void }) {
+export default function ErrorResponse({ reset }: { reset: () => void }) {
     const router = useRouter()
 
     return (
@@ -13,7 +13,7 @@ export default function ErrorRespond({ reset }: { reset: () => void }) {
             <div className="flex w-fit flex-col justify-self-end">
                 <Typography level="H1">400</Typography>
                 <Typography level="P">
-                    Det blev något fel på våran sida. Försök igen senare eller
+                    Det blev något fel på vår sida. Försök igen senare eller
                     prova ladda om sidan.
                 </Typography>
                 <div className="mt-6 flex gap-11">
