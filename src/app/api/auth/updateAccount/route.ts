@@ -1,4 +1,5 @@
 import { pbForRequest } from '@/adapters/pocketbase'
+import { stringWithHyphen } from '@/lib/utils'
 import { updateUserSchema } from '@/types/zod'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
@@ -29,7 +30,7 @@ export async function PUT(request: NextRequest) {
 
         const records = await pb
             .collection('users')
-            .update(userId, { ...formData, role: newRole.id })
+            .update(userId, { ...formData, role: newRole.id, slug: stringWithHyphen(formData.name) })
 
         const dbUser = await pb.collection('users').getOne(userId)
         const token = pb.authStore.token
