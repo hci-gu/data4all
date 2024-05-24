@@ -32,9 +32,9 @@ export default function ActivityFlow() {
 
     return (
         <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-            {events.events.map((event, index) => (
-                <Comment event={event} key={index} />
-            ))}
+            {events.events.map((event, index) => {
+                return <Comment event={event} key={event.id} />
+            })}
         </ul>
     )
 }

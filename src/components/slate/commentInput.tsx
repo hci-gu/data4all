@@ -117,11 +117,11 @@ export const CommentInput = ({
         }
     }, [possibleMentions.length, editor, index, search, target])
 
-    useEffect(() => {
-        console.log(editor)
-    }, [editor])
+    // useEffect(() => {
+    //     console.log(editor)
+    // }, [editor])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         const userMentions = mentions.filter((m) => m.type === 'user')
         const mentionedUsers = users.filter((u) =>
             userMentions.find((m) => m.slug === u.slug)
@@ -135,20 +135,8 @@ export const CommentInput = ({
         const roleName = user.auth.role
 
         //@ts-ignore
-        eventContext.setEvents((prev) => [
-            {
-                content: editor.children,
-                mentions,
-                user: { ...user.auth, expand: { role: { roleName } } },
-                dataset: datasetId,
-                subject: mentionedUsers,
-                subjectRole: mentionedRoles,
-                types: 'comment',
-            },
-            ...prev,
-        ])
 
-        createEvent(
+        const newEvent = await createEvent(
             {
                 content: editor.children,
                 mentions,
@@ -160,6 +148,7 @@ export const CommentInput = ({
             },
             user.cookie
         )
+        eventContext.setEvents((prev) => [newEvent, ...prev])
     }
 
     return (
