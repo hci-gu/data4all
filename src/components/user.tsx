@@ -1,6 +1,7 @@
 import { getInitials } from '@/lib/utils'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import { UserSchema } from '@/types/zod'
+import Link from 'next/link'
 
 export default function User({
     user,
@@ -19,14 +20,14 @@ export default function User({
                         {getInitials(user.name)}
                     </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col items-start">
-                    <p className="text-xs sm:text-lg">
+                <Link href={`/profile/${user.slug}`} className="flex flex-col items-start">
+                    <p className="text-xs">
                         <b>{user.name}</b>
                     </p>
                     <p className="text-[0.625rem] text-gray-500 sm:text-sm">
                         {user.role}
                     </p>
-                </div>
+                </Link>
             </div>
         )
     }
