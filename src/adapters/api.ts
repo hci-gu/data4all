@@ -220,9 +220,10 @@ function responseDatasetCleanup(res: any) {
 }
 function responseEventCleanup(res: any): EventSchema {
     const subject = res?.expand?.subject
+    const user = res?.expand?.user
     return {
         ...res,
-        user: res?.expand?.user,
+        user: user ? { ...user, role: user?.expand?.role.name } : null,
         subject: subject?.map((sub: any) => {
             return { ...sub, role: sub?.expand?.role.name }
         }),

@@ -38,7 +38,7 @@ export const AuthorizedUserSchema = z.object({
     username: z.string(),
     verified: z.boolean(),
     slug: z.string(),
-    expand: z.any(),
+    // expand: z.any(),
     is_admin: z.boolean().default(false),
 })
 export const UserSchema = AuthorizedUserSchema.omit({

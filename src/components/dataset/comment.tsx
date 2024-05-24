@@ -8,7 +8,7 @@ import { getInitials } from '@/lib/utils'
 import AcceptDatasetOwner from './acceptDatasetOwner'
 import SlateComment from '../slate/slateComment'
 
-export default function Comment({ event }: { event: EventSchema }) {    
+export default function Comment({ event }: { event: EventSchema }) {
     if (event.types === 'comment') {
         return (
             <li className="flex gap-1">
@@ -27,7 +27,7 @@ export default function Comment({ event }: { event: EventSchema }) {
                                 {event.user.name}
                             </p>
                             <p className="text-xs font-light">
-                                {event.user.expand.role.name}
+                                {event.user.role}
                             </p>
                         </div>
                     </Link>
