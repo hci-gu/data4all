@@ -117,10 +117,6 @@ export const CommentInput = ({
         }
     }, [possibleMentions.length, editor, index, search, target])
 
-    // useEffect(() => {
-    //     console.log(editor)
-    // }, [editor])
-
     const onSubmit = async () => {
         const userMentions = mentions.filter((m) => m.type === 'user')
         const mentionedUsers = users.filter((u) =>
@@ -132,9 +128,6 @@ export const CommentInput = ({
             roleMentions.find((m) => m.name === r.name)
         )
 
-        const roleName = user.auth.role
-
-        //@ts-ignore
 
         const newEvent = await createEvent(
             {
