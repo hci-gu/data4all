@@ -16,8 +16,8 @@ test.beforeAll(async () => {
 })
 
 test.describe('Search page', () => {
-    test.beforeEach(async ({ page, request, context }) => {
-        await loggedInUser({ page, request, context })
+    test.beforeEach(async ({ request, context }) => {
+        await loggedInUser({ request, context })
     })
 
     test('Will get empty state when search has no matches', async ({

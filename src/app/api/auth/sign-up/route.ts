@@ -1,4 +1,5 @@
 import { env } from '@/lib/env'
+import { stringWithHyphen } from '@/lib/utils'
 import { signUpSchema } from '@/types/zod'
 import { NextResponse } from 'next/server'
 import PocketBase, { ClientResponseError } from 'pocketbase'
@@ -11,9 +12,9 @@ export async function POST(request: Request) {
         emailVisibility: true,
         password: newUser.password,
         passwordConfirm: newUser.passwordConfirmation,
-        name: newUser.email,
+        name: newUser.name,
         role: newUser.role,
-        slug: newUser.slug,
+        slug: stringWithHyphen(newUser.name),
     }
     try {
         await pb.collection('users').create(data)

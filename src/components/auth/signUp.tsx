@@ -24,8 +24,6 @@ import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as api from '@/adapters/api'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { stringWithHyphen } from '@/lib/utils'
-import { useEffect } from 'react'
 
 export default function SignUp() {
     const router = useRouter()
@@ -35,6 +33,8 @@ export default function SignUp() {
             email: '',
             password: '',
             passwordConfirmation: '',
+            slug: '',
+            name: '',
         },
         resetOptions: {
             keepIsSubmitSuccessful: true,
@@ -50,9 +50,6 @@ export default function SignUp() {
         }
     }
 
-    useEffect(() => {
-        form.setValue('slug', stringWithHyphen(form.getValues('email')))
-    }, [form.watch('email')])
 
     const roles = Object.values(roleSchema.Values).filter(
         (role) => role !== 'Admin'
@@ -65,6 +62,23 @@ export default function SignUp() {
                 className="space-y-4"
                 method="post"
             >
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Namn</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="text"
+                                    placeholder="Namn"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="email"
@@ -150,22 +164,6 @@ export default function SignUp() {
                     render={({ field }) => (
                         <FormItem>
                             <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="slug"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="sr-only">slug</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="hidden"
-                                    placeholder="Slug"
-                                    {...field}
-                                />
-                            </FormControl>
                         </FormItem>
                     )}
                 />

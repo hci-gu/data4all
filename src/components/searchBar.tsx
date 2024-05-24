@@ -11,7 +11,7 @@ import { Button } from './ui/button'
 import { Loader2, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import * as api from '@/adapters/api'
-import { AuthorizedUserSchema, datasetSchema } from '@/types/zod'
+import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
 import Link from 'next/link'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
 import { authContext } from '@/lib/context/authContext'
@@ -27,7 +27,7 @@ type autoCompleteSuggestion = {
     slug: string
 }
 
-const datasetToSuggestion = (datasets: datasetSchema[]) => {
+const datasetToSuggestion = (datasets: datasetWithRelationsSchema[]) => {
     let newDatasetArray: autoCompleteSuggestion[] = []
 
     datasets.map((dataset) => {
