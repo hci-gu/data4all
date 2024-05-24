@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
                     //@ts-ignore
                     .getList(pageNumber as number, 15, {
                         sort: '-created',
-                        filter: `subject = "${pb.authStore.model?.id}"`,
+                        filter: `subject ~ "${pb.authStore.model?.id}"`,
                         expand: 'user,subject,dataset',
                     })
 
@@ -36,17 +36,28 @@ export async function GET(request: NextRequest) {
                         filter: `dataowner="${pb.authStore.model?.id}"`,
                     })
 
-                //@ts-ignore
-                records = await pb
-                    .collection('events')
+                if (ownedDatasets.length > 0) {
                     //@ts-ignore
-                    .getList(pageNumber as number, 15, {
-                        sort: '-created',
-                        filter: ownedDatasets
-                            .map((dataset) => `dataset="${dataset.id}"`)
-                            .join('||'),
-                        expand: 'user,subject,dataset',
-                    })
+                    records = await pb
+                        .collection('events')
+                        //@ts-ignore
+                        .getList(pageNumber as number, 15, {
+                            sort: '-created',
+                            filter: ownedDatasets
+                                .map((dataset) => `dataset="${dataset.id}"`)
+                                .join('||'),
+                            expand: 'user,subject,dataset',
+                        })
+                } else {
+                    records = {
+                        //@ts-ignore
+                        page: 1,
+                        perPage: 15,
+                        totalItems: 0,
+                        totalPages: 1,
+                        items: [],
+                    }
+                }
                 break
             case FeedFilter.All:
                 //@ts-ignore
