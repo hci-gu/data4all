@@ -38,8 +38,6 @@ export default async function Page({
         stringWithHyphen(decodeURI(slug)),
         cookie
     )
-    const users = await api.getUsers('', cookie)
-    const roles = await api.getRoles()
 
     return (
         <DatasetProvider datasets={dataset}>
@@ -142,11 +140,6 @@ export default async function Page({
                     <Separator orientation="vertical" />
                     <div className="flex flex-col gap-4">
                         <h2 className="text-2xl font-bold">Aktivitet</h2>
-                        <CommentInput
-                            users={users}
-                            roles={roles}
-                            datasetId={dataset.id}
-                        />
                         {<ActivityFlow />}
                     </div>
                 </main>

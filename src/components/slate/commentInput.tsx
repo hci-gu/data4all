@@ -242,7 +242,7 @@ export const CommentInput = ({
                 )}
             </SlateComment>
             <Button
-                className="mt-2 w-full bg-slate-500"
+                className="sr-only"
                 onClick={() => onSubmit()}
             >
                 Submit

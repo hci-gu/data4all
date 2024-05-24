@@ -10,6 +10,7 @@ import {
     AuthorizedUserSchema,
     EventCreateSchema,
     EventFeedResponse,
+    roleSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -198,8 +199,7 @@ export const getFeed = async (
 }
 
 export const getRoles = async () => {
-    const roles = await apiRequest(apiUrl(`auth/roles`), 'GET')
-    return roles
+    return roleSchema.array().parse(await apiRequest(apiUrl(`auth/roles`), 'GET'))
 }
 
 function responseDatasetCleanup(res: any) {
