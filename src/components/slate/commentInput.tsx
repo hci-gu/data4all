@@ -68,10 +68,10 @@ export const CommentInput = ({
 
     const onKeyDown = useCallback(
         (event: any) => {
-            console.log('non slate interaction', event.key)
+            // console.log('non slate interaction', event.key)
 
             if (target && possibleMentions.length > 0) {
-                console.log('slate interaction', event.key)
+                // console.log('slate interaction', event.key)
 
                 switch (event.key) {
                     case 'ArrowDown':
@@ -107,7 +107,7 @@ export const CommentInput = ({
             } else {
                 switch (event.key) {
                     case 'Enter':
-                        console.log('submit on enter')
+                        // console.log('submit on enter')
                         onSubmit()
                         break
                 }
@@ -220,7 +220,6 @@ export const CommentInput = ({
                                     onClick={() => {
                                         Transforms.select(editor, target)
                                         const mention = getMentionFromName(name)
-                                        console.log('name', name, mention)
                                         if (mention) {
                                             insertMention(editor, mention)
                                         }
