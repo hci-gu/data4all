@@ -68,7 +68,7 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
         return
     }
 
-    if (event.types === 'ownerReq') {
+    if (event.types === 'ownerReq' && auth.is_admin) {
         return (
             <div className="flex gap-2">
                 <Button
