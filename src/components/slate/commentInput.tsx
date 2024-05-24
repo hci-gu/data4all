@@ -68,7 +68,11 @@ export const CommentInput = ({
 
     const onKeyDown = useCallback(
         (event: any) => {
+            // console.log('non slate interaction', event.key)
+
             if (target && possibleMentions.length > 0) {
+                // console.log('slate interaction', event.key)
+
                 switch (event.key) {
                     case 'ArrowDown':
                         event.preventDefault()
@@ -100,6 +104,13 @@ export const CommentInput = ({
                         setTarget(null)
                         break
                 }
+            } else {
+                switch (event.key) {
+                    case 'Enter':
+                        // console.log('submit on enter')
+                        onSubmit()
+                        break
+                }
             }
         },
         [possibleMentions, editor, index, target]
@@ -128,7 +139,6 @@ export const CommentInput = ({
             roleMentions.find((m) => m.name === r.name)
         )
 
-
         const newEvent = await createEvent(
             {
                 content: editor.children,
@@ -142,6 +152,13 @@ export const CommentInput = ({
             user.cookie
         )
         eventContext.setEvents((prev) => [newEvent, ...prev])
+
+        editor.children = [
+            {
+                type: 'paragraph',
+                children: [{ text: '' }],
+            },
+        ]
     }
 
     return (
@@ -203,7 +220,6 @@ export const CommentInput = ({
                                     onClick={() => {
                                         Transforms.select(editor, target)
                                         const mention = getMentionFromName(name)
-                                        console.log('name', name, mention)
                                         if (mention) {
                                             insertMention(editor, mention)
                                         }
