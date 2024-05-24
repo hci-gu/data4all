@@ -15,7 +15,7 @@ export const authContext = createContext<AuthContextType>({
         username: '',
         name: '',
         email: '',
-        role: 'User',
+        role: 'Jurist',
         collectionId: '',
         collectionName: '',
         emailVisibility: true,

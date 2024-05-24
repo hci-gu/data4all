@@ -56,6 +56,7 @@ export const signUpSchema = signInSchema
         passwordConfirmation: z.string().min(8),
         role: z.string(),
         slug: z.string(),
+        name: z.string(),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
         message: 'Lösenorden måste matcha',

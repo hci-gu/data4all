@@ -21,10 +21,9 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { getRoles, getUser, updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
-import { stringWithHyphen } from '@/lib/utils'
 
 export default function UpdateUserForm({ roles }: { roles: any[] }) {
     const userContext = useContext(authContext)
@@ -83,9 +82,6 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
             })
         }
     }
-    useEffect(() => {
-        form.setValue('slug', stringWithHyphen(form.getValues('name')))
-    }, [form.watch('name')])
     return (
         <Form {...form}>
             <form
@@ -207,22 +203,6 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
                                 </Select>
                             </FormControl>
                             <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="slug"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="sr-only">slug</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="hidden"
-                                    placeholder="Slug"
-                                    {...field}
-                                />
-                            </FormControl>
                         </FormItem>
                     )}
                 />
