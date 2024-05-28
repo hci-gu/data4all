@@ -69,12 +69,7 @@ export const CommentInput = ({
 
     const onKeyDown = useCallback(
         (event: any) => {
-            // console.log('non slate interaction', event.key)
-            console.log(event.key, 'down')
-
             if (target && possibleMentions.length > 0) {
-                // console.log('slate interaction', event.key)
-
                 switch (event.key) {
                     case 'ArrowDown':
                         event.preventDefault()
@@ -109,7 +104,6 @@ export const CommentInput = ({
             } else {
                 switch (event.key) {
                     case 'Enter':
-                        console.log('submit on enter')
                         event.preventDefault()
                         if (!isShiftDown) {
                             onSubmit()
@@ -134,13 +128,8 @@ export const CommentInput = ({
         [possibleMentions, editor, index, target]
     )
 
-    // useEffect(() => {
-    //     console.log('shift down:', isShiftDown)
-    // }, [isShiftDown])
-
     const onKeyUp = useCallback(
         (event: any) => {
-            console.log(event.key, 'up')
             switch (event.key) {
                 case 'Shift':
                     setIsShiftDown(false)
