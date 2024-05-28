@@ -8,25 +8,22 @@ import SlateComment from './slate/slateComment'
 
 export default function FeedItem({ event }: { event: EventFeedItem }) {
     if (event.types === 'comment') {
-        return <SlateComment event={event} />
         return (
-            <li className="flex gap-1">
+            <li className="flex w-full gap-1">
                 <Avatar className="h-6 w-6">
                     <AvatarFallback className="text-[0.5625rem]">
                         {getInitials(event.userName)}
                     </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col gap-1">
+                <div className="flex w-full flex-col gap-1">
                     <div className="flex flex-col items-start">
                         <p className="mt-1 text-xs">
                             <b>{event.userName}</b> kommenterade i
                             <b> {event.datasetTitle}</b>
                         </p>
                     </div>
-                    <div className="flex flex-col gap-1">
-                        <div className="rounded-lg rounded-tl-none border border-slate-200 p-2">
-                            <p className="text-xs">{event.content}</p>
-                        </div>
+                    <div className="flex w-full flex-col gap-1">
+                        <SlateComment event={event} />
                         <time className="text-xs font-bold">
                             {moment(event.created).fromNow()}
                         </time>

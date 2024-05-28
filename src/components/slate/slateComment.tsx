@@ -51,7 +51,7 @@ const SlateComment = ({
 
     return (
         <div
-            className={`${!event ? '' : 'rounded-lg rounded-tl-none border border-slate-200 p-2'} `}
+            className={`${!event ? '' : '[& > *]:w-full w-full rounded-lg rounded-tl-none border border-slate-200 p-2'} `}
         >
             <Slate
                 editor={
