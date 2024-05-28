@@ -485,7 +485,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "This is a great point!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.512Z",
             "dataset": "gm8st322o45bmxt",
             "id": "uzvtrimdt4engg9",
@@ -498,7 +507,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I disagree with this perspective."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.516Z",
             "dataset": "rq53dkh5z05sclw",
             "id": "qioui9vo4q3f8ge",
@@ -511,7 +529,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Could you provide more details on this topic?"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.520Z",
             "dataset": "tscv2z8jow5vpey",
             "id": "ve3fq37lt37ewzn",
@@ -524,7 +551,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Interesting approach, thanks for sharing!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.524Z",
             "dataset": "h7t42lz3o1xzi84",
             "id": "4hrqr9n3db2jln2",
@@ -537,7 +573,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "<b>Kim Sung</b> föreslog sig själv som dataägare",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I found this section very informative."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.528Z",
             "dataset": "sq71grfa4w4e7kb",
             "id": "9ni17wkrdnutb66",
@@ -550,7 +595,32 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "<b>Momoko Okazaki</b> föreslog sig själv som dataägare",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Momoko Okazaki",
+                                "slug": "momoko-okazaki",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog sig själv som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.532Z",
             "dataset": "scd4r4p8ocx7v71",
             "id": "632wjdqy2yik027",
@@ -563,7 +633,48 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "<b>Moa Kikuchi</b> föreslog <b>Muhammad Khan</b> som dataägare",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Moa Kikuchi",
+                                "slug": "moa-kikuchi",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Muhammad Khan",
+                                "slug": "muhammad-khan",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.536Z",
             "dataset": "cx5t8a9aexvozz5",
             "id": "reu29nr6st58wgm",
@@ -576,7 +687,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "This is a great point!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.540Z",
             "dataset": "gm8st322o45bmxt",
             "id": "vhu9kce5yo6eegn",
@@ -589,7 +709,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I disagree with this perspective."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.543Z",
             "dataset": "rq53dkh5z05sclw",
             "id": "da0mjie49rqciu8",
@@ -602,7 +731,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Could you provide more details on this topic?"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.547Z",
             "dataset": "tscv2z8jow5vpey",
             "id": "1u23o4wovct6uci",
@@ -615,7 +753,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Interesting approach, thanks for sharing!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.552Z",
             "dataset": "h7t42lz3o1xzi84",
             "id": "bdql1pm04f3fou3",
@@ -628,7 +775,32 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "<b>Sophie Martin</b> föreslog sig själv som dataägare",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Sophie Martin",
+                                "slug": "sophie-martin",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog sig själv som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.556Z",
             "dataset": "sq71grfa4w4e7kb",
             "id": "lva9r6t92okz6g8",
@@ -641,7 +813,32 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "<b>Momoko Okazaki</b> föreslog sig själv som dataägare",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Momoko Okazaki",
+                                "slug": "momoko-okazaki",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog sig själv som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.561Z",
             "dataset": "scd4r4p8ocx7v71",
             "id": "wu8a3dvfzghidmf",
@@ -654,7 +851,48 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "<b>Momoko Okazaki</b> föreslog <b>Maria Rodriguez</b> som dataägare",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Momoko Okazaki",
+                                "slug": "momoko-okazaki",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Maria Rodriguez",
+                                "slug": "maria-rodriguez",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.565Z",
             "dataset": "cx5t8a9aexvozz5",
             "id": "z5jlje1dw5c02dg",
@@ -667,7 +905,16 @@
             "Subject_role": [],
             "collectionId": "zrb2mseythst5ev",
             "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I found this section very informative."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
             "created": "2024-05-22 08:17:10.566Z",
             "dataset": "gm8st322o45bmxt",
             "id": "35md11htq22d2vp",
@@ -675,201 +922,6 @@
             "types": "comment",
             "updated": "2024-05-22 08:17:10.566Z",
             "user": "plylk8ykl6na0lm"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.572Z",
-            "dataset": "rq53dkh5z05sclw",
-            "id": "911yotpb486j6cs",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.572Z",
-            "user": "l621gx6xi8qevy8"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.576Z",
-            "dataset": "tscv2z8jow5vpey",
-            "id": "afu8v00o6xh2afo",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.576Z",
-            "user": "1lzyja7nmzgn5fp"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.579Z",
-            "dataset": "h7t42lz3o1xzi84",
-            "id": "tbgio5uxh0ttjk4",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.579Z",
-            "user": "p6bm0v4x6bgt2h0"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "<b>Sophie Martin</b> föreslog sig själv som dataägare",
-            "created": "2024-05-22 08:17:10.584Z",
-            "dataset": "sq71grfa4w4e7kb",
-            "id": "4am21zzhuhhy1n4",
-            "subject": ["sc2nxrqaxzvihb5"],
-            "types": "ownerReq",
-            "updated": "2024-05-22 08:17:10.584Z",
-            "user": "aeelowasz0ut4d8"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "<b>Emily Johnson</b> föreslog sig själv som dataägare",
-            "created": "2024-05-22 08:17:10.588Z",
-            "dataset": "scd4r4p8ocx7v71",
-            "id": "u0py2puzkhkbbd1",
-            "subject": ["5rit2amdvtfc16l"],
-            "types": "ownerReq",
-            "updated": "2024-05-22 08:17:10.588Z",
-            "user": "qscd3c3ty12hjjp"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "<b>Chen Wei</b> föreslog <b>Moa Kikuchi</b> som dataägare",
-            "created": "2024-05-22 08:17:10.593Z",
-            "dataset": "cx5t8a9aexvozz5",
-            "id": "x39zcmyqhg440la",
-            "subject": ["l621gx6xi8qevy8"],
-            "types": "ownerReq",
-            "updated": "2024-05-22 08:17:10.593Z",
-            "user": "5rit2amdvtfc16l"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.596Z",
-            "dataset": "gm8st322o45bmxt",
-            "id": "6enu0owzhrt9d4q",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.596Z",
-            "user": "plylk8ykl6na0lm"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.600Z",
-            "dataset": "rq53dkh5z05sclw",
-            "id": "g3totyytpmrs7hp",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.600Z",
-            "user": "l621gx6xi8qevy8"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.604Z",
-            "dataset": "tscv2z8jow5vpey",
-            "id": "05kbk08l321u71i",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.604Z",
-            "user": "1lzyja7nmzgn5fp"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.608Z",
-            "dataset": "h7t42lz3o1xzi84",
-            "id": "x1eitxfw2h6pn0t",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.608Z",
-            "user": "p6bm0v4x6bgt2h0"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "<b>Chen Wei</b> föreslog sig själv som dataägare",
-            "created": "2024-05-22 08:17:10.612Z",
-            "dataset": "sq71grfa4w4e7kb",
-            "id": "trngy4jhx49u7kg",
-            "subject": ["qscd3c3ty12hjjp"],
-            "types": "ownerReq",
-            "updated": "2024-05-22 08:17:10.612Z",
-            "user": "aeelowasz0ut4d8"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "<b>Emily Johnson</b> föreslog sig själv som dataägare",
-            "created": "2024-05-22 08:17:10.617Z",
-            "dataset": "scd4r4p8ocx7v71",
-            "id": "e69j4dsswxblfu8",
-            "subject": ["5rit2amdvtfc16l"],
-            "types": "ownerReq",
-            "updated": "2024-05-22 08:17:10.617Z",
-            "user": "qscd3c3ty12hjjp"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "<b>John Smith</b> föreslog <b>Moa Kikuchi</b> som dataägare",
-            "created": "2024-05-22 08:17:10.621Z",
-            "dataset": "cx5t8a9aexvozz5",
-            "id": "02kx83omaszn1f8",
-            "subject": ["l621gx6xi8qevy8"],
-            "types": "ownerReq",
-            "updated": "2024-05-22 08:17:10.621Z",
-            "user": "5rit2amdvtfc16l"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.625Z",
-            "dataset": "gm8st322o45bmxt",
-            "id": "7j8oevyszemlv2q",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.625Z",
-            "user": "plylk8ykl6na0lm"
-        },
-        {
-            "Subject_role": [],
-            "collectionId": "zrb2mseythst5ev",
-            "collectionName": "events",
-            "content": "Väldigt viktig kommentar",
-            "created": "2024-05-22 08:17:10.628Z",
-            "dataset": "rq53dkh5z05sclw",
-            "id": "xweci1426awdnr4",
-            "subject": [],
-            "types": "comment",
-            "updated": "2024-05-22 08:17:10.628Z",
-            "user": "l621gx6xi8qevy8"
         }
     ],
 
