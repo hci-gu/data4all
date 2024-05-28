@@ -19,12 +19,14 @@ const SlateComment = ({
     onChange,
     children,
     onKeyDown,
+    onKeyUp,
 }: {
     editor?: CustomEditor
     event?: EventSchema
     onChange?: (value: Descendant[]) => void
     children?: React.ReactNode
     onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void
+    onKeyUp?: (event: React.KeyboardEvent<HTMLDivElement>) => void
 }) => {
     const renderElement = useCallback(
         (props: any) => <Element {...props} />,
@@ -72,6 +74,7 @@ const SlateComment = ({
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
                     onKeyDown={onKeyDown}
+                    onKeyUp={onKeyUp}
                     placeholder="Skriv en kommentar"
                     style={event ? commentStyle : inputStyle}
                 />
@@ -131,7 +134,6 @@ const Element = (props: any) => {
     const { attributes, children, element } = props
     switch (element.type) {
         case 'mention':
-            console.log('element', props)
             return <Mention {...props} />
         default:
             return <p {...attributes}>{children}</p>

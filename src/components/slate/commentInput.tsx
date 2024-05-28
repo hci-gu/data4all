@@ -41,6 +41,7 @@ export const CommentInput = ({
         []
     )
     const [mentions, setMentions] = useState<MentionSchema[]>([])
+    const [isShiftDown, setIsShiftDown] = useState(false)
 
     const possibleMentions = [
         ...users.map((u) => u.name),
@@ -69,6 +70,7 @@ export const CommentInput = ({
     const onKeyDown = useCallback(
         (event: any) => {
             // console.log('non slate interaction', event.key)
+            console.log(event.key, 'down')
 
             if (target && possibleMentions.length > 0) {
                 // console.log('slate interaction', event.key)
@@ -107,10 +109,32 @@ export const CommentInput = ({
             } else {
                 switch (event.key) {
                     case 'Enter':
-                        // console.log('submit on enter')
-                        onSubmit()
+                        console.log('submit on enter')
+                        event.preventDefault()
+                        if (!isShiftDown) {
+                            onSubmit()
+                        }
+                        break
+                    case 'Shift':
+                        setIsShiftDown(true)
                         break
                 }
+            }
+        },
+        [possibleMentions, editor, index, target]
+    )
+
+    // useEffect(() => {
+    //     console.log('shift down:', isShiftDown)
+    // }, [isShiftDown])
+
+    const onKeyUp = useCallback(
+        (event: any) => {
+            console.log(event.key, 'up')
+            switch (event.key) {
+                case 'Shift':
+                    setIsShiftDown(false)
+                    break
             }
         },
         [possibleMentions, editor, index, target]
@@ -128,7 +152,10 @@ export const CommentInput = ({
         }
     }, [possibleMentions.length, editor, index, search, target])
 
+
     const onSubmit = async () => {
+        const { anchor, focus } = editor.selection
+
         const userMentions = mentions.filter((m) => m.type === 'user')
         const mentionedUsers = users.filter((u) =>
             userMentions.find((m) => m.slug === u.slug)
@@ -151,6 +178,7 @@ export const CommentInput = ({
             },
             user.cookie
         )
+
         eventContext.setEvents((prev) => [newEvent, ...prev])
 
         editor.children = [
@@ -159,6 +187,11 @@ export const CommentInput = ({
                 children: [{ text: '' }],
             },
         ]
+
+        editor.selection = {
+            anchor: { path: [0, 0], offset: 0 },
+            focus: { path: [0, 0], offset: 0 },
+        }
     }
 
     return (
@@ -197,6 +230,7 @@ export const CommentInput = ({
                     setTarget(null)
                 }}
                 onKeyDown={onKeyDown}
+                onKeyUp={onKeyUp}
             >
                 {target && possibleMentions.length > 0 && (
                     <Portal>
@@ -241,10 +275,7 @@ export const CommentInput = ({
                     </Portal>
                 )}
             </SlateComment>
-            <Button
-                className="sr-only"
-                onClick={() => onSubmit()}
-            >
+            <Button className="sr-only" onClick={() => onSubmit()}>
                 Submit
             </Button>
         </div>
