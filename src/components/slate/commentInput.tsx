@@ -14,7 +14,7 @@ import { Range, Transforms, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import { ReactEditor, withReact } from 'slate-react'
 import { Portal } from './customComps'
-import { MentionElement } from './customTypes'
+import { MentionElement, ParagraphElement } from './customTypes'
 import { createEvent } from '@/adapters/api'
 import { authContext } from '@/lib/context/authContext'
 import SlateComment from './slateComment'
@@ -114,6 +114,16 @@ export const CommentInput = ({
                         if (!isShiftDown) {
                             onSubmit()
                         }
+
+                        const newParagrapgh: ParagraphElement = {
+                            type: 'paragraph',
+                            children: [{ text: '' }],
+                        }
+                        //@ts-ignore
+                        Transforms.select(editor, target)
+                        Transforms.insertNodes(editor, newParagrapgh)
+                        Transforms.move(editor)
+
                         break
                     case 'Shift':
                         setIsShiftDown(true)
@@ -151,7 +161,6 @@ export const CommentInput = ({
             }
         }
     }, [possibleMentions.length, editor, index, search, target])
-
 
     const onSubmit = async () => {
         const { anchor, focus } = editor.selection
