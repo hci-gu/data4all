@@ -15,6 +15,10 @@ import { useContext } from 'react'
 import { EventContext } from '@/lib/context/eventContext'
 import { authContext } from '@/lib/context/authContext'
 import { DatasetContext } from '@/lib/context/datasetContext'
+import {
+    SuggestSelfAsDataOwner,
+    SuggestSomeOneElseAsDataOwner,
+} from '@/lib/slateUtilits'
 export default function SuggestDataOwner({
     user,
 }: {
@@ -25,59 +29,11 @@ export default function SuggestDataOwner({
     const { dataset } = useContext(DatasetContext)
     if (!user) return
 
-    const requestSelf = [
-        {
-            children: [
-                { text: '' },
-                {
-                    children: [{ text: '' }],
-                    mention: {
-                        name: auth.name,
-                        slug: auth.slug,
-                        type: 'user',
-                    },
-                    type: 'mention',
-                },
-                { text: 'föreslog sig själv som dataägare' },
-            ],
-            type: 'paragraph',
-        },
-    ]
-    const requestSomeOneElse = [
-        {
-            children: [
-                { text: '' },
-                {
-                    children: [{ text: '' }],
-                    mention: {
-                        name: auth.name,
-                        slug: auth.slug,
-                        type: 'user',
-                    },
-                    type: 'mention',
-                },
-                { text: 'föreslog' },
-                {
-                    children: [{ text: '' }],
-                    mention: {
-                        name: user.name,
-                        slug: user.slug,
-                        type: 'user',
-                    },
-                    type: 'mention',
-                },
-                { text: 'som dataägare' },
-            ],
-            type: 'paragraph',
-        },
-    ]
-
     const onSubmit = async () => {
-        const content = auth?.id === user.id ? requestSelf : requestSomeOneElse
-        // const content =
-        //     auth?.id === user.id
-        //         ? `<b>${auth.name}</b> föreslog sig själv som dataägare`
-        //         : `<b>${auth.name}</b> föreslog <b>${user.name}</b> som dataägare`
+        const content =
+            auth?.id === user.id
+                ? SuggestSelfAsDataOwner(auth)
+                : SuggestSomeOneElseAsDataOwner(auth, user)
 
         const data: EventCreateSchema = {
             content,
