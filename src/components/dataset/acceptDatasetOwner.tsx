@@ -1,6 +1,6 @@
 'use client'
 import { authContext } from '@/lib/context/authContext'
-import { EventSchema, eventTypeSchema } from '@/types/zod'
+import { EventSchema, eventContentSchema, eventTypeSchema } from '@/types/zod'
 import { useContext } from 'react'
 import { Button } from '../ui/button'
 import { updateDataset, createEvent } from '@/adapters/api'
@@ -13,7 +13,10 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
 
     const eventContext = useContext(EventContext)
 
-    const updateEvent = async (types: eventTypeSchema, content: string) => {
+    const updateEvent = async (
+        types: eventTypeSchema,
+        content: eventContentSchema
+    ) => {
         const subject = event.subject
         if (subject) {
             const newEvent = await createEvent(
@@ -43,21 +46,70 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
 
             setDataset(updateResponse)
 
-            await updateEvent(
-                'ownerAccept',
-                `<b>${auth.name}</b> godkände <b>${subject[0].name}</b> som dataägare`
-            )
+            await updateEvent('ownerAccept', [
+                {
+                    children: [
+                        {
+                            children: [{ text: '' }],
+                            mention: {
+                                name: auth.name,
+                                slug: auth.slug,
+                                type: 'user',
+                            },
+                            type: 'mention',
+                        },
+                        { text: 'godkände' },
+                        {
+                            children: [{ text: '' }],
+                            mention: {
+                                name: subject[0].name,
+                                slug: subject[0].slug,
+                                type: 'user',
+                            },
+                            type: 'mention',
+                        },
+                        { text: 'som dataägare' },
+                    ],
+                    type: 'paragraph',
+                },
+            ])
         }
     }
     const decline = async () => {
         const subject = event.subject
         if (subject) {
-            await updateEvent(
-                'ownerDecline',
-                `<b>${auth.name}</b> godkände inte <b>${subject[0].name}</b> som dataägare`
-            )
+            await updateEvent('ownerDecline', [
+                {
+                    children: [
+                        {
+                            children: [{ text: '' }],
+                            mention: {
+                                name: auth.name,
+                                slug: auth.slug,
+                                type: 'user',
+                            },
+                            type: 'mention',
+                        },
+                        { text: 'godkände inte' },
+                        {
+                            children: [{ text: '' }],
+                            mention: {
+                                name: subject[0].name,
+                                slug: subject[0].slug,
+                                type: 'user',
+                            },
+                            type: 'mention',
+                        },
+                        { text: 'som dataägare' },
+                    ],
+                    type: 'paragraph',
+                },
+            ])
         }
     }
+
+    // `<b>${auth.name}</b> godkände <b>${subject[0].name}</b> som dataägare`
+    // `<b>${auth.name}</b> godkände inte <b>${subject[0].name}</b> som dataägare`
 
     const allEventFromSubjectUser = eventContext.events.filter(
         (e) =>

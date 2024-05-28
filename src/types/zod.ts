@@ -105,6 +105,28 @@ export const datasetWithRelationsSchema = datasetSchema.extend({
     tags: z.array(tagSchema),
 })
 
+export const MentionSchema = z.object({
+    name: z.string(),
+    slug: z.string().optional(),
+    type: z.string(),
+})
+
+export const eventContentSchema = z.array(
+    z.object({
+        children: z.array(
+            z.union([
+                z.object({ text: z.string() }),
+                z.object({
+                    children: z.array(z.object({ text: z.string() })),
+                    mention: MentionSchema,
+                    type: z.string(),
+                }),
+            ])
+        ),
+        type: z.string(),
+    })
+)
+
 export const EventSchema = z.object({
     id: z.string().optional(),
     collectionId: z.string().optional(),
@@ -114,15 +136,9 @@ export const EventSchema = z.object({
     dataset: z.string(),
     types: eventTypeSchema,
     user: AuthorizedUserSchema,
-    content: any(),
+    content: eventContentSchema,
     subject: z.array(AuthorizedUserSchema).optional(),
     subjectRole: z.array(roleSchema).optional(),
-})
-
-export const MentionSchema = z.object({
-    name: z.string(),
-    slug: z.string().optional(),
-    type: z.string(),
 })
 
 export const EventCreateSchema = EventSchema.extend({
@@ -159,6 +175,7 @@ export type datasetWithRelationsSchema = z.infer<
 export type roleSchema = z.infer<typeof roleSchema>
 export type AuthorizedUserSchema = z.infer<typeof AuthorizedUserSchema>
 export type UserSchema = z.infer<typeof UserSchema>
+export type eventContentSchema = z.infer<typeof eventContentSchema>
 export type eventTypeSchema = z.infer<typeof eventTypeSchema>
 export type collectionNameSchema = z.infer<typeof collectionNameSchema>
 export type EventSchema = z.infer<typeof EventSchema>

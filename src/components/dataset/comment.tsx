@@ -14,7 +14,7 @@ export default function Comment({ event }: { event: EventSchema }) {
         return (
             <li className="flex flex-col">
                 <User user={event.user} size="small" />
-                <div className='ml-8'>
+                <div className="ml-8">
                     <SlateComment event={event} />
                     <time className="text-xs font-bold">
                         {moment(event.created).fromNow()}
@@ -62,12 +62,7 @@ export default function Comment({ event }: { event: EventSchema }) {
                 </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-                <div
-                    className="text-xs"
-                    dangerouslySetInnerHTML={{
-                        __html: event.content,
-                    }}
-                />
+                <SlateComment event={event} />
                 <AcceptDatasetOwner event={event} />
                 <time className="text-xs font-bold">
                     {moment(event.created).fromNow()}
