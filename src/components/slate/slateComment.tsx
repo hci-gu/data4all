@@ -41,7 +41,6 @@ const SlateComment = ({
         paddingBlock: '0.5rem',
         borderWidth: '1px',
         borderColor: '#e2e8f0',
-        display: 'flex',
         borderRadius: '0.25rem',
     }
 
@@ -133,6 +132,8 @@ const Leaf = ({
 const Element = (props: any) => {
     const { attributes, children, element } = props
     switch (element.type) {
+        case 'heading-one':
+            return <h1 {...attributes}>{children}</h1>
         case 'mention':
             return <Mention {...props} />
         default:
