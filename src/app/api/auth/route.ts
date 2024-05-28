@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import PocketBase, { ClientResponseError } from 'pocketbase'
-import { env } from '@/lib/env'
-const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
+import { ClientResponseError } from 'pocketbase'
+import { pbForRequest } from '@/adapters/pocketbase'
 
 export async function GET(request: NextRequest) {
+    const pb = pbForRequest(request)
     try {
         const name = request.nextUrl.searchParams.get('name') ?? ''
         const cookie = request.headers.get('auth')
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
                 { status: 403 }
             )
         }
-        pb.authStore.loadFromCookie(cookie)
+
         const records = await pb.collection('users').getList(1, 25, {
             sort: '-created',
             filter: `name ~ "${decodeURI(name)}"`,

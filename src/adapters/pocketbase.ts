@@ -6,6 +6,8 @@ export const pbForRequest = (request: NextRequest) => {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const cookie = request.headers.get('auth')
 
+    pb.autoCancellation(false)
+
     if (cookie) {
         pb.authStore.loadFromCookie(cookie)
     }

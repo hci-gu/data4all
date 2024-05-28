@@ -85,11 +85,10 @@ export const removeUser = async (
     })
 }
 
-export const getUsers = async (
-    userName: string,
-    authCookie: string
-): Promise<AuthorizedUserSchema[]> => {
-    return await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
+export const getUsers = async (userName: string, authCookie: string) => {
+    return AuthorizedUserSchema.array().parse(
+        await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
+    )
 }
 export const getUser = async (
     userName: string,
@@ -199,7 +198,9 @@ export const getFeed = async (
 }
 
 export const getRoles = async () => {
-    return roleSchema.array().parse(await apiRequest(apiUrl(`auth/roles`), 'GET'))
+    return roleSchema
+        .array()
+        .parse(await apiRequest(apiUrl(`auth/roles`), 'GET'))
 }
 
 function responseDatasetCleanup(res: any) {
