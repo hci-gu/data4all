@@ -14,8 +14,7 @@ export default function SearchResults({
 }: {
     searchTerm: string | undefined
 }) {
-    const userContext = useContext(authContext)
-    const authCookie = userContext.cookie
+    const { cookie, auth } = useContext(authContext)
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
     const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
@@ -25,12 +24,12 @@ export default function SearchResults({
             if (!searchTerm) {
                 return
             }
-            const users = await api.getUsers(searchTerm, authCookie)
-            setDatasets(await api.getDatasets(searchTerm, authCookie))
-            setUsers(users.filter((user) => user.id !== userContext.auth.id))
+            const users = await api.getUsers(searchTerm, cookie)
+            setDatasets(await api.getDatasets(searchTerm, cookie))
+            setUsers(users.filter((user) => user.id !== auth.id))
         }
         fetchData()
-    }, [searchTerm])
+    }, [searchTerm, cookie, auth.id])
 
     return (
         <>
