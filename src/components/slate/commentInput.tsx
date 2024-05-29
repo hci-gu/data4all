@@ -107,16 +107,21 @@ export const CommentInput = ({
                         event.preventDefault()
                         if (!isShiftDown) {
                             onSubmit()
+                        } else if (
+                            JSON.stringify(editor.children) !==
+                            JSON.stringify([
+                                { type: 'paragraph', children: [{ text: '' }] },
+                            ])
+                        ) {
+                            const newParagrapgh: ParagraphElement = {
+                                type: 'paragraph',
+                                children: [{ text: '' }],
+                            }
+                            //@ts-ignore
+                            Transforms.select(editor, target)
+                            Transforms.insertNodes(editor, newParagrapgh)
+                            Transforms.move(editor)
                         }
-
-                        const newParagrapgh: ParagraphElement = {
-                            type: 'paragraph',
-                            children: [{ text: '' }],
-                        }
-                        //@ts-ignore
-                        Transforms.select(editor, target)
-                        Transforms.insertNodes(editor, newParagrapgh)
-                        Transforms.move(editor)
 
                         break
                     case 'Shift':
@@ -152,43 +157,46 @@ export const CommentInput = ({
     }, [possibleMentions.length, editor, index, search, target])
 
     const onSubmit = async () => {
-        const { anchor, focus } = editor.selection
+        if (
+            JSON.stringify(editor.children) !==
+            JSON.stringify([{ type: 'paragraph', children: [{ text: '' }] }])
+        ) {
+            const userMentions = mentions.filter((m) => m.type === 'user')
+            const mentionedUsers = users.filter((u) =>
+                userMentions.find((m) => m.slug === u.slug)
+            )
 
-        const userMentions = mentions.filter((m) => m.type === 'user')
-        const mentionedUsers = users.filter((u) =>
-            userMentions.find((m) => m.slug === u.slug)
-        )
+            const roleMentions = mentions.filter((m) => m.type === 'role')
+            const mentionedRoles = roles.filter((r) =>
+                roleMentions.find((m) => m.name === r.name)
+            )
 
-        const roleMentions = mentions.filter((m) => m.type === 'role')
-        const mentionedRoles = roles.filter((r) =>
-            roleMentions.find((m) => m.name === r.name)
-        )
+            const newEvent = await createEvent(
+                {
+                    content: editor.children,
+                    mentions,
+                    user: user.auth.id,
+                    dataset: datasetId,
+                    subject: mentionedUsers,
+                    subjectRole: mentionedRoles,
+                    types: 'comment',
+                },
+                user.cookie
+            )
 
-        const newEvent = await createEvent(
-            {
-                content: editor.children,
-                mentions,
-                user: user.auth.id,
-                dataset: datasetId,
-                subject: mentionedUsers,
-                subjectRole: mentionedRoles,
-                types: 'comment',
-            },
-            user.cookie
-        )
+            eventContext.setEvents((prev) => [newEvent, ...prev])
 
-        eventContext.setEvents((prev) => [newEvent, ...prev])
+            editor.children = [
+                {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                },
+            ]
 
-        editor.children = [
-            {
-                type: 'paragraph',
-                children: [{ text: '' }],
-            },
-        ]
-
-        editor.selection = {
-            anchor: { path: [0, 0], offset: 0 },
-            focus: { path: [0, 0], offset: 0 },
+            editor.selection = {
+                anchor: { path: [0, 0], offset: 0 },
+                focus: { path: [0, 0], offset: 0 },
+            }
         }
     }
 
