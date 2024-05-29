@@ -44,7 +44,7 @@ export default function DataOwner() {
             username: 'users36283',
             verified: false,
             slug: 'sebastian-andreasson',
-            is_admin: false
+            is_admin: false,
         },
         {
             collectionId: '_pb_users_auth_',
@@ -59,7 +59,7 @@ export default function DataOwner() {
             username: 'users36283',
             verified: false,
             slug: 'styris.n@gmail.com',
-            is_admin: false
+            is_admin: false,
         },
         {
             avatar: '',
@@ -75,7 +75,7 @@ export default function DataOwner() {
             username: 'users48961',
             verified: false,
             slug: 'exampel',
-            is_admin: false
+            is_admin: false,
         },
         {
             avatar: '',
@@ -91,13 +91,13 @@ export default function DataOwner() {
             username: 'users48961',
             verified: false,
             slug: 'josef',
-            is_admin: false
+            is_admin: false,
         },
     ]
     const { cookie } = useContext(authContext)
     const { dataset } = useContext(DatasetContext)
 
-    const [users, setUsers] = useState<AuthorizedUserSchema[]>(recommendedUsers)
+    const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
     const [searchTerm, setSearchTerm] = useState('')
     const time = 250
     const debouncedSearchTerm = useDebouncedValue(searchTerm, time)
@@ -113,18 +113,17 @@ export default function DataOwner() {
         },
     })
 
-    const autoComplete = async () => {
-        await Promise.allSettled([
-            debouncedSearchTerm
-                ? setUsers(await getUsers(debouncedSearchTerm, cookie))
-                : setUsers(recommendedUsers),
-            new Promise((resolve) => setTimeout(resolve, time)),
-        ])
-    }
-
     useEffect(() => {
+        const autoComplete = async () => {
+            await Promise.allSettled([
+                debouncedSearchTerm
+                    ? setUsers(await getUsers(debouncedSearchTerm, cookie))
+                    : setUsers([]),
+                new Promise((resolve) => setTimeout(resolve, time)),
+            ])
+        }
         autoComplete()
-    }, [debouncedSearchTerm])
+    }, [debouncedSearchTerm, cookie])
 
     if (!dataset.dataowner) {
         return (
