@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 import { getInitials } from '@/lib/utils'
 
 export default function ActivityFlow() {
-    const events = useContext(EventContext)
+    const { events, setEvents } = useContext(EventContext)
     const { dataset } = useContext(DatasetContext)
     const { cookie, auth } = useContext(authContext)
 
@@ -28,15 +28,16 @@ export default function ActivityFlow() {
         return aDate < bDate ? 1 : -1
     }
     useEffect(() => {
+        console.log('ActivityFlow useEffect', dataset.id, cookie)
         async function setData() {
-            events.setEvents(
+            setEvents(
                 (await api.getEvents(dataset.id, cookie)).sort(sortEvents)
             )
             setRoles(await api.getRoles())
             setUsers(await api.getUsers('', cookie))
         }
         setData()
-    }, [])
+    }, [dataset.id, cookie, setEvents])
 
     return (
         <>
@@ -53,7 +54,7 @@ export default function ActivityFlow() {
                 />
             </div>
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-                {events.events.map((event) => {
+                {events.map((event) => {
                     return <Comment event={event} key={event.id} />
                 })}
             </ul>
