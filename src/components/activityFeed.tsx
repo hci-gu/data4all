@@ -65,7 +65,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
             setLoading(false)
         }
         fetchEvents()
-    }, [activeFilter])
+    }, [activeFilter, pageNumber, cookie])
 
     return (
         <>
