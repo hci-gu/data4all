@@ -3,13 +3,15 @@ import {
     createByUserName,
     createDataset,
     createEvent,
+    createRole,
     loggedInUser,
 } from './setup/utils'
 
 test.describe('Profile page', () => {
     test.describe('Logged in user', () => {
         test.beforeEach(async ({ request, context }) => {
-            await loggedInUser({ request, context })
+            const role = await createRole()
+            await loggedInUser({ request, context, role })
         })
 
         test('Can reach the profile page', async ({ page }) => {
@@ -20,7 +22,8 @@ test.describe('Profile page', () => {
         })
         test('Can reach someone else profile page', async ({ page }) => {
             const name = 'tester logged in New user'
-            await createByUserName(name)
+            const role = await createRole()
+            await createByUserName(name, role)
 
             await page.goto(`/profile/${name}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
@@ -111,8 +114,9 @@ test.describe('Profile page', () => {
 
     test.describe('user has a linked dataset', () => {
         test.beforeEach(async ({ request, context }) => {
-            const user = await loggedInUser({ request, context })
-            const dataset = await createDataset('test title')
+            const role = await createRole()
+            const user = await loggedInUser({ request, context, role })
+            const dataset = await createDataset('test title', user.id)
             await createEvent(dataset.id, user.id)
         })
 
@@ -128,9 +132,10 @@ test.describe('Profile page', () => {
     })
     test.describe('someone else has a linked dataset', () => {
         test.beforeEach(async ({ request, context }) => {
-            await loggedInUser({ request, context })
-            const user = await createByUserName('tester someone user')
-            const dataset = await createDataset('test title')
+            const role = await createRole()
+            await loggedInUser({ request, context, role })
+            const user = await createByUserName('tester someone user', role)
+            const dataset = await createDataset('test title', user.id)
             await createEvent(dataset.id, user.id)
         })
 
@@ -146,8 +151,9 @@ test.describe('Profile page', () => {
         })
     })
     test.describe('user does not have dataset', () => {
-        test.beforeEach(async ({ page, request, context }) => {
-            await loggedInUser({ request, context })
+        test.beforeEach(async ({ request, context }) => {
+            const role = await createRole()
+            await loggedInUser({ request, context, role })
         })
 
         test('does not have dataset', async ({ page, request, context }) => {
@@ -163,9 +169,10 @@ test.describe('Profile page', () => {
         })
     })
     test.describe('someone else does not have dataset', () => {
-        test.beforeEach(async ({ page, request, context }) => {
-            await loggedInUser({ request, context })
-            await createByUserName('tester not have dataset user')
+        test.beforeEach(async ({ request, context }) => {
+            const role = await createRole()
+            await loggedInUser({ request, context, role })
+            await createByUserName('tester not have dataset user', role)
         })
 
         test('does not have dataset', async ({ page, request, context }) => {

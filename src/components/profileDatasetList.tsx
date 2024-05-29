@@ -11,29 +11,26 @@ export default function ProfileDatasetList({
 }: {
     username?: string
 }) {
-    const userContext = useContext(authContext)
-    const user = userContext.auth
-    const cookie = userContext.cookie
+    const { auth, cookie } = useContext(authContext)
 
     const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
 
-    async function fetchData() {
-        try {
-            if (username) {
-                const userId = (await api.getUser(username, cookie)).id
-                setDatasets(await api.getDatasetFromUser(userId, cookie))
-            }
-            if (!username) {
-                setDatasets(await api.getDatasetFromUser(user.id, cookie))
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
     useEffect(() => {
+        async function fetchData() {
+            try {
+                if (username) {
+                    const userId = (await api.getUser(username, cookie)).id
+                    setDatasets(await api.getDatasetFromUser(userId, cookie))
+                }
+                if (!username) {
+                    setDatasets(await api.getDatasetFromUser(auth.id, cookie))
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
         fetchData()
-    }, [])
+    }, [auth.id, cookie, username])
 
     if (datasets.length > 0) {
         return (

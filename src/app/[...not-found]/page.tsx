@@ -1,7 +1,7 @@
 'use client'
 
-import { NotfoundRespond } from '@/components/error'
+import { NotFoundResponse } from '@/components/error'
 
 export default function Error() {
-    return <NotfoundRespond />
+    return <NotFoundResponse />
 }

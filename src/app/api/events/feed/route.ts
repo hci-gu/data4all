@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
         }
 
         let records = []
+
         switch (filter) {
             case FeedFilter.Tagged:
                 //@ts-ignore
@@ -23,12 +24,41 @@ export async function GET(request: NextRequest) {
                     //@ts-ignore
                     .getList(pageNumber as number, 15, {
                         sort: '-created',
-                        filter: `subject = "${pb.authStore.model?.id || 'no user found'}"`,
+                        filter: `subject ~ "${pb.authStore.model?.id}"`,
                         expand: 'user,subject,dataset',
                     })
+
                 break
             case FeedFilter.MyDatasets:
-            // TODO: implement this
+                const ownedDatasets = await pb
+                    .collection('dataset')
+                    .getFullList({
+                        filter: `dataowner="${pb.authStore.model?.id}"`,
+                    })
+
+                if (ownedDatasets.length > 0) {
+                    //@ts-ignore
+                    records = await pb
+                        .collection('events')
+                        //@ts-ignore
+                        .getList(pageNumber as number, 15, {
+                            sort: '-created',
+                            filter: ownedDatasets
+                                .map((dataset) => `dataset="${dataset.id}"`)
+                                .join('||'),
+                            expand: 'user,subject,dataset',
+                        })
+                } else {
+                    records = {
+                        //@ts-ignore
+                        page: 1,
+                        perPage: 15,
+                        totalItems: 0,
+                        totalPages: 1,
+                        items: [],
+                    }
+                }
+                break
             case FeedFilter.All:
                 //@ts-ignore
                 records = await pb

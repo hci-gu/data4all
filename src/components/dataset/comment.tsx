@@ -1,26 +1,21 @@
-import { EventSchema, datasetWithRelationsSchema } from '@/types/zod'
+import { EventSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import moment from 'moment'
-import User from '../user'
 import Image from 'next/image'
 import Dataportal from '../../../public/dataportal.png'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 import AcceptDatasetOwner from './acceptDatasetOwner'
+import SlateComment from '../slate/slateComment'
+import User from '../user'
 
-export default function Comment({
-    event,
-}: {
-    event: EventSchema
-}) {
+export default function Comment({ event }: { event: EventSchema }) {
     if (event.types === 'comment') {
         return (
-            <li className="flex flex-col gap-1">
+            <li className="flex flex-col">
                 <User user={event.user} size="small" />
-                <div className="ml-8 flex flex-col gap-1">
-                    <div className="rounded-lg rounded-tl-none border border-slate-200 p-2">
-                        <p className="text-xs">{event.content}</p>
-                    </div>
+                <div className="ml-8">
+                    <SlateComment event={event} />
                     <time className="text-xs font-bold">
                         {moment(event.created).fromNow()}
                     </time>
@@ -67,12 +62,7 @@ export default function Comment({
                 </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-                <div
-                    className="text-xs"
-                    dangerouslySetInnerHTML={{
-                        __html: event.content,
-                    }}
-                />
+                <SlateComment event={event} />
                 <AcceptDatasetOwner event={event} />
                 <time className="text-xs font-bold">
                     {moment(event.created).fromNow()}

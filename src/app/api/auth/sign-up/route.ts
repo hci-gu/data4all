@@ -7,19 +7,25 @@ import PocketBase, { ClientResponseError } from 'pocketbase'
 export async function POST(request: Request) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
     const newUser = signUpSchema.parse(await request.json())
-    const data = {
-        email: newUser.email,
-        emailVisibility: true,
-        password: newUser.password,
-        passwordConfirm: newUser.passwordConfirmation,
-        name: newUser.name,
-        role: newUser.role,
-        slug: stringWithHyphen(newUser.name),
-    }
     try {
+        const role = await pb
+            .collection('roles')
+            .getFirstListItem(`name="${newUser.role}"`)
+
+
+        const data = {
+            email: newUser.email,
+            emailVisibility: true,
+            password: newUser.password,
+            passwordConfirm: newUser.passwordConfirmation,
+            name: newUser.name,
+            role: role.id,
+            slug: stringWithHyphen(newUser.name),
+        }
         await pb.collection('users').create(data)
         return NextResponse.json({ message: 'success' }, { status: 200 })
     } catch (error) {
+
         if (error instanceof ClientResponseError) {
             return NextResponse.json(
                 { message: 'misslyckades att registrera användare' },

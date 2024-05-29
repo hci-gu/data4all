@@ -1,5 +1,5 @@
 import test, { expect } from '@playwright/test'
-import { createDataset, loggedInUser } from './setup/utils'
+import { createDataset, createRole, loggedInUser } from './setup/utils'
 
 const searchTerms = [
     'search test title -1',
@@ -16,8 +16,9 @@ test.beforeAll(async () => {
 })
 
 test.describe('Search page', () => {
-    test.beforeEach(async ({ request, context }) => {
-        await loggedInUser({ request, context })
+    test.beforeEach(async ({ page, request, context }) => {
+        const role = await createRole()
+        await loggedInUser({ request, context, role })
     })
 
     test('Will get empty state when search has no matches', async ({

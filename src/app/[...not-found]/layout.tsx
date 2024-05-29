@@ -18,12 +18,12 @@ export const metadata: Metadata = {
     description: 'A data handling service',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    const user = loadAuthorizedUser()
+    const user = await loadAuthorizedUser()
     const authCookie = cookies().get('PBAuth')
 
     if (!authCookie) {

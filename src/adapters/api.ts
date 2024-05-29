@@ -10,6 +10,7 @@ import {
     AuthorizedUserSchema,
     EventCreateSchema,
     EventFeedResponse,
+    roleSchema,
 } from '@/types/zod'
 import PocketBase from 'pocketbase'
 export const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
@@ -84,11 +85,10 @@ export const removeUser = async (
     })
 }
 
-export const getUsers = async (
-    userName: string,
-    authCookie: string
-): Promise<AuthorizedUserSchema[]> => {
-    return await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
+export const getUsers = async (userName: string, authCookie: string) => {
+    return AuthorizedUserSchema.array().parse(
+        await apiRequest(apiUrl(`auth?name=${userName}`), 'GET', authCookie)
+    )
 }
 export const getUser = async (
     userName: string,
@@ -135,7 +135,7 @@ export const updateDataset = async (
     dataset: Partial<datasetWithRelationsSchema>,
     authCookie: string
 ) => {
-    const datasetRespond = await apiRequest(
+    const datasetResponse = await apiRequest(
         apiUrl(`datasets/${encodeURI(datasetId)}`),
         'PATCH',
         authCookie,
@@ -143,16 +143,17 @@ export const updateDataset = async (
     )
 
     return datasetWithRelationsSchema.parse(
-        responseDatasetCleanup(datasetRespond)
+        responseDatasetCleanup(datasetResponse)
     )
 }
 // Events
 export const getEvents = async (datasetId: string, authCookie: string) => {
-    const events = (await apiRequest(
+    const events = await apiRequest(
         apiUrl(`events/${datasetId}`),
         'GET',
         authCookie
-    )) as []
+    )
+
     const cleanEvent = events.map(responseEventCleanup)
 
     return EventSchema.array().parse(cleanEvent)
@@ -193,25 +194,41 @@ export const getFeed = async (
     )) as []
 
     const clean = responseFeedCleanup(events)
-    console.log(clean)
-
     return EventFeedResponse.parse(clean)
 }
 
+export const getRoles = async () => {
+    return roleSchema
+        .array()
+        .parse(await apiRequest(apiUrl(`auth/roles`), 'GET'))
+}
+
 function responseDatasetCleanup(res: any) {
+    const dataowner = res?.expand?.dataowner
+
     const cleanDataset = {
         ...res,
         relatedDatasets: res?.expand?.related_datasets ?? [],
         tags: res?.expand?.tag ?? [],
-        dataowner: res?.expand?.dataowner,
+        dataowner: dataowner
+            ? {
+                  ...dataowner,
+                  role: dataowner?.expand?.role.name,
+              }
+            : null,
     }
     return cleanDataset
 }
 function responseEventCleanup(res: any): EventSchema {
+    const subject = res?.expand?.subject
+    const user = res?.expand?.user
     return {
         ...res,
-        user: res?.expand?.user,
-        subject: res?.expand?.subject,
+        user: user ? { ...user, role: user?.expand?.role.name } : null,
+        subject: subject?.map((sub: any) => {
+            return { ...sub, role: sub?.expand?.role.name }
+        }),
+        subjectRole: res?.expand?.subjectRole,
     }
 }
 function responseFeedEventCleanup(res: any) {

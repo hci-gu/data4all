@@ -14,7 +14,7 @@ import uuid from 'short-uuid'
 
 const pb = new PocketBase('http://localhost:8090')
 
-export const createUser = async (userRole?: roleSchema) => {
+export const createUser = async (role: string, is_admin: boolean) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const name = `tester user ${uuid.generate()}`
@@ -23,9 +23,10 @@ export const createUser = async (userRole?: roleSchema) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: userRole ?? 'Jurist',
+        role,
         name,
         slug: stringWithHyphen(name),
+        is_admin,
     }
     const user = await pb
         .collection<AuthorizedUserSchema>('users')
@@ -37,7 +38,7 @@ export const createUser = async (userRole?: roleSchema) => {
     }
 }
 
-export const createByUserName = async (name: string) => {
+export const createByUserName = async (name: string, role: roleSchema) => {
     const email = `test.user_${uuid.generate()}@kungsbacka.se`
     const password = '123456789'
     const user = await pb.collection<AuthorizedUserSchema>('users').create({
@@ -45,14 +46,17 @@ export const createByUserName = async (name: string) => {
         emailVisibility: true,
         password,
         passwordConfirm: password,
-        role: 'Jurist',
+        role: role.id,
         name,
         slug: stringWithHyphen(name),
     })
     return user
 }
 
-export const createDataset = async (titleValue: string) => {
+export const createDataset = async (
+    titleValue: string,
+    dataOwnerId?: string
+) => {
     await pb.admins.authWithPassword('admin@email.com', 'password123')
     const title = titleValue
     const description = 'test description'
@@ -61,6 +65,7 @@ export const createDataset = async (titleValue: string) => {
         title,
         description,
         slug,
+        dataowner: dataOwnerId,
     })
     return { ...dataset, title, description }
 }
@@ -106,6 +111,16 @@ export const createEvent = async (
     return EventSchema.parse(responseEventCleanup(event))
 }
 
+export const createRole = async (roleName?: string) => {
+    if (!roleName) {
+        roleName = `tester role ${uuid.generate()}`
+    }
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
+    return await pb.collection<roleSchema>('roles').create({
+        name: roleName,
+    })
+}
+
 function parseCookie(cookieString: string): any {
     const [nameValue, ...attributes] = cookieString.split('; ')
     const [name, value] = nameValue.split('=')
@@ -125,13 +140,15 @@ function parseCookie(cookieString: string): any {
 export const loggedInUser = async ({
     request,
     context,
-    userRole = 'Jurist',
+    role,
+    is_admin = false,
 }: {
     request: APIRequestContext
     context: BrowserContext
-    userRole?: roleSchema
+    role: roleSchema
+    is_admin?: boolean
 }) => {
-    const user = await createUser(userRole)
+    const user = await createUser(role.id, is_admin)
     const response = await request.post('/api/auth/sign-in', {
         data: { email: user.email, password: user.password },
         headers: { 'Content-Type': 'application/json' },

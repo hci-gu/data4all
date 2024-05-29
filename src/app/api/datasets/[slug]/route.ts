@@ -3,6 +3,7 @@ import * as utils from './../utils'
 import { ClientResponseError } from 'pocketbase'
 import { pbForRequest } from '@/adapters/pocketbase'
 import { datasetSchema, datasetWithRelationsSchema } from '@/types/zod'
+import { ZodError } from 'zod'
 
 export async function GET(
     req: NextRequest,
@@ -56,10 +57,9 @@ export async function PATCH(
                 params.slug,
                 { ...body, dataowner: body.dataowner?.id },
                 {
-                    expand: 'related_datasets,tag,dataowner',
+                    expand: 'related_datasets,tag,dataowner,dataowner.role',
                 }
             )
-
         return NextResponse.json(
             {
                 message: 'success',
@@ -68,6 +68,13 @@ export async function PATCH(
             { status: 200 }
         )
     } catch (error) {
+        if (error instanceof ZodError) {
+            return NextResponse.json(
+                { message: 'Formateringen av data är incorrect' },
+                { status: 415 }
+            )
+        }
+
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(

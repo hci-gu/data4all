@@ -31,29 +31,15 @@ export async function datasetForSlug(datasetSlug: string, pb: PocketBase) {
     const records = await pb
         .collection<datasetWithRelationsSchema>('dataset')
         .getFirstListItem(`slug="${datasetSlug}"`, {
-            expand: 'related_datasets,tag,dataowner',
+            expand: 'related_datasets,tag,dataowner,dataowner.role',
         })
 
     return records
 }
 export async function datasetsForUserId(userId: string, pb: PocketBase) {
-    const userEvents = await pb
-        .collection<EventSchema>('events')
-        .getList(1, 50, {
-            filter: `user = "${userId}"`,
-        })
+    const datasets = await pb.collection('dataset').getList(1, 25, {
+        filter: `dataowner="${userId}"`,
+    })
 
-    if (userEvents.items.length === 0) {
-        return []
-    }
-
-    const datasetIds = Array.from(
-        new Set(userEvents.items.map((e) => e.dataset))
-    )
-
-    const datasets = await datasetsForIds(datasetIds, pb)
-
-    await Promise.all(datasets)
-
-    return datasets
+    return datasets.items
 }

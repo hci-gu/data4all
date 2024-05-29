@@ -15,17 +15,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { roleSchema, updateUserSchema } from '@/types/zod'
+import { updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { getUser, updateUser } from '@/adapters/api'
+import { getRoles, getUser, updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { authContext } from '@/lib/context/authContext'
 
-export default function UpdateUserForm() {
+export default function UpdateUserForm({ roles }: { roles: any[] }) {
     const userContext = useContext(authContext)
     const user = userContext.auth
     const cookie = userContext.cookie
@@ -43,8 +43,6 @@ export default function UpdateUserForm() {
             slug: user.slug,
         },
     })
-
-    const roles = Object.values(roleSchema.Values).filter((role) => role !== 'Admin')
 
     const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
@@ -194,8 +192,11 @@ export default function UpdateUserForm() {
                                     </FormControl>
                                     <SelectContent>
                                         {roles.map((role) => (
-                                            <SelectItem value={role} key={role}>
-                                                {role}
+                                            <SelectItem
+                                                value={role.name}
+                                                key={role.name}
+                                            >
+                                                {role.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

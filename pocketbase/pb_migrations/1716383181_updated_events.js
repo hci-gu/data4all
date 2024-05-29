@@ -1,49 +1,46 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((db) => {
   const dao = new Dao(db)
-  const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
+  const collection = dao.findCollectionByNameOrId("zrb2mseythst5ev")
 
-  // update
+  // remove
+  collection.schema.removeField("pyebmd6d")
+
+  // add
   collection.schema.addField(new SchemaField({
     "system": false,
-    "id": "gwilshbx",
-    "name": "role",
-    "type": "select",
-    "required": true,
+    "id": "hbmgkwus",
+    "name": "content",
+    "type": "json",
+    "required": false,
     "presentable": false,
     "unique": false,
     "options": {
-      "maxSelect": 1,
-      "values": [
-        "Jurist",
-        "Utvecklare",
-        "Admin"
-      ]
+      "maxSize": 2000000
     }
   }))
 
   return dao.saveCollection(collection)
 }, (db) => {
   const dao = new Dao(db)
-  const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
+  const collection = dao.findCollectionByNameOrId("zrb2mseythst5ev")
 
-  // update
+  // add
   collection.schema.addField(new SchemaField({
     "system": false,
-    "id": "gwilshbx",
-    "name": "role",
-    "type": "select",
+    "id": "pyebmd6d",
+    "name": "content",
+    "type": "editor",
     "required": true,
     "presentable": false,
     "unique": false,
     "options": {
-      "maxSelect": 1,
-      "values": [
-        "User",
-        "Admin"
-      ]
+      "convertUrls": false
     }
   }))
+
+  // remove
+  collection.schema.removeField("hbmgkwus")
 
   return dao.saveCollection(collection)
 })

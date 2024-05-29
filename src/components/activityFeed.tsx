@@ -61,12 +61,14 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
         async function fetchEvents() {
             const events = await api.getFeed(cookie, activeFilter, pageNumber)
             setEvents(events)
-            console.log(events.totalPages)
 
             setLoading(false)
         }
         fetchEvents()
-    }, [activeFilter])
+    }, [activeFilter, pageNumber, cookie])
+    
+    console.log(pageNumber, nextPage, previusPage);
+    
 
     return (
         <>
@@ -126,7 +128,7 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         </div>
                     </DialogContent>
                 </Dialog>
-                <ul className="flex w-full flex-col gap-4">
+                <ul className="flex h-full w-full flex-col gap-4">
                     {loading ? (
                         <p className="flex flex-col items-center text-center text-slate-500">
                             <Loader2
@@ -143,72 +145,74 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
                         <p className="text-center">Hittade inga händelser</p>
                     )}
                 </ul>
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            {pageNumber == 1 ? (
-                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
-                                    <ChevronLeft
-                                        className="h-4 w-4"
-                                        color="#cbd5e1"
+                {events && events.totalPages > 1 && (
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                {pageNumber == 1 ? (
+                                    <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                        <ChevronLeft
+                                            className="h-4 w-4"
+                                            color="#cbd5e1"
+                                        />
+                                        <span>Föregående</span>
+                                    </div>
+                                ) : (
+                                    <PaginationPrevious
+                                        href={`/?pageNumber=${previusPage}`}
                                     />
-                                    <span>Föregående</span>
-                                </div>
-                            ) : (
-                                <PaginationPrevious
-                                    href={`/?pageNumber=${previusPage}`}
-                                />
-                            )}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {pageNumber == 1 ? (
-                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
-                                    1
-                                </div>
-                            ) : (
-                                <PaginationLink href={`/?pageNumber=${1}`}>
-                                    {1}
-                                </PaginationLink>
-                            )}
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink
-                                isActive={true}
-                                className="cursor-default hover:bg-transparent"
-                            >
-                                {pageNumber ?? 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            {pageNumber == events?.totalPages ? (
-                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
-                                    {events?.totalPages ?? 99}
-                                </div>
-                            ) : (
+                                )}
+                            </PaginationItem>
+                            <PaginationItem>
+                                {pageNumber == 1 ? (
+                                    <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
+                                        1
+                                    </div>
+                                ) : (
+                                    <PaginationLink href={`/?pageNumber=${1}`}>
+                                        {1}
+                                    </PaginationLink>
+                                )}
+                            </PaginationItem>
+                            <PaginationItem>
                                 <PaginationLink
-                                    href={`/?pageNumber=${events?.totalPages ?? 99}`}
+                                    isActive={true}
+                                    className="cursor-default hover:bg-transparent"
                                 >
-                                    {events?.totalPages ?? 99}
+                                    {pageNumber}
                                 </PaginationLink>
-                            )}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {pageNumber == events?.totalPages ? (
-                                <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
-                                    <span>Nästa</span>
-                                    <ChevronRight
-                                        className="h-4 w-4"
-                                        color="#cbd5e1"
+                            </PaginationItem>
+                            <PaginationItem>
+                                {pageNumber >= events.totalPages ? (
+                                    <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-0">
+                                        {events.totalPages}
+                                    </div>
+                                ) : (
+                                    <PaginationLink
+                                        href={`/?pageNumber=${events.totalPages}`}
+                                    >
+                                        {events?.totalPages}
+                                    </PaginationLink>
+                                )}
+                            </PaginationItem>
+                            <PaginationItem>
+                                {pageNumber >= events.totalPages ? (
+                                    <div className="font flex h-10 cursor-default items-center gap-1 px-4 py-2 text-sm font-medium opacity-50">
+                                        <span>Nästa</span>
+                                        <ChevronRight
+                                            className="h-4 w-4"
+                                            color="#cbd5e1"
+                                        />
+                                    </div>
+                                ) : (
+                                    <PaginationNext
+                                        href={`/?pageNumber=${nextPage}`}
                                     />
-                                </div>
-                            ) : (
-                                <PaginationNext
-                                    href={`/?pageNumber=${nextPage}`}
-                                />
-                            )}
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+                                )}
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                )}
             </div>
         </>
     )

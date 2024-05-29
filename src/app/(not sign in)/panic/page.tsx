@@ -21,7 +21,7 @@ export default function Panic() {
         } catch (error) {
             setRedirectFailed(true)
         }
-    })
+    }, [router])
     if (redirectFailed) {
         return (
             <main className="grid h-screen place-content-center">

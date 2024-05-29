@@ -1,0 +1,946 @@
+{
+    "tags": [
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.381Z",
+            "id": "s61zbes5ywyy3k9",
+            "name": "Energy",
+            "updated": "2024-05-22 08:17:07.381Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.383Z",
+            "id": "gwmnokf4jyvyzc3",
+            "name": "Finance",
+            "updated": "2024-05-22 08:17:07.383Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.387Z",
+            "id": "fhfn4cui18p7713",
+            "name": "Weather",
+            "updated": "2024-05-22 08:17:07.387Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.389Z",
+            "id": "nhkyixz3ujs3p8k",
+            "name": "Web Analytics",
+            "updated": "2024-05-22 08:17:07.389Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.393Z",
+            "id": "5pzyfqxplq29q0m",
+            "name": "Environmental",
+            "updated": "2024-05-22 08:17:07.393Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.396Z",
+            "id": "4tlnlk35t3f7rgi",
+            "name": "Sales",
+            "updated": "2024-05-22 08:17:07.396Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.399Z",
+            "id": "2jrociwhkagkeu1",
+            "name": "Economics",
+            "updated": "2024-05-22 08:17:07.399Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.402Z",
+            "id": "hnvap936zctanak",
+            "name": "Social Media",
+            "updated": "2024-05-22 08:17:07.402Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.405Z",
+            "id": "n0ww6venao2oijf",
+            "name": "Transportation",
+            "updated": "2024-05-22 08:17:07.405Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.406Z",
+            "id": "e2hnqegssi4tkwr",
+            "name": "Employment",
+            "updated": "2024-05-22 08:17:07.406Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.411Z",
+            "id": "wd4hajms9hd43pz",
+            "name": "CRM",
+            "updated": "2024-05-22 08:17:07.411Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.414Z",
+            "id": "9q73mcomooea0lf",
+            "name": "Economic Indicator",
+            "updated": "2024-05-22 08:17:07.414Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.418Z",
+            "id": "jod1en1vte66p2a",
+            "name": "Climate",
+            "updated": "2024-05-22 08:17:07.418Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.421Z",
+            "id": "7k3csx1jlzwett4",
+            "name": "Market Analysi",
+            "updated": "2024-05-22 08:17:07.421Z"
+        },
+        {
+            "collectionId": "pgj749tbz9a41vm",
+            "collectionName": "tag",
+            "created": "2024-05-22 08:17:07.424Z",
+            "id": "a7pknwj0100peni",
+            "name": "Demographics",
+            "updated": "2024-05-22 08:17:07.424Z"
+        }
+    ],
+
+    "datasets": [
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.472Z",
+            "dataowner": "",
+            "description": "Time series data representing electricity consumption in kilowatt-hours (kWh) over a period of time.",
+            "id": "gm8st322o45bmxt",
+            "related_datasets": [],
+            "slug": "electricity-consumption",
+            "tag": ["7k3csx1jlzwett4"],
+            "title": "Electricity Consumption",
+            "updated": "2024-05-22 08:17:10.472Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.472Z",
+            "dataowner": "",
+            "description": "Historical stock prices of a particular company's shares over time.",
+            "id": "rq53dkh5z05sclw",
+            "related_datasets": [],
+            "slug": "stock-prices",
+            "tag": ["9q73mcomooea0lf"],
+            "title": "Stock Prices",
+            "updated": "2024-05-22 08:17:10.472Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.482Z",
+            "dataowner": "",
+            "description": "Time series data representing temperature readings in Celsius or Fahrenheit over time.",
+            "id": "tscv2z8jow5vpey",
+            "related_datasets": [],
+            "slug": "temperature-readings",
+            "tag": ["gwmnokf4jyvyzc3"],
+            "title": "Temperature Readings",
+            "updated": "2024-05-22 08:17:10.482Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.485Z",
+            "dataowner": "",
+            "description": "Time series data representing the number of visitors to a website over time.",
+            "id": "h7t42lz3o1xzi84",
+            "related_datasets": [],
+            "slug": "website-traffic",
+            "tag": ["4tlnlk35t3f7rgi"],
+            "title": "Website Traffic",
+            "updated": "2024-05-22 08:17:10.485Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.488Z",
+            "dataowner": "",
+            "description": "Time series data representing the Air Quality Index (AQI) over time.",
+            "id": "sq71grfa4w4e7kb",
+            "related_datasets": [],
+            "slug": "air-quality-index",
+            "tag": ["2jrociwhkagkeu1"],
+            "title": "Air Quality Index",
+            "updated": "2024-05-22 08:17:10.488Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.490Z",
+            "dataowner": "",
+            "description": "Time series data representing sales revenue of a company over a period of time.",
+            "id": "scd4r4p8ocx7v71",
+            "related_datasets": [],
+            "slug": "sales-revenue",
+            "tag": ["e2hnqegssi4tkwr"],
+            "title": "Sales Revenue",
+            "updated": "2024-05-22 08:17:10.490Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.493Z",
+            "dataowner": "",
+            "description": "Time series data representing exchange rates between two currencies over time.",
+            "id": "cx5t8a9aexvozz5",
+            "related_datasets": [],
+            "slug": "exchange-rates",
+            "tag": ["n0ww6venao2oijf"],
+            "title": "Exchange Rates",
+            "updated": "2024-05-22 08:17:10.493Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.495Z",
+            "dataowner": "",
+            "description": "Time series data representing the number of mentions or interactions on a social media platform over time.",
+            "id": "ce2y5k3wsxrfk2n",
+            "related_datasets": [],
+            "slug": "social-media-mentions",
+            "tag": ["s61zbes5ywyy3k9"],
+            "title": "Social Media Mentions",
+            "updated": "2024-05-22 08:17:10.495Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.497Z",
+            "dataowner": "",
+            "description": "Time series data representing the level of traffic congestion in a city over time.",
+            "id": "snhrzpjahp56ghe",
+            "related_datasets": [],
+            "slug": "traffic-congestion",
+            "tag": ["s61zbes5ywyy3k9"],
+            "title": "Traffic Congestion",
+            "updated": "2024-05-22 08:17:10.497Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.500Z",
+            "dataowner": "",
+            "description": "Time series data representing energy production (e.g., solar, wind, hydro) over time.",
+            "id": "1fr4iz10y06zml7",
+            "related_datasets": [],
+            "slug": "energy-production",
+            "tag": ["fhfn4cui18p7713"],
+            "title": "Energy Production",
+            "updated": "2024-05-22 08:17:10.500Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.503Z",
+            "dataowner": "",
+            "description": "Time series data representing the unemployment rate in a region over time.",
+            "id": "ro1ixm41bbnevjt",
+            "related_datasets": [],
+            "slug": "unemployment-rate",
+            "tag": ["s61zbes5ywyy3k9"],
+            "title": "Unemployment Rate",
+            "updated": "2024-05-22 08:17:10.503Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.505Z",
+            "dataowner": "",
+            "description": "Time series data representing the rate of customer churn (i.e., customer attrition) over time.",
+            "id": "ind2b0mu7vj8qv3",
+            "related_datasets": [],
+            "slug": "customer-churn",
+            "tag": ["4tlnlk35t3f7rgi"],
+            "title": "Customer Churn",
+            "updated": "2024-05-22 08:17:10.505Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.507Z",
+            "dataowner": "",
+            "description": "Time series data representing the Gross Domestic Product (GDP) growth rate of a country over time.",
+            "id": "rpzygtbeiepf93g",
+            "related_datasets": [],
+            "slug": "gdp-growth",
+            "tag": ["gwmnokf4jyvyzc3"],
+            "title": "GDP Growth",
+            "updated": "2024-05-22 08:17:10.507Z"
+        },
+        {
+            "collectionId": "i4w0fcmgytxfkwo",
+            "collectionName": "dataset",
+            "created": "2024-05-22 08:17:10.509Z",
+            "dataowner": "",
+            "description": "Time series data representing the amount of rainfall in millimeters over time.",
+            "id": "4r3jbyl9k6t6xj7",
+            "related_datasets": [],
+            "slug": "rainfall",
+            "tag": ["5pzyfqxplq29q0m"],
+            "title": "Rainfall",
+            "updated": "2024-05-22 08:17:10.509Z"
+        }
+    ],
+
+    "users": [
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:07.732Z",
+            "email": "Suzuka_Nakamoto@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "plylk8ykl6na0lm",
+            "name": "Suzuka Nakamoto",
+            "role": "itwhvikva0zdv09",
+            "slug": "suzuka-nakamoto",
+            "updated": "2024-05-22 08:17:07.732Z",
+            "username": "users77597",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:08.028Z",
+            "email": "Moa_Kikuchi@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "l621gx6xi8qevy8",
+            "name": "Moa Kikuchi",
+            "role": "itwhvikva0zdv09",
+            "slug": "moa-kikuchi",
+            "updated": "2024-05-22 08:17:08.028Z",
+            "username": "users39149",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:08.333Z",
+            "email": "Momoko_Okazaki@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "1lzyja7nmzgn5fp",
+            "name": "Momoko Okazaki",
+            "role": "itwhvikva0zdv09",
+            "slug": "momoko-okazaki",
+            "updated": "2024-05-22 08:17:08.333Z",
+            "username": "users39851",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:08.634Z",
+            "email": "john_smith@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "p6bm0v4x6bgt2h0",
+            "name": "John Smith",
+            "role": "itwhvikva0zdv09",
+            "slug": "john-smith",
+            "updated": "2024-05-22 08:17:08.634Z",
+            "username": "users83861",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:08.930Z",
+            "email": "maria_rodriguez@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "aeelowasz0ut4d8",
+            "name": "Maria Rodriguez",
+            "role": "itwhvikva0zdv09",
+            "slug": "maria-rodriguez",
+            "updated": "2024-05-22 08:17:08.930Z",
+            "username": "users88578",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:09.228Z",
+            "email": "chen_wei@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "qscd3c3ty12hjjp",
+            "name": "Chen Wei",
+            "role": "itwhvikva0zdv09",
+            "slug": "chen-wei",
+            "updated": "2024-05-22 08:17:09.228Z",
+            "username": "users95773",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:09.535Z",
+            "email": "emily_johnson@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "5rit2amdvtfc16l",
+            "name": "Emily Johnson",
+            "role": "itwhvikva0zdv09",
+            "slug": "emily-johnson",
+            "updated": "2024-05-22 08:17:09.535Z",
+            "username": "users32724",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:09.864Z",
+            "email": "muhammad_khan@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "dme3h9oyt2ggw76",
+            "name": "Muhammad Khan",
+            "role": "itwhvikva0zdv09",
+            "slug": "muhammad-khan",
+            "updated": "2024-05-22 08:17:09.864Z",
+            "username": "users11362",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:10.162Z",
+            "email": "sophie_martin@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "sc2nxrqaxzvihb5",
+            "name": "Sophie Martin",
+            "role": "itwhvikva0zdv09",
+            "slug": "sophie-martin",
+            "updated": "2024-05-22 08:17:10.162Z",
+            "username": "users34928",
+            "verified": false
+        },
+        {
+            "avatar": "",
+            "password": "password123",
+            "passwordConfirm": "password123",
+            "collectionId": "_pb_users_auth_",
+            "collectionName": "users",
+            "created": "2024-05-22 08:17:10.472Z",
+            "email": "kim_sung@kungsbacka.com",
+            "emailVisibility": true,
+            "id": "sezqcgi8p8jstjq",
+            "name": "Kim Sung",
+            "role": "itwhvikva0zdv09",
+            "slug": "kim-sung",
+            "updated": "2024-05-22 08:17:10.472Z",
+            "username": "users74674",
+            "verified": false
+        }
+    ],
+
+    "events": [
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "This is a great point!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.512Z",
+            "dataset": "gm8st322o45bmxt",
+            "id": "uzvtrimdt4engg9",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.512Z",
+            "user": "plylk8ykl6na0lm"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I disagree with this perspective."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.516Z",
+            "dataset": "rq53dkh5z05sclw",
+            "id": "qioui9vo4q3f8ge",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.516Z",
+            "user": "l621gx6xi8qevy8"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Could you provide more details on this topic?"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.520Z",
+            "dataset": "tscv2z8jow5vpey",
+            "id": "ve3fq37lt37ewzn",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.520Z",
+            "user": "1lzyja7nmzgn5fp"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Interesting approach, thanks for sharing!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.524Z",
+            "dataset": "h7t42lz3o1xzi84",
+            "id": "4hrqr9n3db2jln2",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.524Z",
+            "user": "p6bm0v4x6bgt2h0"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I found this section very informative."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.528Z",
+            "dataset": "sq71grfa4w4e7kb",
+            "id": "9ni17wkrdnutb66",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.528Z",
+            "user": "aeelowasz0ut4d8"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Momoko Okazaki",
+                                "slug": "momoko-okazaki",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog sig själv som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.532Z",
+            "dataset": "scd4r4p8ocx7v71",
+            "id": "632wjdqy2yik027",
+            "subject": ["1lzyja7nmzgn5fp"],
+            "types": "ownerReq",
+            "updated": "2024-05-22 08:17:10.532Z",
+            "user": "1lzyja7nmzgn5fp"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Moa Kikuchi",
+                                "slug": "moa-kikuchi",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Muhammad Khan",
+                                "slug": "muhammad-khan",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.536Z",
+            "dataset": "cx5t8a9aexvozz5",
+            "id": "reu29nr6st58wgm",
+            "subject": ["dme3h9oyt2ggw76"],
+            "types": "ownerReq",
+            "updated": "2024-05-22 08:17:10.536Z",
+            "user": "l621gx6xi8qevy8"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "This is a great point!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.540Z",
+            "dataset": "gm8st322o45bmxt",
+            "id": "vhu9kce5yo6eegn",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.540Z",
+            "user": "plylk8ykl6na0lm"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I disagree with this perspective."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.543Z",
+            "dataset": "rq53dkh5z05sclw",
+            "id": "da0mjie49rqciu8",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.543Z",
+            "user": "l621gx6xi8qevy8"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Could you provide more details on this topic?"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.547Z",
+            "dataset": "tscv2z8jow5vpey",
+            "id": "1u23o4wovct6uci",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.547Z",
+            "user": "1lzyja7nmzgn5fp"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "Interesting approach, thanks for sharing!"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.552Z",
+            "dataset": "h7t42lz3o1xzi84",
+            "id": "bdql1pm04f3fou3",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.552Z",
+            "user": "p6bm0v4x6bgt2h0"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Sophie Martin",
+                                "slug": "sophie-martin",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog sig själv som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.556Z",
+            "dataset": "sq71grfa4w4e7kb",
+            "id": "lva9r6t92okz6g8",
+            "subject": ["sc2nxrqaxzvihb5"],
+            "types": "ownerReq",
+            "updated": "2024-05-22 08:17:10.556Z",
+            "user": "sc2nxrqaxzvihb5"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Momoko Okazaki",
+                                "slug": "momoko-okazaki",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog sig själv som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.561Z",
+            "dataset": "scd4r4p8ocx7v71",
+            "id": "wu8a3dvfzghidmf",
+            "subject": ["1lzyja7nmzgn5fp"],
+            "types": "ownerReq",
+            "updated": "2024-05-22 08:17:10.561Z",
+            "user": "1lzyja7nmzgn5fp"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": ""
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Momoko Okazaki",
+                                "slug": "momoko-okazaki",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "föreslog"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "text": ""
+                                }
+                            ],
+                            "mention": {
+                                "name": "Maria Rodriguez",
+                                "slug": "maria-rodriguez",
+                                "type": "user"
+                            },
+                            "type": "mention"
+                        },
+                        {
+                            "text": "som dataägare"
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.565Z",
+            "dataset": "cx5t8a9aexvozz5",
+            "id": "z5jlje1dw5c02dg",
+            "subject": ["aeelowasz0ut4d8"],
+            "types": "ownerReq",
+            "updated": "2024-05-22 08:17:10.565Z",
+            "user": "1lzyja7nmzgn5fp"
+        },
+        {
+            "Subject_role": [],
+            "collectionId": "zrb2mseythst5ev",
+            "collectionName": "events",
+            "content": [
+                {
+                    "children": [
+                        {
+                            "text": "I found this section very informative."
+                        }
+                    ],
+                    "type": "paragraph"
+                }
+            ],
+            "created": "2024-05-22 08:17:10.566Z",
+            "dataset": "gm8st322o45bmxt",
+            "id": "35md11htq22d2vp",
+            "subject": [],
+            "types": "comment",
+            "updated": "2024-05-22 08:17:10.566Z",
+            "user": "plylk8ykl6na0lm"
+        }
+    ],
+
+    "roles": [
+        {
+            "collectionId": "8nm4909zywbha9h",
+            "collectionName": "roles",
+            "created": "2024-05-22 09:29:41.332Z",
+            "id": "itwhvikva0zdv09",
+            "name": "Utvecklare",
+            "updated": "2024-05-22 09:31:31.421Z"
+        },
+        {
+            "collectionId": "8nm4909zywbha9h",
+            "collectionName": "roles",
+            "created": "2024-05-22 09:31:12.170Z",
+            "id": "9p3b138qag09sqb",
+            "name": "Jurist",
+            "updated": "2024-05-22 09:31:12.170Z"
+        }
+    ]
+}

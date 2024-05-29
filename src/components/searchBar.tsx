@@ -94,9 +94,7 @@ export default function SearchBar({
     const [suggestions, setSuggestions] = useState<autoCompleteSuggestion[]>([])
     const router = useRouter()
 
-    const userContext = useContext(authContext)
-    const authCookie = userContext.cookie
-    const user = userContext.auth
+    const { cookie } = useContext(authContext)
 
     const form = useForm<searchSchema>({
         resolver: zodResolver(searchSchema),
@@ -115,33 +113,32 @@ export default function SearchBar({
         }
     }
 
-    const autoComplete = async () => {
-        if (!!isFocused) {
-            const datasets = await api.getDatasets(
-                debouncedSearchTerm,
-                authCookie
-            )
-            const users = await api.getUsers(debouncedSearchTerm, authCookie)
-            setSuggestions([
-                ...datasetToSuggestion(datasets),
-                ...userToSuggestion(
-                    users.filter((user) => user.id !== user.id)
-                ),
-            ])
-        }
-    }
-
     useEffect(() => {
+        const autoComplete = async () => {
+            if (!!isFocused) {
+                const datasets = await api.getDatasets(
+                    debouncedSearchTerm,
+                    cookie
+                )
+                const users = await api.getUsers(debouncedSearchTerm, cookie)
+                setSuggestions([
+                    ...datasetToSuggestion(datasets),
+                    ...userToSuggestion(
+                        users.filter((user) => user.id !== user.id)
+                    ),
+                ])
+            }
+        }
         autoComplete()
-    }, [debouncedSearchTerm])
+    }, [debouncedSearchTerm, cookie, isFocused])
 
     const slowClose = () => {
         setTimeout(() => setIsFocused(false), 225)
     }
 
     const sugestionsOnFocus = async () => {
-        const datasets = await api.getDatasets(debouncedSearchTerm, authCookie)
-        const users = await api.getUsers(debouncedSearchTerm, authCookie)
+        const datasets = await api.getDatasets(debouncedSearchTerm, cookie)
+        const users = await api.getUsers(debouncedSearchTerm, cookie)
         setSuggestions([
             ...datasetToSuggestion(datasets),
             ...userToSuggestion(users.filter((user) => user.id !== user.id)),

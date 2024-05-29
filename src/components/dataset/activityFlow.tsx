@@ -1,18 +1,22 @@
 'use client'
-import { useContext, useEffect } from 'react'
-import { EventForm } from '.'
+import { useContext, useEffect, useState } from 'react'
 import Comment from './comment'
 import { EventContext } from '@/lib/context/eventContext'
-import { EventSchema } from '@/types/zod'
+import { AuthorizedUserSchema, EventSchema, roleSchema } from '@/types/zod'
 import * as api from '@/adapters/api'
-import { stringWithHyphen } from '@/lib/utils'
 import { authContext } from '@/lib/context/authContext'
 import { DatasetContext } from '@/lib/context/datasetContext'
+import { CommentInput } from '../slate/commentInput'
+import { Avatar, AvatarFallback } from '../ui/avatar'
+import { getInitials } from '@/lib/utils'
 
 export default function ActivityFlow() {
-    const events = useContext(EventContext)
+    const { events, setEvents } = useContext(EventContext)
     const { dataset } = useContext(DatasetContext)
-    const user = useContext(authContext)
+    const { cookie, auth } = useContext(authContext)
+
+    const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
+    const [roles, setRoles] = useState<roleSchema[]>([])
 
     const sortEvents = (a: EventSchema, b: EventSchema) => {
         if (!a.created || !b.created) return 0
@@ -24,29 +28,36 @@ export default function ActivityFlow() {
         return aDate < bDate ? 1 : -1
     }
     useEffect(() => {
+        console.log('ActivityFlow useEffect', dataset.id, cookie)
         async function setData() {
-            events.setEvents(
-                (await api.getEvents(dataset.id, user.cookie)).sort(
-                    sortEvents
-                )
+            setEvents(
+                (await api.getEvents(dataset.id, cookie)).sort(sortEvents)
             )
+            setRoles(await api.getRoles())
+            setUsers(await api.getUsers('', cookie))
         }
         setData()
-    }, [])
+    }, [dataset.id, cookie, setEvents])
+
     return (
-        <section className="flex flex-col gap-4">
-            <h2 className="text-2xl font-bold">Aktivitet</h2>
-            <p className="text-sm">
-                Bli den första att skriva något kring det här datasetet.
-            </p>
-
-            <EventForm datasetId={dataset.id} />
-
+        <>
+            <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6">
+                    <AvatarFallback className="text-[0.5625rem]">
+                        {getInitials(auth.name)}
+                    </AvatarFallback>
+                </Avatar>
+                <CommentInput
+                    users={users}
+                    roles={roles}
+                    datasetId={dataset.id}
+                />
+            </div>
             <ul className="flex flex-col gap-4" aria-label="Aktivitets flödet">
-                {events.events.map((event, index) => (
-                    <Comment event={event} key={index} />
-                ))}
+                {events.map((event) => {
+                    return <Comment event={event} key={event.id} />
+                })}
             </ul>
-        </section>
+        </>
     )
 }

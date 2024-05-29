@@ -12,12 +12,14 @@ export async function POST(request: Request) {
             .collection('users')
             .authWithPassword(user.email, user.password)
         cookies().set('PBAuth', pb.authStore.exportToCookie())
+        
 
         return NextResponse.json(
             { message: 'success', body: userRecord.record },
             { status: 200 }
         )
     } catch (error) {
+        console.log(error)
         if (error instanceof ClientResponseError) {
             // using return as thats what the nextjs docs recommend
             return NextResponse.json(
