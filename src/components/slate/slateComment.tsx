@@ -1,7 +1,7 @@
 'use client'
 
 import { EventSchema } from '@/types/zod'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { Descendant, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import {

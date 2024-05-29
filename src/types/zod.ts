@@ -1,3 +1,4 @@
+import { Descendant } from 'slate'
 import { any, string, z } from 'zod'
 
 export const eventTypeSchema = z.enum([
@@ -151,7 +152,7 @@ export const EventFeedItem = z.object({
     userName: z.string(),
     subject: z.array(z.string()),
     datasetTitle: z.string(),
-    content: z.any(),
+    content: eventContentSchema,
     created: z.string(),
     types: z.string(),
 })
