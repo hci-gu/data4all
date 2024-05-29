@@ -1,6 +1,6 @@
 'use client'
 
-import { EventSchema } from '@/types/zod'
+import { EventFeedItem, EventSchema } from '@/types/zod'
 import React, { useCallback } from 'react'
 import { Descendant, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
@@ -22,7 +22,7 @@ const SlateComment = ({
     onKeyUp,
 }: {
     editor?: CustomEditor
-    event?: EventSchema
+    event?: EventSchema | EventFeedItem
     onChange?: (value: Descendant[]) => void
     children?: React.ReactNode
     onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void
@@ -58,6 +58,7 @@ const SlateComment = ({
                     editor ??
                     withMentions(withReact(withHistory(createEditor())))
                 }
+                // @ts-ignore
                 initialValue={
                     event?.content ?? [
                         {

@@ -28,6 +28,7 @@ export default function FeedItem({ event }: { event: EventFeedItem }) {
                         </p>
                     </div>
                     <div className="flex w-full flex-col gap-1">
+
                         <SlateComment event={event} />
                         <time className="text-xs font-bold">
                             {moment(event.created).fromNow()}
