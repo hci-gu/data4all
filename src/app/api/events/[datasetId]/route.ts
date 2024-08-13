@@ -18,8 +18,6 @@ export async function GET(
                 expand: 'user,user.role,subject,subject.role,subjectRole',
             })
 
-        // console.log(records.items[0].expand.user.expand.role.name)
-
         return NextResponse.json(
             { message: 'success', body: records.items },
             { status: 200 }

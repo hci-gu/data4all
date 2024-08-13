@@ -28,7 +28,6 @@ export default function ActivityFlow() {
         return aDate < bDate ? 1 : -1
     }
     useEffect(() => {
-        console.log('ActivityFlow useEffect', dataset.id, cookie)
         async function setData() {
             setEvents(
                 (await api.getEvents(dataset.id, cookie)).sort(sortEvents)

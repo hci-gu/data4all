@@ -12,8 +12,6 @@ setup('setup', async () => {
         sort: '-created',
     })
 
-    // console.log('roles', roles)
-
     const datasetWithRelations = datasets.filter(
         (dataset) => dataset.related_datasets.length > 0
     )
@@ -37,15 +35,15 @@ setup('setup', async () => {
         }
     }
 
-    for (const user of users) {
-        if (user.name.includes('tester')) {
-            await pb.collection('users').delete(user.id)
-        }
-    }
-
     for (const role of roles) {
         if (role.name.includes('tester')) {
             await pb.collection('roles').delete(role.id)
+        }
+    }
+
+    for (const user of users) {
+        if (user.name.includes('tester')) {
+            await pb.collection('users').delete(user.id)
         }
     }
 })

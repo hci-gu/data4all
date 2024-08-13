@@ -102,11 +102,21 @@ export const createEvent = async (
             dataset: datasetId,
             types: 'comment',
             user: userId,
-            content: 'test',
+            content: [
+                {
+                    children: [
+                        {
+                            text: 'test',
+                        },
+                    ],
+                    type: 'paragraph',
+                },
+            ],
             subject,
         },
         { expand: 'user,subject' }
     )
+    console.log(event)
 
     return EventSchema.parse(responseEventCleanup(event))
 }

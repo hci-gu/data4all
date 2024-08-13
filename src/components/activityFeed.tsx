@@ -66,9 +66,6 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
         }
         fetchEvents()
     }, [activeFilter, pageNumber, cookie])
-    
-    console.log(pageNumber, nextPage, previusPage);
-    
 
     return (
         <>
