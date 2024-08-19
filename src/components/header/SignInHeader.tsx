@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 import { getInitials } from '@/lib/utils'
 import SearchBar from '../searchBar'
 import { authContext } from '@/lib/context/authContext'
-import Logo from '../../../public/logo.svg'
 
 export default function SignInHeader() {
     const userContext = useContext(authContext)
@@ -21,7 +20,12 @@ export default function SignInHeader() {
             className={`sticky flex h-[60px] w-full items-center justify-between border-b-2 border-slate-200 bg-white ${!!isSearchOpen ? 'max-sm:justify-evenly' : 'px-4'}`}
         >
             <Link href={'/'} className="flex items-center gap-4 [&>div]:hidden">
-                <Image src={Logo} alt="Kungsbacka dataportal loga" />
+                <Image
+                    src={'/logo.svg'}
+                    width={36}
+                    height={36}
+                    alt="Kungsbacka dataportal logga"
+                />
                 <Typography level="Large">Kungsbacka dataportal</Typography>
             </Link>
             {!isSearchOpen ? (

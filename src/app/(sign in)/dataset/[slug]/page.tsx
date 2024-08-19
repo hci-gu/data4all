@@ -15,8 +15,6 @@ import * as api from '@/adapters/api'
 import { stringWithHyphen } from '@/lib/utils'
 
 import Image from 'next/image'
-import Dataportal from '../../../../../public/dataportal.png'
-import Entryscape from '../../../../../public/entryscape.png'
 import Link from 'next/link'
 import { EventProvider } from '@/lib/context/eventContext'
 import { cookies } from 'next/headers'
@@ -88,7 +86,8 @@ export default async function Page({
                                     <div className="flex items-center gap-2">
                                         <Image
                                             width={44}
-                                            src={Dataportal}
+                                            height={44}
+                                            src={'/dataportal.png'}
                                             alt="Dataportal.se logo"
                                         />
                                         <b className="flex gap-1">
@@ -106,9 +105,10 @@ export default async function Page({
                                 <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
                                     <div className="flex items-center gap-2">
                                         <Image
-                                            width={44}
-                                            src={Entryscape}
-                                            alt="Dataportal.se logo"
+                                            width={60}
+                                            height={44}
+                                            src={'/entryscape.png'}
+                                            alt="Entryscape logo"
                                         />
                                         <b className="flex gap-1">
                                             Öppna på

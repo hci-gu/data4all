@@ -68,7 +68,6 @@ async function deleteExistingData(
             }
         }
     }
-    console.log(collectionName, ' removed')
 }
 
 async function seedTag(pb: PocketBase, data: tagSchema[]) {

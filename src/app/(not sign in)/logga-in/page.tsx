@@ -1,13 +1,18 @@
 import Typography from '@/components/ui/Typography'
 import Image from 'next/image'
-import absurd from '../../../../public/absurd 1.png'
 import { SignIn } from '@/components/auth'
 
 function LoginPage() {
     return (
         <main className="grid h-screen sm:grid-cols-2">
-            <div className="hidden items-center bg-black sm:px-12 md:px-24 xl:px-40 sm:flex">
-                <Image src={absurd} priority={true} alt="" />
+            <div className="hidden items-center bg-black sm:flex sm:px-12 md:px-24 xl:px-40">
+                <Image
+                    src={'/absurd_login.png'}
+                    priority={true}
+                    alt=""
+                    width={400}
+                    height={400}
+                />
             </div>
             <div className="flex flex-col justify-center gap-12 px-4 sm:mx-auto">
                 <div>

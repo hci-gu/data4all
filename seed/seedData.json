@@ -315,12 +315,12 @@
             "collectionId": "_pb_users_auth_",
             "collectionName": "users",
             "created": "2024-05-22 08:17:07.732Z",
-            "email": "Suzuka_Nakamoto@kungsbacka.com",
+            "email": "jack.wendel@kungsbacka.com",
             "emailVisibility": true,
             "id": "plylk8ykl6na0lm",
-            "name": "Suzuka Nakamoto",
+            "name": "Jack Wendel",
             "role": "itwhvikva0zdv09",
-            "slug": "suzuka-nakamoto",
+            "slug": "jack-wendel",
             "updated": "2024-05-22 08:17:07.732Z",
             "username": "users77597",
             "verified": false
@@ -332,12 +332,12 @@
             "collectionId": "_pb_users_auth_",
             "collectionName": "users",
             "created": "2024-05-22 08:17:08.028Z",
-            "email": "Moa_Kikuchi@kungsbacka.com",
+            "email": "gillis_fredin@kungsbacka.com",
             "emailVisibility": true,
             "id": "l621gx6xi8qevy8",
-            "name": "Moa Kikuchi",
+            "name": "Gillis Fredin",
             "role": "itwhvikva0zdv09",
-            "slug": "moa-kikuchi",
+            "slug": "gillis-fredin",
             "updated": "2024-05-22 08:17:08.028Z",
             "username": "users39149",
             "verified": false
@@ -349,12 +349,12 @@
             "collectionId": "_pb_users_auth_",
             "collectionName": "users",
             "created": "2024-05-22 08:17:08.333Z",
-            "email": "Momoko_Okazaki@kungsbacka.com",
+            "email": "sylvia.lundmark@kungsbacka.com",
             "emailVisibility": true,
             "id": "1lzyja7nmzgn5fp",
-            "name": "Momoko Okazaki",
+            "name": "Sylvia Lundmark",
             "role": "itwhvikva0zdv09",
-            "slug": "momoko-okazaki",
+            "slug": "sylvia-lundmark",
             "updated": "2024-05-22 08:17:08.333Z",
             "username": "users39851",
             "verified": false
@@ -468,18 +468,17 @@
             "collectionId": "_pb_users_auth_",
             "collectionName": "users",
             "created": "2024-05-22 08:17:10.472Z",
-            "email": "kim_sung@kungsbacka.com",
+            "email": "christin.hedqvist@kungsbacka.com",
             "emailVisibility": true,
             "id": "sezqcgi8p8jstjq",
-            "name": "Kim Sung",
+            "name": "Christin Hedqvist",
             "role": "itwhvikva0zdv09",
-            "slug": "kim-sung",
+            "slug": "christin-hedqvist",
             "updated": "2024-05-22 08:17:10.472Z",
             "username": "users74674",
             "verified": false
         }
     ],
-
     "events": [
         {
             "Subject_role": [],
@@ -608,8 +607,8 @@
                                 }
                             ],
                             "mention": {
-                                "name": "Momoko Okazaki",
-                                "slug": "momoko-okazaki",
+                                "name": "Sylvia Lundmark",
+                                "slug": "sylvia-lundmark",
                                 "type": "user"
                             },
                             "type": "mention"
@@ -646,8 +645,8 @@
                                 }
                             ],
                             "mention": {
-                                "name": "Moa Kikuchi",
-                                "slug": "moa-kikuchi",
+                                "name": "Gillis Fredin",
+                                "slug": "gillis-fredin",
                                 "type": "user"
                             },
                             "type": "mention"
@@ -826,8 +825,8 @@
                                 }
                             ],
                             "mention": {
-                                "name": "Momoko Okazaki",
-                                "slug": "momoko-okazaki",
+                                "name": "Sylvia Lundmark",
+                                "slug": "sylvia-lundmark",
                                 "type": "user"
                             },
                             "type": "mention"
@@ -864,8 +863,8 @@
                                 }
                             ],
                             "mention": {
-                                "name": "Momoko Okazaki",
-                                "slug": "momoko-okazaki",
+                                "name": "Sylvia Lundmark",
+                                "slug": "sylvia-lundmark",
                                 "type": "user"
                             },
                             "type": "mention"

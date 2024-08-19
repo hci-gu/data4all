@@ -2,7 +2,6 @@ import { EventSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import moment from 'moment'
 import Image from 'next/image'
-import Dataportal from '../../../public/dataportal.png'
 import Link from 'next/link'
 import { getInitials } from '@/lib/utils'
 import AcceptDatasetOwner from './acceptDatasetOwner'
@@ -38,7 +37,8 @@ export default function Comment({ event }: { event: EventSchema }) {
                         <div className="flex gap-1 rounded-sm border border-slate-200 p-1">
                             <Image
                                 width={16}
-                                src={Dataportal}
+                                height={16}
+                                src={'/dataportal.png'}
                                 alt="Dataportal.se logo"
                             />
                             <Link className="text-cyan-700" href="/">
