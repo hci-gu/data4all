@@ -13,6 +13,7 @@ export default async function Home({
     if (!!searchParams?.pageNumber) {
         pageNumber = Number(searchParams?.pageNumber)
     }
+
     return (
         <main className="flex w-full flex-col items-center">
             <WelcomeBack homePage={true} />
@@ -22,7 +23,7 @@ export default async function Home({
                     <SearchBar />
                 </div>
                 <Separator orientation="vertical" />
-                <ActivityFeed pageNumber={pageNumber}/>
+                <ActivityFeed pageNumber={pageNumber} />
             </div>
         </main>
     )

@@ -7,9 +7,16 @@ export default function ErrorResponse({ reset }: { reset: () => void }) {
     const router = useRouter()
 
     return (
-        <main className="grid h-screen w-full grid-cols-2 items-center justify-between px-28 py-9">
-            <Image src={'/absurd_signup.png'} alt="404" />
-            <div className="flex w-fit flex-col justify-self-end">
+        <main className="grid h-screen w-full grid-cols-2 items-center justify-between">
+            <div className="flex w-full flex-col items-center justify-center">
+                <Image
+                    src={'/absurd_signup.png'}
+                    alt="404"
+                    width={300}
+                    height={300}
+                />
+            </div>
+            <div className="flex w-fit flex-col justify-center">
                 <Typography level="H1">400</Typography>
                 <Typography level="P">
                     Det blev något fel på vår sida. Försök igen senare eller
