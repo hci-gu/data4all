@@ -11,7 +11,7 @@ import {
 import { ChevronRight } from 'lucide-react'
 import { OtherUserFields } from '@/components/auth'
 import CheckIfNotUserProfile from '@/components/CheckIfNotUserProfile'
-import { getUser } from '@/app/actions/auth'
+import { getLoggedInUser, getUser } from '@/app/actions/auth'
 
 async function ProfilePage({
     params: { username },
@@ -19,13 +19,14 @@ async function ProfilePage({
     params: { username: string }
 }) {
     const user = await getUser(username)
+    const loggedInUser = await getLoggedInUser()
 
     if (!user) {
         notFound()
     }
     return (
         <>
-            <CheckIfNotUserProfile name={user.name} />
+            <CheckIfNotUserProfile user={user} loggedInUser={loggedInUser} />
             <main className="grid w-full justify-center gap-8 px-4 pt-8 lg:mx-auto lg:w-fit xl:grid-cols-[1fr_auto_1fr]">
                 <div className="flex w-[573.5px] flex-col gap-5 max-sm:w-full">
                     <Breadcrumb>
