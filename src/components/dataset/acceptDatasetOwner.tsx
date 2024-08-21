@@ -1,18 +1,26 @@
 'use client'
-import { authContext } from '@/lib/context/authContext'
-import { EventSchema, eventContentSchema, eventTypeSchema } from '@/types/zod'
-import { useContext } from 'react'
+import {
+    AuthorizedUserSchema,
+    EventSchema,
+    datasetWithRelationsSchema,
+    eventContentSchema,
+    eventTypeSchema,
+} from '@/types/zod'
 import { Button } from '../ui/button'
-import { updateDataset, createEvent } from '@/adapters/api'
-import { EventContext } from '@/lib/context/eventContext'
-import { DatasetContext } from '@/lib/context/datasetContext'
 import { ownerAcceptDataset, ownerDeclineDataset } from '@/lib/slateUtilits'
+import { createEvent } from '@/app/actions/events'
+import { updateDataset } from '@/app/actions/datasets'
 
-export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
-    const { auth, cookie } = useContext(authContext)
-    const { dataset, setDataset } = useContext(DatasetContext)
-
-    const eventContext = useContext(EventContext)
+export default async function AcceptDatasetOwner({
+    event,
+    dataset,
+    loggedInUser,
+}: {
+    event: EventSchema
+    dataset: datasetWithRelationsSchema
+    loggedInUser: AuthorizedUserSchema
+}) {
+    if (!loggedInUser) return
 
     const updateEvent = async (
         types: eventTypeSchema,
@@ -20,18 +28,13 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
     ) => {
         const subject = event.subject
         if (subject) {
-            const newEvent = await createEvent(
-                {
-                    types,
-                    content,
-                    user: auth.id,
-                    subject: subject,
-                    dataset: dataset.id,
-                    mentions: [],
-                },
-                cookie
-            )
-            eventContext.setEvents((prev) => [newEvent, ...prev])
+            await createEvent({
+                types,
+                content,
+                subject: subject,
+                dataset: dataset.id,
+                mentions: [],
+            })
         }
     }
 
@@ -39,17 +42,13 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
         const subject = event.subject
 
         if (subject) {
-            const updateResponse = await updateDataset(
-                dataset.id,
-                { dataowner: subject[0] },
-                cookie
-            )
-
-            setDataset(updateResponse)
+            await updateDataset(dataset.id, {
+                dataowner: subject[0],
+            })
 
             await updateEvent(
                 'ownerAccept',
-                ownerAcceptDataset(auth, subject[0])
+                ownerAcceptDataset(loggedInUser, subject[0])
             )
         }
     }
@@ -58,21 +57,21 @@ export default function AcceptDatasetOwner({ event }: { event: EventSchema }) {
         if (subject) {
             await updateEvent(
                 'ownerDecline',
-                ownerDeclineDataset(auth, subject[0])
+                ownerDeclineDataset(loggedInUser, subject[0])
             )
         }
     }
 
-    const allEventFromSubjectUser = eventContext.events.filter(
-        (e) =>
-            e.subject?.[0].id === event.subject?.[0].id && e.types !== 'comment'
-    )
+    // const allEventFromSubjectUser = eventContext.events.filter(
+    //     (e) =>
+    //         e.subject?.[0].id === event.subject?.[0].id && e.types !== 'comment'
+    // )
 
-    if (allEventFromSubjectUser[0].id !== event.id) {
-        return
-    }
+    // if (allEventFromSubjectUser[0].id !== event.id) {
+    //     return
+    // }
 
-    if (event.types === 'ownerReq' && auth.is_admin) {
+    if (event.types === 'ownerReq' && loggedInUser.is_admin) {
         return (
             <div className="flex gap-2">
                 <Button

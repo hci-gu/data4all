@@ -1,4 +1,4 @@
-import { EventSchema } from '@/types/zod'
+import { datasetWithRelationsSchema, EventSchema } from '@/types/zod'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import moment from 'moment'
 import Image from 'next/image'
@@ -8,7 +8,15 @@ import AcceptDatasetOwner from './acceptDatasetOwner'
 import SlateComment from '../slate/slateComment'
 import User from '../user'
 
-export default function Comment({ event }: { event: EventSchema }) {
+export default function Comment({
+    event,
+    dataset,
+    loggedInUser,
+}: {
+    event: EventSchema
+    dataset: datasetWithRelationsSchema
+    loggedInUser: AuthorizedUserSchema
+}) {
     if (event.types === 'comment') {
         return (
             <li className="flex flex-col">
@@ -63,7 +71,11 @@ export default function Comment({ event }: { event: EventSchema }) {
             </Avatar>
             <div className="flex flex-col gap-1">
                 <SlateComment event={event} />
-                <AcceptDatasetOwner event={event} />
+                <AcceptDatasetOwner
+                    dataset={dataset}
+                    event={event}
+                    loggedInUser={loggedInUser}
+                />
                 <time className="text-xs font-bold">
                     {moment(event.created).fromNow()}
                 </time>

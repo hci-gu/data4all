@@ -1,7 +1,5 @@
 import { Separator } from '@/components/ui/separator'
 import ProfileDatasetList from '@/components/profileDatasetList'
-import * as api from '@/adapters/api'
-import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import {
     Breadcrumb,
@@ -12,23 +10,16 @@ import {
 } from '@/components/ui/breadcrumb'
 import { ChevronRight } from 'lucide-react'
 import { OtherUserFields } from '@/components/auth'
-import { AuthorizedUserSchema } from '@/types/zod'
 import CheckIfNotUserProfile from '@/components/CheckIfNotUserProfile'
+import { getUser } from '@/app/actions/auth'
 
 async function ProfilePage({
     params: { username },
 }: {
     params: { username: string }
 }) {
-    const cookie = cookies().get('PBAuth')
-    let user: AuthorizedUserSchema | undefined
-    try {
-        if (cookie) {
-            user = await api.getUser(username, cookie.value)
-        }
-    } catch (error) {
-        notFound()
-    }
+    const user = await getUser(username)
+
     if (!user) {
         notFound()
     }

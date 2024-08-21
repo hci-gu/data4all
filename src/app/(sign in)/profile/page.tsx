@@ -3,9 +3,10 @@ import RemoveAccountButton from '@/components/removeAccountButton'
 import { Separator } from '@/components/ui/separator'
 import { UpdateUserForm } from '@/components/auth'
 import ProfileDatasetList from '@/components/profileDatasetList'
-import { getRoles } from '@/adapters/api'
+import { getLoggedInUser, getRoles } from '@/app/actions/auth'
 
 async function ProfilePage() {
+    const user = await getLoggedInUser()
     const roles = await getRoles()
 
     return (
@@ -13,11 +14,9 @@ async function ProfilePage() {
             <div className="flex w-[573.5px] flex-col gap-[10px] max-sm:w-full">
                 <h1 className="text-5xl font-extrabold">Profil</h1>
                 {!!roles ? (
-                    <UpdateUserForm roles={roles} />
+                    <UpdateUserForm user={user} roles={roles} />
                 ) : (
-                    <div className="h-[378px]">
-                        
-                    </div>
+                    <div className="h-[378px]"></div>
                 )}
                 <Separator />
                 <h2 className="text-3xl font-semibold">

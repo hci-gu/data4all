@@ -8,12 +8,9 @@ import { Search, X } from 'lucide-react'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import { getInitials } from '@/lib/utils'
 import SearchBar from '../searchBar'
-import { authContext } from '@/lib/context/authContext'
+import { AuthorizedUserSchema } from '@/types/zod'
 
-export default function SignInHeader() {
-    const userContext = useContext(authContext)
-    const usersName = userContext.auth.name
-
+export default function SignInHeader({ user }: { user: AuthorizedUserSchema }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     return (
         <header
@@ -42,10 +39,10 @@ export default function SignInHeader() {
                             href={`/profile`}
                             className="flex items-center justify-center gap-2"
                         >
-                            <span className="max-sm:sr-only">{usersName}</span>
+                            <span className="max-sm:sr-only">{user.name}</span>
                             <Avatar>
                                 <AvatarFallback>
-                                    {getInitials(usersName)}
+                                    {getInitials(user.name)}
                                 </AvatarFallback>
                             </Avatar>
                         </Link>

@@ -15,21 +15,22 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { updateUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { getRoles, getUser, updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { authContext } from '@/lib/context/authContext'
+import { getUser, updateUser } from '@/app/actions/auth'
 
-export default function UpdateUserForm({ roles }: { roles: any[] }) {
-    const userContext = useContext(authContext)
-    const user = userContext.auth
-    const cookie = userContext.cookie
-
+export default function UpdateUserForm({
+    roles,
+    user,
+}: {
+    roles: any[]
+    user: AuthorizedUserSchema
+}) {
     const [isClicked, setIsClicked] = useState(false)
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
@@ -48,7 +49,7 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
         setIsClicked(true)
 
         try {
-            const userDB = await getUser(value.name, cookie)
+            const userDB = await getUser(value.name)
             if (userDB.id !== user.id) {
                 toast.error('Användarnamnet är upptaget')
                 form.setError('name', { message: 'Användarnamnet är upptaget' })
@@ -61,13 +62,10 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
         }
 
         const request = Promise.allSettled([
-            updateUser(value, user.id, cookie),
+            updateUser(user.id, value),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {
-                userContext.setAuth(
-                    res[0].status === 'fulfilled' ? res[0].value : user
-                )
                 setIsClicked(false)
             })
             .catch(() => {

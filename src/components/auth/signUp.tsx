@@ -21,9 +21,9 @@ import {
 import { signUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
-import * as api from '@/adapters/api'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { signUp } from '@/app/actions/auth'
 
 export default function SignUp({ roles }: { roles: any[] }) {
     const router = useRouter()
@@ -42,14 +42,13 @@ export default function SignUp({ roles }: { roles: any[] }) {
     })
     const submit = async (value: signUpSchema) => {
         try {
-            await api.signUp(value)
+            await signUp(value)
             router.push('/logga-in')
         } catch (e) {
             form.reset()
             form.setError('root', { message: 'Du är redan registrerad' })
         }
     }
-
 
     return (
         <Form {...form}>

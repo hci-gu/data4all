@@ -1,3 +1,4 @@
+'use client'
 import {
     Dialog,
     DialogContent,
@@ -9,43 +10,43 @@ import {
     DialogClose,
 } from '@/components/ui/dialog'
 import User from '../user'
-import { AuthorizedUserSchema, EventCreateSchema } from '@/types/zod'
-import { createEvent } from '@/adapters/api'
-import { useContext } from 'react'
-import { EventContext } from '@/lib/context/eventContext'
-import { authContext } from '@/lib/context/authContext'
-import { DatasetContext } from '@/lib/context/datasetContext'
+import {
+    AuthorizedUserSchema,
+    datasetWithRelationsSchema,
+    EventCreateSchema,
+} from '@/types/zod'
 import {
     SuggestSelfAsDataOwner,
     SuggestSomeOneElseAsDataOwner,
 } from '@/lib/slateUtilits'
+import { createEvent } from '@/app/actions/events'
+
 export default function SuggestDataOwner({
+    dataset,
+    loggedInUser,
     user,
 }: {
+    dataset: datasetWithRelationsSchema
+    loggedInUser: AuthorizedUserSchema
     user: AuthorizedUserSchema | null
 }) {
-    const eventContext = useContext(EventContext)
-    const { auth, cookie } = useContext(authContext)
-    const { dataset } = useContext(DatasetContext)
     if (!user) return
 
     const onSubmit = async () => {
         const content =
-            auth?.id === user.id
-                ? SuggestSelfAsDataOwner(auth)
-                : SuggestSomeOneElseAsDataOwner(auth, user)
+            loggedInUser.id === user.id
+                ? SuggestSelfAsDataOwner(loggedInUser)
+                : SuggestSomeOneElseAsDataOwner(loggedInUser, user)
 
         const data: EventCreateSchema = {
             content,
             dataset: dataset.id,
-            user: auth.id,
             types: 'ownerReq',
             subject: [user],
             mentions: [],
         }
 
-        const respond = await createEvent(data, cookie)
-        eventContext.setEvents((prev) => [respond, ...(prev ?? [])])
+        await createEvent(data)
     }
 
     return (

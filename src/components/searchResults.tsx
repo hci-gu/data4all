@@ -1,35 +1,18 @@
-'use client'
 import Typography from './ui/Typography'
 import DatasetCard from './datasetCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Settings2 } from 'lucide-react'
-import { useContext, useEffect, useState } from 'react'
-import { authContext } from '@/lib/context/authContext'
-import * as api from '@/adapters/api'
-import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
 import UserCard from './userCard'
+import { getDatasets } from '@/app/actions/datasets'
+import { getUsers } from '@/app/actions/auth'
 
-export default function SearchResults({
+export default async function SearchResults({
     searchTerm,
 }: {
     searchTerm: string | undefined
 }) {
-    const { cookie, auth } = useContext(authContext)
-
-    const [datasets, setDatasets] = useState<datasetWithRelationsSchema[]>([])
-    const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
-
-    useEffect(() => {
-        async function fetchData() {
-            if (!searchTerm) {
-                return
-            }
-            const users = await api.getUsers(searchTerm, cookie)
-            setDatasets(await api.getDatasets(searchTerm, cookie))
-            setUsers(users.filter((user) => user.id !== auth.id))
-        }
-        fetchData()
-    }, [searchTerm, cookie, auth.id])
+    const datasets = await getDatasets(searchTerm)
+    const users = await getUsers(searchTerm)
 
     return (
         <>

@@ -1,5 +1,5 @@
 'use client'
-import { signOut } from '@/adapters/api'
+import { signOut } from '@/app/actions/auth'
 import { LogoutButton } from '@/components/auth'
 import Typography from '@/components/ui/Typography'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'

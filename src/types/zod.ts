@@ -142,8 +142,8 @@ export const EventSchema = z.object({
     subjectRole: z.array(roleSchema).optional(),
 })
 
-export const EventCreateSchema = EventSchema.extend({
-    user: z.string(),
+// eventCreate without user
+export const EventCreateSchema = EventSchema.omit({ user: true }).extend({
     mentions: z.array(MentionSchema),
 })
 

@@ -25,6 +25,7 @@ import {
     PaginationPrevious,
 } from './ui/pagination'
 import { EventFeedResponse } from '@/types/zod'
+import { getFeed } from '@/app/actions/events'
 
 const filterFromStorage = () => {
     const filter = localStorage.getItem('activeFilter')
@@ -35,7 +36,6 @@ const filterFromStorage = () => {
 }
 
 export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
-    const cookie = useContext(authContext).cookie
     const [events, setEvents] = useState<EventFeedResponse>()
     const [loading, setLoading] = useState(true)
     const [activeFilter, setActiveFilter] = useState<FeedFilter>(
@@ -59,13 +59,13 @@ export default function ActivityFeed({ pageNumber }: { pageNumber: number }) {
     useEffect(() => {
         setLoading(true)
         async function fetchEvents() {
-            const events = await api.getFeed(cookie, activeFilter, pageNumber)
+            const events = await getFeed(activeFilter, pageNumber)
             setEvents(events)
 
             setLoading(false)
         }
         fetchEvents()
-    }, [activeFilter, pageNumber, cookie])
+    }, [activeFilter, pageNumber])
 
     return (
         <>

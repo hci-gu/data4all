@@ -1,25 +1,21 @@
-import { loadAuthorizedUser } from '../api/auth/utils'
-import { AuthProvider } from '@/lib/context/authContext'
-import { cookies } from 'next/headers'
 import { SignInHeader } from '@/components/header'
+import { getLoggedInUser } from '../actions/auth'
 
 export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    const user = await loadAuthorizedUser()
-    const authCookie = cookies().get('PBAuth')
+    const user = await getLoggedInUser()
 
-    if (!authCookie) {
+    if (!user) {
         throw new Error('Användaren är inte inloggad')
     }
+
     return (
         <>
-            <AuthProvider user={user} authCookie={authCookie.value}>
-                <SignInHeader />
-                {children}
-            </AuthProvider>
+            <SignInHeader user={user} />
+            {children}
         </>
     )
 }

@@ -54,6 +54,7 @@ const SlateComment = ({
             className={`${!event ? '' : '[& > *]:w-full w-full rounded-lg rounded-tl-none border border-slate-200 p-2'} `}
         >
             <Slate
+                key={`SlateComment_${event?.id}`}
                 editor={
                     editor ??
                     withMentions(withReact(withHistory(createEditor())))
