@@ -9,7 +9,6 @@ export default async function WelcomeBack({
 }) {
     const stats = await getStats()
 
-    // all of this is static for now. Needs to be changed to use dynamic data later when and if we get access to the real data
     return (
         <>
             <div className="my-9 flex w-full flex-col items-start gap-9 max-sm:my-1 sm:max-w-[1220px]">
@@ -27,38 +26,25 @@ export default async function WelcomeBack({
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
                                 {stats.datasets}
                             </p>
-                            <p>Totalt i systemet</p>
                         </div>
                         <div className="flex flex-col items-center [&>*]:w-fit">
                             <Typography level="Large">Användare</Typography>
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
                                 {stats.users}
                             </p>
-                            <p>
-                                <span className="text-green-500">+12</span>
-                                från förra veckan
+                        </div>
+                        <div className="flex flex-col items-center [&>*]:w-fit">
+                            <Typography level="Large">
+                                Dataset med ägare
+                            </Typography>
+                            <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
+                                {stats.datasetsWithOwners}
                             </p>
                         </div>
                         <div className="flex flex-col items-center [&>*]:w-fit">
                             <Typography level="Large">Dataägare</Typography>
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
-                                14
-                            </p>
-                            <p>
-                                <span className="text-red-500">-2</span>
-                                från förra veckan
-                            </p>
-                        </div>
-                        <div className="flex flex-col items-center [&>*]:w-fit">
-                            <Typography level="Large">
-                                Öppnade dataset
-                            </Typography>
-                            <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
-                                5
-                            </p>
-                            <p>
-                                <span className="text-green-500">+3</span>
-                                från föra veckan
+                                {stats.dataOwners}
                             </p>
                         </div>
                     </>

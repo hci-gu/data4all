@@ -63,46 +63,53 @@ export default async function Page({
                     <Typography level="Large">Externa länkar</Typography>
 
                     <ul className="flex flex-col gap-1">
-                        <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
-                            <div className="flex items-center gap-2">
-                                <Image
-                                    width={44}
-                                    height={44}
-                                    src={'/dataportal.png'}
-                                    alt="Dataportal.se logo"
-                                />
-                                <b className="flex gap-1">
-                                    Öppna på
-                                    <Link
-                                        href={`/dataset/${dataset.slug}`}
-                                        className="text-cyan-700 underline"
-                                    >
-                                        Dataportal.se
-                                    </Link>
-                                </b>
-                            </div>
-                            <ExternalLink />
-                        </li>
-                        <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
-                            <div className="flex items-center gap-2">
-                                <Image
-                                    width={60}
-                                    height={44}
-                                    src={'/entryscape.png'}
-                                    alt="Entryscape logo"
-                                />
-                                <b className="flex gap-1">
-                                    Öppna på
-                                    <Link
-                                        href={`/dataset/${dataset.slug}`}
-                                        className="text-cyan-700 underline"
-                                    >
-                                        Entryscape.se
-                                    </Link>
-                                </b>
-                            </div>
-                            <ExternalLink />
-                        </li>
+                        {!dataset.published && !dataset.entryscape && (
+                            <li className="text-sm">Inga externa länkar</li>
+                        )}
+                        {dataset.published && (
+                            <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
+                                <div className="flex items-center gap-2">
+                                    <Image
+                                        width={44}
+                                        height={44}
+                                        src={'/dataportal.png'}
+                                        alt="Dataportal.se logo"
+                                    />
+                                    <b className="flex gap-1">
+                                        Öppna på
+                                        <Link
+                                            href={dataset.published}
+                                            className="text-cyan-700 underline"
+                                        >
+                                            Dataportal.se
+                                        </Link>
+                                    </b>
+                                </div>
+                                <ExternalLink />
+                            </li>
+                        )}
+                        {dataset.entryscape && (
+                            <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
+                                <div className="flex items-center gap-2">
+                                    <Image
+                                        width={60}
+                                        height={44}
+                                        src={'/entryscape.png'}
+                                        alt="Entryscape logo"
+                                    />
+                                    <b className="flex gap-1">
+                                        Öppna på
+                                        <Link
+                                            href={dataset.entryscape}
+                                            className="text-cyan-700 underline"
+                                        >
+                                            Entryscape.se
+                                        </Link>
+                                    </b>
+                                </div>
+                                <ExternalLink />
+                            </li>
+                        )}
                     </ul>
                 </section>
                 <section

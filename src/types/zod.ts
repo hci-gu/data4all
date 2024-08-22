@@ -98,6 +98,8 @@ export const datasetSchema = z.object({
     description: z.string(),
     slug: z.string(),
     dataowner: string().optional(),
+    entryscape: z.string().optional(),
+    published: z.string().optional(),
 })
 
 export const datasetWithRelationsSchema = datasetSchema.extend({
