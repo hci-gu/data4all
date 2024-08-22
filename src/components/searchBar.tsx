@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -13,7 +13,6 @@ import { useRouter } from 'next/navigation'
 import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
 import Link from 'next/link'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
-import { authContext } from '@/lib/context/authContext'
 import { getDatasets } from '@/app/actions/datasets'
 import { getUsers } from '@/app/actions/auth'
 const searchSchema = z.object({

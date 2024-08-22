@@ -1,4 +1,8 @@
-import { datasetWithRelationsSchema, EventSchema } from '@/types/zod'
+import {
+    AuthorizedUserSchema,
+    datasetWithRelationsSchema,
+    EventSchema,
+} from '@/types/zod'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import moment from 'moment'
 import Image from 'next/image'

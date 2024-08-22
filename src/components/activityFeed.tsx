@@ -1,11 +1,9 @@
 'use client'
 import Typography from './ui/Typography'
-import { useContext, useEffect, useState } from 'react'
-import { authContext } from '@/lib/context/authContext'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import FeedItem from './feedItem'
 import { ChevronLeft, ChevronRight, Filter, Loader2 } from 'lucide-react'
-import * as api from '@/adapters/api'
 import {
     Dialog,
     DialogClose,

@@ -20,7 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { getUser, updateUser } from '@/app/actions/auth'
 

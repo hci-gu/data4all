@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Typography from '../ui/Typography'
 import { Button } from '../ui/button'
 import { Search, X } from 'lucide-react'

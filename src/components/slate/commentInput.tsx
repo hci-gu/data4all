@@ -11,7 +11,6 @@ import { MentionElement, ParagraphElement } from './customTypes'
 import SlateComment from './slateComment'
 import { Button } from '../ui/button'
 import { createEvent } from '@/app/actions/events'
-import { revalidatePath } from 'next/cache'
 
 export const CommentInput = ({
     users,
