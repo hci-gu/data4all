@@ -13,7 +13,7 @@ import { stringWithHyphen } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 
 export const signOut = async () => {
-    cookies().delete('PBAuth')
+    cookies().delete('pb_auth')
 }
 
 export const signIn = async (credentials: signInSchema) => {
@@ -22,7 +22,7 @@ export const signIn = async (credentials: signInSchema) => {
     const response = await pb
         .collection('users')
         .authWithPassword(credentials.email, credentials.password)
-    cookies().set('PBAuth', pb.authStore.exportToCookie())
+    cookies().set('pb_auth', pb.authStore.exportToCookie())
 
     return AuthorizedUserSchema.parse(response.record)
 }
@@ -50,7 +50,6 @@ export const updateUser = async (
     userId: string,
     formData: updateUserSchema
 ) => {
-    console.log(userId, formData)
     const pb = await getPocketBase()
 
     const newRole = await pb.collection('roles').getOne(formData.role ?? '')
@@ -65,7 +64,7 @@ export const updateUser = async (
 
     pb.authStore.save(token, record)
     const authCookie = pb.authStore.exportToCookie()
-    cookies().set('PBAuth', authCookie)
+    cookies().set('pb_auth', authCookie)
 
     revalidatePath('/profile')
 
@@ -75,7 +74,7 @@ export const updateUser = async (
 export const deleteAccount = async () => {
     const pb = await getPocketBase()
     await pb.collection('users').delete(pb.authStore.model?.id)
-    cookies().delete('PBAuth')
+    cookies().delete('pb_auth')
 }
 
 export const getLoggedInUser = async () => {
@@ -116,11 +115,15 @@ export const getUsers = async (searchTerm: string | undefined) => {
 export const getUser = async (username: string) => {
     const pb = await getPocketBase()
 
-    const record = await pb
-        .collection('users')
-        .getFirstListItem(`slug="${stringWithHyphen(username)}"`)
+    try {
+        const record = await pb
+            .collection('users')
+            .getFirstListItem(`slug="${stringWithHyphen(username)}"`)
 
-    return AuthorizedUserSchema.parse(record)
+        return AuthorizedUserSchema.parse(record)
+    } catch (e) {
+        return null
+    }
 }
 
 export const getRoles = async () => {

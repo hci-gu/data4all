@@ -1,3 +1,4 @@
+import { signIn } from '@/app/actions/auth'
 import { stringWithHyphen } from '@/lib/utils'
 import {
     AuthorizedUserSchema,
@@ -116,7 +117,6 @@ export const createEvent = async (
         },
         { expand: 'user,subject' }
     )
-    console.log(event)
 
     return EventSchema.parse(responseEventCleanup(event))
 }
@@ -136,7 +136,7 @@ function parseCookie(cookieString: string): any {
     const [name, value] = nameValue.split('=')
     const cookie = {
         name,
-        value,
+        value: nameValue,
         domain: 'localhost',
         path: '/',
         expires: -1,
@@ -159,15 +159,8 @@ export const loggedInUser = async ({
     is_admin?: boolean
 }) => {
     const user = await createUser(role.id, is_admin)
-    const response = await request.post('/api/auth/sign-in', {
-        data: { email: user.email, password: user.password },
-        headers: { 'Content-Type': 'application/json' },
-    })
-    const headers = await response.headers()
-    const setCookieHeader = headers['set-cookie']
-    if (setCookieHeader) {
-        await context.addCookies([parseCookie(setCookieHeader)])
-    }
+    await pb.collection('users').authWithPassword(user.email, user.password)
+    await context.addCookies([parseCookie(pb.authStore.exportToCookie())])
     return user
 }
 

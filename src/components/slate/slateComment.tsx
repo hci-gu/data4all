@@ -77,6 +77,11 @@ const SlateComment = ({
                     onKeyDown={onKeyDown}
                     onKeyUp={onKeyUp}
                     placeholder="Skriv en kommentar"
+                    renderPlaceholder={({ children, attributes }) => (
+                        <div {...attributes}>
+                            <p style={{ paddingTop: 8 }}>{children}</p>
+                        </div>
+                    )}
                     style={event ? commentStyle : inputStyle}
                 />
                 {children}
