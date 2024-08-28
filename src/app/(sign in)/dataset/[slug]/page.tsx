@@ -11,7 +11,7 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import DataOwner from '@/components/dataOwner'
 import Tags from '@/components/tag'
 import { Datasets, ActivityFlow } from '@/components/dataset'
-import { stringWithHyphen } from '@/lib/utils'
+import { getSlug } from '@/lib/utils'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -24,7 +24,7 @@ export default async function Page({
 }: {
     params: { slug: string }
 }) {
-    const dataset = await getDataset(stringWithHyphen(decodeURI(slug)))
+    const dataset = await getDataset(getSlug(decodeURI(slug)))
     const loggedInUser = await getLoggedInUser()
 
     return (
@@ -43,7 +43,7 @@ export default async function Page({
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-xl font-bold"
-                                href={`/dataset/${stringWithHyphen(dataset.title)}`}
+                                href={`/dataset/${getSlug(dataset.title)}`}
                             >
                                 {dataset.title}
                             </BreadcrumbLink>

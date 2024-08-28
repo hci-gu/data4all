@@ -7,7 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getInitials = (name: string) => {
-    
     const parts = name.split(' ')
     let initials = ''
     for (let i = 0; i < parts.length; i++) {
@@ -18,7 +17,7 @@ export const getInitials = (name: string) => {
     return initials
 }
 
-export const stringWithHyphen = (text: string) => {
+export const getSlug = (text: string) => {
     return text.toLowerCase().replaceAll(' ', '-')
 }
 

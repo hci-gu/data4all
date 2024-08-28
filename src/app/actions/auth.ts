@@ -9,7 +9,7 @@ import {
 } from '@/types/zod'
 import { getPocketBase } from './pocketbase'
 import { cookies } from 'next/headers'
-import { stringWithHyphen } from '@/lib/utils'
+import { getSlug } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 
 export const signOut = async () => {
@@ -41,7 +41,7 @@ export const signUp = async (newUser: signUpSchema) => {
         passwordConfirm: newUser.passwordConfirmation,
         name: newUser.name,
         role: role.id,
-        slug: stringWithHyphen(newUser.name),
+        slug: getSlug(newUser.name),
     }
     await pb.collection('users').create(data)
 }
@@ -57,7 +57,7 @@ export const updateUser = async (
     const record = await pb.collection('users').update(userId, {
         ...formData,
         role: newRole.id,
-        slug: stringWithHyphen(formData.name),
+        slug: getSlug(formData.name),
     })
 
     const token = pb.authStore.token
@@ -118,7 +118,7 @@ export const getUser = async (username: string) => {
     try {
         const record = await pb
             .collection('users')
-            .getFirstListItem(`slug="${stringWithHyphen(username)}"`)
+            .getFirstListItem(`slug="${getSlug(username)}"`)
 
         return AuthorizedUserSchema.parse(record)
     } catch (e) {

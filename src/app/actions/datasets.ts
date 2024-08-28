@@ -3,7 +3,7 @@
 import { datasetWithRelationsSchema } from '@/types/zod'
 import { getPocketBase } from './pocketbase'
 import { datasetResponseCleanup } from './utils'
-import { stringWithHyphen } from '@/lib/utils'
+import { getSlug } from '@/lib/utils'
 
 export const getOwnedDatasets = async (username?: string) => {
     const pb = await getPocketBase()
@@ -13,7 +13,7 @@ export const getOwnedDatasets = async (username?: string) => {
         if (username) {
             const user = await pb
                 .collection('users')
-                .getFirstListItem(`slug="${stringWithHyphen(username)}"`)
+                .getFirstListItem(`slug="${getSlug(username)}"`)
             userId = user.id
         } else {
             userId = pb.authStore.model?.id

@@ -6,7 +6,7 @@ import {
     createRole,
     loggedInUser,
 } from './setup/utils'
-import { stringWithHyphen } from '@/lib/utils'
+import { getSlug } from '@/lib/utils'
 import { string } from 'slate'
 
 test.describe('Profile page', () => {
@@ -27,7 +27,7 @@ test.describe('Profile page', () => {
             const role = await createRole()
             await createByUserName(name, role)
 
-            await page.goto(`/profile/${stringWithHyphen(name)}`)
+            await page.goto(`/profile/${getSlug(name)}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 name
             )
@@ -143,7 +143,7 @@ test.describe('Profile page', () => {
 
         test('has dataset', async ({ page, request, context }) => {
             const name = 'tester someone user'
-            await page.goto(`/profile/${stringWithHyphen(name)}`)
+            await page.goto(`/profile/${getSlug(name)}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 name
             )
@@ -179,7 +179,7 @@ test.describe('Profile page', () => {
 
         test('does not have dataset', async ({ page, request, context }) => {
             const name = 'tester not have dataset user'
-            await page.goto(`/profile/${stringWithHyphen(name)}`)
+            await page.goto(`/profile/${getSlug(name)}`)
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(
                 name
             )

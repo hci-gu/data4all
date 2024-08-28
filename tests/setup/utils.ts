@@ -1,5 +1,5 @@
 import { signIn } from '@/app/actions/auth'
-import { stringWithHyphen } from '@/lib/utils'
+import { getSlug } from '@/lib/utils'
 import {
     AuthorizedUserSchema,
     EventCreateSchema,
@@ -26,7 +26,7 @@ export const createUser = async (role: string, is_admin: boolean) => {
         passwordConfirm: password,
         role,
         name,
-        slug: stringWithHyphen(name),
+        slug: getSlug(name),
         is_admin,
     }
     const user = await pb
@@ -49,7 +49,7 @@ export const createByUserName = async (name: string, role: roleSchema) => {
         passwordConfirm: password,
         role: role.id,
         name,
-        slug: stringWithHyphen(name),
+        slug: getSlug(name),
     })
     return user
 }
@@ -61,7 +61,7 @@ export const createDataset = async (
     await pb.admins.authWithPassword('admin@email.com', 'password123')
     const title = titleValue
     const description = 'test description'
-    const slug = stringWithHyphen(title)
+    const slug = getSlug(title)
     const dataset = await pb.collection<datasetSchema>('dataset').create({
         title,
         description,
@@ -78,7 +78,7 @@ export const createDatasetWithRelation = async (
     await pb.admins.authWithPassword('admin@email.com', 'password123')
     const title = titleValue
     const description = 'test description'
-    const slug = stringWithHyphen(title)
+    const slug = getSlug(title)
     const related_datasets = releatedDataset?.map((dataset) => dataset.id) ?? []
     const tag = releatedTag?.map((tag) => tag.id) ?? []
 
