@@ -15,8 +15,7 @@ export default async function page({
     return (
         <>
             <main className="flex w-full flex-col items-center">
-                <WelcomeBack />
-                <div className="mb-8 grid w-full max-w-[1220px] grid-cols-3 max-sm:hidden [&>button]:w-fit [&>h2]:border-none [&>h2]:text-center">
+                <div className="mb-8 mt-24 grid w-full max-w-[1220px] grid-cols-3 max-sm:hidden [&>button]:w-fit [&>h2]:border-none [&>h2]:text-center">
                     <Link href={'/'} className="flex items-center">
                         <X /> Stäng
                     </Link>

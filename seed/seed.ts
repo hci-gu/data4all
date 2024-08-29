@@ -9,10 +9,8 @@ import {
     roleSchema,
     tagSchema,
 } from '@/types/zod'
+import { getSlug } from '@/lib/utils'
 
-const stringWithHyphen = (text: string) => {
-    return text.toLowerCase().replaceAll(' ', '-')
-}
 const getRandomTag = (tags: tagSchema[]) => {
     const randomIndex = Math.floor(Math.random() * tags.length)
     return tags[randomIndex].id
@@ -105,7 +103,7 @@ async function seedUser(pb: PocketBase, data: AuthorizedUserSchema[]) {
                 {
                     ...itemData,
                     role: roles[1].id,
-                    slug: stringWithHyphen(itemData.name),
+                    slug: getSlug(itemData.name),
                 },
                 { expand: 'roles', $autoCancel: false }
             )
@@ -123,7 +121,7 @@ async function seedDataset(
         const newItem = await pb.collection<datasetSchema>('dataset').create(
             {
                 ...itemData,
-                slug: stringWithHyphen(itemData.title),
+                slug: getSlug(itemData.title),
                 tag: [getRandomTag(tags)],
             },
             { $autoCancel: false }

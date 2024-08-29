@@ -92,6 +92,7 @@ export default function SearchBar({
     const [isFocused, setIsFocused] = useState(false)
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
     const [suggestions, setSuggestions] = useState<autoCompleteSuggestion[]>([])
+    console.log(suggestions)
     const router = useRouter()
 
     const form = useForm<searchSchema>({
@@ -116,11 +117,10 @@ export default function SearchBar({
             if (!!isFocused) {
                 const datasets = await getDatasets(debouncedSearchTerm)
                 const users = await getUsers(debouncedSearchTerm)
+
                 setSuggestions([
                     ...datasetToSuggestion(datasets),
-                    ...userToSuggestion(
-                        users.filter((user) => user.id !== user.id)
-                    ),
+                    ...userToSuggestion(users),
                 ])
             }
         }

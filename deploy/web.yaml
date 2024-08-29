@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: data4all
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: data4all
+    template:
+        metadata:
+            labels:
+                app: data4all
+        spec:
+            containers:
+                - name: data4all
+                  image: 'appademin/data4all:0.0.5'
+                  imagePullPolicy: Always
+                  env:
+                  - name: NEXT_PUBLIC_POCKETBASE
+                    value: https://data4all-api.prod.appadem.in
+                  ports:
+                      - containerPort: 3000
+                        name: web
+                        protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: data4all-service
+spec:
+    selector:
+        app: data4all
+    ports:
+        - protocol: TCP
+          port: 3000
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+    name: data4all
+    annotations:
+        kubernetes.io/tls-acme: 'true'
+spec:
+    host: data4all.prod.appadem.in
+    to:
+        kind: Service
+        name: data4all-service
+        weight: 100
+    port:
+        targetPort: 3000
+    tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+    wildcardPolicy: None
+
