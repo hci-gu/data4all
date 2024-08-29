@@ -14,10 +14,12 @@ import User from '../user'
 
 export default function Comment({
     event,
+    events,
     dataset,
     loggedInUser,
 }: {
     event: EventSchema
+    events: EventSchema[]
     dataset: datasetWithRelationsSchema
     loggedInUser: AuthorizedUserSchema
 }) {
@@ -78,6 +80,7 @@ export default function Comment({
                 <AcceptDatasetOwner
                     dataset={dataset}
                     event={event}
+                    events={events}
                     loggedInUser={loggedInUser}
                 />
                 <time className="text-xs font-bold">

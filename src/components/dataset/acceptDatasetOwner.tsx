@@ -1,4 +1,3 @@
-'use client'
 import {
     AuthorizedUserSchema,
     EventSchema,
@@ -6,17 +5,17 @@ import {
     eventContentSchema,
     eventTypeSchema,
 } from '@/types/zod'
-import { Button } from '../ui/button'
-import { ownerAcceptDataset, ownerDeclineDataset } from '@/lib/slateUtilits'
 import { createEvent } from '@/app/actions/events'
-import { updateDataset } from '@/app/actions/datasets'
+import DataOwnerActions from './dataOwnerActions'
 
 export default async function AcceptDatasetOwner({
     event,
+    events,
     dataset,
     loggedInUser,
 }: {
     event: EventSchema
+    events: EventSchema[]
     dataset: datasetWithRelationsSchema
     loggedInUser: AuthorizedUserSchema
 }) {
@@ -38,53 +37,23 @@ export default async function AcceptDatasetOwner({
         }
     }
 
-    const accept = async () => {
-        const subject = event.subject
+    const eventsAfterThis = events.filter((e) => e.created > event.created)
+    const hasBeenAcceptedOrRejected = eventsAfterThis.some(
+        (e) => e.types === 'ownerAccept' || e.types === 'ownerDecline'
+    )
 
-        if (subject) {
-            await updateDataset(dataset.id, {
-                dataowner: subject[0],
-            })
-
-            await updateEvent(
-                'ownerAccept',
-                ownerAcceptDataset(loggedInUser, subject[0])
-            )
-        }
-    }
-    const decline = async () => {
-        const subject = event.subject
-        if (subject) {
-            await updateEvent(
-                'ownerDecline',
-                ownerDeclineDataset(loggedInUser, subject[0])
-            )
-        }
-    }
-
-    // const allEventFromSubjectUser = eventContext.events.filter(
-    //     (e) =>
-    //         e.subject?.[0].id === event.subject?.[0].id && e.types !== 'comment'
-    // )
-
-    // if (allEventFromSubjectUser[0].id !== event.id) {
-    //     return
-    // }
-
-    if (event.types === 'ownerReq' && loggedInUser.is_admin) {
+    if (
+        event.types === 'ownerReq' &&
+        loggedInUser.is_admin &&
+        !hasBeenAcceptedOrRejected
+    ) {
         return (
-            <div className="flex gap-2">
-                <Button
-                    type="submit"
-                    onClick={accept}
-                    className="bg-slate-500 hover:bg-slate-600"
-                >
-                    Godkänn
-                </Button>
-                <Button type="submit" onClick={decline} variant="outline">
-                    Avböj
-                </Button>
-            </div>
+            <DataOwnerActions
+                user={loggedInUser}
+                dataset={dataset}
+                event={event}
+                updateEvent={updateEvent}
+            />
         )
     }
 }

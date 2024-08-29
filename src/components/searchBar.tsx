@@ -92,7 +92,6 @@ export default function SearchBar({
     const [isFocused, setIsFocused] = useState(false)
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
     const [suggestions, setSuggestions] = useState<autoCompleteSuggestion[]>([])
-    console.log(suggestions)
     const router = useRouter()
 
     const form = useForm<searchSchema>({

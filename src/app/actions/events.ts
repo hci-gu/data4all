@@ -5,6 +5,9 @@ import { getPocketBase } from './pocketbase'
 import { eventResponseCleanup, feedResponseCleanup } from './utils'
 import { revalidatePath } from 'next/cache'
 import { FeedFilter } from '@/types/constants'
+import { ListResult, RecordModel } from 'pocketbase'
+
+const PAGE_SIZE = 10
 
 export const getEventsForDataset = async (datasetId: string) => {
     const pb = await getPocketBase()
@@ -41,19 +44,15 @@ export const createEvent = async (event: EventCreateSchema) => {
 
 export const getFeed = async (filter: FeedFilter, page: number) => {
     const pb = await getPocketBase()
-    let records = []
+    let records: ListResult<RecordModel>
+
     switch (filter) {
         case FeedFilter.Tagged:
-            //@ts-ignore
-            records = await pb
-                .collection('events')
-                //@ts-ignore
-                .getList(page, 15, {
-                    sort: '-created',
-                    filter: `subject ~ "${pb.authStore.model?.id}"`,
-                    expand: 'user,subject,dataset',
-                })
-
+            records = await pb.collection('events').getList(page, PAGE_SIZE, {
+                sort: '-created',
+                filter: `subject ~ "${pb.authStore.model?.id}" || subjectRole ~ "${pb.authStore.model?.role}"`,
+                expand: 'user,subject,dataset',
+            })
             break
         case FeedFilter.MyDatasets:
             const ownedDatasets = await pb.collection('dataset').getFullList({
@@ -61,11 +60,9 @@ export const getFeed = async (filter: FeedFilter, page: number) => {
             })
 
             if (ownedDatasets.length > 0) {
-                //@ts-ignore
                 records = await pb
                     .collection('events')
-                    //@ts-ignore
-                    .getList(page, 15, {
+                    .getList(page, PAGE_SIZE, {
                         sort: '-created',
                         filter: ownedDatasets
                             .map((dataset) => `dataset="${dataset.id}"`)
@@ -74,7 +71,6 @@ export const getFeed = async (filter: FeedFilter, page: number) => {
                     })
             } else {
                 records = {
-                    //@ts-ignore
                     page: 1,
                     perPage: 15,
                     totalItems: 0,
@@ -84,14 +80,10 @@ export const getFeed = async (filter: FeedFilter, page: number) => {
             }
             break
         case FeedFilter.All:
-            //@ts-ignore
-            records = await pb
-                .collection('events')
-                //@ts-ignore
-                .getList(page, 15, {
-                    sort: '-created',
-                    expand: 'user,subject,dataset',
-                })
+            records = await pb.collection('events').getList(page, PAGE_SIZE, {
+                sort: '-created',
+                expand: 'user,subject,dataset',
+            })
             break
     }
 

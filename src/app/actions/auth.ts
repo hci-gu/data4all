@@ -82,16 +82,26 @@ export const getLoggedInUser = async () => {
     return AuthorizedUserSchema.parse(pb.authStore.model)
 }
 
-export const getUsers = async (searchTerm: string | undefined) => {
+export const getUsers = async (searchTerm?: string) => {
     const pb = await getPocketBase()
 
-    const records = await pb.collection('users').getList(1, 25, {
-        sort: '-created',
-        filter: `name ~ "${decodeURI(searchTerm ?? '')}"`,
-        expand: 'role',
-    })
+    let records = []
+    if (searchTerm) {
+        records = (
+            await pb.collection('users').getList(1, 25, {
+                sort: '-created',
+                filter: `name ~ "${decodeURI(searchTerm)}"`,
+                expand: 'role',
+            })
+        ).items
+    } else {
+        records = await pb.collection('users').getFullList({
+            sort: '-created',
+            expand: 'role',
+        })
+    }
 
-    const cleanUsers = records.items.map((user: any) => {
+    const cleanUsers = records.map((user: any) => {
         return {
             avatar: user.avatar,
             collectionId: user.collectionId,

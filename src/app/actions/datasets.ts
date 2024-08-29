@@ -34,13 +34,29 @@ export const getOwnedDatasets = async (username?: string) => {
 export const getDataset = async (slug: string) => {
     const pb = await getPocketBase()
 
-    const dataset = await pb
+    const response = await pb
         .collection<datasetWithRelationsSchema>('dataset')
         .getFirstListItem(`slug="${slug}"`, {
             expand: 'related_datasets,tag,dataowner,dataowner.role',
         })
 
-    return datasetWithRelationsSchema.parse(datasetResponseCleanup(dataset))
+    const dataset = datasetWithRelationsSchema.parse(
+        datasetResponseCleanup(response)
+    )
+
+    const tags = dataset.tags.map((tag) => tag.id)
+    const datasetWithSameTag = await pb.collection('dataset').getList(1, 25, {
+        filter: `${tags.map((tagId) => `tag ~ "${tagId}"`).join(' || ')}`,
+    })
+
+    dataset.relatedDatasets = [
+        ...dataset.relatedDatasets,
+        ...datasetWithSameTag.items
+            .filter((item) => item.id !== dataset.id)
+            .map(datasetResponseCleanup),
+    ]
+
+    return dataset
 }
 
 export const getDatasets = async (searchTerm: string | undefined) => {

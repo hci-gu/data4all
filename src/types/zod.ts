@@ -131,11 +131,11 @@ export const eventContentSchema = z.array(
 )
 
 export const EventSchema = z.object({
-    id: z.string().optional(),
-    collectionId: z.string().optional(),
-    collectionName: z.string().optional(),
-    created: z.string().optional(),
-    updated: z.string().optional(),
+    id: z.string(),
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    updated: z.string(),
     dataset: z.string(),
     types: eventTypeSchema,
     user: AuthorizedUserSchema,
@@ -145,7 +145,14 @@ export const EventSchema = z.object({
 })
 
 // eventCreate without user
-export const EventCreateSchema = EventSchema.omit({ user: true }).extend({
+export const EventCreateSchema = EventSchema.omit({
+    id: true,
+    user: true,
+    created: true,
+    updated: true,
+    collectionId: true,
+    collectionName: true,
+}).extend({
     mentions: z.array(MentionSchema),
 })
 
