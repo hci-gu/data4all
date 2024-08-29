@@ -59,12 +59,22 @@ export const getDataset = async (slug: string) => {
     return dataset
 }
 
-export const getDatasets = async (searchTerm: string | undefined) => {
+export const getDatasets = async (searchTerm?: string, tagSlug?: string) => {
     const pb = await getPocketBase()
 
+    let filter = `title ~ "${decodeURI(searchTerm ?? '')}"`
+    if (tagSlug) {
+        const tag = await pb
+            .collection('tag')
+            .getFirstListItem(`slug="${tagSlug}"`)
+
+        if (tag) {
+            filter += ` && tag ~ "${tag.id}"`
+        }
+    }
     const response = await pb.collection('dataset').getList(1, 25, {
         sort: '-created',
-        filter: `title ~ "${decodeURI(searchTerm ?? '')}"`,
+        filter,
         expand: 'tag',
     })
     const cleanDatasets = response.items.map(datasetResponseCleanup)
@@ -77,6 +87,8 @@ export const updateDataset = async (
     dataset: Partial<datasetWithRelationsSchema>
 ) => {
     const pb = await getPocketBase()
+
+    console.log(datasetId, dataset)
 
     const record = await pb
         .collection<datasetWithRelationsSchema>('dataset')

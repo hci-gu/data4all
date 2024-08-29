@@ -8,10 +8,12 @@ import { getUsers } from '@/app/actions/auth'
 
 export default async function SearchResults({
     searchTerm,
+    tag,
 }: {
     searchTerm: string | undefined
+    tag: string | undefined
 }) {
-    const datasets = await getDatasets(searchTerm)
+    const datasets = await getDatasets(searchTerm, tag)
     const users = await getUsers(searchTerm)
 
     return (

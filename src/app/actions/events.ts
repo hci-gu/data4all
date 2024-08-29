@@ -1,11 +1,19 @@
 'use server'
 
-import { EventCreateSchema, EventFeedResponse, EventSchema } from '@/types/zod'
+import {
+    AuthorizedUserSchema,
+    EventCreateSchema,
+    EventFeedResponse,
+    EventSchema,
+    UserSchema,
+} from '@/types/zod'
 import { getPocketBase } from './pocketbase'
 import { eventResponseCleanup, feedResponseCleanup } from './utils'
 import { revalidatePath } from 'next/cache'
 import { FeedFilter } from '@/types/constants'
 import { ListResult, RecordModel } from 'pocketbase'
+import { updateDataset } from './datasets'
+import { ownerAcceptDataset, ownerDeclineDataset } from '@/lib/slateUtilits'
 
 const PAGE_SIZE = 10
 
@@ -88,4 +96,44 @@ export const getFeed = async (filter: FeedFilter, page: number) => {
     }
 
     return EventFeedResponse.parse(feedResponseCleanup(records))
+}
+
+export const acceptDataOwner = async (
+    datasetId: string,
+    subject: AuthorizedUserSchema
+) => {
+    const pb = await getPocketBase()
+
+    const user = AuthorizedUserSchema.parse(pb.authStore.model)
+
+    await updateDataset(datasetId, {
+        dataowner: subject,
+    })
+
+    const content = ownerAcceptDataset(user, subject)
+    await createEvent({
+        types: 'ownerAccept',
+        content,
+        subject: [subject],
+        dataset: datasetId,
+        mentions: [],
+    })
+}
+
+export const declineDataOwner = async (
+    datasetId: string,
+    subject: AuthorizedUserSchema
+) => {
+    const pb = await getPocketBase()
+
+    const user = AuthorizedUserSchema.parse(pb.authStore.model)
+
+    const content = ownerDeclineDataset(user, subject)
+    await createEvent({
+        types: 'ownerDecline',
+        content,
+        subject: [subject],
+        dataset: datasetId,
+        mentions: [],
+    })
 }

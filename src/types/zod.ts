@@ -90,6 +90,7 @@ export const updateFrendUserSchema = AuthorizedUserSchema.pick({
 export const tagSchema = z.object({
     id: z.string(),
     name: z.string(),
+    slug: z.string(),
 })
 
 export const datasetSchema = z.object({
@@ -100,6 +101,19 @@ export const datasetSchema = z.object({
     dataowner: string().optional(),
     entryscape: z.string().optional(),
     published: z.string().optional(),
+})
+
+export const datasetUpdateSchema = z.object({
+    entryscape: z
+        .string()
+        .url('Måste vara en länk')
+        .optional()
+        .or(z.literal('')),
+    published: z
+        .string()
+        .url('Måste vara en länk')
+        .optional()
+        .or(z.literal('')),
 })
 
 export const datasetWithRelationsSchema = datasetSchema.extend({

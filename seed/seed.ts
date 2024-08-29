@@ -21,11 +21,13 @@ const getRandomTag = (tags: tagSchema[]) => {
     const { tags, datasets, users, events, roles }: SeedData =
         JSON.parse(jsonData)
 
-    const pb = new PocketBase('https://data4all-api.prod.appadem.in')
-    await pb.admins.authWithPassword(
-        'sebastian.andreasson@ait.gu.se',
-        'password123'
-    )
+    // const pb = new PocketBase('http://data4all-api.prod.appadem.in')
+    // await pb.admins.authWithPassword(
+    //     'sebastian.andreasson@ait.gu.se',
+    //     'password123'
+    // )
+    const pb = new PocketBase('http://localhost:8090')
+    await pb.admins.authWithPassword('admin@email.com', 'password123')
 
     try {
         await deleteExistingData(pb, 'events', events, 'id')

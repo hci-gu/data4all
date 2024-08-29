@@ -50,7 +50,7 @@ export default function UpdateUserForm({
 
         try {
             const userDB = await getUser(value.name)
-            if (userDB.id !== user.id) {
+            if (userDB?.id !== user.id) {
                 toast.error('Användarnamnet är upptaget')
                 form.setError('name', { message: 'Användarnamnet är upptaget' })
                 setIsClicked(false)
@@ -191,8 +191,8 @@ export default function UpdateUserForm({
                                     <SelectContent>
                                         {roles.map((role) => (
                                             <SelectItem
-                                                value={role.name}
-                                                key={role.name}
+                                                value={role.id}
+                                                key={role.id}
                                             >
                                                 {role.name}
                                             </SelectItem>

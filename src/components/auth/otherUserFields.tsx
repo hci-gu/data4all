@@ -1,13 +1,17 @@
 import { Input } from '@/components/ui/input'
 import { Select, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { AuthorizedUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, roleSchema } from '@/types/zod'
 import { Label } from '../ui/label'
 
 export default function OtherUserFields({
     user,
+    roles,
 }: {
     user: AuthorizedUserSchema
+    roles: roleSchema[]
 }) {
+    const role = roles.find((r) => r.id === user.role)
+
     return (
         <section
             aria-labelledby="ProfileInformation"
@@ -24,7 +28,7 @@ export default function OtherUserFields({
                 <Label>Arbetsroll</Label>
                 <Select disabled>
                     <SelectTrigger>
-                        <SelectValue placeholder={user.role} />
+                        <SelectValue placeholder={role?.name} />
                     </SelectTrigger>
                 </Select>
             </div>

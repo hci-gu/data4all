@@ -33,7 +33,7 @@ export default function DatasetCard({
                     {dataset.tags.map((tag, index) => (
                         <li key={index}>
                             <Link
-                                href={`/sok?tag=${tag.name}`}
+                                href={`/sok?tag=${tag.slug}`}
                                 className="inline-block rounded-full bg-slate-500 px-2 py-1 text-xs text-white hover:bg-slate-600 focus-visible:bg-slate-600 focus-visible:outline-1 focus-visible:outline-offset-4"
                             >
                                 {tag.name}

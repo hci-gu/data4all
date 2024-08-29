@@ -11,7 +11,7 @@ import {
 import { ChevronRight } from 'lucide-react'
 import { OtherUserFields } from '@/components/auth'
 import CheckIfNotUserProfile from '@/components/CheckIfNotUserProfile'
-import { getLoggedInUser, getUser } from '@/app/actions/auth'
+import { getLoggedInUser, getRoles, getUser } from '@/app/actions/auth'
 
 async function ProfilePage({
     params: { username },
@@ -20,10 +20,12 @@ async function ProfilePage({
 }) {
     const user = await getUser(username)
     const loggedInUser = await getLoggedInUser()
+    const roles = await getRoles()
 
     if (!user) {
         notFound()
     }
+
     return (
         <>
             <CheckIfNotUserProfile user={user} loggedInUser={loggedInUser} />
@@ -50,7 +52,7 @@ async function ProfilePage({
                         </BreadcrumbList>
                     </Breadcrumb>
                     <h1 className="text-5xl font-extrabold">{user.name}</h1>
-                    <OtherUserFields user={user} />
+                    <OtherUserFields user={user} roles={roles} />
                     <Separator />
                     <section aria-labelledby="datasetList">
                         <h2

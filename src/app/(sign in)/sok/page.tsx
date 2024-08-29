@@ -1,7 +1,7 @@
 import SearchBar from '@/components/searchBar'
 import SearchResults from '@/components/searchResults'
+import SearchTag from '@/components/sok/searchTag'
 import Typography from '@/components/ui/Typography'
-import WelcomeBack from '@/components/welcomeBack'
 import { X } from 'lucide-react'
 import Link from 'next/link'
 
@@ -11,6 +11,7 @@ export default async function page({
     searchParams?: { [key: string]: string | undefined }
 }) {
     const searchTerm = searchParams?.searchTerm
+    const tag = searchParams?.tag
 
     return (
         <>
@@ -24,9 +25,10 @@ export default async function page({
 
                 <div className="max-sm:hidden">
                     <SearchBar initialSearchTerm={searchTerm} />
+                    {tag && <SearchTag title={tag} />}
                 </div>
 
-                <SearchResults searchTerm={searchTerm} />
+                <SearchResults searchTerm={searchTerm} tag={tag} />
             </main>
         </>
     )

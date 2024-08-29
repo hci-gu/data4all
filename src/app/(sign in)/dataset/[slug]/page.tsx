@@ -15,9 +15,9 @@ import { getSlug } from '@/lib/utils'
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { CommentInput } from '@/components/slate/commentInput'
 import { getDataset } from '@/app/actions/datasets'
 import { getLoggedInUser } from '@/app/actions/auth'
+import EditLinks from '@/components/dataset/editLinks'
 
 export default async function Page({
     params: { slug },
@@ -62,55 +62,7 @@ export default async function Page({
                 <section className="flex flex-col gap-1">
                     <Typography level="Large">Externa länkar</Typography>
 
-                    <ul className="flex flex-col gap-1">
-                        {!dataset.published && !dataset.entryscape && (
-                            <li className="text-sm">Inga externa länkar</li>
-                        )}
-                        {dataset.published && (
-                            <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
-                                <div className="flex items-center gap-2">
-                                    <Image
-                                        width={44}
-                                        height={44}
-                                        src={'/dataportal.png'}
-                                        alt="Dataportal.se logo"
-                                    />
-                                    <b className="flex gap-1">
-                                        Öppna på
-                                        <Link
-                                            href={dataset.published}
-                                            className="text-cyan-700 underline"
-                                        >
-                                            Dataportal.se
-                                        </Link>
-                                    </b>
-                                </div>
-                                <ExternalLink />
-                            </li>
-                        )}
-                        {dataset.entryscape && (
-                            <li className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm sm:w-fit">
-                                <div className="flex items-center gap-2">
-                                    <Image
-                                        width={60}
-                                        height={44}
-                                        src={'/entryscape.png'}
-                                        alt="Entryscape logo"
-                                    />
-                                    <b className="flex gap-1">
-                                        Öppna på
-                                        <Link
-                                            href={dataset.entryscape}
-                                            className="text-cyan-700 underline"
-                                        >
-                                            Entryscape.se
-                                        </Link>
-                                    </b>
-                                </div>
-                                <ExternalLink />
-                            </li>
-                        )}
-                    </ul>
+                    <EditLinks dataset={dataset} loggedInUser={loggedInUser} />
                 </section>
                 <section
                     aria-labelledby="RelatedDatasets"

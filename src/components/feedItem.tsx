@@ -80,7 +80,12 @@ export default function FeedItem({ event }: { event: EventFeedItem }) {
             <div className="flex w-full flex-col gap-1">
                 <div className="flex flex-col items-start">
                     <p className="mt-1 text-xs">
-                        <b>{event.userName}</b> Föreslog en dataägare i
+                        <b>
+                            <Link href={`/profile/${getSlug(event.userName)}`}>
+                                {event.userName}
+                            </Link>
+                        </b>{' '}
+                        Föreslog en dataägare i
                         <b>
                             {' '}
                             <Link
