@@ -1,25 +1,16 @@
 'use client'
 
 import { AuthorizedUserSchema, MentionSchema, roleSchema } from '@/types/zod'
-import {
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Editor } from 'slate'
 import { Range, Transforms, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import { ReactEditor, withReact } from 'slate-react'
 import { Portal } from './customComps'
 import { MentionElement, ParagraphElement } from './customTypes'
-import { createEvent } from '@/adapters/api'
-import { authContext } from '@/lib/context/authContext'
 import SlateComment from './slateComment'
 import { Button } from '../ui/button'
-import { EventContext } from '@/lib/context/eventContext'
+import { createEvent } from '@/app/actions/events'
 
 export const CommentInput = ({
     users,
@@ -30,8 +21,6 @@ export const CommentInput = ({
     roles: roleSchema[]
     datasetId: string
 }) => {
-    const eventContext = useContext(EventContext)
-    const user = useContext(authContext)
     const ref = useRef<HTMLDivElement>()
     const [target, setTarget] = useState<Range | null>(null)
     const [index, setIndex] = useState(0)
@@ -171,20 +160,14 @@ export const CommentInput = ({
                 roleMentions.find((m) => m.name === r.name)
             )
 
-            const newEvent = await createEvent(
-                {
-                    content: editor.children,
-                    mentions,
-                    user: user.auth.id,
-                    dataset: datasetId,
-                    subject: mentionedUsers,
-                    subjectRole: mentionedRoles,
-                    types: 'comment',
-                },
-                user.cookie
-            )
-
-            eventContext.setEvents((prev) => [newEvent, ...prev])
+            await createEvent({
+                content: editor.children,
+                mentions,
+                dataset: datasetId,
+                subject: mentionedUsers,
+                subjectRole: mentionedRoles,
+                types: 'comment',
+            })
 
             editor.children = [
                 {

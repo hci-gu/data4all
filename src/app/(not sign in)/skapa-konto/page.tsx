@@ -1,7 +1,7 @@
 import Typography from '@/components/ui/Typography'
 import Image from 'next/image'
 import { SignUp } from '@/components/auth'
-import { getRoles } from '@/adapters/api'
+import { getRoles } from '@/app/actions/auth'
 
 async function SignUpPage() {
     const roles = await getRoles()

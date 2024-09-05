@@ -54,6 +54,7 @@ const SlateComment = ({
             className={`${!event ? '' : '[& > *]:w-full w-full rounded-lg rounded-tl-none border border-slate-200 p-2'} `}
         >
             <Slate
+                key={`SlateComment_${event?.id}`}
                 editor={
                     editor ??
                     withMentions(withReact(withHistory(createEditor())))
@@ -76,6 +77,11 @@ const SlateComment = ({
                     onKeyDown={onKeyDown}
                     onKeyUp={onKeyUp}
                     placeholder="Skriv en kommentar"
+                    renderPlaceholder={({ children, attributes }) => (
+                        <div {...attributes}>
+                            <p style={{ paddingTop: 8 }}>{children}</p>
+                        </div>
+                    )}
                     style={event ? commentStyle : inputStyle}
                 />
                 {children}

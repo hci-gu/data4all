@@ -1,18 +1,18 @@
 'use client'
 
-import { authContext } from '@/lib/context/authContext'
+import { AuthorizedUserSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
-import { useContext } from 'react'
 
 export default function CheckIfNotUserProfile({
-    name,
+    user,
+    loggedInUser,
 }: {
-    name: string
+    user: AuthorizedUserSchema
+    loggedInUser: AuthorizedUserSchema
 }) {
-    const user = useContext(authContext).auth
     const router = useRouter()
 
-    if (user.name === name) {
+    if (user.name === loggedInUser.name) {
         router.push('/profile')
     }
     return <></>

@@ -15,88 +15,25 @@ import { Input } from '@/components/ui/input'
 import { UserPlus } from 'lucide-react'
 import User from './user'
 
-import { AuthorizedUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
 import { z } from 'zod'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import SuggestDataOwner from './dataset/suggestDataOwner'
-import { getUsers } from '@/adapters/api'
 import { ScrollArea } from './ui/scroll-area'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
-import { authContext } from '@/lib/context/authContext'
-import { DatasetContext } from '@/lib/context/datasetContext'
+import { getUsers } from '@/app/actions/auth'
 
-export default function DataOwner() {
-    const recommendedUsers: AuthorizedUserSchema[] = [
-        {
-            collectionId: '_pb_users_auth_',
-            collectionName: 'users',
-            created: '2024-03-18 12:56:08.789Z',
-            email: 'Sebastian.Andreasson@kungsbacka.se',
-            emailVisibility: true,
-            id: '5sufjyr2vdad3s0',
-            name: 'Sebastian Andreasson',
-            role: 'Admin',
-            updated: '2024-03-18 12:56:08.789Z',
-            username: 'users36283',
-            verified: false,
-            slug: 'sebastian-andreasson',
-            is_admin: false,
-        },
-        {
-            collectionId: '_pb_users_auth_',
-            collectionName: 'users',
-            created: '2024-03-18 12:56:08.789Z',
-            email: 'styris.n@gmail.com',
-            emailVisibility: true,
-            id: '5sufjyr2vdad3s0',
-            name: 'styris.n@gmail.com',
-            role: 'Utvecklare',
-            updated: '2024-03-18 12:56:08.789Z',
-            username: 'users36283',
-            verified: false,
-            slug: 'styris.n@gmail.com',
-            is_admin: false,
-        },
-        {
-            avatar: '',
-            collectionId: '_pb_users_auth_',
-            collectionName: 'users',
-            created: '2024-04-02 12:59:18.094Z',
-            email: 'exampel@kungsbacka.se',
-            emailVisibility: true,
-            id: '0zfiwpwiv1myhrc',
-            name: 'exampel',
-            role: 'Utvecklare',
-            updated: '2024-04-11 09:14:09.924Z',
-            username: 'users48961',
-            verified: false,
-            slug: 'exampel',
-            is_admin: false,
-        },
-        {
-            avatar: '',
-            collectionId: '_pb_users_auth_',
-            collectionName: 'users',
-            created: '2024-04-02 12:59:18.094Z',
-            email: 'Josef@kungsbacka.se',
-            emailVisibility: true,
-            id: '0zfiwpwiv1myhrc',
-            name: 'Josef',
-            role: 'Utvecklare',
-            updated: '2024-04-11 09:14:09.924Z',
-            username: 'users48961',
-            verified: false,
-            slug: 'josef',
-            is_admin: false,
-        },
-    ]
-    const { cookie } = useContext(authContext)
-    const { dataset } = useContext(DatasetContext)
-
+export default function DataOwner({
+    dataset,
+    loggedInUser,
+}: {
+    dataset: datasetWithRelationsSchema
+    loggedInUser: AuthorizedUserSchema
+}) {
     const [users, setUsers] = useState<AuthorizedUserSchema[]>([])
     const [searchTerm, setSearchTerm] = useState('')
     const time = 250
@@ -117,15 +54,15 @@ export default function DataOwner() {
         const autoComplete = async () => {
             await Promise.allSettled([
                 debouncedSearchTerm
-                    ? setUsers(await getUsers(debouncedSearchTerm, cookie))
+                    ? setUsers(await getUsers(debouncedSearchTerm))
                     : setUsers([]),
                 new Promise((resolve) => setTimeout(resolve, time)),
             ])
         }
         autoComplete()
-    }, [debouncedSearchTerm, cookie])
+    }, [debouncedSearchTerm])
 
-    if (!dataset.dataowner) {
+    if (!dataset || !dataset.dataowner) {
         return (
             <>
                 <h2 id="DataOwner" className="text-lg font-bold">
@@ -176,7 +113,11 @@ export default function DataOwner() {
                                 {users &&
                                     users.map((user, index) => (
                                         <li key={index}>
-                                            <SuggestDataOwner user={user} />
+                                            <SuggestDataOwner
+                                                user={user}
+                                                loggedInUser={loggedInUser}
+                                                dataset={dataset}
+                                            />
                                         </li>
                                     ))}
                                 {users.length === 0 && (

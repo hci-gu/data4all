@@ -5,7 +5,7 @@ import { env } from './lib/env'
 
 export async function middleware(request: NextRequest) {
     const pb = new PocketBase(env.NEXT_PUBLIC_POCKETBASE)
-    const authorizedUser = cookies().get('PBAuth')
+    const authorizedUser = cookies().get('pb_auth')
     const path = request.nextUrl.pathname
 
     if (authorizedUser) {

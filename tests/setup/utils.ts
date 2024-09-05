@@ -1,4 +1,5 @@
-import { stringWithHyphen } from '@/lib/utils'
+import { signIn } from '@/app/actions/auth'
+import { getSlug } from '@/lib/utils'
 import {
     AuthorizedUserSchema,
     EventCreateSchema,
@@ -25,7 +26,7 @@ export const createUser = async (role: string, is_admin: boolean) => {
         passwordConfirm: password,
         role,
         name,
-        slug: stringWithHyphen(name),
+        slug: getSlug(name),
         is_admin,
     }
     const user = await pb
@@ -48,7 +49,7 @@ export const createByUserName = async (name: string, role: roleSchema) => {
         passwordConfirm: password,
         role: role.id,
         name,
-        slug: stringWithHyphen(name),
+        slug: getSlug(name),
     })
     return user
 }
@@ -60,7 +61,7 @@ export const createDataset = async (
     await pb.admins.authWithPassword('admin@email.com', 'password123')
     const title = titleValue
     const description = 'test description'
-    const slug = stringWithHyphen(title)
+    const slug = getSlug(title)
     const dataset = await pb.collection<datasetSchema>('dataset').create({
         title,
         description,
@@ -77,7 +78,7 @@ export const createDatasetWithRelation = async (
     await pb.admins.authWithPassword('admin@email.com', 'password123')
     const title = titleValue
     const description = 'test description'
-    const slug = stringWithHyphen(title)
+    const slug = getSlug(title)
     const related_datasets = releatedDataset?.map((dataset) => dataset.id) ?? []
     const tag = releatedTag?.map((tag) => tag.id) ?? []
 
@@ -116,7 +117,6 @@ export const createEvent = async (
         },
         { expand: 'user,subject' }
     )
-    console.log(event)
 
     return EventSchema.parse(responseEventCleanup(event))
 }
@@ -136,7 +136,7 @@ function parseCookie(cookieString: string): any {
     const [name, value] = nameValue.split('=')
     const cookie = {
         name,
-        value,
+        value: nameValue,
         domain: 'localhost',
         path: '/',
         expires: -1,
@@ -159,15 +159,8 @@ export const loggedInUser = async ({
     is_admin?: boolean
 }) => {
     const user = await createUser(role.id, is_admin)
-    const response = await request.post('/api/auth/sign-in', {
-        data: { email: user.email, password: user.password },
-        headers: { 'Content-Type': 'application/json' },
-    })
-    const headers = await response.headers()
-    const setCookieHeader = headers['set-cookie']
-    if (setCookieHeader) {
-        await context.addCookies([parseCookie(setCookieHeader)])
-    }
+    await pb.collection('users').authWithPassword(user.email, user.password)
+    await context.addCookies([parseCookie(pb.authStore.exportToCookie())])
     return user
 }
 

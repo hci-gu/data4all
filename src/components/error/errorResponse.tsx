@@ -3,6 +3,7 @@ import Typography from '@/components/ui/Typography'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+
 export default function ErrorResponse({ reset }: { reset: () => void }) {
     const router = useRouter()
 
@@ -10,8 +11,8 @@ export default function ErrorResponse({ reset }: { reset: () => void }) {
         <main className="grid h-screen w-full grid-cols-2 items-center justify-between">
             <div className="flex w-full flex-col items-center justify-center">
                 <Image
-                    src={'/absurd_signup.png'}
-                    alt="404"
+                    src={'/absurd_signup_black.png'}
+                    alt="400"
                     width={300}
                     height={300}
                 />

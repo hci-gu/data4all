@@ -1,22 +1,18 @@
 'use client'
-import { removeUser } from '@/adapters/api'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { authContext } from '@/lib/context/authContext'
+import { deleteAccount } from '@/app/actions/auth'
 
 export default function RemoveAccountButton() {
-    const userContext = useContext(authContext)
-    const user = userContext.auth
-
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
     const removeAccount = async () => {
         try {
             setIsClicked(true)
-            await removeUser(user.id, userContext.cookie)
+            await deleteAccount()
             router.push('/skapa-konto')
         } catch (e) {
             setIsClicked(false)

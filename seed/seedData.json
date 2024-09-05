@@ -6,6 +6,7 @@
             "created": "2024-05-22 08:17:07.381Z",
             "id": "s61zbes5ywyy3k9",
             "name": "Energy",
+            "slug": "energy",
             "updated": "2024-05-22 08:17:07.381Z"
         },
         {
@@ -14,6 +15,7 @@
             "created": "2024-05-22 08:17:07.383Z",
             "id": "gwmnokf4jyvyzc3",
             "name": "Finance",
+            "slug": "finance",
             "updated": "2024-05-22 08:17:07.383Z"
         },
         {
@@ -22,6 +24,7 @@
             "created": "2024-05-22 08:17:07.387Z",
             "id": "fhfn4cui18p7713",
             "name": "Weather",
+            "slug": "weather",
             "updated": "2024-05-22 08:17:07.387Z"
         },
         {
@@ -30,6 +33,7 @@
             "created": "2024-05-22 08:17:07.389Z",
             "id": "nhkyixz3ujs3p8k",
             "name": "Web Analytics",
+            "slug": "web-analytics",
             "updated": "2024-05-22 08:17:07.389Z"
         },
         {
@@ -38,6 +42,7 @@
             "created": "2024-05-22 08:17:07.393Z",
             "id": "5pzyfqxplq29q0m",
             "name": "Environmental",
+            "slug": "environmental",
             "updated": "2024-05-22 08:17:07.393Z"
         },
         {
@@ -46,6 +51,7 @@
             "created": "2024-05-22 08:17:07.396Z",
             "id": "4tlnlk35t3f7rgi",
             "name": "Sales",
+            "slug": "sales",
             "updated": "2024-05-22 08:17:07.396Z"
         },
         {
@@ -54,6 +60,7 @@
             "created": "2024-05-22 08:17:07.399Z",
             "id": "2jrociwhkagkeu1",
             "name": "Economics",
+            "slug": "economics",
             "updated": "2024-05-22 08:17:07.399Z"
         },
         {
@@ -62,6 +69,7 @@
             "created": "2024-05-22 08:17:07.402Z",
             "id": "hnvap936zctanak",
             "name": "Social Media",
+            "slug": "social-media",
             "updated": "2024-05-22 08:17:07.402Z"
         },
         {
@@ -70,6 +78,7 @@
             "created": "2024-05-22 08:17:07.405Z",
             "id": "n0ww6venao2oijf",
             "name": "Transportation",
+            "slug": "transportation",
             "updated": "2024-05-22 08:17:07.405Z"
         },
         {
@@ -78,6 +87,7 @@
             "created": "2024-05-22 08:17:07.406Z",
             "id": "e2hnqegssi4tkwr",
             "name": "Employment",
+            "slug": "employment",
             "updated": "2024-05-22 08:17:07.406Z"
         },
         {
@@ -86,6 +96,7 @@
             "created": "2024-05-22 08:17:07.411Z",
             "id": "wd4hajms9hd43pz",
             "name": "CRM",
+            "slug": "crm",
             "updated": "2024-05-22 08:17:07.411Z"
         },
         {
@@ -94,6 +105,7 @@
             "created": "2024-05-22 08:17:07.414Z",
             "id": "9q73mcomooea0lf",
             "name": "Economic Indicator",
+            "slug": "economic-indicator",
             "updated": "2024-05-22 08:17:07.414Z"
         },
         {
@@ -102,6 +114,7 @@
             "created": "2024-05-22 08:17:07.418Z",
             "id": "jod1en1vte66p2a",
             "name": "Climate",
+            "slug": "climate",
             "updated": "2024-05-22 08:17:07.418Z"
         },
         {
@@ -109,7 +122,8 @@
             "collectionName": "tag",
             "created": "2024-05-22 08:17:07.421Z",
             "id": "7k3csx1jlzwett4",
-            "name": "Market Analysi",
+            "name": "Market Analysis",
+            "slug": "market-analysis",
             "updated": "2024-05-22 08:17:07.421Z"
         },
         {
@@ -118,6 +132,7 @@
             "created": "2024-05-22 08:17:07.424Z",
             "id": "a7pknwj0100peni",
             "name": "Demographics",
+            "slug": "demographics",
             "updated": "2024-05-22 08:17:07.424Z"
         }
     ],

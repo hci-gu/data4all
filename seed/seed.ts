@@ -9,10 +9,8 @@ import {
     roleSchema,
     tagSchema,
 } from '@/types/zod'
+import { getSlug } from '@/lib/utils'
 
-const stringWithHyphen = (text: string) => {
-    return text.toLowerCase().replaceAll(' ', '-')
-}
 const getRandomTag = (tags: tagSchema[]) => {
     const randomIndex = Math.floor(Math.random() * tags.length)
     return tags[randomIndex].id
@@ -23,6 +21,11 @@ const getRandomTag = (tags: tagSchema[]) => {
     const { tags, datasets, users, events, roles }: SeedData =
         JSON.parse(jsonData)
 
+    // const pb = new PocketBase('http://data4all-api.prod.appadem.in')
+    // await pb.admins.authWithPassword(
+    //     'sebastian.andreasson@ait.gu.se',
+    //     'password123'
+    // )
     const pb = new PocketBase('http://localhost:8090')
     await pb.admins.authWithPassword('admin@email.com', 'password123')
 
@@ -102,7 +105,7 @@ async function seedUser(pb: PocketBase, data: AuthorizedUserSchema[]) {
                 {
                     ...itemData,
                     role: roles[1].id,
-                    slug: stringWithHyphen(itemData.name),
+                    slug: getSlug(itemData.name),
                 },
                 { expand: 'roles', $autoCancel: false }
             )
@@ -120,7 +123,7 @@ async function seedDataset(
         const newItem = await pb.collection<datasetSchema>('dataset').create(
             {
                 ...itemData,
-                slug: stringWithHyphen(itemData.title),
+                slug: getSlug(itemData.title),
                 tag: [getRandomTag(tags)],
             },
             { $autoCancel: false }

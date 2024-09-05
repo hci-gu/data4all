@@ -55,7 +55,7 @@ export const signInSchema = z
 export const signUpSchema = signInSchema
     .extend({
         passwordConfirmation: z.string().min(8),
-        role: z.string(),
+        role: z.string().optional(),
         slug: z.string(),
         name: z.string(),
     })
@@ -69,6 +69,7 @@ export const updateUserSchema = z
         oldPassword: z.string(),
         password: z.string(),
         passwordConfirm: z.string(),
+        role: z.string().optional().nullable(),
     })
     .merge(
         AuthorizedUserSchema.pick({
@@ -82,14 +83,11 @@ export const updateUserSchema = z
         path: ['passwordConfirm'],
         message: 'Lösenorden måste matcha',
     })
-export const updateFrendUserSchema = AuthorizedUserSchema.pick({
-    email: true,
-    role: true,
-})
 
 export const tagSchema = z.object({
     id: z.string(),
     name: z.string(),
+    slug: z.string(),
 })
 
 export const datasetSchema = z.object({
@@ -98,6 +96,21 @@ export const datasetSchema = z.object({
     description: z.string(),
     slug: z.string(),
     dataowner: string().optional(),
+    entryscape: z.string().optional(),
+    published: z.string().optional(),
+})
+
+export const datasetUpdateSchema = z.object({
+    entryscape: z
+        .string()
+        .url('Måste vara en länk')
+        .optional()
+        .or(z.literal('')),
+    published: z
+        .string()
+        .url('Måste vara en länk')
+        .optional()
+        .or(z.literal('')),
 })
 
 export const datasetWithRelationsSchema = datasetSchema.extend({
@@ -129,11 +142,11 @@ export const eventContentSchema = z.array(
 )
 
 export const EventSchema = z.object({
-    id: z.string().optional(),
-    collectionId: z.string().optional(),
-    collectionName: z.string().optional(),
-    created: z.string().optional(),
-    updated: z.string().optional(),
+    id: z.string(),
+    collectionId: z.string(),
+    collectionName: z.string(),
+    created: z.string(),
+    updated: z.string(),
     dataset: z.string(),
     types: eventTypeSchema,
     user: AuthorizedUserSchema,
@@ -142,8 +155,15 @@ export const EventSchema = z.object({
     subjectRole: z.array(roleSchema).optional(),
 })
 
-export const EventCreateSchema = EventSchema.extend({
-    user: z.string(),
+// eventCreate without user
+export const EventCreateSchema = EventSchema.omit({
+    id: true,
+    user: true,
+    created: true,
+    updated: true,
+    collectionId: true,
+    collectionName: true,
+}).extend({
     mentions: z.array(MentionSchema),
 })
 
@@ -168,7 +188,6 @@ export const EventFeedResponse = z.object({
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
-export type updateFrendUserSchema = z.infer<typeof updateFrendUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
 export type datasetWithRelationsSchema = z.infer<
     typeof datasetWithRelationsSchema

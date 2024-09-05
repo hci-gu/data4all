@@ -24,7 +24,7 @@ export default function UserCard({ user }: { user: AuthorizedUserSchema }) {
                                 {user.name}
                             </CardTitle>
                             <CardDescription className="line-clamp-2">
-                                {user.role}
+                                {user.role ?? '-'}
                             </CardDescription>
                         </div>
                     </div>

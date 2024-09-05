@@ -1,16 +1,12 @@
 'use client'
-import { signOut } from '@/adapters/api'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { authContext } from '@/lib/context/authContext'
+import { signOut } from '@/app/actions/auth'
 
 export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
-    const userContext = useContext(authContext)
-    const user = userContext.auth
-
     const [isClicked, setIsClicked] = useState(false)
     const router = useRouter()
     const logout = async () => {
@@ -23,6 +19,7 @@ export default function LogoutButton({ text = 'Logga ut' }: { text?: string }) {
             toast.error('Något gick fel')
         }
     }
+
     if (!isClicked) {
         return (
             <>

@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -21,9 +22,9 @@ import {
 import { signUpSchema } from '@/types/zod'
 import { useRouter } from 'next/navigation'
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
-import * as api from '@/adapters/api'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { signUp } from '@/app/actions/auth'
 
 export default function SignUp({ roles }: { roles: any[] }) {
     const router = useRouter()
@@ -42,14 +43,13 @@ export default function SignUp({ roles }: { roles: any[] }) {
     })
     const submit = async (value: signUpSchema) => {
         try {
-            await api.signUp(value)
+            await signUp(value)
             router.push('/logga-in')
         } catch (e) {
             form.reset()
             form.setError('root', { message: 'Du är redan registrerad' })
         }
     }
-
 
     return (
         <Form {...form}>
@@ -63,7 +63,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Namn</FormLabel>
+                            <FormLabel required>Namn</FormLabel>
                             <FormControl>
                                 <Input
                                     type="text"
@@ -80,7 +80,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Mail</FormLabel>
+                            <FormLabel required>Mail</FormLabel>
                             <FormControl>
                                 <Input
                                     type="email"
@@ -97,7 +97,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Lösenord</FormLabel>
+                            <FormLabel required>Lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -114,7 +114,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="passwordConfirmation"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Upprepa lösenord</FormLabel>
+                            <FormLabel required>Upprepa lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -132,6 +132,10 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Arbetsroll</FormLabel>
+                            <FormDescription>
+                                Valfritt, primärt för dig som är
+                                dataägare/förvaltare
+                            </FormDescription>
                             <FormControl>
                                 <Select
                                     onValueChange={field.onChange}

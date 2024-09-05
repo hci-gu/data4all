@@ -15,22 +15,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { updateUserSchema } from '@/types/zod'
+import { AuthorizedUserSchema, updateUserSchema } from '@/types/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { getRoles, getUser, updateUser } from '@/adapters/api'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { authContext } from '@/lib/context/authContext'
+import { getUser, updateUser } from '@/app/actions/auth'
+import { Separator } from '../ui/separator'
 
-export default function UpdateUserForm({ roles }: { roles: any[] }) {
-    const userContext = useContext(authContext)
-    const user = userContext.auth
-    const cookie = userContext.cookie
-
+export default function UpdateUserForm({
+    roles,
+    user,
+}: {
+    roles: any[]
+    user: AuthorizedUserSchema
+}) {
     const [isClicked, setIsClicked] = useState(false)
+    const [key, setKey] = useState(+new Date())
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
@@ -43,13 +46,14 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
             slug: user.slug,
         },
     })
+    console.log(form.getValues())
 
     const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
 
         try {
-            const userDB = await getUser(value.name, cookie)
-            if (userDB.id !== user.id) {
+            const userDB = await getUser(value.name)
+            if (userDB?.id !== user.id) {
                 toast.error('Användarnamnet är upptaget')
                 form.setError('name', { message: 'Användarnamnet är upptaget' })
                 setIsClicked(false)
@@ -61,13 +65,10 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
         }
 
         const request = Promise.allSettled([
-            updateUser(value, user.id, cookie),
+            updateUser(user.id, value),
             new Promise((resolve) => setTimeout(resolve, 700)),
         ])
             .then((res) => {
-                userContext.setAuth(
-                    res[0].status === 'fulfilled' ? res[0].value : user
-                )
                 setIsClicked(false)
             })
             .catch(() => {
@@ -182,6 +183,7 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
                             <FormLabel>Arbetsroll</FormLabel>
                             <FormControl>
                                 <Select
+                                    key={key}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                 >
@@ -193,12 +195,25 @@ export default function UpdateUserForm({ roles }: { roles: any[] }) {
                                     <SelectContent>
                                         {roles.map((role) => (
                                             <SelectItem
-                                                value={role.name}
-                                                key={role.name}
+                                                value={role.id}
+                                                key={role.id}
                                             >
                                                 {role.name}
                                             </SelectItem>
                                         ))}
+                                        <Separator />
+                                        <Button
+                                            className="mt-2 w-full px-2"
+                                            variant="secondary"
+                                            size="sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                field.onChange()
+                                                setKey(+new Date())
+                                            }}
+                                        >
+                                            Ta bort roll
+                                        </Button>
                                     </SelectContent>
                                 </Select>
                             </FormControl>
