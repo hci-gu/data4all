@@ -9,14 +9,15 @@ import { Form, FormControl, FormField, FormItem } from './ui/form'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Loader2, Search } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { AuthorizedUserSchema, datasetWithRelationsSchema } from '@/types/zod'
 import Link from 'next/link'
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue'
 import { getDatasets } from '@/app/actions/datasets'
 import { getUsers } from '@/app/actions/auth'
+
 const searchSchema = z.object({
-    searchTerm: z.string().min(1),
+    searchTerm: z.string(),
 })
 type searchSchema = z.infer<typeof searchSchema>
 
@@ -92,6 +93,8 @@ export default function SearchBar({
     const [isFocused, setIsFocused] = useState(false)
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 250)
     const [suggestions, setSuggestions] = useState<autoCompleteSuggestion[]>([])
+    const path = usePathname()
+    const searchParams = useSearchParams()
     const router = useRouter()
 
     const form = useForm<searchSchema>({
@@ -104,7 +107,19 @@ export default function SearchBar({
     const submit = async (value: searchSchema) => {
         try {
             setIsClicked(true)
-            router.push(`/sok?searchTerm=${value.searchTerm}`)
+            // if we are not on /sok page we push to /sok
+            if (path !== '/sok') {
+                router.push(`/sok?searchTerm=${value.searchTerm}`)
+            } else {
+                // otherwise we just want to update the query
+                const params = new URLSearchParams(searchParams.toString())
+
+                // Update the searchTerm in the query params
+                params.set('searchTerm', value.searchTerm)
+
+                // Replace the current URL with the updated query params
+                router.replace(`/sok?${params.toString()}`)
+            }
             setIsClicked(false)
         } catch (error) {
             toast.error('något gick fel')
@@ -114,29 +129,44 @@ export default function SearchBar({
     useEffect(() => {
         const autoComplete = async () => {
             if (!!isFocused) {
-                const datasets = await getDatasets(debouncedSearchTerm)
-                const users = await getUsers(debouncedSearchTerm)
+                if (path !== '/sok') {
+                    const datasets = await getDatasets(debouncedSearchTerm)
+                    const users = await getUsers(debouncedSearchTerm)
 
-                setSuggestions([
-                    ...datasetToSuggestion(datasets),
-                    ...userToSuggestion(users),
-                ])
+                    setSuggestions([
+                        ...datasetToSuggestion(datasets),
+                        ...userToSuggestion(users),
+                    ])
+                } else {
+                    // otherwise we just want to update the query
+                    const params = new URLSearchParams(searchParams.toString())
+
+                    // Update the searchTerm in the query params
+                    params.set('searchTerm', debouncedSearchTerm)
+
+                    // Replace the current URL with the updated query params
+                    router.replace(`/sok?${params.toString()}`)
+                }
             }
         }
         autoComplete()
-    }, [debouncedSearchTerm, isFocused])
+    }, [debouncedSearchTerm, path, isFocused])
 
     const slowClose = () => {
         setTimeout(() => setIsFocused(false), 225)
     }
 
     const sugestionsOnFocus = async () => {
-        const datasets = await getDatasets(debouncedSearchTerm)
-        const users = await getUsers(debouncedSearchTerm)
-        setSuggestions([
-            ...datasetToSuggestion(datasets),
-            ...userToSuggestion(users.filter((user) => user.id !== user.id)),
-        ])
+        if (path !== '/sok') {
+            const datasets = await getDatasets(debouncedSearchTerm)
+            const users = await getUsers(debouncedSearchTerm)
+            setSuggestions([
+                ...datasetToSuggestion(datasets),
+                ...userToSuggestion(
+                    users.filter((user) => user.id !== user.id)
+                ),
+            ])
+        }
     }
 
     suggestions.sort((a, b) => {
@@ -196,7 +226,7 @@ export default function SearchBar({
                             </Button>
                         )}
                     </div>
-                    {!!isFocused && (
+                    {!!isFocused && path != '/sok' && (
                         <div className="absolute left-0 right-0 top-[1rem] z-10 mx-auto mt-11 h-fit w-[392px] rounded-md bg-white shadow max-sm:w-screen sm:right-12 sm:mx-0">
                             {suggestions.length > 0 &&
                             debouncedSearchTerm !== '' ? (

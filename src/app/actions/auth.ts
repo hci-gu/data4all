@@ -11,6 +11,7 @@ import { getPocketBase } from './pocketbase'
 import { cookies } from 'next/headers'
 import { getSlug } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
+import { getDatasets } from './datasets'
 
 export const signOut = async () => {
     cookies().delete('pb_auth')
@@ -30,9 +31,12 @@ export const signIn = async (credentials: signInSchema) => {
 export const signUp = async (newUser: signUpSchema) => {
     const pb = await getPocketBase()
 
-    const role = await pb
-        .collection('roles')
-        .getFirstListItem(`name="${newUser.role}"`)
+    let role
+    try {
+        role = await pb
+            .collection('roles')
+            .getFirstListItem(`name="${newUser.role}"`)
+    } catch (e) {}
 
     const data = {
         email: newUser.email,
@@ -40,7 +44,7 @@ export const signUp = async (newUser: signUpSchema) => {
         password: newUser.password,
         passwordConfirm: newUser.passwordConfirmation,
         name: newUser.name,
-        role: role.id,
+        role: role?.id,
         slug: getSlug(newUser.name),
     }
     await pb.collection('users').create(data)
@@ -52,11 +56,14 @@ export const updateUser = async (
 ) => {
     const pb = await getPocketBase()
 
-    const newRole = await pb.collection('roles').getOne(formData.role ?? '')
+    let role
+    if (formData.role) {
+        role = await pb.collection('roles').getOne(formData.role ?? '')
+    }
 
     const record = await pb.collection('users').update(userId, {
         ...formData,
-        role: newRole.id,
+        role: role ? role.id : null,
         slug: getSlug(formData.name),
     })
 
@@ -82,8 +89,21 @@ export const getLoggedInUser = async () => {
     return AuthorizedUserSchema.parse(pb.authStore.model)
 }
 
-export const getUsers = async (searchTerm?: string) => {
+export const getUsers = async (searchTerm?: string, isDataOwner = false) => {
     const pb = await getPocketBase()
+
+    let dataOwnerIds: string[] = []
+    if (isDataOwner) {
+        const datasets = await getDatasets(
+            undefined,
+            undefined,
+            '&& dataowner!=""'
+        )
+        console.log('datasets', datasets)
+        dataOwnerIds = datasets
+            .map((dataset) => dataset.dataowner?.id ?? '')
+            .filter((id) => id)
+    }
 
     let records = []
     if (searchTerm) {
@@ -99,6 +119,11 @@ export const getUsers = async (searchTerm?: string) => {
             sort: '-created',
             expand: 'role',
         })
+    }
+
+    if (isDataOwner) {
+        console.log('dataOwnerIds', dataOwnerIds)
+        records = records.filter((user) => dataOwnerIds.includes(user.id))
     }
 
     const cleanUsers = records.map((user: any) => {

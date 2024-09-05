@@ -8,6 +8,7 @@ import {
 } from './ui/card'
 import { datasetWithRelationsSchema } from '@/types/zod'
 import Link from 'next/link'
+import Tags from './tag'
 
 export default function DatasetCard({
     dataset,
@@ -29,18 +30,8 @@ export default function DatasetCard({
                 </CardDescription>
             </CardHeader>
             <CardFooter className="flex gap-1">
-                <ul className="flex gap-1">
-                    {dataset.tags.map((tag, index) => (
-                        <li key={index}>
-                            <Link
-                                href={`/sok?tag=${tag.slug}`}
-                                className="inline-block rounded-full bg-slate-500 px-2 py-1 text-xs text-white hover:bg-slate-600 focus-visible:bg-slate-600 focus-visible:outline-1 focus-visible:outline-offset-4"
-                            >
-                                {tag.name}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
+                <Tags Tags={dataset.tags} />
+
                 {dataset.published && (
                     <div className="flex items-center gap-1 rounded-md px-3 py-2 text-sm sm:w-fit">
                         <CheckCircle color="#22C55E" size={20} />

@@ -55,7 +55,7 @@ export const signInSchema = z
 export const signUpSchema = signInSchema
     .extend({
         passwordConfirmation: z.string().min(8),
-        role: z.string(),
+        role: z.string().optional(),
         slug: z.string(),
         name: z.string(),
     })
@@ -69,6 +69,7 @@ export const updateUserSchema = z
         oldPassword: z.string(),
         password: z.string(),
         passwordConfirm: z.string(),
+        role: z.string().optional().nullable(),
     })
     .merge(
         AuthorizedUserSchema.pick({
@@ -82,10 +83,6 @@ export const updateUserSchema = z
         path: ['passwordConfirm'],
         message: 'Lösenorden måste matcha',
     })
-export const updateFrendUserSchema = AuthorizedUserSchema.pick({
-    email: true,
-    role: true,
-})
 
 export const tagSchema = z.object({
     id: z.string(),
@@ -191,7 +188,6 @@ export const EventFeedResponse = z.object({
 export type signInSchema = z.infer<typeof signInSchema>
 export type signUpSchema = z.infer<typeof signUpSchema>
 export type updateUserSchema = z.infer<typeof updateUserSchema>
-export type updateFrendUserSchema = z.infer<typeof updateFrendUserSchema>
 export type datasetSchema = z.infer<typeof datasetSchema>
 export type datasetWithRelationsSchema = z.infer<
     typeof datasetWithRelationsSchema

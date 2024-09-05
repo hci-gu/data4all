@@ -23,6 +23,7 @@ import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { getUser, updateUser } from '@/app/actions/auth'
+import { Separator } from '../ui/separator'
 
 export default function UpdateUserForm({
     roles,
@@ -32,6 +33,7 @@ export default function UpdateUserForm({
     user: AuthorizedUserSchema
 }) {
     const [isClicked, setIsClicked] = useState(false)
+    const [key, setKey] = useState(+new Date())
     const form = useForm<updateUserSchema>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
@@ -44,6 +46,7 @@ export default function UpdateUserForm({
             slug: user.slug,
         },
     })
+    console.log(form.getValues())
 
     const submit = async (value: updateUserSchema) => {
         setIsClicked(true)
@@ -180,6 +183,7 @@ export default function UpdateUserForm({
                             <FormLabel>Arbetsroll</FormLabel>
                             <FormControl>
                                 <Select
+                                    key={key}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                 >
@@ -197,6 +201,19 @@ export default function UpdateUserForm({
                                                 {role.name}
                                             </SelectItem>
                                         ))}
+                                        <Separator />
+                                        <Button
+                                            className="mt-2 w-full px-2"
+                                            variant="secondary"
+                                            size="sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                field.onChange()
+                                                setKey(+new Date())
+                                            }}
+                                        >
+                                            Ta bort roll
+                                        </Button>
                                     </SelectContent>
                                 </Select>
                             </FormControl>

@@ -59,10 +59,17 @@ export const getDataset = async (slug: string) => {
     return dataset
 }
 
-export const getDatasets = async (searchTerm?: string, tagSlug?: string) => {
+export const getDatasets = async (
+    searchTerm?: string,
+    tagSlug?: string,
+    additionalFilter?: string
+) => {
     const pb = await getPocketBase()
 
-    let filter = `title ~ "${decodeURI(searchTerm ?? '')}"`
+    let filter =
+        `title ~ "${decodeURI(searchTerm ?? '')}"` +
+        (additionalFilter ? `${additionalFilter}` : '')
+
     if (tagSlug) {
         const tag = await pb
             .collection('tag')
@@ -75,7 +82,7 @@ export const getDatasets = async (searchTerm?: string, tagSlug?: string) => {
     const response = await pb.collection('dataset').getList(1, 25, {
         sort: '-created',
         filter,
-        expand: 'tag',
+        expand: 'tag,dataowner',
     })
     const cleanDatasets = response.items.map(datasetResponseCleanup)
 

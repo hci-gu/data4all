@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Typography from './ui/Typography'
 import { Separator } from './ui/separator'
 import { getStats } from '@/app/actions/stats'
@@ -21,32 +22,44 @@ export default async function WelcomeBack({
                 </div>
                 <div className="flex w-full justify-between max-sm:grid max-sm:grid-cols-2 max-sm:gap-7 max-sm:px-4">
                     <>
-                        <div className="flex flex-col items-center [&>*]:w-fit">
+                        <Link
+                            className="flex flex-col items-center [&>*]:w-fit"
+                            href="/sok?type=datasets"
+                        >
                             <Typography level="Large">Dataset</Typography>
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
                                 {stats.datasets}
                             </p>
-                        </div>
-                        <div className="flex flex-col items-center [&>*]:w-fit">
+                        </Link>
+                        <Link
+                            className="flex flex-col items-center [&>*]:w-fit"
+                            href="/sok?type=users"
+                        >
                             <Typography level="Large">Användare</Typography>
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
                                 {stats.users}
                             </p>
-                        </div>
-                        <div className="flex flex-col items-center [&>*]:w-fit">
+                        </Link>
+                        <Link
+                            className="flex flex-col items-center [&>*]:w-fit"
+                            href="/sok?type=datasets&filter=%26%26%20dataowner%21%3D%22%22"
+                        >
                             <Typography level="Large">
                                 Dataset med ägare
                             </Typography>
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
                                 {stats.datasetsWithOwners}
                             </p>
-                        </div>
-                        <div className="flex flex-col items-center [&>*]:w-fit">
+                        </Link>
+                        <Link
+                            className="flex flex-col items-center [&>*]:w-fit"
+                            href="/sok?type=users&isDataOwner=true"
+                        >
                             <Typography level="Large">Dataägare</Typography>
                             <p className="text-[64px] font-black leading-[48px] max-sm:text-[48px]">
                                 {stats.dataOwners}
                             </p>
-                        </div>
+                        </Link>
                     </>
                 </div>
                 {homePage !== true ? (

@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -62,7 +63,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Namn</FormLabel>
+                            <FormLabel required>Namn</FormLabel>
                             <FormControl>
                                 <Input
                                     type="text"
@@ -79,7 +80,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Mail</FormLabel>
+                            <FormLabel required>Mail</FormLabel>
                             <FormControl>
                                 <Input
                                     type="email"
@@ -96,7 +97,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Lösenord</FormLabel>
+                            <FormLabel required>Lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -113,7 +114,7 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     name="passwordConfirmation"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Upprepa lösenord</FormLabel>
+                            <FormLabel required>Upprepa lösenord</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -131,6 +132,10 @@ export default function SignUp({ roles }: { roles: any[] }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Arbetsroll</FormLabel>
+                            <FormDescription>
+                                Valfritt, primärt för dig som är
+                                dataägare/förvaltare
+                            </FormDescription>
                             <FormControl>
                                 <Select
                                     onValueChange={field.onChange}
