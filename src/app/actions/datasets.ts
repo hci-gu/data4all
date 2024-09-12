@@ -71,12 +71,14 @@ export const getDatasets = async (
         (additionalFilter ? `${additionalFilter}` : '')
 
     if (tagSlug) {
-        const tag = await pb
-            .collection('tag')
-            .getFirstListItem(`slug="${tagSlug}"`)
+        const tagSlugs = tagSlug.split(',')
 
-        if (tag) {
-            filter += ` && tag ~ "${tag.id}"`
+        const tags = await pb.collection('tag').getList(1, 25, {
+            filter: tagSlugs.map((slug) => `slug="${slug}"`).join(' || '),
+        })
+
+        if (tags.items.length > 0) {
+            filter += ` && (${tags.items.map((tag) => `tag ~ "${tag.id}"`).join(' && ')})`
         }
     }
     const response = await pb.collection('dataset').getList(1, 25, {

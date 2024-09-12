@@ -23,7 +23,7 @@ export default function SearchType() {
         <Tabs
             defaultValue="all"
             value={activeTab}
-            className="mt-2 flex w-1/3 w-full flex-col items-center px-4"
+            className="mt-2 flex w-1/3 flex-col items-center px-4"
             onValueChange={(value) => {
                 // update search type
                 const params = new URLSearchParams(searchParams.toString())
