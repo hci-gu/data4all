@@ -1,135 +1,134 @@
-# Data4All – Kungsbacka dataportal
+# Data4All – Kungsbacka Data Portal
 
-Data4All är en Next.js 14-applikation som presenterar dataset och användaraktivitet för Kungsbacka kommuns dataportal. Projektet använder PocketBase som headless backend för autentisering, behörigheter och innehåll, medan gränssnittet byggs med React, TypeScript och Tailwind CSS. Applikationen tillhandahåller sökning, detaljerade datasetsidor, aktivitetsflöden och profilsidor där användare kan hantera sina uppgifter och dataset.
+Data4All is a Next.js 14 application that showcases datasets and user activity for the Kungsbacka municipality open-data portal. PocketBase serves as the headless backend for authentication, authorization, and content management, while the interface is built with React, TypeScript, and Tailwind CSS. The application provides search, detailed dataset views, activity feeds, and profile pages where users can manage their information and datasets.
 
-## Innehållsförteckning
-- [Arkitektur och teknikstack](#arkitektur-och-teknikstack)
-- [Huvudfunktioner](#huvudfunktioner)
-- [Kodsstruktur](#kodsstruktur)
-- [Kom igång](#kom-igång)
-  - [Förutsättningar](#förutsättningar)
-  - [Installera beroenden](#installera-beroenden)
-  - [Konfigurera miljövariabler](#konfigurera-miljövariabler)
-  - [Starta PocketBase lokalt](#starta-pocketbase-lokalt)
-  - [Fylla databasen med testdata](#fylla-databasen-med-testdata)
-  - [Starta webbklienten](#starta-webbklienten)
-- [Testning och kvalitetssäkring](#testning-och-kvalitetssäkring)
-- [Deployments och infrastruktur](#deployments-och-infrastruktur)
-- [Felsökning](#felsökning)
-- [Ytterligare resurser](#ytterligare-resurser)
+## Table of contents
+- [Architecture and tech stack](#architecture-and-tech-stack)
+- [Key features](#key-features)
+- [Code structure](#code-structure)
+- [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Install dependencies](#install-dependencies)
+  - [Configure environment variables](#configure-environment-variables)
+  - [Run PocketBase locally](#run-pocketbase-locally)
+  - [Seed the database](#seed-the-database)
+  - [Start the web client](#start-the-web-client)
+- [Testing and quality assurance](#testing-and-quality-assurance)
+- [Deployments and infrastructure](#deployments-and-infrastructure)
+- [Troubleshooting](#troubleshooting)
+- [Additional resources](#additional-resources)
 
-## Arkitektur och teknikstack
+## Architecture and tech stack
 
-| Komponent | Teknologi | Detaljer |
+| Component | Technology | Details |
 | --- | --- | --- |
-| Frontend | [Next.js 14](https://nextjs.org/) / React 18 | App Router-struktur med server actions och middleware för autentisering. |
-| UI | Tailwind CSS, Radix UI, shadcn/ui | Designsystem för formulär, navigation och komponenter. |
-| Backend | [PocketBase](https://pocketbase.io/) | Hanterar användare, roller, dataset, taggar och aktivitetsloggar. |
-| Typning/validering | TypeScript, Zod | Delade scheman för klient och server. |
-| Testning | Playwright | End-to-end-tester för inloggning, sökning och datasetflöden. |
+| Frontend | [Next.js 14](https://nextjs.org/) / React 18 | Uses the App Router with server actions and authentication middleware. |
+| UI | Tailwind CSS, Radix UI, shadcn/ui | Design system for forms, navigation, and reusable components. |
+| Backend | [PocketBase](https://pocketbase.io/) | Manages users, roles, datasets, tags, and activity logs. |
+| Typing/validation | TypeScript, Zod | Shared schemas between client and server. |
+| Testing | Playwright | End-to-end tests covering login, search, and dataset flows. |
 
-## Huvudfunktioner
+## Key features
 
-- **Autentisering och behörigheter** – Inloggning, registrering, uppdatering av profil samt kontoborttagning sker via PocketBase och exponeras genom server actions. Middleware ser till att endast autentiserade användare kommer åt skyddade routes.
-- **Sökning och filtrering** – Ett smart sökfält med autosuggest letar efter både dataset och användare och uppdaterar URL-parametrar för att möjliggöra delbara resultat.
-- **Datasetsidor** – Detaljerade vyer visar metadata, taggar, relaterade dataset och aktivitetsflöden samt möjliggör redigering av externa länkar för användare med rättigheter.
-- **Profilsidor** – Användare kan uppdatera sin profil, byta roll, logga ut eller ta bort sitt konto, samt se en lista över sina dataset.
-- **Aktivitetsflöde** – Samlar händelser kopplade till dataset och användare för att ge överblick över vad som hänt den senaste tiden.
+- **Authentication and authorization** – Login, registration, profile updates, and account deletion go through PocketBase and are exposed via server actions. Middleware ensures only authenticated users can access protected routes.
+- **Search and filtering** – An autosuggest search field looks up both datasets and users, updating URL parameters so results can be shared.
+- **Dataset pages** – Detailed views show metadata, tags, related datasets, and activity feeds. Authorized users can edit outbound links.
+- **Profile pages** – Users can update their profile, switch roles, sign out or delete their account, and review the datasets they own.
+- **Activity feed** – Aggregates events tied to datasets and users to provide an overview of recent changes.
 
-## Kodsstruktur
+## Code structure
 
 ```text
 src/
-├─ app/                    # App Router-sidor, grupperade efter autentiseringstillstånd
-│  ├─ (not sign in)/       # Publika sidor (logga in, skapa konto, panic)
-│  ├─ (sign in)/           # Autentiserade sidor (startsida, dataset, profiler)
-│  ├─ actions/             # Server actions som pratar med PocketBase
-│  └─ globals.css          # Globala stilar
-├─ components/             # Återanvändbara UI- och domänkomponenter
-├─ lib/                    # Hjälpfunktioner, t.ex. miljövariabler och slugifiering
-├─ middleware.ts           # Next.js-middleware för åtkomstkontroll
-├─ types/                  # Zod-scheman och delade typer
-seed/                      # Skript och data för att fylla PocketBase
-pocketbase/                # Dockerfile och migrationer för PocketBase
-deploy/                    # Kubernetesmanifest för drift
+├─ app/                    # App Router routes grouped by authentication state
+│  ├─ (not sign in)/       # Public routes (sign in, create account, panic)
+│  ├─ (sign in)/           # Authenticated routes (home, datasets, profiles)
+│  ├─ actions/             # Server actions for PocketBase operations
+│  └─ globals.css          # Global styles
+├─ components/             # Reusable UI and domain components
+├─ lib/                    # Utilities such as env handling and slugification
+├─ middleware.ts           # Next.js middleware for access control
+├─ types/                  # Zod schemas and shared types
+seed/                      # Scripts and data for seeding PocketBase
+pocketbase/                # Dockerfile and migrations for PocketBase
+deploy/                    # Kubernetes manifests for deployment
 ```
 
-## Kom igång
+## Getting started
 
-### Förutsättningar
-- Node.js 18 eller senare
+### Prerequisites
+- Node.js 18 or later
 - [pnpm](https://pnpm.io/) 8+
-- Docker (för att köra PocketBase lokalt via container)
+- Docker (to run PocketBase locally via container)
 
-### Installera beroenden
+### Install dependencies
 ```bash
 pnpm install
 ```
 
-### Konfigurera miljövariabler
-Skapa en `.env.local` i projektroten:
+### Configure environment variables
+Create a `.env.local` in the project root:
 
 ```bash
 echo "NEXT_PUBLIC_POCKETBASE=http://localhost:8090" > .env.local
 ```
 
-`NEXT_PUBLIC_POCKETBASE` ska peka på din PocketBase-instans och används både i server actions och på klienten.
+`NEXT_PUBLIC_POCKETBASE` should point to your PocketBase instance and is used by both server actions and the client.
 
-### Starta PocketBase lokalt
-Det enklaste sättet att köra PocketBase lokalt är via den medföljande Dockerfilen.
+### Run PocketBase locally
+The easiest way to run PocketBase locally is via the included Dockerfile.
 
 ```bash
-# bygg containern
+# build the container
 docker build -t data4all-pocketbase ./pocketbase
 
-# starta PocketBase på http://localhost:8090
-# (kartan 8090->8080 matchar seed-skriptets standardadress)
+# start PocketBase on http://localhost:8090
+# (the 8090->8080 mapping matches the seed script default)
 docker run --rm -p 8090:8080 data4all-pocketbase
 ```
 
-När PocketBase körs första gången skapas ingen admin automatiskt. Surfa till `http://localhost:8090/_/` för att skapa en admin-användare (använd samma adress som ovan). Seed-skriptet förväntar sig som standard `admin@email.com` / `password123`; uppdatera dessa i `seed/seed.ts` om du väljer andra uppgifter.
+When PocketBase starts for the first time it does not create an admin user automatically. Visit `http://localhost:8090/_/` to create one. The seed script expects `admin@email.com` / `password123` by default; update `seed/seed.ts` if you prefer different credentials.
 
-### Fylla databasen med testdata
-Med PocketBase igång kan du fylla databasen med demo-data:
+### Seed the database
+With PocketBase running, populate it with demo data:
 
 ```bash
 pnpm seed
 ```
 
-Skriptet läser `seed/seedData.json`, skapar taggar, roller, användare, dataset och händelser och rensar existerande testdata innan import.
+The script reads `seed/seedData.json`, creates tags, roles, users, datasets, and events, and clears existing test data before import.
 
-### Starta webbklienten
-Starta Next.js-utvecklingsservern:
+### Start the web client
+Start the Next.js development server:
 
 ```bash
 pnpm dev
 ```
 
-Besök sedan [http://localhost:3000](http://localhost:3000). Middleware omdirigerar icke-inloggade besökare till `/logga-in`; använd någon av de seedade användarna för att logga in.
+Then visit [http://localhost:3000](http://localhost:3000). Middleware redirects unauthenticated visitors to `/sign-in`; use one of the seeded accounts to log in.
 
-## Testning och kvalitetssäkring
+## Testing and quality assurance
 
-- **End-to-end**: `pnpm test` kör Playwright-specar i `tests/`, förutsatt att både webbappen (`pnpm dev`) och PocketBase är igång.
-- **Lintning**: `pnpm lint`
-- **Formattering**: `pnpm format`
+- **End-to-end**: `pnpm test` runs the Playwright specs in `tests/`, provided both the web app (`pnpm dev`) and PocketBase are running.
+- **Linting**: `pnpm lint`
+- **Formatting**: `pnpm format`
 
-För interaktiv felsökning kan du köra `pnpm test:ui` för att öppna Playwrights testrunner.
+For interactive debugging, run `pnpm test:ui` to open the Playwright test runner.
 
-## Deployments och infrastruktur
+## Deployments and infrastructure
 
-I katalogen `deploy/` finns Kubernetes-manifest för både PocketBase (`api.yaml`) och webbklienten (`web.yaml`). Dessa exempel visar hur produktionstjänsterna kan deployas med beständig lagring för PocketBase-data samt hur miljövariabler sätts för frontendens anslutning till backend.
+The `deploy/` directory contains Kubernetes manifests for PocketBase (`api.yaml`) and the web client (`web.yaml`). These examples illustrate how to deploy the production services with persistent storage for PocketBase data and environment variables that point the frontend to the backend.
 
-## Felsökning
+## Troubleshooting
 
-| Problem | Lösning |
+| Problem | Solution |
 | --- | --- |
-| **"401 Unauthorized" vid API-anrop** | Kontrollera att `pb_auth`-cookien finns och att PocketBase-tokenet är giltigt. Ett förfallet token omdirigeras automatiskt till `/panic`. |
-| **Seed-skriptet misslyckas** | Verifiera att PocketBase körs på `http://localhost:8090` och att admin-inloggningen i `seed/seed.ts` stämmer. |
-| **Playwright-tester hittar inte element** | Säkerställ att du har seedat data och att både appen och PocketBase körs innan du startar testerna. |
+| **"401 Unauthorized" on API calls** | Verify the `pb_auth` cookie exists and that the PocketBase token is valid. Expired tokens automatically redirect to `/panic`. |
+| **Seed script fails** | Ensure PocketBase runs at `http://localhost:8090` and that the admin credentials in `seed/seed.ts` are correct. |
+| **Playwright tests cannot find elements** | Make sure you have seeded data and that both the app and PocketBase are running before starting the tests. |
 
-## Ytterligare resurser
+## Additional resources
 
-- [Next.js-dokumentation](https://nextjs.org/docs)
-- [PocketBase-dokumentation](https://pocketbase.io/docs/)
-- [Playwright-dokumentation](https://playwright.dev/docs/intro)
-
+- [Next.js documentation](https://nextjs.org/docs)
+- [PocketBase documentation](https://pocketbase.io/docs/)
+- [Playwright documentation](https://playwright.dev/docs/intro)
